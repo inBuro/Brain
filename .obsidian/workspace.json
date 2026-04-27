@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "_raw/raw.md",
+                    "file": "Novation/XL_Performance.README.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "raw"
+                  "title": "XL_Performance.README"
                 }
               }
             ]
@@ -114,7 +114,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: zsh"
+                  "title": "Terminal: ✳ Organize Novation files and create empty Bify folder"
                 }
               }
             ],
@@ -282,43 +282,54 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "349c3d6ef53f0de6",
+  "active": "5c05a8acc0e0694e",
   "lastOpenFiles": [
     "_raw/raw.md",
+    "Novation/XL_Performance.README.md",
+    "Novation/XL_Performance.amxd",
+    "Novation/docs/wiki/sources/XL_Performance v1.5 Description.md",
+    "Novation/docs/wiki/entities/Solo Follower.md",
+    "Novation/docs/wiki/entities/Mixer Layer.md",
+    "Novation/docs/wiki/entities/MIDI Passthrough.md",
+    "Novation/docs/wiki/entities/Instruments Layer.md",
+    "Novation/docs/wiki/entities/CC47 Cross-Mode Transit.md",
+    "Novation/docs/wiki/concepts/Custom Modes Model.md",
+    "Novation/docs/log.md",
+    "Novation/docs/index.md",
+    "Novation/docs/cloud.md",
+    "Novation/docs/README.md",
+    "Novation/directives/sync_to_figma.md",
+    "Novation/directives/parity_check.md",
+    "Novation/directives/figma_mcp_setup.md",
+    "Novation/directives/demo_app.md",
+    "Novation/directives/build_tokens.md",
+    "Novation/directives/build_react_ds.md",
+    "Novation/artifacts/tokens.json",
+    "Novation/artifacts/figma-mirror.json",
+    "Novation/app/src/tokens/typography.ts",
+    "Novation/app/src/tokens/tokens.ts",
+    "Novation/app/src/tokens/tokens.css",
+    "Novation/app/src/pages/ProductPage.tsx",
+    "Novation/app/src/pages/ProductPage.module.css",
+    "Novation/app/src/components/organisms/ProductGallery/index.ts",
+    "Novation/app/src/components/organisms/ProductGallery/ProductGallery.tsx",
+    "Novation/app/src/assets/icons/warranty.svg",
+    "Novation/app/src/assets/icons/warning.svg",
+    "Novation/app/src/assets/icons/tune.svg",
+    "Novation/app/src/assets/icons/splitscreen.svg",
+    "Novation/app/src/assets/icons/socials-youtube.svg",
+    "Novation/app/src/assets/icons/socials-x.svg",
+    "Novation/app/src/assets/icons/socials-tiktok.svg",
+    "Novation/app/src/assets/icons/socials-linkedin.svg",
+    "Novation/app/src/assets/icons/socials-instagram.svg",
+    "Novation/app/src/assets/icons/socials-facebook.svg",
+    "Novation/CLAUDE.md",
+    "Novation/app/README.md",
+    "Novation/index.md",
+    "Inbox/Feed  LinkedIn.md",
     "index.md",
+    "_raw/Feed  LinkedIn.md",
     "RixAI.md",
-    "Clippings/Obsidian + Claude Code Как ИИ сам читает Telegram и строит базу знаний.md",
-    "claUntitled.base",
-    "Clippings",
-    "raw/Obsidian + Claude Code Как ИИ сам читает Telegram и строит базу знаний.md",
-    "README.md",
-    "Untitled.canvas",
-    "log.md",
-    "_raw",
-    "_Inbox/Projects Structure Pattern.md",
-    "_Raw/Obsidian + Claude Code Как ИИ сам читает Telegram и строит базу знаний.md",
-    "Clippings/Beefy.md",
-    "_Inbox/Obsidian + Claude Code Как ИИ сам читает Telegram и строит базу знаний.md",
-    "Clippings/llm-wiki.md",
-    "_templates/source.md",
-    "_templates/project.md",
-    "_templates/entity.md",
-    "_templates/concept.md",
-    "_templates/analysis.md",
-    "Clippings/llm-wiki 1.md",
-    "Untitled.md",
-    "_Inbox",
-    "_Raw",
-    "Novation XL/log.md",
-    "Novation XL/README.md",
-    "_shared/concepts",
-    "_shared/entities",
-    "_shared/index.md",
-    "_shared",
-    "_templates",
-    "Novation XL/wiki/entities/CC47 Cross-Mode Transit.md",
-    "Novation XL/wiki/entities/Instruments Layer.md",
-    "Novation XL/wiki/entities/Solo Follower.md",
-    "Novation XL/raw/assets"
+    "Untitled.canvas"
   ]
 }

@@ -8,7 +8,8 @@
 
 | Проект | Статус | Краткое описание |
 |---|---|---|
-| [[Novation XL/index\|Novation XL]] | active | Кастомные режимы Launch Control XL MK3, патч XL_Performance |
+| [[Novation/index\|novation]] | extracted | Launch Control XL MK3, патч XL_Performance — wiki вынесена в `~/Projects/Claude/Novation/docs/` |
+| [[bify/index\|bify]] | placeholder | (пусто, заполним позже) |
 
 ## Shared
 
