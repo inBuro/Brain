@@ -1,4 +1,4 @@
-# XL_Performance.amxd
+cla# XL_Performance.amxd
 
 Max for Live MIDI-устройство для **Novation Launch Control XL MK3**.
 Превращает контроллер в перформанс-инструмент с переключаемыми «слоями» (Mixer / Instruments), кросс-режимными переходами и автоматическим Solo Follow.

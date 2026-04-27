@@ -10,7 +10,7 @@
           {
             "id": "8c0ec2e874311d6d",
             "type": "tabs",
-            "dimension": 69.58333333333333,
+            "dimension": 18.2648401826484,
             "children": [
               {
                 "id": "5c05a8acc0e0694e",
@@ -31,7 +31,7 @@
           {
             "id": "f871446c15eeabcf",
             "type": "tabs",
-            "dimension": 30.416666666666664,
+            "dimension": 81.7351598173516,
             "children": [
               {
                 "id": "41384c8d8a78ba47",
@@ -282,10 +282,11 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "5c05a8acc0e0694e",
+  "active": "349c3d6ef53f0de6",
   "lastOpenFiles": [
-    "_raw/raw.md",
     "Novation/XL_Performance.README.md",
+    "_Inbox/llm-wiki.md",
+    "_raw/raw.md",
     "Novation/XL_Performance.amxd",
     "Novation/docs/wiki/sources/XL_Performance v1.5 Description.md",
     "Novation/docs/wiki/entities/Solo Follower.md",
@@ -329,7 +330,6 @@
     "Inbox/Feed  LinkedIn.md",
     "index.md",
     "_raw/Feed  LinkedIn.md",
-    "RixAI.md",
     "Untitled.canvas"
   ]
 }
