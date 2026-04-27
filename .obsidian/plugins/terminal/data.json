@@ -41,13 +41,13 @@
       "args": [
         "--login"
       ],
-      "executable": "/bin/zsh",
+      "executable": "/usr/local/bin/python3",
       "followTheme": true,
       "name": "",
       "platforms": {
         "darwin": true
       },
-      "pythonExecutable": "",
+      "pythonExecutable": "python3",
       "restoreHistory": false,
       "rightClickAction": "copyPaste",
       "successExitCodes": [
