@@ -4,17 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "d394cc1d6c84a0d5",
+        "id": "364b24a45114a488",
         "type": "tabs",
         "children": [
           {
-            "id": "93753059c60ca000",
+            "id": "954007e5e566b43b",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "New tab"
+              "type": "bases",
+              "state": {
+                "file": "Untitled 1.base",
+                "viewName": "Table"
+              },
+              "icon": "lucide-table",
+              "title": "Untitled 1"
             }
           }
         ]
@@ -90,6 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Untitled 1.base",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +103,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for Untitled 1"
             }
           },
           {
@@ -108,11 +112,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Untitled 1.base",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from Untitled 1"
             }
           },
           {
@@ -157,26 +162,43 @@
               "icon": "lucide-list",
               "title": "Outline"
             }
+          },
+          {
+            "id": "ee538cc2504549b3",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-git:Open Git source control": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "obsidian-git:Open Git source control": false,
+      "terminal:Open terminal": false
     }
   },
-  "active": "93753059c60ca000",
-  "lastOpenFiles": []
+  "active": "954007e5e566b43b",
+  "lastOpenFiles": [
+    "Untitled 1.base",
+    "2026-04-27.md",
+    "Untitled.canvas",
+    "Untitled.base",
+    "Check.md"
+  ]
 }
