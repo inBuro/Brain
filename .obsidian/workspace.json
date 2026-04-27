@@ -10,7 +10,7 @@
           {
             "id": "8c0ec2e874311d6d",
             "type": "tabs",
-            "dimension": 18.2648401826484,
+            "dimension": 63.013698630136986,
             "children": [
               {
                 "id": "5c05a8acc0e0694e",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "Novation/XL_Performance.README.md",
+                    "file": "_raw/llm-wiki.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "XL_Performance.README"
+                  "title": "llm-wiki"
                 }
               }
             ]
@@ -31,7 +31,7 @@
           {
             "id": "f871446c15eeabcf",
             "type": "tabs",
-            "dimension": 81.7351598173516,
+            "dimension": 36.986301369863014,
             "children": [
               {
                 "id": "41384c8d8a78ba47",
@@ -282,38 +282,44 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "349c3d6ef53f0de6",
+  "active": "b2e7bb053c776520",
   "lastOpenFiles": [
+    "Novation/log.md",
+    "Novation/wiki/entities/MIDI Passthrough.md",
+    "Novation/wiki/entities/Solo Follower.md",
+    "Novation/wiki/entities/CC47 Cross-Mode Transit.md",
+    "Novation/wiki/entities/Instruments Layer.md",
+    "Novation/wiki/entities/Mixer Layer.md",
+    "Novation/wiki/concepts/Mode Encoding.md",
+    "Novation/wiki/concepts/Custom Modes Model.md",
+    "Novation/wiki/sources/XL_Performance README.md",
+    "Novation/XL_Performance — как это работает.md",
+    "Novation/index.md",
+    "Novation/wiki/entities",
+    "Novation/wiki/sources",
+    "Novation/wiki/concepts",
+    "Novation/wiki",
+    "Novation/raw/XL_Performance.amxd",
+    "Novation/raw/XL_Performance.README.md",
+    "Novation/raw",
+    "Novation/XL_Performance.amxd",
     "Novation/XL_Performance.README.md",
     "_Inbox/llm-wiki.md",
+    "_Inbox",
+    "Novation/m4l/NovationXL/XL_Performance.amxd",
+    "Novation/m4l/NovationXL",
+    "_raw/llm-wiki.md",
+    "log.md",
+    "Projects Structure Pattern.md",
+    "README.md",
     "_raw/raw.md",
-    "Novation/XL_Performance.amxd",
+    "index.md",
     "Novation/docs/wiki/sources/XL_Performance v1.5 Description.md",
     "Novation/docs/wiki/entities/Solo Follower.md",
     "Novation/docs/wiki/entities/Mixer Layer.md",
     "Novation/docs/wiki/entities/MIDI Passthrough.md",
     "Novation/docs/wiki/entities/Instruments Layer.md",
     "Novation/docs/wiki/entities/CC47 Cross-Mode Transit.md",
-    "Novation/docs/wiki/concepts/Custom Modes Model.md",
-    "Novation/docs/log.md",
-    "Novation/docs/index.md",
-    "Novation/docs/cloud.md",
-    "Novation/docs/README.md",
-    "Novation/directives/sync_to_figma.md",
-    "Novation/directives/parity_check.md",
-    "Novation/directives/figma_mcp_setup.md",
-    "Novation/directives/demo_app.md",
-    "Novation/directives/build_tokens.md",
-    "Novation/directives/build_react_ds.md",
-    "Novation/artifacts/tokens.json",
-    "Novation/artifacts/figma-mirror.json",
-    "Novation/app/src/tokens/typography.ts",
-    "Novation/app/src/tokens/tokens.ts",
-    "Novation/app/src/tokens/tokens.css",
-    "Novation/app/src/pages/ProductPage.tsx",
-    "Novation/app/src/pages/ProductPage.module.css",
-    "Novation/app/src/components/organisms/ProductGallery/index.ts",
-    "Novation/app/src/components/organisms/ProductGallery/ProductGallery.tsx",
     "Novation/app/src/assets/icons/warranty.svg",
     "Novation/app/src/assets/icons/warning.svg",
     "Novation/app/src/assets/icons/tune.svg",
@@ -324,12 +330,6 @@
     "Novation/app/src/assets/icons/socials-linkedin.svg",
     "Novation/app/src/assets/icons/socials-instagram.svg",
     "Novation/app/src/assets/icons/socials-facebook.svg",
-    "Novation/CLAUDE.md",
-    "Novation/app/README.md",
-    "Novation/index.md",
-    "Inbox/Feed  LinkedIn.md",
-    "index.md",
-    "_raw/Feed  LinkedIn.md",
     "Untitled.canvas"
   ]
 }
