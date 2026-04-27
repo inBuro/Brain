@@ -25,7 +25,7 @@ status: active
 ├── README.md       ← этот файл
 ├── index.md
 ├── log.md
-├── raw/
+├── _RAW/
 │   └── assets/
 └── wiki/
     ├── entities/
