@@ -4,37 +4,38 @@
     "type": "split",
     "children": [
       {
-        "id": "97178e924bd6d974",
+        "id": "6dd28e1ecaaf6134",
         "type": "split",
         "children": [
           {
-            "id": "8c0ec2e874311d6d",
+            "id": "2218083928b27537",
             "type": "tabs",
+            "dimension": 49.27007299270073,
             "children": [
               {
-                "id": "5c05a8acc0e0694e",
+                "id": "a8ace8d296f7dc75",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "_raw/llm-wiki.md",
-                    "mode": "source",
+                    "file": "Novation/raw/XL_Performance.README.md",
+                    "mode": "preview",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "llm-wiki"
+                  "title": "XL_Performance.README"
                 }
               }
             ]
           },
           {
-            "id": "2218083928b27537",
+            "id": "f90cd97e3bd9ac1f",
             "type": "tabs",
+            "dimension": 50.72992700729927,
             "children": [
               {
                 "id": "2683054319d62e38",
                 "type": "leaf",
-                "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
@@ -68,9 +69,50 @@
                       "serial": null
                     }
                   },
-                  "pinned": true,
                   "icon": "terminal",
                   "title": "Terminal: zsh"
+                }
+              },
+              {
+                "id": "428a0752b25354a6",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "terminal:terminal",
+                  "state": {
+                    "terminal:terminal": {
+                      "cwd": "/Users/Kirill/Brain",
+                      "focus": false,
+                      "profile": {
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/usr/local/bin/python3",
+                        "followTheme": true,
+                        "name": "",
+                        "platforms": {
+                          "darwin": true
+                        },
+                        "pythonExecutable": "python3",
+                        "restoreHistory": false,
+                        "rightClickAction": "copyPaste",
+                        "successExitCodes": [
+                          "0",
+                          "SIGINT",
+                          "SIGTERM"
+                        ],
+                        "terminalOptions": {
+                          "documentOverride": null
+                        },
+                        "type": "integrated",
+                        "useWin32Conhost": true
+                      },
+                      "serial": null
+                    }
+                  },
+                  "pinned": true,
+                  "icon": "terminal",
+                  "title": "Terminal: python3"
                 }
               }
             ]
@@ -96,7 +138,7 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": true
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -216,9 +258,19 @@
               "icon": "lucide-list",
               "title": "Outline"
             }
+          },
+          {
+            "id": "3bf6b3b87202a9ef",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
         ],
-        "currentTab": 3
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -239,6 +291,18 @@
   },
   "active": "2683054319d62e38",
   "lastOpenFiles": [
+    "dasdasd.md",
+    "Novation/raw/XL_Performance.README.md",
+    "Novation/solo_follower.js",
+    "Novation/raw/solo_follower.js",
+    "Untitled 1.base",
+    "Untitled.base",
+    "Untitled 2.base",
+    "Novation/wiki/log.md",
+    "Novation/wiki/index.md",
+    "Novation/wiki/XL_Performance — как это работает.md",
+    "Novation/index.md",
+    "Novation/Claude.md",
     "_raw/llm-wiki.md",
     "Novation/log.md",
     "Novation/wiki/entities/MIDI Passthrough.md",
@@ -249,32 +313,20 @@
     "Novation/wiki/concepts/Mode Encoding.md",
     "Novation/wiki/concepts/Custom Modes Model.md",
     "Novation/wiki/sources/XL_Performance README.md",
-    "Novation/XL_Performance — как это работает.md",
-    "Novation/index.md",
+    "Novation/raw/XL_Performance — как это работает.md",
     "Novation/wiki/entities",
     "Novation/wiki/sources",
     "Novation/wiki/concepts",
     "Novation/wiki",
     "Novation/raw/XL_Performance.amxd",
-    "Novation/raw/XL_Performance.README.md",
-    "Novation/raw",
-    "Novation/XL_Performance.amxd",
     "Novation/XL_Performance.README.md",
     "_Inbox/llm-wiki.md",
-    "_Inbox",
-    "Novation/m4l/NovationXL/XL_Performance.amxd",
-    "Novation/m4l/NovationXL",
     "log.md",
     "Projects Structure Pattern.md",
     "README.md",
     "_raw/raw.md",
     "index.md",
     "Novation/docs/wiki/sources/XL_Performance v1.5 Description.md",
-    "Novation/docs/wiki/entities/Solo Follower.md",
-    "Novation/docs/wiki/entities/Mixer Layer.md",
-    "Novation/docs/wiki/entities/MIDI Passthrough.md",
-    "Novation/docs/wiki/entities/Instruments Layer.md",
-    "Novation/docs/wiki/entities/CC47 Cross-Mode Transit.md",
     "Novation/app/src/assets/icons/warranty.svg",
     "Novation/app/src/assets/icons/warning.svg",
     "Novation/app/src/assets/icons/tune.svg",
