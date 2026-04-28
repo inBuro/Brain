@@ -173,3 +173,18 @@ mix_obj-ui-page          Bank fx
 - Patch comment: **v1.5**
 - Внутренний тег router’а: **LCXL Overlay Router v18 (single Listen CC + mode by value)**
 - Min Live: см. `minimum_live_version` в `.amxd`. Min Max: `minimum_max_version`. Patch сохранён в Max **9.0.10 x64**.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

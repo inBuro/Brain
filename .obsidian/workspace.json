@@ -4,79 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "5daa0e6d656e00a8",
-        "type": "split",
+        "id": "2218083928b27537",
+        "type": "tabs",
         "children": [
           {
-            "id": "2218083928b27537",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "a8ace8d296f7dc75",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "Novation/raw/XL_Performance.README.md",
-                    "mode": "preview",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "XL_Performance.README"
-                }
-              }
-            ]
-          },
-          {
-            "id": "458688a5a594f4e5",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "b052c29ca583c7f5",
-                "type": "leaf",
-                "pinned": true,
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/Kirill/Brain",
-                      "focus": false,
-                      "profile": {
-                        "args": [],
-                        "executable": "/bin/zsh",
-                        "followTheme": true,
-                        "name": "zsh",
-                        "platforms": {
-                          "darwin": true,
-                          "linux": false,
-                          "win32": false
-                        },
-                        "pythonExecutable": "/opt/homebrew/bin/python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
-                  "pinned": true,
-                  "icon": "terminal",
-                  "title": "Terminal: zsh"
-                }
-              }
-            ]
+            "id": "a8ace8d296f7dc75",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
           }
-        ],
-        "direction": "horizontal"
+        ]
       }
     ],
     "direction": "vertical"
@@ -247,12 +188,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "b052c29ca583c7f5",
+  "active": "a8ace8d296f7dc75",
   "lastOpenFiles": [
     "Novation/raw/XL_Performance.README.md",
+    "Novation/solo_follower.js",
+    "solo_follower.js",
     "Novation/wiki/XL_Performance — как это работает.md",
     "dasdasd.md",
-    "Novation/solo_follower.js",
     "Novation/raw/solo_follower.js",
     "Untitled 1.base",
     "Untitled.base",
@@ -276,7 +218,6 @@
     "Novation/wiki/sources",
     "Novation/wiki/concepts",
     "Novation/wiki",
-    "Novation/raw/XL_Performance.amxd",
     "Novation/XL_Performance.README.md",
     "_Inbox/llm-wiki.md",
     "log.md",
@@ -284,7 +225,6 @@
     "README.md",
     "_raw/raw.md",
     "index.md",
-    "Novation/docs/wiki/sources/XL_Performance v1.5 Description.md",
     "Novation/app/src/assets/icons/warranty.svg",
     "Novation/app/src/assets/icons/warning.svg",
     "Novation/app/src/assets/icons/tune.svg",
