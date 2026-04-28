@@ -29,6 +29,14 @@ var initTask = null;
 
 var pendingDesiredSolo = 0;
 
+var viewObserver = null;
+var lastUserSelectedId = 0;
+var pendingFocusRestore = 0;
+var savedSelectionForRestore = 0;
+var inSoloEvent = 0;
+var soloEventTask = null;
+var lastSoloedExternalId = 0;
+
 function bang() {
     safeInit();
 }
@@ -107,10 +115,11 @@ function tryInit() {
             return;
         }
 
-        ownTrackId = ownTrackApi.id;
+        ownTrackId = parseIntSafe(ownTrackApi.id);
 
         rebuild();
         startTopologyTask();
+        installViewObserver();
 
         initialized = 1;
         rebuilding = 0;
@@ -173,9 +182,10 @@ function addObserver(path) {
     try {
         var probe = new LiveAPI(path);
         if (!isValidApi(probe)) return;
-        if (probe.id === ownTrackId) return;
 
-        var id = probe.id;
+        var id = parseIntSafe(probe.id);
+        if (id === ownTrackId) return;
+
         var currentSolo = safeGetInt(probe, "solo", 0);
 
         soloStates[id] = currentSolo;
@@ -205,10 +215,13 @@ function makeSoloCallback(trackId) {
 
             if (prev === newVal) return;
 
+            markSoloEvent();
+
             soloStates[trackId] = newVal;
 
             if (newVal === 1) {
                 soloCount++;
+                lastSoloedExternalId = trackId;
             } else {
                 soloCount = Math.max(0, soloCount - 1);
             }
@@ -216,6 +229,18 @@ function makeSoloCallback(trackId) {
             scheduleApply(currentDesiredSolo());
         } catch (e) {}
     };
+}
+
+function markSoloEvent() {
+    inSoloEvent = 1;
+    if (soloEventTask) {
+        try { soloEventTask.cancel(); } catch (e) {}
+    }
+    soloEventTask = new Task(function () {
+        inSoloEvent = 0;
+        soloEventTask = null;
+    }, this);
+    soloEventTask.schedule(500);
 }
 
 function currentDesiredSolo() {
@@ -257,17 +282,49 @@ function forceOwnSolo(v) {
         var current = safeGetInt(ownTrackApi, "solo", 0);
         if (current === v) return;
 
-        // Live auto-selects a track as a side-effect of programmatic solo set.
-        // Capture the user's current selection before the set and restore it
-        // right after, so focus never visibly jumps to the router track.
-        var savedId = readSelectedTrackId();
+        var savedId = lastUserSelectedId;
+        if (savedId <= 0 || savedId === ownTrackId) {
+            savedId = readSelectedTrackId();
+        }
+
+        if (v === 1 && savedId > 0 && savedId !== ownTrackId) {
+            savedSelectionForRestore = savedId;
+            pendingFocusRestore = 1;
+            cancelClearPendingFocus();
+        } else if (v === 0) {
+            cancelClearPendingFocus();
+            pendingFocusRestore = 0;
+            savedSelectionForRestore = 0;
+        }
 
         ownTrackApi.set("solo", v);
 
-        if (savedId > 0) {
-            restoreSelectedTrackId(savedId);
+        if (savedSelectionForRestore > 0 && savedSelectionForRestore !== ownTrackId) {
+            try {
+                var view = new LiveAPI("live_set view");
+                if (isValidApi(view)) {
+                    if (v === 1 && lastSoloedExternalId > 0 && lastSoloedExternalId !== savedSelectionForRestore && lastSoloedExternalId !== ownTrackId) {
+                        view.set("selected_track", "id " + lastSoloedExternalId);
+                    }
+                    view.set("selected_track", "id " + savedSelectionForRestore);
+                }
+            } catch (eSync) {}
+        }
+
+        if (v === 0) {
+            scheduleClearPendingFocus();
         }
     } catch (e) {}
+}
+
+function readTrackSolo(trackId) {
+    try {
+        var api = new LiveAPI("id " + trackId);
+        if (!isValidApi(api)) return 0;
+        return safeGetInt(api, "solo", 0);
+    } catch (e) {
+        return 0;
+    }
 }
 
 function readSelectedTrackId() {
@@ -289,11 +346,87 @@ function readSelectedTrackId() {
     }
 }
 
-function restoreSelectedTrackId(trackId) {
+var clearPendingTask = null;
+
+function scheduleClearPendingFocus() {
+    cancelClearPendingFocus();
+    clearPendingTask = new Task(function () {
+        pendingFocusRestore = 0;
+        savedSelectionForRestore = 0;
+        clearPendingTask = null;
+    }, this);
+    clearPendingTask.schedule(800);
+}
+
+function cancelClearPendingFocus() {
+    if (clearPendingTask) {
+        try { clearPendingTask.cancel(); } catch (e) {}
+        clearPendingTask = null;
+    }
+}
+
+function installViewObserver() {
+    uninstallViewObserver();
     try {
-        var view = new LiveAPI("live_set view");
-        if (!isValidApi(view)) return;
-        view.set("selected_track", "id " + trackId);
+        var initialId = readSelectedTrackId();
+        if (initialId > 0 && initialId !== ownTrackId) {
+            lastUserSelectedId = initialId;
+        }
+
+        viewObserver = new LiveAPI(viewObserverCallback, "live_set view");
+        if (!isValidApi(viewObserver)) {
+            viewObserver = null;
+            return;
+        }
+        viewObserver.property = "selected_track";
+    } catch (e) {
+        viewObserver = null;
+    }
+}
+
+function uninstallViewObserver() {
+    if (viewObserver) {
+        try { viewObserver.property = ""; } catch (e) {}
+        viewObserver = null;
+    }
+}
+
+function viewObserverCallback(args) {
+    if (!enabled) return;
+    if (!initialized) return;
+
+    if (pendingFocusRestore) {
+        try {
+            var currentId = readSelectedTrackId();
+            if (currentId <= 0) return;
+            if (savedSelectionForRestore <= 0) return;
+            if (currentId === savedSelectionForRestore) return;
+
+            var liveSolo = readTrackSolo(currentId);
+            var isAutoShift = (currentId === ownTrackId) || (liveSolo === 1) || (soloStates[currentId] === 1);
+
+            if (isAutoShift) {
+                var view = new LiveAPI("live_set view");
+                if (!isValidApi(view)) return;
+                view.set("selected_track", "id " + savedSelectionForRestore);
+            } else {
+                savedSelectionForRestore = currentId;
+                lastUserSelectedId = currentId;
+            }
+        } catch (e) {}
+        return;
+    }
+
+    if (inSoloEvent) return;
+
+    try {
+        var idx = readSelectedTrackId();
+        if (idx <= 0 || idx === ownTrackId) return;
+
+        var liveSoloOnIdx = readTrackSolo(idx);
+        if (liveSoloOnIdx === 1 || soloStates[idx] === 1) return;
+
+        lastUserSelectedId = idx;
     } catch (e) {}
 }
 
@@ -379,6 +512,7 @@ function freebang() {
     stopTopologyTask();
     clearObservers();
     cancelInitTask();
+    uninstallViewObserver();
 
     if (applyTask) {
         try {
@@ -386,6 +520,22 @@ function freebang() {
         } catch (e) {}
         applyTask = null;
     }
+
+    if (clearPendingTask) {
+        try { clearPendingTask.cancel(); } catch (e) {}
+        clearPendingTask = null;
+    }
+
+    if (soloEventTask) {
+        try { soloEventTask.cancel(); } catch (e) {}
+        soloEventTask = null;
+    }
+
+    pendingFocusRestore = 0;
+    savedSelectionForRestore = 0;
+    lastUserSelectedId = 0;
+    inSoloEvent = 0;
+    lastSoloedExternalId = 0;
 
     initialized = 0;
     rebuilding = 0;
