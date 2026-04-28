@@ -4,13 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "6dd28e1ecaaf6134",
+        "id": "5daa0e6d656e00a8",
         "type": "split",
         "children": [
           {
             "id": "2218083928b27537",
             "type": "tabs",
-            "dimension": 49.27007299270073,
             "children": [
               {
                 "id": "a8ace8d296f7dc75",
@@ -29,13 +28,13 @@
             ]
           },
           {
-            "id": "f90cd97e3bd9ac1f",
+            "id": "458688a5a594f4e5",
             "type": "tabs",
-            "dimension": 50.72992700729927,
             "children": [
               {
-                "id": "2683054319d62e38",
+                "id": "b052c29ca583c7f5",
                 "type": "leaf",
+                "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
@@ -43,14 +42,14 @@
                       "cwd": "/Users/Kirill/Brain",
                       "focus": false,
                       "profile": {
-                        "args": [
-                          "--login"
-                        ],
+                        "args": [],
                         "executable": "/bin/zsh",
                         "followTheme": true,
-                        "name": "",
+                        "name": "zsh",
                         "platforms": {
-                          "darwin": true
+                          "darwin": true,
+                          "linux": false,
+                          "win32": false
                         },
                         "pythonExecutable": "/opt/homebrew/bin/python3",
                         "restoreHistory": false,
@@ -69,50 +68,9 @@
                       "serial": null
                     }
                   },
-                  "icon": "terminal",
-                  "title": "Terminal: zsh"
-                }
-              },
-              {
-                "id": "428a0752b25354a6",
-                "type": "leaf",
-                "pinned": true,
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/Kirill/Brain",
-                      "focus": false,
-                      "profile": {
-                        "args": [
-                          "--login"
-                        ],
-                        "executable": "/usr/local/bin/python3",
-                        "followTheme": true,
-                        "name": "",
-                        "platforms": {
-                          "darwin": true
-                        },
-                        "pythonExecutable": "python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: python3"
+                  "title": "Terminal: zsh"
                 }
               }
             ]
@@ -289,10 +247,11 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "2683054319d62e38",
+  "active": "b052c29ca583c7f5",
   "lastOpenFiles": [
-    "dasdasd.md",
     "Novation/raw/XL_Performance.README.md",
+    "Novation/wiki/XL_Performance — как это работает.md",
+    "dasdasd.md",
     "Novation/solo_follower.js",
     "Novation/raw/solo_follower.js",
     "Untitled 1.base",
@@ -300,7 +259,6 @@
     "Untitled 2.base",
     "Novation/wiki/log.md",
     "Novation/wiki/index.md",
-    "Novation/wiki/XL_Performance — как это работает.md",
     "Novation/index.md",
     "Novation/Claude.md",
     "_raw/llm-wiki.md",
