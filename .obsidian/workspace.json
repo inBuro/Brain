@@ -16,10 +16,14 @@
                 "id": "a8ace8d296f7dc75",
                 "type": "leaf",
                 "state": {
-                  "type": "graph",
-                  "state": {},
-                  "icon": "lucide-git-fork",
-                  "title": "Graph view"
+                  "type": "markdown",
+                  "state": {
+                    "file": "_Inbox/llm-wiki.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "llm-wiki"
                 }
               }
             ]
@@ -110,7 +114,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: ✳ Connect solo follower with xl_performance"
+                  "title": "Terminal: zsh"
                 }
               }
             ],
@@ -289,8 +293,9 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "a541e1bc1a25e6c1",
+  "active": "a8ace8d296f7dc75",
   "lastOpenFiles": [
+    "Novation/raw/XL_Performance.README.md",
     "Novation/Novation XL.md",
     "Trading/Claude.md",
     "Trading/wiki/entry-rules-long.md",
@@ -313,7 +318,6 @@
     "Novation/index.md",
     "Novation/Claude.md",
     "Trading",
-    "Novation/raw/XL_Performance.README.md",
     "solo_follower.js",
     "Novation/wiki/XL_Performance — как это работает.md",
     "dasdasd.md",
