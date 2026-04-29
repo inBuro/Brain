@@ -34,7 +34,6 @@
               {
                 "id": "5c788711b2f77efc",
                 "type": "leaf",
-                "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
@@ -68,7 +67,6 @@
                       "serial": null
                     }
                   },
-                  "pinned": true,
                   "icon": "terminal",
                   "title": "Terminal: ✳ Set up project structure per Claude documentation"
                 }
@@ -290,8 +288,9 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "b2e7bb053c776520",
+  "active": "5c788711b2f77efc",
   "lastOpenFiles": [
+    "Trading/wiki/entry-rules-long.md",
     "Trading/wiki/index.md",
     "Trading/wiki/ .md",
     "Trading/wiki/trading-strategy.md",
@@ -327,7 +326,6 @@
     "Novation/wiki/entities/Solo Follower.md",
     "Novation/wiki/entities/CC47 Cross-Mode Transit.md",
     "Novation/wiki/entities/Instruments Layer.md",
-    "Novation/wiki/entities/Mixer Layer.md",
     "Novation/app/src/assets/icons/warranty.svg",
     "Novation/app/src/assets/icons/warning.svg",
     "Novation/app/src/assets/icons/tune.svg",
