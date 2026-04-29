@@ -4,75 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "d2e5a09ae40ce2f1",
-        "type": "split",
+        "id": "2218083928b27537",
+        "type": "tabs",
         "children": [
           {
-            "id": "2218083928b27537",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "a8ace8d296f7dc75",
-                "type": "leaf",
-                "state": {
-                  "type": "graph",
-                  "state": {},
-                  "icon": "lucide-git-fork",
-                  "title": "Graph view"
-                }
-              }
-            ]
-          },
-          {
-            "id": "d7940305867473eb",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "25db377a475c6b6d",
-                "type": "leaf",
-                "pinned": true,
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/Kirill/Brain",
-                      "focus": false,
-                      "profile": {
-                        "args": [],
-                        "executable": "/bin/zsh",
-                        "followTheme": true,
-                        "name": "zsh",
-                        "platforms": {
-                          "darwin": true,
-                          "linux": false,
-                          "win32": false
-                        },
-                        "pythonExecutable": "/opt/homebrew/bin/python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
-                  "pinned": true,
-                  "icon": "terminal",
-                  "title": "Terminal: ⠐ Obsidian Git commit and sync"
-                }
-              }
-            ]
+            "id": "a8ace8d296f7dc75",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
           }
-        ],
-        "direction": "horizontal"
+        ]
       }
     ],
     "direction": "vertical"
@@ -243,7 +188,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "25db377a475c6b6d",
+  "active": "a8ace8d296f7dc75",
   "lastOpenFiles": [
     "Trading",
     "Novation/raw/XL_Performance.README.md",
