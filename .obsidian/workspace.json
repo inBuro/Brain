@@ -289,8 +289,9 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "a8ace8d296f7dc75",
+  "active": "b2e7bb053c776520",
   "lastOpenFiles": [
+    "Bifi",
     "_Inbox/llm-wiki.md",
     "Novation/raw/XL_Performance.README.md",
     "Novation/Novation XL.md",
@@ -326,7 +327,6 @@
     "Novation/wiki/index.md",
     "_raw/llm-wiki.md",
     "Novation/wiki/entities/MIDI Passthrough.md",
-    "Novation/wiki/entities/Solo Follower.md",
     "Novation/app/src/assets/icons/warranty.svg",
     "Novation/app/src/assets/icons/warning.svg",
     "Novation/app/src/assets/icons/tune.svg",
