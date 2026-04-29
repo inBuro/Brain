@@ -5,7 +5,6 @@ outlets = 1;
 var TOPOLOGY_CHECK_MS = 3000;
 var INIT_RETRY_MS = 400;
 var INIT_MAX_RETRIES = 40;
-var SELECTION_RESTORE_DELAY_MS = 30;
 
 var enabled = 1;
 var initialized = 0;
@@ -15,7 +14,6 @@ var initRetries = 0;
 
 var ownTrackApi = null;
 var ownTrackId = 0;
-var viewApi = null;
 
 var observers = [];
 var soloStates = {};
@@ -28,9 +26,7 @@ var cachedReturnCount = -1;
 var topologyTask = null;
 var applyTask = null;
 var initTask = null;
-var selectionRestoreTask = null;
 
-var lastSoloedExternalId = 0;
 var pendingDesiredSolo = 0;
 
 function bang() {
@@ -113,12 +109,6 @@ function tryInit() {
 
         ownTrackId = ownTrackApi.id;
 
-        viewApi = new LiveAPI("live_set view");
-        if (!isValidApi(viewApi)) {
-            rebuildFailed();
-            return;
-        }
-
         rebuild();
         startTopologyTask();
 
@@ -137,7 +127,6 @@ function rebuildFailed() {
     initialized = 0;
     ownTrackApi = null;
     ownTrackId = 0;
-    viewApi = null;
 
     initRetries++;
 
@@ -178,7 +167,6 @@ function clearObservers() {
     soloStates = {};
     trackPaths = {};
     soloCount = 0;
-    lastSoloedExternalId = 0;
 }
 
 function addObserver(path) {
@@ -195,7 +183,6 @@ function addObserver(path) {
 
         if (currentSolo === 1) {
             soloCount++;
-            lastSoloedExternalId = id;
         }
 
         var cb = makeSoloCallback(id);
@@ -222,27 +209,13 @@ function makeSoloCallback(trackId) {
 
             if (newVal === 1) {
                 soloCount++;
-                lastSoloedExternalId = trackId;
             } else {
                 soloCount = Math.max(0, soloCount - 1);
-
-                if (trackId === lastSoloedExternalId) {
-                    lastSoloedExternalId = findAnySoloedTrackId();
-                }
             }
 
             scheduleApply(currentDesiredSolo());
         } catch (e) {}
     };
-}
-
-function findAnySoloedTrackId() {
-    for (var id in soloStates) {
-        if (soloStates.hasOwnProperty(id) && soloStates[id] === 1) {
-            return parseInt(id, 10);
-        }
-    }
-    return 0;
 }
 
 function currentDesiredSolo() {
@@ -285,53 +258,7 @@ function forceOwnSolo(v) {
         if (current === v) return;
 
         ownTrackApi.set("solo", v);
-
-        if (v === 1 && lastSoloedExternalId > 0 && lastSoloedExternalId !== ownTrackId) {
-            applySelectedTrack(lastSoloedExternalId);
-            scheduleSelectionRestore(lastSoloedExternalId);
-        }
     } catch (e) {}
-}
-
-function applySelectedTrack(trackId) {
-    if (!trackId) return;
-    if (trackId === ownTrackId) return;
-
-    try {
-        if (!isValidApi(viewApi)) {
-            viewApi = new LiveAPI("live_set view");
-        }
-        if (!isValidApi(viewApi)) return;
-
-        viewApi.set("selected_track", "id " + trackId);
-    } catch (e) {
-        try {
-            viewApi = new LiveAPI("live_set view");
-            if (isValidApi(viewApi)) {
-                viewApi.set("selected_track", "id " + trackId);
-            }
-        } catch (e2) {}
-    }
-}
-
-function scheduleSelectionRestore(trackId) {
-    cancelSelectionRestore();
-
-    selectionRestoreTask = new Task(function () {
-        applySelectedTrack(trackId);
-        selectionRestoreTask = null;
-    }, this);
-
-    selectionRestoreTask.schedule(SELECTION_RESTORE_DELAY_MS);
-}
-
-function cancelSelectionRestore() {
-    if (selectionRestoreTask) {
-        try {
-            selectionRestoreTask.cancel();
-        } catch (e) {}
-        selectionRestoreTask = null;
-    }
 }
 
 function startTopologyTask() {
@@ -416,7 +343,6 @@ function freebang() {
     stopTopologyTask();
     clearObservers();
     cancelInitTask();
-    cancelSelectionRestore();
 
     if (applyTask) {
         try {
@@ -429,6 +355,4 @@ function freebang() {
     rebuilding = 0;
     ownTrackApi = null;
     ownTrackId = 0;
-    viewApi = null;
-    lastSoloedExternalId = 0;
 }
