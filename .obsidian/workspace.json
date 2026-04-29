@@ -17,12 +17,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "Trading/Hello.md",
+                    "file": "Trading/Claude.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Hello"
+                  "title": "Claude"
                 }
               }
             ]
@@ -249,7 +249,8 @@
   },
   "active": "0b008363acfcd175",
   "lastOpenFiles": [
-    "Trading/Hello.md",
+    "Trading/Claude.md",
+    "Novation/Claude.md",
     "Trading",
     "Novation/raw/XL_Performance.README.md",
     "Novation/solo_follower.js",
@@ -263,7 +264,6 @@
     "Novation/wiki/log.md",
     "Novation/wiki/index.md",
     "Novation/index.md",
-    "Novation/Claude.md",
     "_raw/llm-wiki.md",
     "Novation/log.md",
     "Novation/wiki/entities/MIDI Passthrough.md",
