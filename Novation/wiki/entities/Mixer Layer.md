@@ -56,6 +56,7 @@ CC47/CC49 сохраняют предыдущее состояние в `v mixer
 
 ## Related pages
 
+- [[Novation XL]] — корневой хаб проекта
 - [[Mode Encoding]]
 - [[CC47 Cross-Mode Transit]]
 - [[Instruments Layer]]

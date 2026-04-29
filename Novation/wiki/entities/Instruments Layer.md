@@ -67,6 +67,8 @@ Router помечен как **«LCXL Overlay Router v18 (single Listen CC + mod
 
 ## Related pages
 
+- [[Novation XL]] — корневой хаб проекта
+- [[XL_Performance — как это работает]]
 - [[Mode Encoding]]
 - [[Mixer Layer]]
 - [[CC47 Cross-Mode Transit]]

@@ -39,6 +39,7 @@ tags: [readme, m4l]
 
 ## Related pages
 
+- [[Novation XL]] — корневой хаб проекта
 - [[XL_Performance — как это работает]]
 - [[Custom Modes Model]]
 - [[Mode Encoding]]

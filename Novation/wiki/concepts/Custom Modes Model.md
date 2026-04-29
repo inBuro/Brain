@@ -2,18 +2,18 @@
 type: concept
 project: Novation
 created: 2026-04-27
-updated: 2026-04-28
+updated: 2026-04-29
 status: stable
 tags: [lcxl, midi]
 ---
 
 # Custom Modes Model
 
-**Summary**: Как Launch Control XL MK3 хранит и переключает 16 пользовательских custom-modes; роль CC30/ch7 как канала смены режима.
+**Summary**: Как Launch Control XL MK3 хранит и переключает 14 пользовательских custom-modes; роль CC30/ch7 как канала смены режима.
 
 **Sources**: `raw/XL_Performance.README.md`
 
-**Last updated**: 2026-04-28
+**Last updated**: 2026-04-29
 
 ---
 
@@ -40,6 +40,8 @@ Cross-mode переход между двумя диапазонами реал�
 
 ## Related pages
 
+- [[Novation XL]] — корневой хаб проекта
+- [[XL_Performance — как это работает]]
 - [[Mode Encoding]]
 - [[Mixer Layer]]
 - [[Instruments Layer]]

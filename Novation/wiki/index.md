@@ -2,16 +2,16 @@
 type: index
 project: Novation
 created: 2026-04-28
-updated: 2026-04-28
+updated: 2026-04-29
 ---
 
 # Wiki Index
 
-**Summary**: Содержание вики проекта **Novation** — knowledge base вокруг устройства `XL_Performance.amxd` для Launch Control XL MK3.
+**Summary**: Альтернативный плоский TOC вики проекта **Novation** (knowledge base вокруг `XL_Performance.amxd` для Launch Control XL MK3). Основной хаб с описаниями страниц и связями к raw-источникам — [[Novation XL]].
 
 **Sources**: —
 
-**Last updated**: 2026-04-28
+**Last updated**: 2026-04-29
 
 ---
 
@@ -25,7 +25,7 @@ updated: 2026-04-28
 
 ## Concepts
 
-- [[Custom Modes Model]] — как LCXL MK3 хранит и переключает 16 custom-modes; роль CC30/ch7.
+- [[Custom Modes Model]] — как LCXL MK3 хранит и переключает 14 custom-modes; роль CC30/ch7.
 - [[Mode Encoding]] — формула `mode = 23 + bank + 2*((page+hold) % 2)` и таблица маппинга инструментов.
 
 ## Entities
@@ -33,5 +33,5 @@ updated: 2026-04-28
 - [[Mixer Layer]] — custom-modes 11–14, value-объекты `mixer_bank/page/hold`, UI.
 - [[Instruments Layer]] — custom-modes 1–10, overlay CC (по умолчанию 49), фильтрация.
 - [[CC47 Cross-Mode Transit]] — quick-jump между микшером и инструментами с памятью.
-- [[Solo Follower]] — JS + LiveAPI, держит собственный трек заSOLOенным вместе с внешними.
+- [[Solo Follower]] — JS + LiveAPI, держит собственный трек заSOLOенным вместе с внешними; **неотъемлемая часть** XL_Performance.
 - [[MIDI Passthrough]] — verbatim notes/bend/aftertouch/program; CC режутся `[sel 30 31]`.
