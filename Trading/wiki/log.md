@@ -60,3 +60,18 @@ This file is **append-only**. Never modify previous entries — only add new one
 - `wiki/index.md`: добавлена секция `## Sources` со ссылкой `[[raw/strategy-v3]]` и описанием — теперь хаб тоже ссылается на канонический документ.
 
 В графе `raw/strategy-v3` — узел источника со связями к `trading-strategy`, `entry-rules-long` и `wiki/index`. Аналог пути, который сделан в Novation для `raw/XL_Performance.README` и `solo_follower.js`.
+
+---
+
+## 2026-04-29 — Lint fix: wiki-link path resolution
+
+**Issue:** Wiki-links вида `[[raw/strategy-v3]]` не резолвились в Obsidian. Vault root = `/Users/Kirill/Brain` (подтверждено наличием `.obsidian/` именно там), значит ссылка искала `/Users/Kirill/Brain/raw/strategy-v3.md`, а файл лежит на `/Users/Kirill/Brain/Trading/raw/strategy-v3.md`. Граф был сломан.
+
+**Fix:** заменил `[[raw/strategy-v3]]` → `[[strategy-v3]]` (короткая форма, работает потому что имя `strategy-v3` уникально в vault'е — проверено `find` по всему `/Users/Kirill/Brain`).
+
+**Updated:**
+- `wiki/index.md` — секция Sources
+- `wiki/trading-strategy.md` — поле Sources в шапке + раздел «История версий»
+- `wiki/entry-rules-long.md` — поле Sources в шапке
+
+**Why this form:** `[[strategy-v3]]` короче чем `[[Trading/raw/strategy-v3]]` и устойчивее к перемещению файла в другую подпапку. Если в будущем появится другой `strategy-v3.md` где-то в vault'е — Obsidian заругается на коллизию имён, и тогда переключимся на полный путь.
