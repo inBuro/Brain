@@ -2,7 +2,7 @@
 
 **Summary**: Точка входа во всю базу знаний Trading. Для каждой страницы — одна строка с описанием.
 **Sources**: операционная страница (источника нет)
-**Last updated**: 2026-04-29
+**Last updated**: 2026-04-29 (добавлено правило проверки новостей в [[entry-rules-long]])
 
 ---
 
@@ -31,6 +31,7 @@
 - `indicators` — BOLL, EMA, RSI, MACD
 - `bybit-data` — раздел Data на Bybit (funding, OI, whale ratio)
 - `bybit-chart-markers` — метки B/S на графиках = исполненные ордера, не сигналы
+- `news-check` — типология финансовых новостей по активу: критические блокеры, sell-pressure сигналы, macro-headlines, мягкие bullish/bearish фоны
 - `daily-routine` — рутина торгового дня
 - `weekly-review` — еженедельное ревью стратегии
 - `psychology-rules` — психологические правила и паттерны срывов
