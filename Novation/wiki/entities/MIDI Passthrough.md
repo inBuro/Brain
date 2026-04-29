@@ -44,6 +44,7 @@ tags: [m4l, midi]
 
 ## Related pages
 
+- [[Novation XL]] — корневой хаб проекта
 - [[Custom Modes Model]]
 - [[XL_Performance — как это работает]]
 - [[XL_Performance README]]

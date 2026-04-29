@@ -9,7 +9,7 @@
 Source: [[raw/XL_Performance.README]] (12.6 KB).
 
 Создано:
-- [[index]]
+- [[Novation XL]] (изначально `index.md`, переименован 2026-04-29 для уникального узла в графе)
 - [[XL_Performance — как это работает]] — синтез верхнего уровня.
 - [[wiki/sources/XL_Performance README]]
 - [[wiki/concepts/Custom Modes Model]]

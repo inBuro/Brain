@@ -50,6 +50,8 @@ CC47 одновременно используется как:
 
 ## Related pages
 
+- [[Novation XL]] — корневой хаб проекта
+- [[XL_Performance — как это работает]]
 - [[Mixer Layer]]
 - [[Instruments Layer]]
 - [[Mode Encoding]]

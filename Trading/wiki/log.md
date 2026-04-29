@@ -50,3 +50,13 @@ This file is **append-only**. Never modify previous entries — only add new one
 **Reasoning по выбору первого концепта:** в предыдущей log-записи было предсказано что `entry-rules-long` — самый часто используемый концепт. Решили не ждать первой недели торговли, а сразу развернуть его, чтобы при первом же setup'е не возвращаться к raw-документу. Остальные концепты по-прежнему раскрываем по мере необходимости — следующий кандидат `position-sizing` (нужен сразу после `entry-rules-long` в потоке "решил войти → считаю размер").
 
 **Next:** при следующем касании wiki — либо `entry-rules-short` (зеркальная пара), либо `position-sizing` (следующий шаг в operational flow). Решим по ситуации.
+
+## 2026-04-29 — связь `raw/strategy-v3` ↔ trading-strategy (граф)
+
+Канонический документ стратегии теперь явно залинкован как wiki-link, а не упоминается plain text'ом — чтобы быть узлом в Obsidian Graph View рядом с `trading-strategy` и `entry-rules-long`.
+
+- `wiki/trading-strategy.md`: в строке `**Sources**` `strategy-v3.md` → `[[raw/strategy-v3]]`; в разделе «История версий» `\`raw/strategy-v3.md\`` → `[[raw/strategy-v3]]`. Inline-цитаты `(source: strategy-v3.md)` оставлены plain text по конвенции CLAUDE.md.
+- `wiki/entry-rules-long.md`: в строке `**Sources**` `strategy-v3.md` → `[[raw/strategy-v3]]`.
+- `wiki/index.md`: добавлена секция `## Sources` со ссылкой `[[raw/strategy-v3]]` и описанием — теперь хаб тоже ссылается на канонический документ.
+
+В графе `raw/strategy-v3` — узел источника со связями к `trading-strategy`, `entry-rules-long` и `wiki/index`. Аналог пути, который сделан в Novation для `raw/XL_Performance.README` и `solo_follower.js`.
