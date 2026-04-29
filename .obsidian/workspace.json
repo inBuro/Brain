@@ -35,40 +35,10 @@
                 "id": "5c788711b2f77efc",
                 "type": "leaf",
                 "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/Kirill/Brain",
-                      "focus": false,
-                      "profile": {
-                        "args": [],
-                        "executable": "/bin/zsh",
-                        "followTheme": true,
-                        "name": "zsh",
-                        "platforms": {
-                          "darwin": true,
-                          "linux": false,
-                          "win32": false
-                        },
-                        "pythonExecutable": "/opt/homebrew/bin/python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
-                  "icon": "terminal",
-                  "title": "Terminal: ✳ Set up project structure per Claude documentation"
+                  "type": "graph",
+                  "state": {},
+                  "icon": "lucide-git-fork",
+                  "title": "Graph view"
                 }
               },
               {
