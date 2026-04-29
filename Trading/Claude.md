@@ -119,3 +119,18 @@ When the user asks you to lint or audit the wiki:
 - Keep page names lowercase with hyphens (e.g. `machine-learning.md`)
 - Write in clear, plain language
 - When uncertain about how to categorize something, ask the user
+
+## Live market analysis behavior
+
+When the user shares market screenshots/context for a trading setup analysis:
+
+- If a valid setup exists → walk through entry rules, suggest size/SL/TP per the strategy.
+- **If no valid setup exists** → don't just say "no entry right now". Always propose a concrete time window for the next market check, e.g. "Сейчас setup'а нет. Возвращайся примерно через ~6 часов с новыми скриншотами 4h/1h."
+
+Why: the trader has a 30-40 min/day attention budget (see `wiki/trader-profile` / `raw/strategy-v3.md`) and explicitly does not want to sit over the chart. An open-ended "no setup" leaves the trader either forgetting to come back or checking too often. A concrete next-checkpoint converts a no-trade into an actionable plan.
+
+How to pick the interval:
+- If waiting for an HL/LH to form on 4h → ~4-6 hours
+- If price is far from key support/resistance → 8-12 hours
+- If price is close to the zone but conditions are missing → 2-3 hours
+- Always specify what to send back (4h + 1h minimum, plus Bybit Data screenshots when whale ratio / funding are decision-relevant)
