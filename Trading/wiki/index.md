@@ -1,54 +1,54 @@
 # Wiki Index
 
-**Summary**: Точка входа во всю базу знаний Trading. Для каждой страницы — одна строка с описанием.
-**Sources**: операционная страница (источника нет)
-**Last updated**: 2026-04-29 (синк wiki с [[strategy-v4]]: hub перепаян на v4, [[entry-rules-long]] синхронизирована, создана [[entry-rules-short]])
+**Summary**: Entry point for the entire Trading knowledge base. Each page gets one descriptive line.
+**Sources**: operational page (no upstream source)
+**Last updated**: 2026-04-30 (bulk translation RU → EN; structure unchanged)
 
 ---
 
-## Стратегия
+## Strategy
 
-- [[trading-strategy]] — главная страница системной свинг-стратегии для ETH/USDT (v3)
-- [[strategy-v3-baseline-backtest]] — sanity-check одиночных сигналов из v3 на дневках ETH-USD за 2 года (бэктест через `backtesting-trading-strategies` skill)
+- [[trading-strategy]] — main page for the systematic ETH/USDT swing strategy (v3)
+- [[strategy-v3-baseline-backtest]] — sanity check of v3's individual signals on 2 years of daily ETH-USD data (backtest via the `backtesting-trading-strategies` skill)
 
 ## Sources
 
-- [[strategy-v4]] — **АКТУАЛЬНАЯ** версия стратегии (2026-04-29). Добавлены multi-TF alignment, запрещающие условия из risk-management skill, news Impact Score, weekly leverage accounting
-- [[strategy-v3]] — предыдущая версия стратегии (2026-04-29), сохранена как исторический референс. См. changelog в [[strategy-v4]]
+- [[strategy-v4]] — **CURRENT** strategy version (2026-04-29). Adds multi-TF alignment, prohibitive conditions from the `risk-management` skill, news Impact Score, weekly leverage accounting
+- [[strategy-v3]] — previous strategy version (2026-04-29), kept as historical reference. See changelog in [[strategy-v4]]
 
-## Концепты
+## Concepts
 
-- [[entry-rules-long]] — условия входа в long (главный вопрос → multi-TF pre-check → news Impact Score → 5 базовых + бонусные + 7 запрещающих)
-- [[entry-rules-short]] — условия входа в short (зеркальная страница к entry-rules-long)
+- [[entry-rules-long]] — long entry conditions (main question → multi-TF pre-check → news Impact Score → 5 base conditions + bonuses + 7 prohibitive)
+- [[entry-rules-short]] — short entry conditions (mirror page to entry-rules-long)
 
-## Концепты (planned)
+## Concepts (planned)
 
-Страницы упомянуты в `[[trading-strategy]]` через wiki-links, но ещё не созданы. Раскрываем по одной-две за каждое еженедельное ревью, когда есть повод обсудить тему детально.
+These pages are referenced from `[[trading-strategy]]` via wiki-links but not yet created. We expand one or two per weekly review when there is a real reason to discuss the topic in depth.
 
-- `trader-profile` — профиль трейдера: депозит, плечо, режим работы
-- `position-sizing` — формула размера позиции
-- `stop-loss-rules` — где ставить SL и когда подтягивать
-- `take-profit-rules` — конфигурация трёх TP уровней (30/30/40)
-- `timeframes` — назначение таймфреймов (1D / 4h / 1h / 15m / 1m)
+- `trader-profile` — trader profile: capital, leverage, work mode
+- `position-sizing` — position size formula
+- `stop-loss-rules` — where to place SL and when to trail it
+- `take-profit-rules` — three TP levels (30/30/40)
+- `timeframes` — purpose of each timeframe (1D / 4h / 1h / 15m / 1m)
 - `indicators` — BOLL, EMA, RSI, MACD
-- `bybit-data` — раздел Data на Bybit (funding, OI, whale ratio)
-- `bybit-chart-markers` — метки B/S на графиках = исполненные ордера, не сигналы
-- `multi-tf-alignment` — концепт multi-TF pre-check: что значит «alignment 4h+1h+15m», когда считается выполненным, отсылка к risk-management паттерну
-- `news-impact-score` — формула Impact Score, шкалы Price Impact / Breadth / Forward Modifier, пороги решений
-- `leverage-accounting` — как вести отдельный учёт P&L по сделкам где 5x плечо реально использовалось vs нет (для weekly review)
-- `news-check` — типология финансовых новостей (старый концепт, теперь частично поглощён `news-impact-score`; решим объединять или оставить рядом)
-- `daily-routine` — рутина торгового дня
-- `weekly-review` — еженедельное ревью стратегии (включая leverage outcome accounting)
-- `psychology-rules` — психологические правила и паттерны срывов
-- `commission-management` — минимизация комиссий
+- `bybit-data` — Bybit Data tab (funding, OI, whale ratio)
+- `bybit-chart-markers` — B/S markers on Bybit charts mean executed orders, not signals
+- `multi-tf-alignment` — multi-TF pre-check concept: what "alignment 4h+1h+15m" means, when it's satisfied, link to the underlying risk-management pattern
+- `news-impact-score` — Impact Score formula, Price Impact / Breadth / Forward Modifier scales, decision thresholds
+- `leverage-accounting` — separate P&L tracking for trades where 5x leverage was actually required vs not (for weekly review)
+- `news-check` — taxonomy of financial news (older concept, now partially absorbed by `news-impact-score`; merge-or-keep decision pending)
+- `daily-routine` — trading day routine
+- `weekly-review` — weekly strategy review (including leverage outcome accounting)
+- `psychology-rules` — psychological rules and breakdown patterns
+- `commission-management` — commission minimization
 
-## Операционные
+## Operational
 
-- [[log]] — журнал операций над wiki (append-only)
+- [[log]] — wiki operations journal (append-only)
 
-## Глоссарий (planned)
+## Glossary (planned)
 
-Термины которые встречаются в стратегии и заслуживают отдельной страницы для определения и контекста:
+Terms that come up in the strategy and deserve their own page for definition and context:
 
 - whale ratio
 - funding rate
@@ -57,5 +57,5 @@
 - exponential moving average (EMA)
 - relative strength index (RSI)
 - MACD
-- HH / HL / LH / LL (структура свечей)
+- HH / HL / LH / LL (candle structure)
 - R:R (risk-reward ratio)
