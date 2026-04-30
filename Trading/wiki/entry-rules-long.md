@@ -1,20 +1,20 @@
 # Entry Rules: LONG
 
-**Summary**: Long entry conditions for ETH/USDT. Structure: main potential question → multi-TF alignment pre-check → news Impact Score → 5 base conditions (at least 3 of 5) → bonus confirmations → prohibitive conditions (including mixed-market momentum and counter-trend). Mirrored on [[entry-rules-short]].
-**Sources**: [[strategy-v4]] (current strategy version), [[strategy-v3]] (historical reference), chat 2026-04-29
-**Last updated**: 2026-04-30 (translation RU → EN; content unchanged from 2026-04-29 v4 sync)
+**Summary**: Long entry conditions for ETH/USDT. Structure: main potential question → multi-TF alignment pre-check → news Impact Score → 5 base conditions (at least 3 of 5) → bonus confirmations → prohibitive conditions (including mixed-market momentum and counter-trend). Mirrored on [[entry-rules-short]]. For range mean-reversion setups, see [[range-trade-rules]].
+**Sources**: [[strategy-v5]] (current strategy version), [[strategy-v4]] (historical reference), [[strategy-v3]] (older reference), chat 2026-04-29..30
+**Last updated**: 2026-04-30 (sync with v5: lowered potential 4-7% → 2.5-4%, R:R 1:3 → 1:2 min)
 
 ---
 
 ## Main question (gating)
 
-Before any other check, one question: **is there a 4-7% move (or $100-150 of profit) potential up to TP3?** (source: strategy-v4.md). If no potential — don't look further, don't enter. This filters out small moves that don't justify the risk and commissions (see [[commission-management]]).
+Before any other check, one question: **is there a 2.5-4% move (or $60-100 of profit) potential up to TP3?** (source: strategy-v5.md, lowered from 4-7% in v4). If no potential — don't look further, don't enter. This filters out small moves that don't justify the risk and commissions (see [[commission-management]]).
 
-In practice: if ETH is at $2,300, then TP3 for long should sit at $2,400 or higher. If the nearest strong resistance is $2,330 — potential is only ~1.3%, nothing to enter on.
+In practice: if ETH is at $2,300, then TP3 for long should sit at $2,358 or higher. If the nearest strong resistance is $2,330 — potential is only ~1.3%, nothing to enter on. For shorter-range mean-reversion plays where potential is 1.5-2.5%, see [[range-trade-rules]] (different rule set).
 
 ## Pre-check 1 — Multi-TF Alignment
 
-**Mandatory check BEFORE evaluating the 5 base conditions** (source: strategy-v4.md). If alignment doesn't hold — there is no setup, don't look further.
+**Mandatory check BEFORE evaluating the 5 base conditions** (source: strategy-v5.md). If alignment doesn't hold — there is no setup, don't look further.
 
 For long, all three timeframes must line up in the same direction:
 
@@ -59,7 +59,7 @@ Methodology source — `market-news-analyst` skill, adapted for crypto/ETH. Conc
 
 ## Base conditions (at least 3 of 5)
 
-This is the core of the entry rules. Need to satisfy at least **three of the five** below at the same time (source: strategy-v4.md):
+This is the core of the entry rules. Need to satisfy at least **three of the five** below at the same time (source: strategy-v5.md):
 
 1. **Price at strong support.** Support means: 24h low, EMA100 on 4h, lower BB band on 4h, or a historical level. The more support types overlap, the stronger the zone.
 2. **RSI oversold.** Satisfied if RSI(14) on 1h <40 OR RSI(14) on 4h <45. Either one is enough — both not required.
@@ -79,7 +79,7 @@ Not required for entry, but they raise confidence and can justify increasing siz
 
 ## Prohibitive conditions (any one — no entry)
 
-These are blockers. If **any one** of the conditions below holds — don't take the long, even if all 5 base conditions are met and bonuses favor us (source: strategy-v4.md):
+These are blockers. If **any one** of the conditions below holds — don't take the long, even if all 5 base conditions are met and bonuses favor us (source: strategy-v5.md):
 
 1. **Fresh break of a key daily support.** If the 1D level just broke down — don't catch a falling knife.
 2. **Whale ratio <0.8.** Whales are short. Going against them is a bad idea.
