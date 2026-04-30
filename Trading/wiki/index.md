@@ -2,7 +2,7 @@
 
 **Summary**: Entry point for the entire Trading knowledge base. Each page gets one descriptive line.
 **Sources**: operational page (no upstream source)
-**Last updated**: 2026-04-30 (bulk translation RU → EN; structure unchanged)
+**Last updated**: 2026-04-30 (v5 added: range-trade-rules, trading-journal-v5; sources reordered)
 
 ---
 
@@ -13,13 +13,16 @@
 
 ## Sources
 
-- [[strategy-v4]] — **CURRENT** strategy version (2026-04-29). Adds multi-TF alignment, prohibitive conditions from the `risk-management` skill, news Impact Score, weekly leverage accounting
-- [[strategy-v3]] — previous strategy version (2026-04-29), kept as historical reference. See changelog in [[strategy-v4]]
+- [[strategy-v5]] — **CURRENT** strategy version (2026-04-30). Lowered potential and R:R thresholds, added RANGE-trade subcategory, graduated position sizing ($30 → $40), scheduled remote agent for passive monitoring + email alerts
+- [[strategy-v4]] — previous strategy version (2026-04-29), kept as historical reference. Adds multi-TF alignment, prohibitive conditions from the `risk-management` skill, news Impact Score, weekly leverage accounting
+- [[strategy-v3]] — strategy version v3 (2026-04-29), older historical reference. See changelog in [[strategy-v4]]
 
 ## Concepts
 
 - [[entry-rules-long]] — long entry conditions (main question → multi-TF pre-check → news Impact Score → 5 base conditions + bonuses + 7 prohibitive)
 - [[entry-rules-short]] — short entry conditions (mirror page to entry-rules-long)
+- [[range-trade-rules]] — new in v5: range mean-reversion subcategory (4h MACD ≈ 0 + ATR contraction + clear horizontal range)
+- [[trading-journal-v5]] — append-only journal of all market checks (manual + scheduled routine), v5 onward
 
 ## Concepts (planned)
 

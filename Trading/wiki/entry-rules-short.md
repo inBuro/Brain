@@ -1,20 +1,20 @@
 # Entry Rules: SHORT
 
-**Summary**: Short entry conditions for ETH/USDT. Mirror page to [[entry-rules-long]] — same structure: main potential question → multi-TF alignment pre-check → news Impact Score → 5 base conditions (at least 3 of 5) → bonus confirmations → prohibitive conditions (including mixed-market momentum and counter-trend in a bullish market).
-**Sources**: [[strategy-v4]] (current strategy version), [[strategy-v3]] (historical reference)
-**Last updated**: 2026-04-30 (translation RU → EN; content unchanged from 2026-04-29 v4 sync)
+**Summary**: Short entry conditions for ETH/USDT. Mirror page to [[entry-rules-long]] — same structure: main potential question → multi-TF alignment pre-check → news Impact Score → 5 base conditions (at least 3 of 5) → bonus confirmations → prohibitive conditions (including mixed-market momentum and counter-trend in a bullish market). For range mean-reversion setups, see [[range-trade-rules]].
+**Sources**: [[strategy-v5]] (current strategy version), [[strategy-v4]] (historical reference), [[strategy-v3]] (older reference)
+**Last updated**: 2026-04-30 (sync with v5: lowered potential 4-7% → 2.5-4%, R:R 1:3 → 1:2 min)
 
 ---
 
 ## Main question (gating)
 
-Before any other check, one question: **is there a 4-7% downward move (or $100-150 of profit) potential up to TP3?** (source: strategy-v4.md). If no potential — don't look further, don't enter. This filters out small moves that don't justify the risk and commissions (see [[commission-management]]).
+Before any other check, one question: **is there a 2.5-4% downward move (or $60-100 of profit) potential up to TP3?** (source: strategy-v5.md, lowered from 4-7% in v4). If no potential — don't look further, don't enter. This filters out small moves that don't justify the risk and commissions (see [[commission-management]]).
 
-In practice: if ETH is at $2,300, then TP3 for short should sit at $2,200 or lower. If the nearest strong support is $2,270 — potential is only ~1.3%, nothing to enter on.
+In practice: if ETH is at $2,300, then TP3 for short should sit at $2,243 or lower. If the nearest strong support is $2,270 — potential is only ~1.3%, nothing to enter on. For shorter-range mean-reversion shorts where potential is 1.5-2.5%, see [[range-trade-rules]].
 
 ## Pre-check 1 — Multi-TF Alignment
 
-**Mandatory check BEFORE evaluating the 5 base conditions** (source: strategy-v4.md). If alignment doesn't hold — there is no setup, don't look further.
+**Mandatory check BEFORE evaluating the 5 base conditions** (source: strategy-v5.md). If alignment doesn't hold — there is no setup, don't look further.
 
 For short, all three timeframes must line up in the same direction (mirror of long):
 
@@ -55,7 +55,7 @@ Methodology source — `market-news-analyst` skill, adapted for crypto/ETH. Conc
 
 ## Base conditions (at least 3 of 5)
 
-This is the core of the entry rules. Need to satisfy at least **three of the five** below at the same time (source: strategy-v4.md):
+This is the core of the entry rules. Need to satisfy at least **three of the five** below at the same time (source: strategy-v5.md):
 
 1. **Price at strong resistance.** Resistance means: 24h high, EMA100 on 4h, upper BB band on 4h, or a historical level. The more resistance types overlap, the stronger the zone.
 2. **RSI overbought.** Satisfied if RSI(14) on 1h >65 OR RSI(14) on 4h >60. Either one is enough — both not required.
@@ -76,7 +76,7 @@ Not required for entry, but they raise confidence and can justify increasing siz
 
 ## Prohibitive conditions (any one — no entry)
 
-These are blockers. If **any one** of the conditions below holds — don't take the short, even if all 5 base conditions are met and bonuses favor us (source: strategy-v4.md):
+These are blockers. If **any one** of the conditions below holds — don't take the short, even if all 5 base conditions are met and bonuses favor us (source: strategy-v5.md):
 
 1. **Fresh break of a key daily resistance.** If the 1D level just broke up — don't short into impulse, you risk a short squeeze.
 2. **Whale ratio >1.3.** Whales are strongly long. Going against them is a bad idea.

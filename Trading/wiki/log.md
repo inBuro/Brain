@@ -226,3 +226,61 @@ In the graph, `raw/strategy-v3` becomes a source node with edges to `trading-str
 
 **Follow-up:** none required. Future doc edits run through the lint workflow automatically.
 
+---
+
+## 2026-04-30 — Strategy v5 launched + scheduled remote agent for paper-trading journal
+
+**Operation:** drafted strategy v5 as a frequency-and-coverage iteration. Goal: lift expected monthly P&L from v4's effective ~$30 (5 setups × 25% catch rate at manual scans) to **$200-500/month** by relaxing thresholds, adding range trades, graduated position sizing, and scheduled remote agent for passive monitoring.
+
+**Created:**
+- `raw/strategy-v5.md` — new canonical strategy version (immutable after creation per CLAUDE.md). English (per language-split memory rule).
+- `wiki/range-trade-rules.md` — new concept page for the v5 range-trade subcategory (mean-reversion when 4h MACD ≈ 0 + ATR contracting + clear horizontal range).
+- `wiki/trading-journal-v5.md` — append-only journal stub for the 2-week paper-trading test (2026-04-30 → 2026-05-14). Will be filled by the scheduled remote agent and by manual entries during chat sessions.
+
+**Updated:**
+- `wiki/index.md` — v5 promoted to CURRENT, v4 → historical reference, v3 → older reference. Added `range-trade-rules` and `trading-journal-v5` to active Concepts. Last updated note refreshed.
+- `wiki/trading-strategy.md` — Summary/Sources/Last updated switched to v5. Target parameters table rewritten for new tier risk schedule, R:R, frequency, and the dollar-based monthly target ($200-350 Tier 1, $500 Tier 2 stretch). Pre-checks section mentions range pre-check as alternative path. Strategy structure section adds `range-trade-rules` link. Target metrics section adds Tier promotion/demotion tracking and range vs trend split. Version history entry for v5.
+- `wiki/entry-rules-long.md` — main potential question lowered from 4-7% to 2.5-4% (with $60-100 profit target instead of $100-150). Mentions `range-trade-rules` as alternative for shorter-range plays. All inline `(source: strategy-v4.md)` citations replaced with `strategy-v5.md`. Sources field updated.
+- `wiki/entry-rules-short.md` — mirror updates: 2.5-4%, range-trade-rules link, source citations.
+
+**Strategy v5 content highlights (full changelog inside `raw/strategy-v5.md`):**
+
+1. **Lowered potential threshold** for trend trades: 4-7% → 2.5-4%.
+2. **Lowered R:R**: minimum 1:3 → 1:2, target 1:5 → 1:3.5. TP levels: TP1 1:1, TP2 1:2 (was 1:2.5), TP3 1:3.5+ (was 1:5+).
+3. **Added RANGE-trade subcategory** — entirely new section with own pre-check (no multi-TF alignment), entry rules (rejection candle at edge), 2 TPs (midpoint + opposite edge), smaller size ($15 Tier 1), higher target win rate (60-65%).
+4. **Graduated position sizing**: $25 → $30 (Tier 1 initial) → $40 (Tier 2 after 30 valid setups + ≥45% win rate). Demotion to $20 if losses > $300 in any 7-day window.
+5. **Scheduled remote agent** (passive monitoring layer) — see below.
+6. **Margin per trade relaxed** 40% → 50% (to accommodate Tier 2 positions on tight SL setups).
+7. **Psychology rule #9** — "trust routine alerts but still run manual checklist".
+8. **Daily routine restructured** — passive layer at top, manual scans become supplements.
+
+**Why v5 was written before the routine:** trader requested it (chat 2026-04-30). Routine needs the latest strategy doc to evaluate against — by writing v5 first, the routine prompt can reference it directly without baking strategy logic into the prompt itself.
+
+**What was deliberately rejected (recorded in v5 changelog):**
+- Removing the "counter-trend in bearish market" prohibitive — empirically too dangerous (`risk-management`: 0-30% success rate, 132+ samples).
+- Variant 3 from brainstorm ($60 risk, R:R 1:1.5) — too aggressive for current $2,200 capital.
+- Auto-execution by routine — violates "decision before entry" principle. Routine alerts, human enters.
+
+**Scheduled remote agent setup (next step in this session):**
+
+- Routine name: `eth-paper-journal`
+- Schedule: cron `0 3,8,16 * * *` UTC = 10:00 / 15:00 / 23:00 ICT
+- Tools: Bash, Read, Write, Edit, Glob, Grep
+- MCP: Gmail (for email alerts to `hellokbbureau@gmail.com`)
+- Repo: `inBuro/Brain`
+- Test period: 2 weeks (2026-04-30 → 2026-05-14)
+- After 2 weeks: review journal stats, decide if routine pays off
+
+**What the routine does each run:**
+1. Reads current strategy from repo (`wiki/trading-strategy.md`, `wiki/entry-rules-*.md`, `wiki/range-trade-rules.md`)
+2. Fetches Bybit market data via public REST API
+3. Computes indicators in Python
+4. Evaluates strategy rules (excluding news Impact Score and whale ratio — flagged for manual verification)
+5. Appends entry to `wiki/trading-journal-v5.md` (always, even on no-setup runs)
+6. Sends email via Gmail MCP if SETUP_LONG / SETUP_SHORT / SETUP_RANGE detected
+7. Commits + pushes the journal update
+
+**Linting:** `raw/strategy-v5.md` and all wiki updates ran through Vale + LanguageTool per the language-split workflow. Vocab extended for new domain terms (TradingView, EMAs, cron, recalibrated, drawdowns).
+
+**Next:** create the routine via the `schedule` skill, manually trigger a test run, verify end-to-end (data fetch → analysis → journal append → email if setup → commit/push), then let cron take over for 2 weeks.
+
