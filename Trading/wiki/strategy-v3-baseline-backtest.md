@@ -1,88 +1,88 @@
-# Strategy v3 — Baseline Backtest (Sanity Check одиночных сигналов)
+# Strategy v3 — Baseline Backtest (Sanity Check on Single Signals)
 
-**Summary**: Бэктест **отдельных индикаторов** из [[strategy-v3]] на дневных данных ETH-USD за 2 года. Это НЕ валидация полной стратегии — это проверка, есть ли edge у одиночных сигналов в изоляции (Variant A из плана валидации).
+**Summary**: Backtest of **individual indicators** from [[strategy-v3]] on 2 years of daily ETH-USD data. This isn't a full-strategy validation — it's a check whether individual signals have any edge in isolation (Variant A from the validation plan).
 **Sources**: `raw/strategy-v3.md`, `.agents/skills/backtesting-trading-strategies/`
-**Last updated**: 2026-04-29
+**Last updated**: 2026-04-30 (translation RU → EN; content unchanged from 2026-04-29)
 
 ---
 
-## Контекст и ограничения
+## Context and limitations
 
-Полный бэктест [[strategy-v3]] напрямую невозможен через установленный skill `backtesting-trading-strategies` по причинам:
+A direct full backtest of [[strategy-v3]] via the installed `backtesting-trading-strategies` skill isn't possible, for these reasons:
 
-1. **Источник данных** — `yfinance` (`ETH-USD` спот), а не Bybit ETH/USDT perpetual. Различие в цене незначительное, но **полностью отсутствуют** funding rate, open interest и whale ratio (Bybit Trading Trend) — а это ключевые компоненты setup'а.
-2. **Таймфрейм** — skill хардкодит `interval='1d'`, тогда как [[strategy-v3]] работает на 4h/1h.
-3. **Логика входа** — встроенные стратегии skill'а одно-правильные (один индикатор → сигнал), а strategy-v3 требует «3 из 5 базовых условий» + бонусы + запрещающие.
-4. **Multi-TP exits** — TP1/TP2/TP3 с разными R:R и переводом SL в БУ после TP1 (стандарт стратегии) skill'ом не моделируется.
+1. **Data source** — `yfinance` (`ETH-USD` spot), not Bybit ETH/USDT perpetual. The price difference is small, but funding rate, open interest, and whale ratio (Bybit Trading Trend) are **completely absent** — and those are key setup components.
+2. **Timeframe** — the skill hardcodes `interval='1d'`, while [[strategy-v3]] runs on 4h/1h.
+3. **Entry logic** — built-in skill strategies are single-rule (one indicator → signal), while strategy-v3 requires "3 of 5 base conditions" + bonuses + prohibitive.
+4. **Multi-TP exits** — TP1/TP2/TP3 with different R:R and moving SL to breakeven after TP1 (the standard playbook) isn't modeled by the skill.
 
-**Поэтому этот бэктест отвечает только на один вопрос:**
-> Если использовать только один из индикаторов из strategy-v3 (RSI, BOLL, MACD, EMA crossover) на дневках ETH без всякого фильтра — есть ли у него edge?
+**So this backtest answers only one question:**
+> If you use only one of the indicators from strategy-v3 (RSI, BOLL, MACD, EMA crossover) on daily ETH without any filter — does it have edge?
 
-## Параметры теста
+## Test parameters
 
-- **Инструмент**: ETH-USD спот (yfinance)
-- **Период**: 2024-04-29 → 2026-04-29 (2 года)
-- **Таймфрейм**: 1D
-- **Стартовый капитал**: $2,200 (соответствует депозиту из strategy-v3)
-- **Параметры индикаторов** взяты из strategy-v3 где возможно
+- **Instrument**: ETH-USD spot (yfinance)
+- **Period**: 2024-04-29 → 2026-04-29 (2 years)
+- **Timeframe**: 1D
+- **Starting capital**: $2,200 (matches strategy-v3 deposit)
+- **Indicator parameters** taken from strategy-v3 where applicable
 
-## Результаты
+## Results
 
-| Стратегия | Total Return | Win Rate | Trades | Profit Factor | Max DD | Notes |
+| Strategy | Total Return | Win Rate | Trades | Profit Factor | Max DD | Notes |
 |---|---|---|---|---|---|---|
-| **Buy & Hold** | **−28.4%** | — | 1 | — | −63.2% | benchmark — рынок упал с $3215 до $2301 |
-| RSI reversal (14, 40/65) | **−67.8%** | 51.5% | 68 | 0.73 | −84.3% | RSI<40 на лонг / >65 на шорт по [[strategy-v3]] |
-| Bollinger Bands (20, 2) | **−54.2%** | 52.3% | 44 | 0.69 | −62.7% | mean-reversion от границ |
+| **Buy & Hold** | **−28.4%** | — | 1 | — | −63.2% | benchmark — market dropped from $3215 to $2301 |
+| RSI reversal (14, 40/65) | **−67.8%** | 51.5% | 68 | 0.73 | −84.3% | RSI<40 long / >65 short per [[strategy-v3]] |
+| Bollinger Bands (20, 2) | **−54.2%** | 52.3% | 44 | 0.69 | −62.7% | mean-reversion off the bands |
 | MACD (12, 26, 9) | **−62.8%** | 28.6% | 56 | 0.66 | −79.3% | crossover signal/MACD |
-| EMA 50/100 crossover | **+32.8%** | 100% | 1 | ∞ | −31.0% | сработало 1 раз за 2 года, фактически buy-and-hold с фильтром |
+| EMA 50/100 crossover | **+32.8%** | 100% | 1 | ∞ | −31.0% | fired once in 2 years, effectively buy-and-hold with a filter |
 
 (source: `.agents/skills/backtesting-trading-strategies/reports/`)
 
-## Интерпретация
+## Interpretation
 
-### Что подтвердилось
+### What got confirmed
 
-1. **Одиночные индикаторные сигналы из strategy-v3 на дневках ETH не имеют положительного edge.** Три из четырёх стратегий (RSI, BOLL, MACD) проиграли buy-and-hold, причём RSI и MACD проиграли его более чем в 2 раза.
+1. **Single-indicator signals from strategy-v3 on daily ETH have no positive edge.** Three of four strategies (RSI, BOLL, MACD) lost to buy-and-hold, with RSI and MACD losing by more than 2x.
 
-2. **Win rate ~50% при отрицательной expectancy** у RSI и BOLL означает классическую проблему: средний выигрыш ($100-104) меньше среднего проигрыша ($145-165). Профита нет даже при «честной монетке».
+2. **~50% win rate with negative expectancy** for RSI and BOLL means the classic problem: average win ($100-104) smaller than average loss ($145-165). No profit even on a "fair coin".
 
-3. **MACD на дневках работает катастрофически** (win rate 28.6%, profit factor 0.66) — даёт много ложных сигналов в боковике.
+3. **MACD on dailies works catastrophically** (win rate 28.6%, profit factor 0.66) — produces many false signals in chop.
 
-### Что это значит для strategy-v3
+### What this means for strategy-v3
 
-Это **аргумент в пользу** дисциплины strategy-v3, а не против неё:
+This is an **argument for** the discipline of strategy-v3, not against it:
 
-- Правило **«минимум 3 из 5 базовых условий»** — критично. Без него любой одиночный индикатор фактически случаен.
-- **Funding / OI / whale ratio как фильтры** — не опциональны. Они единственный источник «не-ТА edge», и без них голая ТА на ETH в 2024-2026 = убыток.
-- **Лоутаймфрейм (4h/1h) важнее, чем кажется** — на дневках сигналы слишком шумные, а позиций должно быть 1-2 в день, не 30-60 за 2 года.
-- **Multi-TP exit (TP1=БУ)** — вероятно, ключевой источник edge: в этих тестах все сделки идут «в один заход» SL/TP, без перевода в безубыток.
+- The rule **"at least 3 of 5 base conditions"** is critical. Without it, any single indicator is effectively random.
+- **Funding / OI / whale ratio as filters** aren't optional. They're the only source of "non-TA edge", and without them naked TA on ETH in 2024-2026 = loss.
+- **Lower timeframes (4h/1h) matter more than they seem** — on dailies signals are too noisy, and trade frequency should be 1-2 per day, not 30-60 over 2 years.
+- **Multi-TP exit (TP1=BU)** — likely a key edge source: in these tests every trade runs single-shot SL/TP without moving to breakeven.
 
-### Что НЕ протестировано
+### What wasn't tested
 
-- Точные правила strategy-v3 на 4h/1h — нужен кастомный движок (Variant B плана валидации)
-- Funding / OI / whale ratio как фильтры — нет данных в yfinance
-- Multi-TP с переводом SL в БУ
-- Combo-логика «3 из 5»
-- Запрещающие условия (новостной блокер, BTC корреляция и т.д.)
+- Exact strategy-v3 rules on 4h/1h — needs a custom engine (Variant B of the validation plan)
+- Funding / OI / whale ratio as filters — no data in yfinance
+- Multi-TP with SL-to-BU
+- Combo logic "3 of 5"
+- Prohibitive conditions (news blocker, BTC correlation, etc.)
 
-## Решение / следующие шаги
+## Decision / next steps
 
-**Не вносить изменений в [[strategy-v3]] на основании этого теста** — он валидирует только то, что одиночные сигналы не работают, что и так заложено в дизайне стратегии (требование комбинации).
+**Don't change [[strategy-v3]] based on this test** — it validates only that single signals don't work, which is already baked into the design (combo requirement).
 
-**Опции продолжения:**
-1. **Variant B** (1-2 часа) — написать кастомную python-стратегию, реализующую подмножество правил strategy-v3 на OHLC (без funding/OI/whale). Использовать движок этого же skill'а с custom strategy.
-2. **Variant C** (несколько дней) — поднять полноценный бэктест с Bybit perp + funding + OI через Bybit API. Whale ratio из Trading Trend публичного API не имеет — пропускать или скрейпить.
-3. **Не валидировать quantitatively** — продолжать вести журнал реальных сделок и делать еженедельное ревью (это тоже валидация, просто медленная).
+**Continuation options:**
+1. **Variant B** (1-2 hours) — write a custom python strategy implementing a subset of strategy-v3 rules on OHLC (no funding/OI/whale). Use the same skill's engine with a custom strategy.
+2. **Variant C** (several days) — stand up a full backtest with Bybit perp + funding + OI via Bybit API. Whale ratio from Trading Trend has no public API — skip it or scrape.
+3. **Don't validate quantitatively** — keep journaling real trades and doing the weekly review (also a form of validation, just slow).
 
-## Артефакты
+## Artifacts
 
-- Отчёты по каждому бэктесту: `.agents/skills/backtesting-trading-strategies/reports/`
-- PNG-графики equity curves: там же
-- Кэш данных ETH-USD 1D: `.agents/skills/backtesting-trading-strategies/data/ETH_USD_1d.csv`
+- Per-backtest reports: `.agents/skills/backtesting-trading-strategies/reports/`
+- PNG equity-curve charts: same path
+- ETH-USD 1D data cache: `.agents/skills/backtesting-trading-strategies/data/ETH_USD_1d.csv`
 
 ## Related pages
 
-- [[strategy-v3]] — каноническая стратегия, которую тестировали
-- [[trading-strategy]] — wiki-страница стратегии
-- [[indicators]] — описание используемых индикаторов (planned)
-- [[bybit-data]] — funding, OI, whale ratio (planned), отсутствующие в этом тесте
+- [[strategy-v3]] — the canonical strategy that was tested
+- [[trading-strategy]] — wiki page for the strategy
+- [[indicators]] — description of indicators used (planned)
+- [[bybit-data]] — funding, OI, whale ratio (planned), absent from this test

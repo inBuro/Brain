@@ -1,123 +1,123 @@
 # Entry Rules: LONG
 
-**Summary**: Условия входа в long-позицию по ETH/USDT. Структура — главный вопрос про потенциал → multi-TF alignment pre-check → news Impact Score → 5 базовых условий (минимум 3 из 5) → бонусные подтверждения → запрещающие условия (включая mixed-market momentum и контр-тренд). Зеркало — на странице [[entry-rules-short]].
-**Sources**: [[strategy-v4]] (актуальная версия стратегии), [[strategy-v3]] (исторический референс), chat 2026-04-29
-**Last updated**: 2026-04-29 (синк с v4: добавлены multi-TF pre-check, Impact Score, 2 запрещающих)
+**Summary**: Long entry conditions for ETH/USDT. Structure: main potential question → multi-TF alignment pre-check → news Impact Score → 5 base conditions (at least 3 of 5) → bonus confirmations → prohibitive conditions (including mixed-market momentum and counter-trend). Mirrored on [[entry-rules-short]].
+**Sources**: [[strategy-v4]] (current strategy version), [[strategy-v3]] (historical reference), chat 2026-04-29
+**Last updated**: 2026-04-30 (translation RU → EN; content unchanged from 2026-04-29 v4 sync)
 
 ---
 
-## Главный вопрос (gating)
+## Main question (gating)
 
-Перед всеми остальными чеками — один вопрос: **есть ли потенциал движения 4-7% (или $100-150 прибыли) до TP3?** (source: strategy-v4.md). Если потенциала нет — дальше не смотрим, в сделку не входим. Это фильтр против мелких движений, которые не оправдывают риск и комиссии (см. [[commission-management]]).
+Before any other check, one question: **is there a 4-7% move (or $100-150 of profit) potential up to TP3?** (source: strategy-v4.md). If no potential — don't look further, don't enter. This filters out small moves that don't justify the risk and commissions (see [[commission-management]]).
 
-Практически: если ETH стоит на $2,300, то TP3 для long должен быть на $2,400+ или выше. Если ближайшее сильное сопротивление на $2,330 — потенциал всего ~1.3%, входить не на что.
+In practice: if ETH is at $2,300, then TP3 for long should sit at $2,400 or higher. If the nearest strong resistance is $2,330 — potential is only ~1.3%, nothing to enter on.
 
 ## Pre-check 1 — Multi-TF Alignment
 
-**Обязательно проверяется ДО оценки 5 базовых условий** (source: strategy-v4.md). Если alignment не сошёлся — setup не существует, дальше не смотрим.
+**Mandatory check BEFORE evaluating the 5 base conditions** (source: strategy-v4.md). If alignment doesn't hold — there is no setup, don't look further.
 
-Для long все три таймфрейма должны быть в одну сторону:
+For long, all three timeframes must line up in the same direction:
 
-- **4h** — структура показывает разворот вверх или продолжение: формируется HL, цена держит EMA100, MACD пересекает 0 снизу вверх.
-- **1h** — импульс не противоречит лонгу: RSI выходит из зоны <40, MACD-гистограмма растёт, формируется HL.
-- **15m** — момент входа подтверждается: свечной паттерн разворота, объём на ретесте, RSI отбой от <30.
+- **4h** — structure shows a reversal up or continuation: HL is forming, price holds EMA100, MACD crosses 0 from below.
+- **1h** — momentum doesn't contradict the long: RSI rises out of the <40 zone, MACD histogram grows, HL is forming.
+- **15m** — entry timing confirmed: reversal candle pattern, volume on retest, RSI bounce from <30.
 
-Если на одном из таймфреймов противоречие (например, 4h за лонг, 1h за шорт) — alignment не выполнен, setup'а нет, ждём следующего часа. Это **не замена** 5 базовых условий, это первичный фильтр.
+If one of the timeframes contradicts (for example, 4h for long, 1h for short) — alignment fails, no setup, wait for the next hour. It's **not a replacement** for the 5 base conditions; it's a primary filter.
 
-Источник правила — risk-management skill, паттерн «Multi-timeframe bearish alignment» (success rate 88%, 383 наблюдения, confidence 99%). Концепт планируется на отдельной странице `multi-tf-alignment`.
+Source rule — `risk-management` skill, pattern "Multi-timeframe bearish alignment" (success rate 88%, 383 observations, confidence 99%). Concept page planned at `multi-tf-alignment`.
 
 ## Pre-check 2 — News Impact Score
 
-После multi-TF alignment — заглянуть в Bybit Feed → News (или другую ленту по ETH) и оценить главные новости по формуле:
+After multi-TF alignment — open Bybit Feed → News (or another ETH news feed) and score the top headlines via the formula:
 
 ```
 Impact Score = (Price Impact × Breadth Multiplier) × Forward Modifier
 ```
 
-**Price Impact** (движение ETH за 24h): Severe ≥±5% = 10, Major ±3...±5% = 7, Moderate ±1...±3% = 4, Minor <±1% = 2, Negligible = 1.
+**Price Impact** (ETH move over 24h): Severe ≥±5% = 10, Major ±3...±5% = 7, Moderate ±1...±3% = 4, Minor <±1% = 2, Negligible = 1.
 
-**Breadth Multiplier** (охват): Systemic (крипта целиком, рег-новость, BTC ETF, макро) = 3×, Cross-asset (ETH + DeFi или ETH + L2) = 2×, Asset-specific (только Ethereum) = 1.5×, Wallet-specific (один кит / протокол / market-maker) = 1×.
+**Breadth Multiplier** (reach): Systemic (crypto-wide, regulatory news, BTC ETF, macro) = 3×, Cross-asset (ETH + DeFi or ETH + L2) = 2×, Asset-specific (Ethereum only) = 1.5×, Wallet-specific (single whale / protocol / market-maker) = 1×.
 
-**Forward Modifier**: Regime change (ETF approval, регдействие, halving pivot) = ×1.5, Trend confirmation (последовательные ликвидации, sustained outflows, серия hot CPI) = ×1.25, Isolated (одиночный whale transfer, локальная новость) = ×1.0, Contrary signal (bullish news ignored / bearish rallied) = ×0.75.
+**Forward Modifier**: Regime change (ETF approval, regulatory action, halving pivot) = ×1.5, Trend confirmation (consecutive liquidations, sustained outflows, series of hot CPI prints) = ×1.25, Isolated (single whale transfer, local news) = ×1.0, Contrary signal (bullish news ignored / bearish rallied) = ×0.75.
 
-**Пороги решений** (для bearish-новости при оценке long):
+**Decision thresholds** (for bearish news when evaluating a long):
 
-| Impact Score | Решение |
+| Impact Score | Decision |
 |---|---|
-| ≥ 20 | **SKIP** — не входим в эту сделку |
-| 10...20 | Размер позиции урезается на 50% |
-| < 10 | Информационно, размер не меняем |
+| ≥ 20 | **SKIP** — don't take the trade |
+| 10...20 | Halve position size |
+| < 10 | Informational, size unchanged |
 
-Симметрично: при bullish-новости с Impact ≥10 long получает дополнительный аргумент (но не «бесплатный билет» — все остальные правила работают).
+Symmetrically, bullish news with Impact ≥10 gives the long an extra argument (but not a "free pass" — all other rules still apply).
 
-**Запрещающие новости** (любой Impact, мгновенный блокер, отдельно перечислены ниже):
-- Хак core-протокола Ethereum или major L2 (Arbitrum, Optimism, Base, zkSync)
-- Регуляторное действие (SEC charges, exchange shutdown, ban в крупной юрисдикции)
-- Macro-headline в ближайшие 1-2 часа (FOMC решение, CPI выход)
+**Prohibitive headlines** (any Impact, instant blocker, listed separately below):
+- Hack of Ethereum core protocol or a major L2 (Arbitrum, Optimism, Base, zkSync)
+- Regulatory action (SEC charges, exchange shutdown, ban in a major jurisdiction)
+- Macro headline within the next 1-2 hours (FOMC decision, CPI print)
 
-Источник методологии — market-news-analyst skill, адаптировано под крипту/ETH. Концепт планируется на странице `news-impact-score`. См. также [[bybit-data]] (раздел Feed).
+Methodology source — `market-news-analyst` skill, adapted for crypto/ETH. Concept page planned at `news-impact-score`. See also [[bybit-data]] (Feed section).
 
-## Базовые условия (минимум 3 из 5)
+## Base conditions (at least 3 of 5)
 
-Это ядро правил входа. Нужно одновременно выполнить хотя бы **три из пяти** условий ниже (source: strategy-v4.md):
+This is the core of the entry rules. Need to satisfy at least **three of the five** below at the same time (source: strategy-v4.md):
 
-1. **Цена на сильной поддержке.** Поддержкой считается: 24h low, EMA100 на 4h, нижняя граница BB на 4h, или исторический уровень. Чем больше типов поддержки совпадают — тем сильнее зона.
-2. **RSI перепродан.** Условие выполнено если RSI(14) на 1h <40 ИЛИ RSI(14) на 4h <45. Достаточно одного из двух — необязательно обоих.
-3. **Структура на 4h начинает разворот.** Формируется HL (higher low — выше предыдущего low) или двойное дно. Это видно на 4h-свечах: после нисходящей серии цена делает откат вверх и следующий low оказывается выше предыдущего.
-4. **Whale ratio >1.2 в long.** Берётся из раздела Data → Trading Trend на Bybit (см. [[bybit-data]]). Значение >1.2 означает что киты покупают.
-5. **Дневной тренд не катастрофически медвежий.** Это негативное условие — оно выполняется по умолчанию, *если только* на 1D нет недавнего сильного пробоя поддержки или откровенно крутого нисходящего движения. Идея: не лезем в long против разрушительного дневного даунтренда.
+1. **Price at strong support.** Support means: 24h low, EMA100 on 4h, lower BB band on 4h, or a historical level. The more support types overlap, the stronger the zone.
+2. **RSI oversold.** Satisfied if RSI(14) on 1h <40 OR RSI(14) on 4h <45. Either one is enough — both not required.
+3. **4h structure starts to reverse.** HL (higher low — above the previous low) or a double bottom is forming. Visible on 4h candles: after a downward sequence, price pulls back up and the next low prints above the previous one.
+4. **Whale ratio >1.2 long.** Taken from Data → Trading Trend on Bybit (see [[bybit-data]]). >1.2 means whales are buying.
+5. **Daily trend not catastrophically bearish.** This is a negative condition — satisfied by default *unless* there's a recent strong support break on 1D or an outright steep down move. Idea: don't go long against a destructive daily downtrend.
 
-## Бонусные подтверждения
+## Bonus confirmations
 
-Не обязательны для входа, но усиливают уверенность и могут стать поводом увеличить размер позиции до целевого (а не урезанного после серии SL):
+Not required for entry, but they raise confidence and can justify increasing size to the target value (rather than the reduced one after a string of SLs):
 
-- **Funding отрицательный** — шорты платят лонгам. Сигнал что рынок перегружен шортами и готов отскочить вверх.
-- **OI снижается на падении** — открытый интерес уходит на снижении цены, значит шорты закрываются (а не наращиваются), давление вниз ослабевает.
-- **Outflow > Inflow** — деньги уходят с биржи (холодные кошельки), что обычно бычий сигнал.
-- **BTC показывает похожий паттерн** — корреляция с биткоином подтверждает что движение не идиосинкратическое.
-- **MACD на 4h начинает разворот вверх** — гистограмма уменьшает отрицательные значения или линии MACD делают bullish crossover.
+- **Negative funding** — shorts pay longs. Signal that the market is overloaded with shorts and ready to bounce.
+- **OI declining on the drop** — open interest leaves on price decline, meaning shorts are closing (not adding), downward pressure weakens.
+- **Outflow > Inflow** — money leaves the exchange (cold wallets), usually a bullish signal.
+- **BTC shows a similar pattern** — correlation with bitcoin confirms the move isn't idiosyncratic.
+- **MACD on 4h begins to turn up** — histogram reduces negative values or MACD lines make a bullish crossover.
 
-## Запрещающие условия (хотя бы одно — не входим)
+## Prohibitive conditions (any one — no entry)
 
-Это блокеры. Если выполнено **любое одно** из условий ниже — в long не входим, даже если 5 базовых выполнены и бонусы за нас (source: strategy-v4.md):
+These are blockers. If **any one** of the conditions below holds — don't take the long, even if all 5 base conditions are met and bonuses favor us (source: strategy-v4.md):
 
-1. **Свежий пробой ключевой дневной поддержки.** Если 1D-уровень только что пробит вниз — не ловим падающий нож.
-2. **Whale ratio <0.8.** Киты в short. Идти против них — плохая идея.
-3. **Funding сильно положительный (>0.025%).** Лонги уже перегружены, расширения вверх ждать не от кого.
-4. **Inflow доминирует и растёт.** Деньги активно идут на биржу = готовятся продажи.
-5. **Mixed-market momentum trade.** 1D MACD ходит около нуля без чёткого тренда И вход основан на momentum-сигнале (пробой, импульс). В боковике momentum не работает. (Источник: risk-management паттерн «Avoid momentum-following in mixed markets», 75% / 33 samples.)
-6. **Контр-тренд в медвежьем рынке.** 1D MACD <0 И BTC <EMA200 на 1D — лонги в таком окружении не рассматриваются. (Источник: risk-management паттерн «Contrarian LONG entries in bearish markets», 0-30% success.)
-7. **Критические новости по активу.** Взлом core-протокола ETH или крупного L2, регуляторное действие против ETH в крупной юрисдикции, или macro-headline в ближайшие 1-2 часа (FOMC, CPI, заявление главы ФРС). См. раздел "Pre-check 2 — News Impact Score" выше.
+1. **Fresh break of a key daily support.** If the 1D level just broke down — don't catch a falling knife.
+2. **Whale ratio <0.8.** Whales are short. Going against them is a bad idea.
+3. **Funding strongly positive (>0.025%).** Longs are already overloaded, no room to expand higher.
+4. **Inflow dominates and rising.** Money actively moving to the exchange = sells being prepared.
+5. **Mixed-market momentum trade.** 1D MACD wandering near zero without clear trend AND entry based on a momentum signal (breakout, impulse). Momentum doesn't work in chop. (Source: `risk-management` pattern "Avoid momentum-following in mixed markets", 75% / 33 samples.)
+6. **Counter-trend in a bearish market.** 1D MACD <0 AND BTC <EMA200 on 1D — longs in such an environment aren't considered. (Source: `risk-management` pattern "Contrarian LONG entries in bearish markets", 0-30% success.)
+7. **Critical news on the asset.** Hack of ETH core protocol or a major L2, regulatory action against ETH in a major jurisdiction, or macro headline within the next 1-2 hours (FOMC, CPI, Fed Chair speech). See "Pre-check 2 — News Impact Score" above.
 
-## Порядок проверки
+## Check order
 
-Чтобы не запутаться в setup'е, чеклист идёт в этом порядке:
+To avoid getting tangled in setup analysis, the checklist runs in this order:
 
-1. **Главный вопрос про потенциал.** Нет потенциала — закрыли вкладку, дальше не думаем.
-2. **Pre-check 1: Multi-TF alignment** (4h + 1h + 15m в одну сторону). Не сошёлся — setup'а нет, дальше не думаем.
-3. **Pre-check 2: News Impact Score.** Запрещающая новость или Score ≥20 против сделки — стоп. Score 10-20 — пометить, размер ÷2 на этапе позиционирования.
-4. **Запрещающие условия** (структурные блокеры пп.1-6). Хотя бы одно — стоп.
-5. **Базовые условия.** Считаем сколько выполнено. <3 — стоп.
-6. И только если 3 базовых пройдены без блокеров — смотрим бонусные.
+1. **Main potential question.** No potential — close the tab, stop thinking.
+2. **Pre-check 1: Multi-TF alignment** (4h + 1h + 15m in the same direction). Doesn't hold — no setup, stop thinking.
+3. **Pre-check 2: News Impact Score.** Prohibitive headline or Score ≥20 against the trade — stop. Score 10-20 — flag it, halve size during sizing.
+4. **Prohibitive conditions** (structural blockers #1-6). Any one holds — stop.
+5. **Base conditions.** Count how many hold. <3 — stop.
+6. Only if 3 base conditions are passed without blockers — look at the bonuses.
 
-Этот порядок экономит время: pre-check'и и блокеры самые быстрые в проверке (multi-TF alignment виден за пару минут, одно значение whale ratio или funding отсекает половину ложных setup'ов). Новости проверяем вторым шагом — иногда они сразу закрывают вопрос (например, FOMC через час — никаких новых сделок).
+This order saves time: pre-checks and blockers are the fastest to verify (multi-TF alignment is visible in a couple of minutes, a single whale ratio or funding value cuts off half the false setups). News are checked second — sometimes they close the question immediately (for example, FOMC in an hour — no new trades).
 
-## Что дальше после входа
+## What happens after entry
 
-После того как все условия пройдены:
-- Размер позиции считается по формуле — см. [[position-sizing]]
-- SL ставится сразу при входе — см. [[stop-loss-rules]]
-- Все три TP ставятся при входе — см. [[take-profit-rules]]
-- Вход желательно через limit-ордер для экономии комиссий — см. [[commission-management]]
+Once all conditions pass:
+- Position size calculated by formula — see [[position-sizing]]
+- SL placed immediately on entry — see [[stop-loss-rules]]
+- All three TPs placed on entry — see [[take-profit-rules]]
+- Entry preferably via limit order to save commissions — see [[commission-management]]
 
-После входа в работу включается главный принцип стратегии: **"сделка должна работать сама"**. Решение было принято до входа, теперь не вмешиваемся.
+After entry, the strategy's main principle kicks in: **"the trade should work on its own"**. The decision was made before entry, no further intervention.
 
 ## Related pages
 
-- [[trading-strategy]] — главная страница стратегии
-- [[entry-rules-short]] — зеркальные правила для шорт-входа
+- [[trading-strategy]] — main strategy page
+- [[entry-rules-short]] — mirror rules for short entry
 - [[indicators]] — RSI, MACD, EMA, BOLL
 - [[bybit-data]] — whale ratio, funding, OI
-- [[position-sizing]] — размер позиции
-- [[stop-loss-rules]] — установка SL
-- [[take-profit-rules]] — три TP уровня
+- [[position-sizing]] — position size
+- [[stop-loss-rules]] — SL placement
+- [[take-profit-rules]] — three TP levels
