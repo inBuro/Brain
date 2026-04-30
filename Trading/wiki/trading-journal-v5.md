@@ -73,3 +73,11 @@ Updated weekly during review (see [[weekly-review]]):
 ## Entries
 
 (Empty. First entry will be appended by the scheduled routine or by the manual session that follows v5 launch.)
+
+### 2026-04-30 21:10 ICT — auto check
+
+**Decision**: RUN_ERROR
+
+**Error**: Bybit public REST API is blocked by the sandbox egress allowlist (`api.bybit.com` → "Host not in allowlist"). All seven data fetches (1h/4h/15m/1D klines, funding, OI, ticker) returned empty 21-byte responses. No market data was loaded; no indicators could be computed; no strategy evaluation performed.
+
+**Action required**: The `api.bybit.com` domain must be added to the sandbox egress allowlist (or the routine must be migrated to an environment with unrestricted outbound HTTPS). No email sent (no setup detected). This entry is logged per the hard constraint to always commit even on errors.
