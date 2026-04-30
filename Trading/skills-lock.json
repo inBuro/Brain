@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "skills": {
+    "backtesting-trading-strategies": {
+      "source": "jeremylongshore/claude-code-plugins-plus-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/crypto/trading-strategy-backtester/skills/backtesting-trading-strategies/SKILL.md",
+      "computedHash": "d3d31dfb5a2234936d56f9097f5f5636a0a2469b7a21ce1cfc2909f9cafbf699"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "9e1c8b3103f92fa8092568a44fe64858de7c5c9dc65ce4bea8f168080e889cfd"
+    },
+    "market-news-analyst": {
+      "source": "tradermonty/claude-trading-skills",
+      "sourceType": "github",
+      "skillPath": "skills/market-news-analyst/SKILL.md",
+      "computedHash": "3e61a6a96b874f63223aa787b76878ec02094eaf237bc63c29d500d7d1857ad8"
+    },
+    "risk-management": {
+      "source": "0xhubed/agent-trading-arena",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/risk-management/SKILL.md",
+      "computedHash": "e64e6863b041bf23565ade0cc0d941bc7896be3be02067f0c56a4544809421c5"
+    },
+    "trading-analysis": {
+      "source": "gracefullight/stock-checker",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/trading-analysis/SKILL.md",
+      "computedHash": "886bdbb07be29864ef396e06c3cc2b0931d767c93e46487a2f26594c5b09c9f2"
+    },
+    "trading-signal": {
+      "source": "binance/binance-skills-hub",
+      "sourceType": "github",
+      "skillPath": "skills/binance-web3/trading-signal/SKILL.md",
+      "computedHash": "3363c91803ed82496034ffbf54b5407ecc9a7713c994fe941328b7be6fccdcf6"
+    },
+    "trading-strategies": {
+      "source": "agentmc15/polymarket-trader",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/trading-strategies/SKILL.md",
+      "computedHash": "229cd6130f41b9e6fe8085870cd1512cb3dc968893735ef1cfbdd01864659381"
+    }
+  }
+}
