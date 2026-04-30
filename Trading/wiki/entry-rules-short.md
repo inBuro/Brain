@@ -1,126 +1,126 @@
 # Entry Rules: SHORT
 
-**Summary**: Условия входа в short-позицию по ETH/USDT. Зеркальная страница к [[entry-rules-long]] — структура та же: главный вопрос про потенциал → multi-TF alignment pre-check → news Impact Score → 5 базовых условий (минимум 3 из 5) → бонусные подтверждения → запрещающие условия (включая mixed-market momentum и контр-тренд в бычьем рынке).
-**Sources**: [[strategy-v4]] (актуальная версия стратегии), [[strategy-v3]] (исторический референс)
-**Last updated**: 2026-04-29 (создана как зеркало entry-rules-long при синке с v4)
+**Summary**: Short entry conditions for ETH/USDT. Mirror page to [[entry-rules-long]] — same structure: main potential question → multi-TF alignment pre-check → news Impact Score → 5 base conditions (at least 3 of 5) → bonus confirmations → prohibitive conditions (including mixed-market momentum and counter-trend in a bullish market).
+**Sources**: [[strategy-v4]] (current strategy version), [[strategy-v3]] (historical reference)
+**Last updated**: 2026-04-30 (translation RU → EN; content unchanged from 2026-04-29 v4 sync)
 
 ---
 
-## Главный вопрос (gating)
+## Main question (gating)
 
-Перед всеми остальными чеками — один вопрос: **есть ли потенциал движения вниз 4-7% (или $100-150 прибыли) до TP3?** (source: strategy-v4.md). Если потенциала нет — дальше не смотрим, в сделку не входим. Это фильтр против мелких движений, которые не оправдывают риск и комиссии (см. [[commission-management]]).
+Before any other check, one question: **is there a 4-7% downward move (or $100-150 of profit) potential up to TP3?** (source: strategy-v4.md). If no potential — don't look further, don't enter. This filters out small moves that don't justify the risk and commissions (see [[commission-management]]).
 
-Практически: если ETH стоит на $2,300, то TP3 для short должен быть на $2,200 или ниже. Если ближайшая сильная поддержка на $2,270 — потенциал всего ~1.3%, входить не на что.
+In practice: if ETH is at $2,300, then TP3 for short should sit at $2,200 or lower. If the nearest strong support is $2,270 — potential is only ~1.3%, nothing to enter on.
 
 ## Pre-check 1 — Multi-TF Alignment
 
-**Обязательно проверяется ДО оценки 5 базовых условий** (source: strategy-v4.md). Если alignment не сошёлся — setup не существует, дальше не смотрим.
+**Mandatory check BEFORE evaluating the 5 base conditions** (source: strategy-v4.md). If alignment doesn't hold — there is no setup, don't look further.
 
-Для short все три таймфрейма должны быть в одну сторону (зеркально лонгу):
+For short, all three timeframes must line up in the same direction (mirror of long):
 
-- **4h** — структура показывает разворот вниз или продолжение: формируется LH (lower high), цена отбивается от EMA100 / BB upper, MACD пересекает 0 сверху вниз.
-- **1h** — импульс не противоречит шорту: RSI выходит из зоны >65, MACD-гистограмма падает, формируется LH.
-- **15m** — момент входа подтверждается: свечной паттерн разворота вниз, объём на ретесте, RSI откат от >70.
+- **4h** — structure shows a downward reversal or continuation: LH (lower high) is forming, price rejects from EMA100 / BB upper, MACD crosses 0 from above.
+- **1h** — momentum doesn't contradict the short: RSI exits the >65 zone, MACD histogram falls, LH is forming.
+- **15m** — entry timing confirmed: downward reversal candle pattern, volume on retest, RSI rollback from >70.
 
-Если на одном из таймфреймов противоречие (например, 4h за шорт, 1h за лонг) — alignment не выполнен, setup'а нет, ждём следующего часа. Это **не замена** 5 базовых условий, это первичный фильтр.
+If one of the timeframes contradicts (for example, 4h for short, 1h for long) — alignment fails, no setup, wait for the next hour. It's **not a replacement** for the 5 base conditions; it's a primary filter.
 
-Источник правила — risk-management skill, паттерн «Multi-timeframe bearish alignment» (success rate 88%, 383 наблюдения, confidence 99% — паттерн исторически калиброван именно на bearish-сценариях, поэтому для шорта особенно весом). Концепт планируется на отдельной странице `multi-tf-alignment`.
+Source rule — `risk-management` skill, pattern "Multi-timeframe bearish alignment" (success rate 88%, 383 observations, confidence 99% — the pattern is historically calibrated specifically on bearish scenarios, so it carries extra weight for shorts). Concept page planned at `multi-tf-alignment`.
 
 ## Pre-check 2 — News Impact Score
 
-После multi-TF alignment — заглянуть в Bybit Feed → News (или другую ленту по ETH) и оценить главные новости по формуле:
+After multi-TF alignment — open Bybit Feed → News (or another ETH news feed) and score the top headlines via the formula:
 
 ```
 Impact Score = (Price Impact × Breadth Multiplier) × Forward Modifier
 ```
 
-Шкалы Price Impact / Breadth Multiplier / Forward Modifier — те же что для лонга, см. [[entry-rules-long]] раздел «Pre-check 2 — News Impact Score». Зеркально меняется только трактовка знака новости.
+The Price Impact / Breadth Multiplier / Forward Modifier scales are the same as for long; see [[entry-rules-long]] section "Pre-check 2 — News Impact Score". Only the news polarity interpretation flips.
 
-**Пороги решений** (для bullish-новости при оценке short — она против сделки):
+**Decision thresholds** (for bullish news when evaluating a short — it works against the trade):
 
-| Impact Score | Решение |
+| Impact Score | Decision |
 |---|---|
-| ≥ 20 | **SKIP** — не входим в шорт |
-| 10...20 | Размер позиции урезается на 50% |
-| < 10 | Информационно, размер не меняем |
+| ≥ 20 | **SKIP** — don't take the short |
+| 10...20 | Halve position size |
+| < 10 | Informational, size unchanged |
 
-Симметрично: при bearish-новости с Impact ≥10 short получает дополнительный аргумент (но не «бесплатный билет» — все остальные правила работают).
+Symmetrically, bearish news with Impact ≥10 gives the short an extra argument (but not a "free pass" — all other rules still apply).
 
-**Запрещающие новости** (любой Impact, мгновенный блокер, отдельно перечислены ниже):
-- Хак core-протокола Ethereum или major L2 (Arbitrum, Optimism, Base, zkSync) — несмотря на bearish-нарратив, в день хака рынок крайне нестабилен в обе стороны, шорт тоже не открываем
-- Регуляторное действие (SEC charges, exchange shutdown, ban в крупной юрисдикции)
-- Macro-headline в ближайшие 1-2 часа (FOMC решение, CPI выход)
+**Prohibitive headlines** (any Impact, instant blocker, listed separately below):
+- Hack of Ethereum core protocol or a major L2 (Arbitrum, Optimism, Base, zkSync) — despite the bearish narrative, day-of-hack market is unstable in both directions, no short either
+- Regulatory action (SEC charges, exchange shutdown, ban in a major jurisdiction)
+- Macro headline within the next 1-2 hours (FOMC decision, CPI print)
 
-Источник методологии — market-news-analyst skill, адаптировано под крипту/ETH. Концепт планируется на странице `news-impact-score`. См. также [[bybit-data]] (раздел Feed).
+Methodology source — `market-news-analyst` skill, adapted for crypto/ETH. Concept page planned at `news-impact-score`. See also [[bybit-data]] (Feed section).
 
-## Базовые условия (минимум 3 из 5)
+## Base conditions (at least 3 of 5)
 
-Это ядро правил входа. Нужно одновременно выполнить хотя бы **три из пяти** условий ниже (source: strategy-v4.md):
+This is the core of the entry rules. Need to satisfy at least **three of the five** below at the same time (source: strategy-v4.md):
 
-1. **Цена на сильном сопротивлении.** Сопротивлением считается: 24h high, EMA100 на 4h, верхняя граница BB на 4h, или исторический уровень. Чем больше типов сопротивления совпадают — тем сильнее зона.
-2. **RSI перекуплен.** Условие выполнено если RSI(14) на 1h >65 ИЛИ RSI(14) на 4h >60. Достаточно одного из двух — необязательно обоих.
-3. **Структура на 4h начинает разворот вниз.** Формируется LH (lower high — ниже предыдущего high) или двойная вершина. Это видно на 4h-свечах: после восходящей серии цена делает откат вниз и следующий high оказывается ниже предыдущего.
-4. **Whale ratio в short.** Берётся из раздела Data → Trading Trend на Bybit (см. [[bybit-data]]). Условие выполнено если whale ratio <0.8 (киты в short) ИЛИ снижается с >1 к <1 (киты переходят в short).
-5. **Дневной тренд не катастрофически бычий.** Это негативное условие — оно выполняется по умолчанию, *если только* на 1D нет недавнего сильного пробоя сопротивления вверх или откровенно крутого восходящего движения. Идея: не лезем в short против разрушительного дневного аптренда.
+1. **Price at strong resistance.** Resistance means: 24h high, EMA100 on 4h, upper BB band on 4h, or a historical level. The more resistance types overlap, the stronger the zone.
+2. **RSI overbought.** Satisfied if RSI(14) on 1h >65 OR RSI(14) on 4h >60. Either one is enough — both not required.
+3. **4h structure starts to reverse downward.** LH (lower high — below the previous high) or a double top is forming. Visible on 4h candles: after an upward sequence, price pulls back down and the next high prints below the previous one.
+4. **Whale ratio short.** Taken from Data → Trading Trend on Bybit (see [[bybit-data]]). Satisfied if whale ratio <0.8 (whales short) OR declining from >1 to <1 (whales rotating into short).
+5. **Daily trend not catastrophically bullish.** This is a negative condition — satisfied by default *unless* there's a recent strong resistance break on 1D or an outright steep up move. Idea: don't go short against a destructive daily uptrend.
 
-## Бонусные подтверждения
+## Bonus confirmations
 
-Не обязательны для входа, но усиливают уверенность и могут стать поводом увеличить размер позиции до целевого (а не урезанного после серии SL):
+Not required for entry, but they raise confidence and can justify increasing size to the target value (rather than the reduced one after a string of SLs):
 
-- **Funding положительный высокий (>0.015%)** — лонги перегреты, платят шортам. Сигнал что рынок готов к коррекции вниз.
-- **OI растёт на росте цены** — открытый интерес наращивается на верхах = новые лонги входят туда, где их потом будут ликвидировать.
-- **Inflow > Outflow** — деньги идут на биржу (готовятся продажи), что обычно медвежий сигнал.
-- **BTC показывает похожий паттерн** — корреляция с биткоином подтверждает что движение не идиосинкратическое.
-- **MACD на 4h начинает разворот вниз** — гистограмма уменьшает положительные значения или линии MACD делают bearish crossover.
-- **Длинные верхние тени на 4h свечах** — продавцы перебивают покупателей на каждом тесте сопротивления.
+- **High positive funding (>0.015%)** — longs are overheated, paying shorts. Signal that the market is ready to correct down.
+- **OI rising on price advance** — open interest builds at the highs = new longs entering exactly where they will be liquidated later.
+- **Inflow > Outflow** — money moves to the exchange (sells being prepared), usually bearish.
+- **BTC shows a similar pattern** — correlation with bitcoin confirms the move isn't idiosyncratic.
+- **MACD on 4h begins to turn down** — histogram shrinks positive values or MACD lines make a bearish crossover.
+- **Long upper wicks on 4h candles** — sellers overpower buyers at every test of resistance.
 
-## Запрещающие условия (хотя бы одно — не входим)
+## Prohibitive conditions (any one — no entry)
 
-Это блокеры. Если выполнено **любое одно** из условий ниже — в short не входим, даже если 5 базовых выполнены и бонусы за нас (source: strategy-v4.md):
+These are blockers. If **any one** of the conditions below holds — don't take the short, even if all 5 base conditions are met and bonuses favor us (source: strategy-v4.md):
 
-1. **Свежий пробой ключевого дневного сопротивления.** Если 1D-уровень только что пробит вверх — не шортим в импульс, рискуем попасть в short squeeze.
-2. **Whale ratio >1.3.** Киты в сильном long. Идти против них — плохая идея.
-3. **Funding сильно отрицательный (<-0.02%).** Шорты уже перегружены, движения вниз ждать не от кого, легко поймать сквиз.
-4. **Outflow доминирует и растёт.** Деньги уходят с биржи (на холодные кошельки) = накопление, не распределение.
-5. **Mixed-market momentum trade.** 1D MACD ходит около нуля без чёткого тренда И вход основан на momentum-сигнале (пробой, импульс). В боковике momentum не работает. (Источник: risk-management паттерн «Avoid momentum-following in mixed markets», 75% / 33 samples.)
-6. **Контр-тренд в бычьем рынке.** 1D MACD >0 И BTC >EMA200 на 1D со свежим пробоем — шорты в таком окружении не рассматриваются. (Зеркальный паттерн к risk-management «Contrarian LONG entries in bearish markets», та же логика — против сильного дневного тренда не торгуем.)
-7. **Критические новости по активу.** Взлом core-протокола ETH или крупного L2, регуляторное действие против ETH, или macro-headline в ближайшие 1-2 часа (FOMC, CPI, заявление главы ФРС). См. раздел "Pre-check 2 — News Impact Score" выше.
+1. **Fresh break of a key daily resistance.** If the 1D level just broke up — don't short into impulse, you risk a short squeeze.
+2. **Whale ratio >1.3.** Whales are strongly long. Going against them is a bad idea.
+3. **Funding strongly negative (<-0.02%).** Shorts already overloaded, no fuel for downward move, easy squeeze.
+4. **Outflow dominates and rising.** Money leaves the exchange (to cold wallets) = accumulation, not distribution.
+5. **Mixed-market momentum trade.** 1D MACD wandering near zero without clear trend AND entry based on a momentum signal (breakout, impulse). Momentum doesn't work in chop. (Source: `risk-management` pattern "Avoid momentum-following in mixed markets", 75% / 33 samples.)
+6. **Counter-trend in a bullish market.** 1D MACD >0 AND BTC >EMA200 on 1D with a fresh break — shorts in such an environment aren't considered. (Mirror pattern to `risk-management` "Contrarian LONG entries in bearish markets", same logic — don't trade against a strong daily trend.)
+7. **Critical news on the asset.** Hack of ETH core protocol or a major L2, regulatory action against ETH, or macro headline within the next 1-2 hours (FOMC, CPI, Fed Chair speech). See "Pre-check 2 — News Impact Score" above.
 
-## Порядок проверки
+## Check order
 
-Зеркален лонгу — тот же чеклист, что и в [[entry-rules-long]]:
+Mirror of long — same checklist as in [[entry-rules-long]]:
 
-1. **Главный вопрос про потенциал** (вниз 4-7%). Нет потенциала — стоп.
-2. **Pre-check 1: Multi-TF alignment** (4h + 1h + 15m в сторону шорта). Не сошёлся — стоп.
-3. **Pre-check 2: News Impact Score.** Запрещающая новость или Score ≥20 против сделки — стоп. Score 10-20 — размер ÷2 на этапе позиционирования.
-4. **Запрещающие условия** (структурные блокеры пп.1-6). Хотя бы одно — стоп.
-5. **Базовые условия.** Считаем сколько выполнено. <3 — стоп.
-6. И только если 3 базовых пройдены без блокеров — смотрим бонусные.
+1. **Main potential question** (down 4-7%). No potential — stop.
+2. **Pre-check 1: Multi-TF alignment** (4h + 1h + 15m for short). Doesn't hold — stop.
+3. **Pre-check 2: News Impact Score.** Prohibitive headline or Score ≥20 against the trade — stop. Score 10-20 — halve size during sizing.
+4. **Prohibitive conditions** (structural blockers #1-6). Any one holds — stop.
+5. **Base conditions.** Count how many hold. <3 — stop.
+6. Only if 3 base conditions are passed without blockers — look at the bonuses.
 
-## Особенности шортов на ETH (заметки на будущее)
+## Short-specific notes on ETH (for the future)
 
-Эти моменты не правила, а наблюдения, которые накапливаются по мере живых сделок. Раскроем подробнее когда будет статистика:
+These aren't rules, just observations that accumulate as live trades pile up. Will be expanded once there is statistical material:
 
-- **Шорт-сквизы на ETH случаются чаще лонг-капитуляций** — поэтому для short SL ставим строже к структурному инвалидатору, чем для long. Подробнее — в [[stop-loss-rules]].
-- **Funding высокий ≠ автоматический шорт** — рынок может оставаться overbought неделями. Funding сам по себе не setup, только бонусное подтверждение.
-- **Дневные свечи с длинными верхними тенями vs закрытие выше high** — первое сильный сигнал за шорт, второе — сильный сигнал что шорта нет.
+- **Short squeezes on ETH happen more often than long capitulations** — therefore, for shorts, set SL tighter to the structural invalidator than for longs. Details in [[stop-loss-rules]].
+- **High funding ≠ automatic short** — the market can stay overbought for weeks. Funding alone isn't a setup, only a bonus confirmation.
+- **Daily candles with long upper wicks vs close above the high** — the first is a strong short signal, the second is a strong "no short" signal.
 
-## Что дальше после входа
+## What happens after entry
 
-После того как все условия пройдены:
-- Размер позиции считается по формуле — см. [[position-sizing]]. Если Impact Score новости 10-20 против сделки — размер ÷2.
-- SL ставится сразу при входе, **над** последним значимым LH или ключевой EMA с буфером — см. [[stop-loss-rules]].
-- Все три TP ставятся при входе — см. [[take-profit-rules]].
-- Вход желательно через limit-ордер для экономии комиссий — см. [[commission-management]].
+Once all conditions pass:
+- Position size calculated by formula — see [[position-sizing]]. If news Impact Score is 10-20 against the trade — halve size.
+- SL placed immediately on entry, **above** the last significant LH or a key EMA with a buffer — see [[stop-loss-rules]].
+- All three TPs placed on entry — see [[take-profit-rules]].
+- Entry preferably via limit order to save commissions — see [[commission-management]].
 
-После входа в работу включается главный принцип стратегии: **"сделка должна работать сама"**. Решение было принято до входа, теперь не вмешиваемся.
+After entry, the strategy's main principle kicks in: **"the trade should work on its own"**. The decision was made before entry, no further intervention.
 
 ## Related pages
 
-- [[trading-strategy]] — главная страница стратегии
-- [[entry-rules-long]] — зеркальные правила для long-входа
+- [[trading-strategy]] — main strategy page
+- [[entry-rules-long]] — mirror rules for long entry
 - [[indicators]] — RSI, MACD, EMA, BOLL
 - [[bybit-data]] — whale ratio, funding, OI
-- [[position-sizing]] — размер позиции
-- [[stop-loss-rules]] — установка SL
-- [[take-profit-rules]] — три TP уровня
+- [[position-sizing]] — position size
+- [[stop-loss-rules]] — SL placement
+- [[take-profit-rules]] — three TP levels

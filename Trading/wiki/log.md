@@ -1,193 +1,228 @@
 # Wiki Operations Log
 
-**Summary**: Append-only журнал операций над wiki — ингесты, создание страниц, лит, ревью.
-**Sources**: операционная страница (источника нет)
-**Last updated**: 2026-04-29
+**Summary**: Append-only log of wiki operations — ingests, page creation, lints, reviews.
+**Sources**: operational page (no upstream source)
+**Last updated**: 2026-04-30
 
 ---
 
 This file is **append-only**. Never modify previous entries — only add new ones at the bottom.
 
-Каждая запись описывает один логический акт работы над wiki: ингест источника, создание страниц, ревью, лит и т.п.
+Each entry describes one logical act of wiki work: source ingest, page creation, review, lint, etc.
 
 ---
 
 ## 2026-04-29 — Initial strategy ingest (v3)
 
-**Operation:** First wiki population. Создан каркас и заведена главная стратегическая страница.
+**Operation:** First wiki population. Built the skeleton and seeded the main strategy page.
 
 **Created:**
-- `raw/strategy-v3.md` — канонический документ торговой стратегии v3 как первоисточник
-- `wiki/trading-strategy.md` — главная сводная страница со ссылками на планируемые концептуальные страницы
-- `wiki/index.md` — обновлён, теперь содержит запись про trading-strategy и список planned-страниц
-- `wiki/log.md` — этот файл
+- `raw/strategy-v3.md` — canonical strategy v3 document, used as primary source
+- `wiki/trading-strategy.md` — main summary page with links to planned concept pages
+- `wiki/index.md` — updated; now contains the trading-strategy entry and the planned-pages list
+- `wiki/log.md` — this file
 
-**Source:** живые торговые сессии 2026-04-26..29 + согласование стратегии в чате. Полные транскрипты не сохранены — куратор (Кирилл) подтвердил content стратегии устно, документ собран Claude по ходу обсуждения.
+**Source:** live trading sessions 2026-04-26..29 + strategy alignment in chat. Full transcripts not preserved — curator (Kirill) confirmed strategy content verbally, the document was assembled by Claude over the course of discussion.
 
-**Pending concept pages** (упомянуты в wiki-links на главной странице, не созданы):
+**Pending concept pages** (referenced via wiki-links from the main page, not yet created):
 - trader-profile, entry-rules-long, entry-rules-short, position-sizing, stop-loss-rules, take-profit-rules, timeframes, indicators, bybit-data, bybit-chart-markers, daily-routine, weekly-review, psychology-rules, commission-management
 
-**Plan:** концептуальные страницы наполняются постепенно. Каждое еженедельное ревью стратегии — повод раскрыть одну-две темы подробно (например, после первой реальной серии шорт-сделок развернуть `entry-rules-short` с примерами).
+**Plan:** concept pages get filled in incrementally. Each weekly strategy review is an opportunity to expand one or two topics in detail (for example, after the first real series of short trades, expand `entry-rules-short` with examples).
 
-**Next:** дождаться первой недели торговли по v3, на ревью обсудить статистику и решить какие концепты раскрывать первыми (предположительно `entry-rules-long` + `position-sizing`, как самые часто используемые).
+**Next:** wait for the first week of v3 trading, discuss statistics at review, decide which concepts to expand first (likely `entry-rules-long` + `position-sizing`, the most frequently used).
 
 ---
 
 ## 2026-04-29 — Audit fixes + first concept page
 
-**Operation:** мелкие правки по результатам аудита wiki + создание первого концепта.
+**Operation:** small fixes per the wiki audit + creation of the first concept.
 
 **Updated:**
-- `wiki/index.md` — добавлено поле `Sources` в шапку для соответствия page format (стоит "операционная страница (источника нет)")
-- `wiki/log.md` — добавлена шапка с `Summary / Sources / Last updated`
-- `wiki/trading-strategy.md` — добавлены три inline-цитаты `(source: strategy-v3.md)` к ключевым числовым утверждениям (депозит/плечо, минимальное движение 4-5%, целевые показатели win rate)
+- `wiki/index.md` — added the `Sources` field in the header for compliance with the page format (set to "operational page (no upstream source)")
+- `wiki/log.md` — added the `Summary / Sources / Last updated` header
+- `wiki/trading-strategy.md` — added three inline citations `(source: strategy-v3.md)` to key numeric statements (capital/leverage, minimum 4-5% movement, target win-rate metrics)
 
 **Created:**
-- `wiki/entry-rules-long.md` — первый концепт: условия входа в long. Структура: главный вопрос (потенциал 4-7%) → 5 базовых условий → бонусы → запрещающие условия → порядок проверки → next steps. Источник — `raw/strategy-v3.md`, раздел "Правила входа в LONG", расширен пояснениями по каждому условию.
+- `wiki/entry-rules-long.md` — first concept: long entry conditions. Structure: main question (4-7% potential) → 5 base conditions → bonuses → prohibitive conditions → check order → next steps. Source — `raw/strategy-v3.md`, "LONG entry rules" section, expanded with explanations per condition.
 
-**Index:** `entry-rules-long` перенесён из секции "Концепты (planned)" в активные "Концепты".
+**Index:** `entry-rules-long` moved from "Concepts (planned)" to active "Concepts".
 
-**Reasoning по выбору первого концепта:** в предыдущей log-записи было предсказано что `entry-rules-long` — самый часто используемый концепт. Решили не ждать первой недели торговли, а сразу развернуть его, чтобы при первом же setup'е не возвращаться к raw-документу. Остальные концепты по-прежнему раскрываем по мере необходимости — следующий кандидат `position-sizing` (нужен сразу после `entry-rules-long` в потоке "решил войти → считаю размер").
+**Reasoning for the choice of first concept:** the previous log entry predicted `entry-rules-long` as the most-used concept. We decided not to wait for the first trading week and to expand it right away, so that on the first setup we don't have to revisit the raw document. Other concepts continue to be expanded as needed — next candidate is `position-sizing` (needed right after `entry-rules-long` in the "decided to enter → calculate size" flow).
 
-**Next:** при следующем касании wiki — либо `entry-rules-short` (зеркальная пара), либо `position-sizing` (следующий шаг в operational flow). Решим по ситуации.
+**Next:** at the next wiki touch — either `entry-rules-short` (mirror page) or `position-sizing` (next step in operational flow). Decide at that point.
 
-## 2026-04-29 — связь `raw/strategy-v3` ↔ trading-strategy (граф)
+## 2026-04-29 — link `raw/strategy-v3` ↔ trading-strategy (graph)
 
-Канонический документ стратегии теперь явно залинкован как wiki-link, а не упоминается plain text'ом — чтобы быть узлом в Obsidian Graph View рядом с `trading-strategy` и `entry-rules-long`.
+The canonical strategy document is now explicitly linked as a wiki-link, not mentioned as plain text — so it becomes a node in the Obsidian Graph View next to `trading-strategy` and `entry-rules-long`.
 
-- `wiki/trading-strategy.md`: в строке `**Sources**` `strategy-v3.md` → `[[raw/strategy-v3]]`; в разделе «История версий» `\`raw/strategy-v3.md\`` → `[[raw/strategy-v3]]`. Inline-цитаты `(source: strategy-v3.md)` оставлены plain text по конвенции CLAUDE.md.
-- `wiki/entry-rules-long.md`: в строке `**Sources**` `strategy-v3.md` → `[[raw/strategy-v3]]`.
-- `wiki/index.md`: добавлена секция `## Sources` со ссылкой `[[raw/strategy-v3]]` и описанием — теперь хаб тоже ссылается на канонический документ.
+- `wiki/trading-strategy.md`: in the `**Sources**` line `strategy-v3.md` → `[[raw/strategy-v3]]`; in "Version history" `\`raw/strategy-v3.md\`` → `[[raw/strategy-v3]]`. Inline citations `(source: strategy-v3.md)` left as plain text per CLAUDE.md convention.
+- `wiki/entry-rules-long.md`: in the `**Sources**` line `strategy-v3.md` → `[[raw/strategy-v3]]`.
+- `wiki/index.md`: added a `## Sources` section with the link `[[raw/strategy-v3]]` and a description — the hub now references the canonical document too.
 
-В графе `raw/strategy-v3` — узел источника со связями к `trading-strategy`, `entry-rules-long` и `wiki/index`. Аналог пути, который сделан в Novation для `raw/XL_Performance.README` и `solo_follower.js`.
+In the graph, `raw/strategy-v3` becomes a source node with edges to `trading-strategy`, `entry-rules-long`, and `wiki/index`. Same pattern that was applied in Novation for `raw/XL_Performance.README` and `solo_follower.js`.
 
 ---
 
 ## 2026-04-29 — Lint fix: wiki-link path resolution
 
-**Issue:** Wiki-links вида `[[raw/strategy-v3]]` не резолвились в Obsidian. Vault root = `/Users/Kirill/Brain` (подтверждено наличием `.obsidian/` именно там), значит ссылка искала `/Users/Kirill/Brain/raw/strategy-v3.md`, а файл лежит на `/Users/Kirill/Brain/Trading/raw/strategy-v3.md`. Граф был сломан.
+**Issue:** Wiki-links of the form `[[raw/strategy-v3]]` weren't resolving in Obsidian. Vault root = `/Users/Kirill/Brain` (confirmed by `.obsidian/` being there), so the link was looking for `/Users/Kirill/Brain/raw/strategy-v3.md`, while the file is at `/Users/Kirill/Brain/Trading/raw/strategy-v3.md`. The graph was broken.
 
-**Fix:** заменил `[[raw/strategy-v3]]` → `[[strategy-v3]]` (короткая форма, работает потому что имя `strategy-v3` уникально в vault'е — проверено `find` по всему `/Users/Kirill/Brain`).
+**Fix:** replaced `[[raw/strategy-v3]]` → `[[strategy-v3]]` (short form, works because `strategy-v3` is unique within the vault — verified via `find` over `/Users/Kirill/Brain`).
 
 **Updated:**
-- `wiki/index.md` — секция Sources
-- `wiki/trading-strategy.md` — поле Sources в шапке + раздел «История версий»
-- `wiki/entry-rules-long.md` — поле Sources в шапке
+- `wiki/index.md` — Sources section
+- `wiki/trading-strategy.md` — Sources field in header + "Version history" section
+- `wiki/entry-rules-long.md` — Sources field in header
 
-**Why this form:** `[[strategy-v3]]` короче чем `[[Trading/raw/strategy-v3]]` и устойчивее к перемещению файла в другую подпапку. Если в будущем появится другой `strategy-v3.md` где-то в vault'е — Obsidian заругается на коллизию имён, и тогда переключимся на полный путь.
+**Why this form:** `[[strategy-v3]]` is shorter than `[[Trading/raw/strategy-v3]]` and resilient to moving the file into another subfolder. If another `strategy-v3.md` ever appears somewhere in the vault — Obsidian will complain about a name collision, and we will switch to the full path then.
 
 ---
 
-## 2026-04-29 — Правило проверки финансовых новостей в entry-rules
+## 2026-04-29 — Rule for checking financial news in entry-rules
 
-**Operation:** добавлено новое правило в `entry-rules-long`: перед входом обязательно заглядывать в Bybit Feed → News (или другую ленту по ETH). Изменение возникло из живой торговой сессии — куратор попросил добавить это в правила и сразу применить к текущему рынку.
+**Operation:** added a new rule to `entry-rules-long`: before entering, mandatory check of Bybit Feed → News (or another ETH news feed). Change emerged from a live trading session — the curator asked to add this to the rules and apply it immediately to the current market.
 
 **Updated:**
 - `wiki/entry-rules-long.md`:
-  - Шапка `Summary` — добавлено упоминание новостного чека в пайплайне.
-  - Новый раздел "Финансовые новости (контекст-чек)" — что искать (критические блокеры, sell-pressure сигналы, macro-headlines, мягкий bullish/bearish фон), правило выходного контекста (mixed-bearish или headline впереди → урезанный размер или skip).
-  - В "Запрещающих условиях" добавлен 5-й блокер — критические новости (хак core-протокола / L2, регуляторное действие, macro-headline в ближайшие 1-2 часа).
-  - В "Порядке проверки" — новостной чек теперь шаг 2, между главным вопросом и запрещающими условиями.
+  - Header `Summary` — mentioned the news check in the pipeline.
+  - New section "Financial news (context check)" — what to look for (critical blockers, sell-pressure signals, macro headlines, soft bullish/bearish background), and the contextual rule (mixed-bearish or upcoming headline → reduced size or skip).
+  - In "Prohibitive conditions" added the 5th blocker — critical news (core-protocol or L2 hack, regulatory action, macro headline within the next 1-2 hours).
+  - In "Check order" — news check is now step 2, between the main question and the prohibitive conditions.
 - `wiki/index.md`:
-  - В секции "Концепты (planned)" добавлена страница `news-check` — типология финансовых новостей.
-  - Поле `Last updated` обновлено пометкой про правило новостей.
+  - In "Concepts (planned)" added a `news-check` page — taxonomy of financial news.
+  - `Last updated` field updated with a note about the news rule.
 
-**Зеркало:** правило симметрично применяется к short. Когда будет создан `entry-rules-short`, новостной раздел туда копируется с инвертированными бонусами (bullish-новости → аргумент против шорта).
+**Mirror:** the rule applies symmetrically to short. When `entry-rules-short` gets created, the news section is copied with inverted bonuses (bullish news → an argument against shorting).
 
-**Почему отдельной страницей `news-check` пока не делаем:** правило только что введено, реальной типологии новостей по реакции рынка ещё нет. Соберём 2-3 случая когда новость явно повлияла на сделку (или должна была) — тогда развернём на отдельной странице. Пока живёт inline в `entry-rules-long`.
+**Why no separate `news-check` page yet:** the rule was just introduced, and the actual news-reaction taxonomy doesn't exist yet. Once we collect 2-3 cases where news clearly affected a trade (or should have) — we will expand it on a separate page. For now, it lives inline in `entry-rules-long`.
 
-**Применение к текущему рынку (29.04.2026, 07:49 UTC):** новостной фон mixed-bearish (6 bearish / 3 bullish / 1 neutral за последние 2 часа). Sell-pressure сигналы — убытки market-makers (Hyperliquid/Wintermute/Auros) и transfer 3,418 ETH на Binance с фиксацией прибыли. Macro — рынок ждёт оценку ФРС по инфляции. Критических блокеров нет, но фон подтвердил решение "no setup, ждём". Записано как живой пример работы правила.
+**Application to the current market (2026-04-29, 07:49 UTC):** news background was mixed-bearish (6 bearish / 3 bullish / 1 neutral over the last 2 hours). Sell-pressure signals — losses by market-makers (Hyperliquid/Wintermute/Auros) and a transfer of 3,418 ETH to Binance with profit-taking. Macro — market awaiting Fed assessment of inflation. No critical blockers, but the background confirmed the "no setup, wait" decision. Recorded as a live example of the rule at work.
 
-## 2026-04-29 — Baseline backtest одиночных сигналов strategy-v3
+## 2026-04-29 — Baseline backtest of single signals from strategy-v3
 
-**Operation:** установлены skill'ы `risk-management` (0xhubed/agent-trading-arena), `market-news-analyst` (tradermonty), `backtesting-trading-strategies` (jeremylongshore). Прогнан Variant A валидации [[strategy-v3]] — sanity-check одиночных индикаторных сигналов на дневках ETH-USD за 2 года ($2,200 капитал).
+**Operation:** installed skills `risk-management` (0xhubed/agent-trading-arena), `market-news-analyst` (tradermonty), `backtesting-trading-strategies` (jeremylongshore). Ran Variant A of [[strategy-v3]] validation — sanity check of single indicator signals on daily ETH-USD over 2 years ($2,200 capital).
 
-**Результаты (vs benchmark Buy&Hold = −28.4%):**
+**Results (vs benchmark Buy&Hold = −28.4%):**
 - RSI reversal (14, 40/65): −67.8%, win rate 51.5%, profit factor 0.73
 - Bollinger Bands (20, 2): −54.2%, win rate 52.3%, profit factor 0.69
 - MACD (12, 26, 9): −62.8%, win rate 28.6%, profit factor 0.66
-- EMA 50/100 crossover: +32.8% (но всего 1 сделка за 2 года = фактически buy-and-hold)
+- EMA 50/100 crossover: +32.8% (only 1 trade in 2 years = effectively buy-and-hold)
 
-**Вывод:** одиночные индикаторы из strategy-v3 на дневках ETH **edge'а не имеют**. Это не повод менять стратегию — это аргумент в пользу её дисциплины: правило «3 из 5 базовых условий» + funding/OI/whale ratio как фильтры — критически нужны, без них ТА на ETH в 2024-2026 = убыток.
+**Conclusion:** single indicators from strategy-v3 on daily ETH **have no edge**. This isn't a reason to change the strategy — it's an argument for its discipline: the rule "3 of 5 base conditions" + funding/OI/whale ratio as filters are critically needed; without them, TA on ETH in 2024-2026 = loss.
 
 **Created:**
-- `wiki/strategy-v3-baseline-backtest.md` — полный отчёт с интерпретацией и ограничениями теста.
-- `wiki/index.md` — добавлена ссылка в раздел «Стратегия».
+- `wiki/strategy-v3-baseline-backtest.md` — full report with interpretation and test limitations.
+- `wiki/index.md` — added a link in the "Strategy" section.
 
-**Технические артефакты:**
-- venv `.venv/` (pandas, numpy, yfinance, matplotlib) для изоляции зависимостей.
-- Отчёты и PNG в `.agents/skills/backtesting-trading-strategies/reports/`.
+**Technical artifacts:**
+- venv `.venv/` (pandas, numpy, yfinance, matplotlib) for dependency isolation.
+- Reports and PNGs in `.agents/skills/backtesting-trading-strategies/reports/`.
 
-**Что НЕ протестировано (ограничения skill'а):**
-- Таймфрейм 4h/1h (skill хардкодит 1d).
-- Funding / OI / whale ratio (yfinance их не отдаёт).
-- Combo-логика «3 из 5» и multi-TP exits.
-- Запрещающие условия (новостной блокер, BTC-корреляция).
+**What wasn't tested (skill limitations):**
+- Timeframe 4h/1h (skill hardcodes 1d).
+- Funding / OI / whale ratio (yfinance doesn't provide them).
+- Combo logic "3 of 5" and multi-TP exits.
+- Prohibitive conditions (news blocker, BTC correlation).
 
-**Дальнейшие опции:** Variant B — кастомная python-стратегия на OHLC (~50% правил). Variant C — полноценный бэктест с Bybit API (perp + funding + OI). Решение по B/C отложено.
+**Further options:** Variant B — custom python strategy on OHLC (~50% of rules). Variant C — full backtest with Bybit API (perp + funding + OI). Decision on B/C deferred.
 
-## 2026-04-29 — Strategy v4: интеграция risk-management и news-analyst skill'ов
+## 2026-04-29 — Strategy v4: integration of risk-management and news-analyst skills
 
-**Operation:** создана новая версия стратегии [[strategy-v4]] на основе анализа двух установленных skill'ов (`risk-management` от 0xhubed/agent-trading-arena, `market-news-analyst` от tradermonty/claude-trading-skills) и [[strategy-v3-baseline-backtest]]. v3 не модифицирована (immutable per CLAUDE.md), сохранена как исторический референс.
+**Operation:** created a new strategy version [[strategy-v4]] based on the analysis of two installed skills (`risk-management` from 0xhubed/agent-trading-arena, `market-news-analyst` from tradermonty/claude-trading-skills) and [[strategy-v3-baseline-backtest]]. v3 not modified (immutable per CLAUDE.md), kept as historical reference.
 
-**Что добавлено в v4 (4 изменения, обсуждены и approved by curator):**
+**What v4 adds (4 changes, discussed and approved by curator):**
 
-1. **Multi-TF Alignment как обязательный pre-check** — новый раздел перед условиями входа. Требует согласования 4h + 1h + 15m в направлении сделки до оценки 5 базовых условий. Источник: risk-management паттерн «Multi-timeframe bearish alignment» (success rate 88%, 383 samples, 99% confidence).
+1. **Multi-TF Alignment as a mandatory pre-check** — new section before entry conditions. Requires 4h + 1h + 15m alignment in the trade direction before evaluating the 5 base conditions. Source: `risk-management` pattern "Multi-timeframe bearish alignment" (success rate 88%, 383 samples, 99% confidence).
 
-2. **Запрещающие условия пополнены 2 пунктами** (зеркально для long/short):
-   - Mixed-market momentum trade (1D MACD без тренда + momentum-вход)
-   - Контр-тренд в медвежьем/бычьем рынке (1D MACD против + BTC EMA200 против)
-   Источник: «Avoid momentum-following in mixed markets» (75%/33), «Contrarian LONG entries in bearish markets» (0-30% success).
+2. **Prohibitive conditions extended by 2 items** (mirrored for long/short):
+   - Mixed-market momentum trade (1D MACD trendless + momentum entry)
+   - Counter-trend in a bearish/bullish market (1D MACD against + BTC EMA200 against)
+   Source: "Avoid momentum-following in mixed markets" (75%/33), "Contrarian LONG entries in bearish markets" (0-30% success).
 
-3. **Новый раздел «Финансовые новости» с Impact Score формулой**: `(Price Impact × Breadth) × Forward Modifier` с адаптированными под ETH порогами (Severe ≥5%, Major 3-5%, Moderate 1-3%, Minor <1%). Пороги решений: ≥20 = skip, 10-20 = размер ÷2, <10 = информационно. Запрещающие новости (любой Impact): хак core-протокола / L2, регдействие, macro-headline в ближайшие 1-2 часа. Источник: методология импакт-скоринга из market-news-analyst, адаптирована под крипту.
+3. **New "Financial news" section with the Impact Score formula**: `(Price Impact × Breadth) × Forward Modifier` with ETH-adapted thresholds (Severe ≥5%, Major 3-5%, Moderate 1-3%, Minor <1%). Decision thresholds: ≥20 = skip, 10-20 = halve size, <10 = informational. Prohibitive headlines (any Impact): core-protocol or L2 hack, regulatory action, macro headline within 1-2 hours. Source: impact-scoring methodology from market-news-analyst, adapted for crypto.
 
-4. **Weekly review — leverage outcome accounting**: отдельный учёт P&L по сделкам где 5x плечо реально использовалось vs не использовалось. Триггер: тревожный сигнал из risk-management «High leverage 4x-5x with optimal risk = 0% success / 132 samples / 50% confidence». Решение: не менять плечо (низкая confidence), но измерять. После 30+ наблюдений — пересмотр.
+4. **Weekly review — leverage outcome accounting**: separate P&L tracking for trades where 5x leverage was actually required vs not. Trigger: alarming signal from risk-management "High leverage 4x-5x with optimal risk = 0% success / 132 samples / 50% confidence". Decision: don't change leverage (low confidence), but measure. After 30+ observations — re-evaluate.
 
-**Что НЕ переносилось из skill'ов (намеренно отказались):**
-- Конкретные trade-frequency лимиты (high-freq режимы, не релевантны)
-- 6-step workflow news-analyst (нет бюджета времени, 30-40 мин/день)
-- Pattern comparison (consistent/amplified/dampened/inverse) — отвергнут куратором как добавляющий когнитивную нагрузку
+**What wasn't carried over from skills (deliberately rejected):**
+- Concrete trade-frequency limits (high-freq modes, not relevant)
+- 6-step news-analyst workflow (no time budget, 30-40 min/day)
+- Pattern comparison (consistent/amplified/dampened/inverse) — rejected by curator as adding cognitive load
 
-**Что НЕ менялось vs v3:**
-- Размер позиции, риск $25, R:R 1:3-1:5, плечо 5x (под наблюдением)
-- Основные индикаторы, multi-TP конфигурация
-- Главный принцип «сделка должна работать сама»
+**What didn't change vs v3:**
+- Position size, $25 risk, R:R 1:3-1:5, 5x leverage (under observation)
+- Core indicators, multi-TP configuration
+- Main principle "the trade should work on its own"
 
 **Created/Updated:**
-- `raw/strategy-v4.md` — новая канонiческая версия стратегии (immutable после создания)
-- `wiki/index.md` — v4 помечена как АКТУАЛЬНАЯ, v3 — как исторический референс
+- `raw/strategy-v4.md` — new canonical strategy version (immutable after creation)
+- `wiki/index.md` — v4 marked as CURRENT, v3 as historical reference
 
-**Follow-up (не сделано в этой сессии):**
-- `wiki/trading-strategy.md` — обновить чтобы указывала на v4
-- `wiki/entry-rules-long.md` — синхронизировать с v4 (новостной раздел теперь скоринговый, добавить multi-TF pre-check, добавить 2 запрещающих)
-- `wiki/entry-rules-short.md` — создать (зеркальная страница)
-- Концептуальные страницы планируются: `multi-tf-alignment`, `news-impact-score`, `leverage-accounting`
+**Follow-up (not done in this session):**
+- `wiki/trading-strategy.md` — update to point to v4
+- `wiki/entry-rules-long.md` — sync with v4 (news section now scored, add multi-TF pre-check, add 2 prohibitive)
+- `wiki/entry-rules-short.md` — create (mirror page)
+- Concept pages planned: `multi-tf-alignment`, `news-impact-score`, `leverage-accounting`
 
 ---
 
-## 2026-04-29 — Wiki sync со strategy-v4 + создание entry-rules-short
+## 2026-04-29 — Wiki sync with strategy-v4 + creation of entry-rules-short
 
-**Operation:** закрыты три из четырёх follow-up'ов предыдущей записи. Wiki полностью переведена на [[strategy-v4]] как актуальный источник, концептуальные страницы для новых разделов остаются planned.
+**Operation:** closed three of four follow-ups from the previous entry. Wiki fully migrated to [[strategy-v4]] as the active source; concept pages for new sections remain planned.
 
 **Updated:**
-- `wiki/trading-strategy.md` — Summary/Sources/Last updated переключены на v4. Все inline-цитаты `(source: strategy-v3.md)` заменены на `strategy-v4.md` (числовые параметры в v4 не менялись, цитаты остаются точными). Добавлен новый раздел «Pre-check перед каждым входом» с кратким описанием multi-TF alignment и news Impact Score (детали — в entry-rules-* страницах). В разделе «Целевые показатели» добавлен абзац про weekly leverage outcome accounting. История версий пополнена записью про v4.
-- `wiki/entry-rules-long.md` — синхронизирована с v4: старый раздел «Финансовые новости» (категории) заменён на «Pre-check 2 — News Impact Score» (формула + три шкалы + пороги решений). Добавлен новый раздел «Pre-check 1 — Multi-TF Alignment» перед базовыми условиями. В список запрещающих условий добавлены 2 пункта: mixed-market momentum trade, контр-тренд в медвежьем рынке (1D MACD <0 + BTC <EMA200). Порядок проверки переписан под 6 шагов вместо 5. Все источники переключены с strategy-v3.md на strategy-v4.md.
-- `wiki/index.md` — `entry-rules-short` поднята из «planned» в активные «Концепты» с описанием. В planned добавлены три новых концепта: `multi-tf-alignment`, `news-impact-score`, `leverage-accounting`. Старый planned `news-check` оставлен с пометкой что он частично поглощён `news-impact-score` — решим про объединение позже. Last updated обновлён.
+- `wiki/trading-strategy.md` — Summary/Sources/Last updated switched to v4. All inline citations `(source: strategy-v3.md)` replaced with `strategy-v4.md` (numeric parameters didn't change in v4, citations stay accurate). Added new section "Pre-checks before each entry" with brief multi-TF alignment and news Impact Score description (details — in entry-rules-* pages). In "Target metrics" added a paragraph about weekly leverage outcome accounting. Version history extended with the v4 entry.
+- `wiki/entry-rules-long.md` — synced with v4: old "Financial news" section (categories) replaced with "Pre-check 2 — News Impact Score" (formula + three scales + decision thresholds). Added new section "Pre-check 1 — Multi-TF Alignment" before base conditions. In the prohibitive list added 2 items: mixed-market momentum trade, counter-trend in a bearish market (1D MACD <0 + BTC <EMA200). Check order rewritten as 6 steps instead of 5. All sources switched from strategy-v3.md to strategy-v4.md.
+- `wiki/index.md` — `entry-rules-short` promoted from "planned" to active "Concepts" with description. In planned added three new concepts: `multi-tf-alignment`, `news-impact-score`, `leverage-accounting`. Old planned `news-check` kept with a note that it's partially absorbed by `news-impact-score` — merge decision deferred. `Last updated` refreshed.
 
 **Created:**
-- `wiki/entry-rules-short.md` — новая страница, зеркало entry-rules-long. Структура идентична: главный вопрос (4-7% вниз) → multi-TF alignment в сторону шорта → news Impact Score (зеркальная трактовка bullish/bearish) → 5 базовых условий (RSI >65/>60, whale ratio <0.8 или снижается, и т.д.) → 6 бонусных подтверждений → 7 запрещающих (включая контр-тренд в бычьем рынке: 1D MACD >0 + BTC >EMA200 со свежим пробоем). Добавлен короткий раздел «Особенности шортов на ETH» с тремя наблюдениями для будущей раскрутки (шорт-сквизы чаще, funding ≠ setup, тени vs закрытие выше high) — пока без статистики, заметки для будущих сделок.
+- `wiki/entry-rules-short.md` — new page, mirror of entry-rules-long. Identical structure: main question (down 4-7%) → multi-TF alignment for short → news Impact Score (mirror interpretation of bullish/bearish) → 5 base conditions (RSI >65/>60, whale ratio <0.8 or declining, etc.) → 6 bonus confirmations → 7 prohibitive (including counter-trend in a bullish market: 1D MACD >0 + BTC >EMA200 with a fresh break). Added a short section "Short-specific notes on ETH" with three observations for future expansion (short squeezes more frequent, funding ≠ setup, wicks vs close above the high) — no statistics yet, notes for future trades.
 
-**Решения по содержанию entry-rules-short:**
-- Шкалы Impact Score не дублируются в short — отсылка к entry-rules-long чтобы не было двух источников правды. Если шкалы поменяются, правится только одно место.
-- Запрещающая новость про хак core-протокола ETH/L2 включена и в short, несмотря на bearish-нарратив. Аргумент: в день хака волатильность непредсказуема в обе стороны, шорт тоже не открываем.
-- Multi-TF alignment паттерн в risk-management калиброван именно на bearish-сценариях (88% / 383 samples) — для шорта помечено как «особенно весом».
-- Особенности шортов вынесены отдельным разделом, а не растворены в правилах — чтобы при еженедельном ревью видеть, какие из этих наблюдений подтвердились живыми сделками.
+**Decisions on entry-rules-short content:**
+- Impact Score scales not duplicated in short — pointer to entry-rules-long to avoid two sources of truth. If scales change, only one place gets updated.
+- Prohibitive headline about ETH/L2 core-protocol hack also included in short, despite the bearish narrative. Argument: on hack day volatility is unpredictable in both directions, no short either.
+- Multi-TF alignment pattern in risk-management is calibrated specifically on bearish scenarios (88% / 383 samples) — flagged as "extra weight" for short.
+- Short-specific notes carved out as a separate section, not dissolved into the rules — so weekly review can see which observations were confirmed by live trades.
 
-**Что НЕ сделано (остаётся в follow-up):**
-- Концептуальные страницы `multi-tf-alignment`, `news-impact-score`, `leverage-accounting` — пока живут inline в entry-rules-* и trading-strategy. Раскрутим когда появится живой материал (первая сделка по multi-TF alignment, первый Impact Score реальной новости, первые ≥10 сделок для leverage accounting).
-- Решение про `news-check` vs `news-impact-score` — оставлены оба planned, объединение или замена будет когда писать концепт.
-- Inline-цитаты `(source: strategy-v3.md)` в trading-strategy.md заменены на v4. Если на v4 действительно появятся новые числовые параметры (которых нет в v3), нужно будет добавить новые цитаты — но в текущем v4 числа не менялись.
+**What wasn't done (still in follow-up):**
+- Concept pages `multi-tf-alignment`, `news-impact-score`, `leverage-accounting` — still inline in entry-rules-* and trading-strategy. Will expand once live material appears (first multi-TF alignment trade, first real-news Impact Score, first ≥10 trades for leverage accounting).
+- Decision on `news-check` vs `news-impact-score` — both kept planned; merge or replacement when writing the concept.
+- Inline citations `(source: strategy-v3.md)` in trading-strategy.md replaced with v4. If v4 actually introduces new numeric parameters (absent in v3), new citations will be added — but in current v4 the numbers haven't changed.
 
-**Граф (ожидаемое состояние):** [[strategy-v4]] становится новым центральным источником, [[strategy-v3]] и [[strategy-v3-baseline-backtest]] — связанные исторические узлы. [[trading-strategy]], [[entry-rules-long]], [[entry-rules-short]] — три страницы первого порядка, ссылающиеся на [[strategy-v4]]. [[entry-rules-long]] ↔ [[entry-rules-short]] — взаимная ссылка как зеркальные документы.
+**Graph (expected state):** [[strategy-v4]] becomes the new central source; [[strategy-v3]] and [[strategy-v3-baseline-backtest]] are linked historical nodes. [[trading-strategy]], [[entry-rules-long]], [[entry-rules-short]] are three first-order pages referencing [[strategy-v4]]. [[entry-rules-long]] ↔ [[entry-rules-short]] — mutual link as mirror documents.
 
-**Next:** дождаться первой реальной сделки по v4, на ревью обсудить — какой из новых pre-check'ов реально сработал, какой оказался шумом, какие настройки шкал (особенно пороги Impact Score) требуют калибровки. Концепт-страницы раскрываем по живому материалу.
+**Next:** wait for the first real trade under v4, discuss at review — which of the new pre-checks actually fired, which turned out to be noise, which threshold settings (especially Impact Score) need calibration. Concept pages get expanded based on live material.
+
+---
+
+## 2026-04-30 — Bulk RU → EN translation + Vale/LanguageTool tooling
+
+**Operation:** translated the entire `wiki/` from Russian to English following the new "docs in English, chat in Russian" rule (memory: `feedback_language_split.md`). Installed and configured prose-checking tooling so every future English doc edit gets linted automatically.
+
+**Translated (content unchanged, language only):**
+- `wiki/index.md`
+- `wiki/trading-strategy.md`
+- `wiki/entry-rules-long.md`
+- `wiki/entry-rules-short.md`
+- `wiki/strategy-v3-baseline-backtest.md`
+- `wiki/log.md` (this file — historical entries above this line are translated; append-only convention preserved)
+
+`raw/` not touched (immutable per CLAUDE.md). Wiki-link filenames (`[[entry-rules-long]]` etc.) were already lowercase-hyphen English and stayed unchanged. User quotes and citations preserved.
+
+**Tooling installed:**
+- `vale` 3.14.1 (`brew install vale`) — style linter, configured with Microsoft + write-good packages.
+- `languagetool` 6.7 (`brew install languagetool`) — grammar checker.
+- `Trading/.vale.ini` — config tuned for trading wiki: disabled overly strict rules (`Microsoft.Headings`, `Microsoft.Acronyms`, `Microsoft.Hyphens`, `Microsoft.Dashes`, `Microsoft.DateOrder`, `Microsoft.Quotes`, `Microsoft.Foreign`, `Microsoft.Auto`, `Microsoft.HeadingColons`, `Microsoft.Terms`); downgraded `write-good.E-Prime` and `write-good.TooWordy` from error to suggestion. Spaced em-dashes preserved as stylistic choice.
+- `Trading/.vale/styles/config/vocabularies/Trading/accept.txt` — domain vocab: Bybit, Ethereum, indicator acronyms (RSI/MACD/EMA/BOLL), candle structure (HH/HL/LH/LL), exchange and market-maker names (Binance, Coinbase, Hyperliquid, etc.), python tooling (yfinance, numpy, pandas), and other wiki terminology.
+- `Trading/.gitignore` — ignores `.vale/styles/` (auto-synced by `vale sync`).
+
+**Process:** for each file — full translate → `vale` → fix findings → `vale` again until 0 errors / 0 warnings. Most fixes were mechanical: switching to contracted forms (`don't`, `isn't`, `doesn't`), replacing Latin abbreviations with English equivalents, and adding domain terms to the vocab when Vale flagged them as misspellings.
+
+**Memory translated alongside:**
+- `feedback_no_setup_followup.md`, `user_timezone.md`, `feedback_language_split.md` — all bodies translated to English, descriptions kept already-English from previous edits.
+- `MEMORY.md` index — three entries rewritten in English.
+- `feedback_language_split.md` extended with the "Prose-checking after writing/translating English docs" section codifying the Vale + LanguageTool workflow as a persistent rule.
+
+**Why the bulk pass now (not incremental):** user explicitly requested it, citing the value of a single coherent pass over slow file-by-file drift across many sessions. One large diff, one log entry, one consistent terminology pass.
+
+**Follow-up:** none required. Future doc edits run through the lint workflow automatically.
+

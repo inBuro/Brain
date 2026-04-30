@@ -1,89 +1,89 @@
 # Trading Strategy
 
-**Summary**: Системная позиционная свинг-стратегия для ETH/USDT на Bybit фьючерсах. Текущая версия — v4 (29.04.2026), добавлены multi-TF alignment pre-check, news Impact Score, расширенный список запрещающих условий, weekly leverage accounting. Главный принцип — "сделка должна работать сама": войти, поставить SL и TP, не дёргать.
-**Sources**: [[strategy-v4]] (актуальная), [[strategy-v3]] (исторический референс), chat 2026-04-26..29
-**Last updated**: 2026-04-29 (синк с v4)
+**Summary**: Systematic positional swing strategy for ETH/USDT on Bybit perpetual futures. Current version is v4 (2026-04-29), which adds the multi-TF alignment pre-check, news Impact Score, an expanded list of prohibitive conditions, and weekly leverage accounting. Main principle: "the trade should work on its own" — enter, set SL and TP, don't micromanage.
+**Sources**: [[strategy-v4]] (current), [[strategy-v3]] (historical reference), chat 2026-04-26..29
+**Last updated**: 2026-04-30 (translation RU → EN; content unchanged from 2026-04-29 v4 sync)
 
 ---
 
-## Контекст
+## Context
 
-Стратегия разработана для трейдера, который не может (и не хочет) сидеть над графиком целый день. Бюджет внимания — 30-40 минут в день. Депозит $2,200 на фьючерсах Bybit, плечо 5x (source: strategy-v4.md). Торгуется только ETH/USDT в обе стороны (LONG и SHORT). Подробнее в [[trader-profile]].
+The strategy targets a trader who can't (and doesn't want to) sit over the chart all day. Attention budget: 30-40 minutes per day. Capital $2,200 on Bybit perpetual futures, leverage 5x (source: strategy-v4.md). Only ETH/USDT is traded, both directions (LONG and SHORT). See [[trader-profile]] for details.
 
-## Главный принцип
+## Main principle
 
-**"Сделка должна работать сама"** — стратегия построена так, чтобы решения принимались *до* открытия позиции, а не во время. После входа позиция управляется автоматически: SL и TP уже стоят, а вмешательство руками допустимо только в редких случаях (см. [[stop-loss-rules]] раздел "когда подтягивать SL").
+**"The trade should work on its own"** — the strategy is built so that decisions are made *before* opening a position, not during it. Once entered, the position is managed automatically: SL and TP are already in place, and manual intervention is allowed only in rare cases (see [[stop-loss-rules]], section "when to trail SL").
 
-## Целевые параметры
+## Target parameters
 
-| Параметр | Значение |
+| Parameter | Value |
 |----------|----------|
-| Риск на сделку | $20-30 (1-1.5% депозита) |
-| Целевая прибыль (идеал) | $100-150 |
-| Реалистичная прибыль | $50-100 |
-| R:R минимум | 1:3 |
-| R:R целевое | 1:5 |
-| Длительность сделки | от часов до 3-4 дней |
-| Частота | максимум 1-2 setup'а в день |
+| Risk per trade | $20-30 (1-1.5% of capital) |
+| Target profit (ideal) | $100-150 |
+| Realistic profit | $50-100 |
+| Minimum R:R | 1:3 |
+| Target R:R | 1:5 |
+| Trade duration | from hours to 3-4 days |
+| Frequency | maximum 1-2 setups per day |
 
-Подробный расчёт — на странице [[position-sizing]]. Минимальное движение для входа в сделку — **4-5% от текущей цены**, иначе комиссии съедают результат (source: strategy-v4.md, см. [[commission-management]]).
+Detailed sizing math lives on [[position-sizing]]. Minimum movement to take a trade — **4-5% from current price**, otherwise commissions eat the result (source: strategy-v4.md, see [[commission-management]]).
 
-## Pre-check перед каждым входом
+## Pre-checks before each entry
 
-В v4 добавлены два обязательных pre-check'а, которые срабатывают **до** оценки 5 базовых условий:
+In v4, two mandatory pre-checks were added that run **before** evaluating the 5 base conditions:
 
-1. **Multi-TF Alignment** — 4h, 1h и 15m должны указывать в одну сторону. Если хотя бы один таймфрейм противоречит — setup'а нет, ждём следующего часа. Концепт планируется на отдельной странице `multi-tf-alignment`. Источник правила — risk-management skill, паттерн «Multi-timeframe bearish alignment» (88% success / 383 samples / 99% confidence).
+1. **Multi-TF Alignment** — 4h, 1h and 15m must all point in the same direction. If at least one timeframe contradicts — no setup, wait for the next hour. Concept page planned at `multi-tf-alignment`. Source rule: `risk-management` skill, pattern "Multi-timeframe bearish alignment" (88% success / 383 samples / 99% confidence).
 
-2. **News Impact Score** — заглянуть в Bybit Feed → News, оценить главные новости по формуле `(Price Impact × Breadth) × Forward Modifier`. Score ≥20 против сделки → skip. Score 10-20 → размер ÷2. Score <10 → информационно. Любая запрещающая новость (хак core-протокола / L2, регдействие, macro-headline в ближайшие 1-2 часа) — мгновенный блокер. Концепт планируется на отдельной странице `news-impact-score`.
+2. **News Impact Score** — open Bybit Feed → News, evaluate top headlines via the formula `(Price Impact × Breadth) × Forward Modifier`. Score ≥20 against the trade → skip. Score 10-20 → halve position size. Score <10 → informational only. Any prohibitive headline (core-protocol or major L2 hack, regulatory action, macro headline within the next 1-2 hours) is an instant blocker. Concept page planned at `news-impact-score`.
 
-Подробности — в [[entry-rules-long]] (зеркально в [[entry-rules-short]]).
+For details, see [[entry-rules-long]] (mirrored in [[entry-rules-short]]).
 
-## Структура стратегии
+## Strategy structure
 
-Стратегия разворачивается на нескольких концептуальных страницах:
+The strategy unfolds across the concept pages below:
 
-**Профиль и принципы:**
-- [[trader-profile]] — профиль трейдера, депозит, плечо, режим работы
-- [[psychology-rules]] — психологические правила и паттерны срывов
+**Profile and principles:**
+- [[trader-profile]] — trader profile, capital, leverage, work mode
+- [[psychology-rules]] — psychological rules and breakdown patterns
 
-**Аналитика:**
-- [[timeframes]] — какие таймфреймы используем и для чего (1D / 4h / 1h / 15m / 1m)
-- [[indicators]] — индикаторы (BOLL, EMA, RSI, MACD)
-- [[bybit-data]] — раздел Data на Bybit (funding, OI, whale ratio)
-- [[bybit-chart-markers]] — что значат метки B/S на графиках Bybit (важно — это исполненные ордера, не сигналы)
+**Analytics:**
+- [[timeframes]] — which timeframes to use and for what (1D / 4h / 1h / 15m / 1m)
+- [[indicators]] — indicators (BOLL, EMA, RSI, MACD)
+- [[bybit-data]] — Bybit Data tab (funding, OI, whale ratio)
+- [[bybit-chart-markers]] — what B/S markers on Bybit charts mean (important: those are executed orders, not signals)
 
-**Входы:**
-- [[entry-rules-long]] — условия входа в long (5 базовых, бонусные, запрещающие)
-- [[entry-rules-short]] — условия входа в short (зеркальные правила)
+**Entries:**
+- [[entry-rules-long]] — long entry conditions (5 base, bonuses, prohibitive)
+- [[entry-rules-short]] — short entry conditions (mirror rules)
 
-**Управление сделкой:**
-- [[position-sizing]] — формула размера позиции
-- [[stop-loss-rules]] — где ставить SL и когда подтягивать
-- [[take-profit-rules]] — три TP уровня (30/30/40)
+**Trade management:**
+- [[position-sizing]] — position size formula
+- [[stop-loss-rules]] — where to set SL and when to trail it
+- [[take-profit-rules]] — three TP levels (30/30/40)
 
-**Операционка:**
-- [[daily-routine]] — рутина дня (утром, в setup, во время позиции, после)
-- [[weekly-review]] — еженедельное ревью стратегии
-- [[commission-management]] — минимизация комиссий
+**Operations:**
+- [[daily-routine]] — daily routine (morning, at setup, during the position, after)
+- [[weekly-review]] — weekly strategy review
+- [[commission-management]] — commission minimization
 
-## Что НЕ торговать
+## What we don't trade
 
-Список исключений важен не меньше правил входа. Не торгуем сделки с потенциалом меньше 4% движения. Не торгуем контр-тренд при сильном дневном тренде в обратную сторону. После двух SL подряд за день — пауза до следующего дня. Поздним вечером (после 22:00 локального) новые сделки не открываем. Если устал или эмоционален — не торгуем вообще. Полный список — в [[psychology-rules]].
+The exclusion list matters as much as the entry rules. We don't take setups with potential under 4% movement. We don't take counter-trend against a strong daily trend in the opposite direction. After two consecutive SLs in one day — pause until the next day. Late evening (after 22:00 local) — no new entries. If tired or emotional — no trading at all. Full list: [[psychology-rules]].
 
-## Целевые показатели
+## Target metrics
 
-При дисциплинированном следовании стратегии месячные цели — win rate 50-60%, средний выигрыш $80-120, средний проигрыш $20-25, чистый результат +8-15% к депозиту (source: strategy-v4.md). Если хуже — разбираемся на [[weekly-review]] что идёт не так. Если лучше — фиксируем что работает.
+With disciplined execution, monthly targets are: win rate 50-60%, average win $80-120, average loss $20-25, net result +8-15% on capital (source: strategy-v4.md). Worse than that — investigate at [[weekly-review]] what's going wrong. Better — record what's working.
 
-С v4 в weekly review добавлен **leverage outcome accounting** — отдельный учёт P&L по сделкам где близкий SL реально требовал 5x плечо (т.е. без плеча размер позиции был бы недостижим) vs сделки где 5x не повлияло на исполнение. Цель — собрать ≥30 наблюдений и оценить, есть ли edge от плеча или 5x только увеличивает дисперсию. Это сбор данных, не решение менять плечо. Триггер — risk-management запись «High leverage 4x-5x with optimal risk = 0% success / 132 samples / 50% confidence»: выборка маленькая чтобы менять, но достаточно тревожная чтобы измерять. Концепт планируется на странице `leverage-accounting`.
+Starting with v4, weekly review adds **leverage outcome accounting**: a separate P&L tally for trades where a tight SL actually required 5x leverage (that is, without leverage the position size would have been unreachable) vs trades where 5x had no effect on execution. Goal: collect ≥30 observations and assess whether leverage actually provides edge or 5x only inflates variance. This is data collection, not a decision to change leverage. Trigger: the `risk-management` record "High leverage 4x-5x with optimal risk = 0% success / 132 samples / 50% confidence" — sample too small to act on, but alarming enough to measure. Concept page planned at `leverage-accounting`.
 
-## История версий
+## Version history
 
-- **v1** — первая попытка формализации (рабочих следов не сохранилось)
-- **v2** — уточнение таймфреймов и R:R (рабочих следов не сохранилось)
-- **v3** — добавлены шорты, еженедельное ревью, реалистичные ожидания прибыли. Источник: [[strategy-v3]]. Сформирована на основе серии живых торговых сессий 26-29.04.2026. Сохраняется как исторический референс.
-- **v4 (текущая)** — итерация после ингеста skill'ов `risk-management` и `market-news-analyst` + [[strategy-v3-baseline-backtest]]. Добавлены: multi-TF alignment как pre-check, 2 новых запрещающих условия (mixed-market momentum, контр-тренд по 1D MACD + BTC EMA200), news Impact Score, weekly leverage accounting. Источник: [[strategy-v4]]. Полный changelog — в самом документе v4.
+- **v1** — first attempt at formalization (no working notes preserved)
+- **v2** — refined timeframes and R:R (no working notes preserved)
+- **v3** — added shorts, weekly review, realistic profit expectations. Source: [[strategy-v3]]. Built from a series of live trading sessions 2026-04-26..29. Kept as historical reference.
+- **v4 (current)** — iteration after ingesting the `risk-management` and `market-news-analyst` skills, plus [[strategy-v3-baseline-backtest]]. Adds: multi-TF alignment as pre-check, 2 new prohibitive conditions (mixed-market momentum, counter-trend by 1D MACD + BTC EMA200), news Impact Score, weekly leverage accounting. Source: [[strategy-v4]]. Full changelog inside the v4 document.
 
-Версия меняется только после реального обкатывания в торговле и обсуждения на еженедельном ревью. Промежуточные правки конкретных правил (например подкрутить порог RSI) живут в commit-истории, новая major-версия — это отдельный документ в `raw/` (в случае v4 — отдельный файл, чтобы v3 остался immutable per CLAUDE.md).
+A version bump only happens after real-world live testing and discussion at the weekly review. Intermediate edits to specific rules (for example, nudging an RSI threshold) live in commit history; a new major version is a separate document in `raw/` (in the v4 case — a separate file, so v3 stays immutable per CLAUDE.md).
 
 ## Related pages
 
