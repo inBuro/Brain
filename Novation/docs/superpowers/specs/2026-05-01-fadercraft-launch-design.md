@@ -195,7 +195,13 @@ Collapsible "📬 Release notes" element with single email field. Submit → POS
 
 **Brand & infrastructure**
 - Logo + wordmark + 2 primary colors
-- Register `fadercraft.com`, set up DNS, deploy static landing host (Vercel / Netlify)
+- Register `fadercraft.com` via **Cloudflare Registrar** (wholesale pricing, ~$10/yr; fallback: Porkbun if CF payment method is rejected in user's region)
+- DNS managed inside Cloudflare (automatic after registration)
+- Deploy static landing host on Cloudflare Pages (or Vercel / Netlify if preferred — DNS already on CF)
+- **Email infrastructure via Cloudflare Email Routing** (free, in same CF dashboard):
+  - Aliases: `hello@fadercraft.com`, `support@fadercraft.com`, `noreply@fadercraft.com` → forward to user's existing Gmail
+  - Configure "Send mail as" in Gmail with SendGrid or Mailgun free relay (~30 min setup)
+  - Add SPF / DKIM / DMARC DNS records to keep outbound mail out of spam (Cloudflare guides through it)
 - Set up Gumroad storefront `gumroad.com/fadercraft`
 - Reserve Instagram handle (alt: `@fadercraft.studio` / `.audio` / `.dev`)
 
