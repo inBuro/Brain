@@ -284,3 +284,31 @@ In the graph, `raw/strategy-v3` becomes a source node with edges to `trading-str
 
 **Next:** create the routine via the `schedule` skill, manually trigger a test run, verify end-to-end (data fetch → analysis → journal append → email if setup → commit/push), then let cron take over for 2 weeks.
 
+---
+
+## 2026-05-01 — Pending-orders supplement to v5 + 2-week review one-shot routine
+
+**Operation:** added a pending-orders capability (concept page, routine prompt update, memory rule) so that probable setups generate ready-to-paste limit orders rather than just watch points. Scheduled a one-shot remote agent for 2026-05-14 09:00 ICT to email a 2-week review of the eth-paper-journal routine.
+
+**Why:** trader requested 2026-05-01 — manual scans 3x/day miss many setup zones because price doesn't always touch them within a scan window. A pending order with full structure (entry / SL / TP1/2/3 / size / time validity / manual cancel triggers) closes the gap without forcing the trader to draft each order at fill time. Trader also asked Claude to remind them about the 2-week mark rather than relying on memory.
+
+**Created:**
+- `wiki/pending-orders.md` — new concept page. Defines when pending orders are appropriate (5 conditions all hold) and when they aren't (7 disqualifiers, including macro events in next 12h, counter-trend bearish blocking LONG, conditions still developing, news Impact Score in grey zone, etc.). Includes a structured chat-output template with all required fields and per-direction notes (LONG/SHORT/RANGE). Range trades are the natural fit; trend trades need stricter eligibility.
+
+**Updated:**
+- `wiki/index.md` — added `pending-orders` link to active Concepts section.
+- `wiki/trading-strategy.md` — added pending-orders link in Entries subsection of Strategy structure.
+- Routine prompt for `eth-paper-journal` (`trig_0169HXZsfncrZeL5dD3MwMfr`) — extended to evaluate pending-order eligibility per direction (LIVE_SETUP / PENDING_ELIGIBLE / WATCH / BLOCKED), output structured pending-order suggestions in the journal entry, and send email when EITHER live setup OR pending suggestion exists (not just live setups).
+
+**Memory:**
+- `feedback_pending_orders.md` — feedback memory: in market checks, when probable setup with all gating criteria satisfied, proactively suggest concrete pending order. Reference [[pending-orders]] for rules.
+- `project_2week_review_reminder.md` — project memory: 2-week review scheduled for 2026-05-14 09:00 ICT via one-shot routine; if email doesn't arrive, raise topic in chat.
+- `MEMORY.md` — index updated with both new entries.
+
+**Scheduled remote agent:**
+- One-shot routine `eth-paper-journal-2week-review` (`trig_01SgfeZ7dayRSNiEjbR8NmWp`) — fires once at 2026-05-14T02:00:00Z (= 09:00 ICT). Aggregates stats from `wiki/trading-journal-v5.md` (decision distribution, pending-order count, data source distribution, top NO_SETUP blockers, BTC EMA200 status), emits a recommendation (CONTINUE / CONTINUE WITH REFINEMENT / REVERT / PAUSE), emails to `hellokbbureau@gmail.com`, appends report to journal, commits + pushes.
+
+**Linting:** all wiki and memory updates passed Vale + LanguageTool with disable list. Vocab extended for `[Tt]rendlines?`, `eth-paper-journal`, `[Aa]llowlist(?:ed)?`.
+
+**Follow-up:** none required — routine continues running 3x/day with new pending-order logic; one-shot reminder fires automatically on 2026-05-14.
+

@@ -58,6 +58,7 @@ The strategy unfolds across the concept pages below:
 - [[entry-rules-long]] — long entry conditions (5 base, bonuses, prohibitive)
 - [[entry-rules-short]] — short entry conditions (mirror rules)
 - [[range-trade-rules]] — range mean-reversion subcategory (new in v5)
+- [[pending-orders]] — when to suggest pending limit orders for probable setups (v5 supplement, 2026-05-01)
 
 **Trade management:**
 - [[position-sizing]] — position size formula
