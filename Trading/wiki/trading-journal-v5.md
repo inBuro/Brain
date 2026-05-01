@@ -168,3 +168,51 @@ Updated weekly during review (see [[weekly-review]]):
 - Trader's eye: confirm $2,232 24h low held or broken; if $2,221 support breaks → fresh daily support broken (Prohibitive #1 for long); could improve short setup preconditions but alignment still needed
 - ATR(1h) 24h trend: manually verify if volatility contracting for range pre-check assessment
 - 4h MACD exact values: check on chart to determine if within [-10, +10] for range pre-check
+
+---
+
+### 2026-05-01 10:28 ICT — auto check
+
+**Data source**: Web search aggregates (reduced precision — CoinGecko and Binance REST APIs blocked by sandbox egress allowlist; WebFetch returning HTTP 403 on most external sites). All indicator values are estimates from published analyses and web-search results. Treat values as approximate (±5–10%).
+
+**Price**: $2,245 (Δ −3.60% 24h)
+**Decision**: NO_SETUP
+
+**Market state:**
+- 24h: high ~$2,329 (price 24h ago, pre-FOMC level), low ~$2,220–$2,230 (key support zone); volume ~$19.26B USD
+- Context: Post-FOMC sell-off continuation. Fed held rates 3.5%–3.75% on April 29 with hawkish tone; 3 of 4 dissenters wanted removal of easing bias — most divided FOMC since Oct 1992. $149.7M ETH futures liquidations (longs $110.3M), 226K ETH flowing to exchanges over 72h, $87.73M ETH ETF outflows on Apr 29.
+- BTC: ~$77,051 — below 200-day EMA ($82,228); −6.3% below EMA200; has not closed above EMA200 since Oct 2025
+- 4h structure: Tightening triangle compression; LH/LL bearish macro trend; price approaching $2,220–$2,230 support zone; no HL forming; multiple analyses note "imminent compression resolution" without confirming direction
+- Indicators (1h): RSI est. ~38–43 (declining with sell-off, approaching oversold); MACD negative, histogram decreasing; price below EMA20/EMA26/EMA100; approaching lower BB on 1h
+- Indicators (4h): RSI est. ~38–42 (approaching oversold); MACD bearish, histogram est. ~−1 to −5 (contracting from prior −10s, possibly borderline for range pre-check — manual verification needed); EMA100 est. ~$2,348; price well below all MAs
+- Indicators (1D): RSI ~33–35 (oversold territory); Weekly RSI ~30 (historically significant cycle-bottom zone); MACD negative (confirmed); EMA200 at $2,617 — price ~16% below; EMA50 ~$2,322
+- Funding: Near neutral to slightly negative (post-liquidation wash of $110.3M longs; exact rate: manual verification needed; est. range −0.01% to +0.01%)
+- OI: ~$31B (est., declined ~1.6% from prior $31.5B); declining on price drop = shorts closing / longs washed
+- Top-100 L/S ratio: manual verification needed (no public API); long/short ratio reported ~0.97 (marginally short-biased on Binance)
+
+**Pre-checks:**
+- Multi-TF alignment (LONG): FAIL — 4h structure: no HL forming, price in LH/LL continuation; 1h RSI ~38–43 moving downward (not exiting oversold zone on bounce); no 15m reversal candle from confirmed support; 4h MACD not crossing from below 0
+- Multi-TF alignment (SHORT): FAIL — price at $2,245 is near key support ($2,220–$2,230), NOT at resistance ($2,300–$2,347); 1h RSI ~38–43 is approaching oversold, not exiting overbought; 15m not showing rejection from an overhead level; no LH forming at resistance
+- Range pre-check: FAIL — (1) ATR(1h): likely spiked with today's −3.60% sell-off move; contraction for 24h+ NOT confirmed — today's volatility expansion directly contradicts contraction requirement; (2) Range boundaries: unclear post-FOMC flush; 24h range ($2,220–$2,329 = ~$109, ~4.8% width) is too wide for range-trade category; shorter sub-range ($2,220–$2,300) would be 3.5% = borderline but 2x confirmed edge-rejections not established; (3) 4h MACD borderline/uncertain; (4) BB(4h) flatness: not confirmed
+- **News Impact Score**: **26.2** (FOMC April 29 hawkish: Price Impact 7 [major, −3.60%] × Breadth 3× [systemic macro] × Forward 1.25× [trend confirmation of bearish macro]) → For LONG: SKIP threshold (≥20) is **independently triggered** even if Prohibitive #6 were lifted; For SHORT: bearish news score ≥10 is an extra argument, not a blocker
+- **Prohibitive conditions (LONG)**: **TRIGGERED — two independent blockers:**
+  - **Prohibitive #6**: 1D MACD <0 AND BTC <EMA200 on 1D ($77,051 vs $82,228) → counter-trend bearish regime; longs prohibited
+  - **Prohibitive #4**: Inflow dominates and rising — 226K ETH flowing to exchanges over 72h post-FOMC; elevated selling preparation signal
+  - (News Impact ≥20 would also independently block, per the financial news threshold, even without #6 and #4)
+- **Prohibitive conditions (SHORT)**: CLEAR for known automated checks — Prohibitive #6 for short (1D MACD >0 AND BTC >EMA200 with fresh break) NOT triggered; funding not confirmed < −0.02% (manual check needed); no critical news identified for next 1–2h; no FOMC until June 16
+
+**Reasoning:**
+- **LONG — SKIP**: Three independent blockers. (a) Prohibitive #6: BTC firmly below EMA200, ETH 1D MACD negative — exact same macro regime as prior two entries, unchanged. (b) Prohibitive #4: 226K ETH exchange inflows over 72h = inflow dominance triggered. (c) News Impact Score 26.2 ≥ 20 threshold from hawkish FOMC April 29 — structural macro event. Multi-TF alignment also independently fails.
+- **SHORT — SKIP**: Multi-TF pre-check alignment fails at the most basic level: price is near the $2,220–$2,230 support zone, not at resistance. RSI ~38–43 is approaching oversold, the opposite of the >65 trigger required for short alignment. Only base condition BC5 (1D not catastrophically bullish) qualifies; BC1 (price at resistance), BC2 (RSI >65/60), BC3 (LH forming) all fail. Score: 1 of 5 base conditions — well below minimum 3. While the macro context (FOMC hawkish, exchange inflows) is bearish, the immediate price action is not at a short-entry location.
+- **RANGE — SKIP**: Pre-check fails on two hard conditions: (1) ATR contraction for 24h+ is directly contradicted by today's −3.60% sell-off impulse — volatility expanded; (2) range boundaries have been disrupted: the 24h range ($2,220–$2,329) is ~4.8% wide, too wide for range category; a narrower sub-range ($2,220–$2,300) hasn't had confirmed 2x rejection at both edges in 24–48h. 4h MACD borderline but other pre-check failures are definitive.
+- **Primary blockers**: LONG → Prohibitive #6 + #4 + News Impact Score ≥20. SHORT → Multi-TF alignment fail + insufficient base conditions (1/5). RANGE → Pre-check fails (ATR expansion, range undefined post-FOMC flush).
+- **Notable context**: (1) Weekly RSI ~30 is a historically significant cycle-bottom signal (preceded recoveries in 2018, 2022). (2) Long/short ratio ~0.97 suggests market balance vs. crowded longs — longs already washed by $149.7M in liquidations. (3) ETH approaching $2,220 key support zone — if this breaks, Prohibitive #1 (fresh break of key daily support) activates for long; could incrementally improve short pre-conditions but alignment still needs to develop at a resistance retest. (4) No FOMC until June 16 — near-term macro calendar relatively quiet. April CPI likely mid-May.
+- **Email sent**: no (NO_SETUP)
+
+**Manual verification needed before next scan:**
+- Whale ratio from Bybit Trading Trend (no public API)
+- ETH funding rate exact % on Bybit (confirm near-neutral vs. extreme — short blocked if < −0.02%)
+- OI 24h direction: confirm declining (longs closing = less downward pressure ahead) vs. rising (new shorts loading)
+- Trader's eye: $2,220–$2,230 support — does it hold or break cleanly? If breaks with volume → Prohibitive #1 triggers for long; potential short continuation setup but would need LH to form on 4h on retest of broken level
+- 4h MACD exact values: confirm whether in [−10, +10] for range pre-check (chart-only verification)
+- ATR(1h) 24h trend: verify if volatility contracts again in next 12–24h after today's impulse (range pre-check prerequisite)
