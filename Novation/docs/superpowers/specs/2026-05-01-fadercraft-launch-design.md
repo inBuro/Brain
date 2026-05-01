@@ -7,6 +7,14 @@
 
 ---
 
+## 0. How to read this document
+
+This spec is a **living direction**, not a contract. Every decision below is a starting point — sections may be re-opened, revised, or replaced when new context appears during implementation. Treat the document as a map: useful for orientation, not a rulebook that overrides better information learned later.
+
+If a planned step turns out to be wrong, surface the conflict and revise the spec rather than powering through because "the spec said so".
+
+---
+
 ## 1. Executive summary
 
 This document captures the launch design for **Fadercraft** — an umbrella brand under which Max for Live / Ableton performance utilities will ship. The flagship is `XL_Performance`, a starter kit for Novation Launch Control XL MK3. The launch comprises a single paid SKU on Gumroad ($39), a long-scroll landing page at `fadercraft.com`, a YouTube-anchored content strategy, and an in-device update-notification mechanism that lets shipped copies announce new versions without depending on email reach.
