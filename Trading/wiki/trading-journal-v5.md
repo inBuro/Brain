@@ -274,3 +274,70 @@ Updated weekly during review (see [[weekly-review]]):
 - OI 24h direction (rising = new shorts loading; declining = longs still washing out)
 - Trader's eye: confirm $2,220 support held; 4h MACD exact value (within [−10, +10] for range pre-check?); BB(4h) flatness
 - ATR(1h) 24h trend: verify if contraction sustains through afternoon/Asia session for range eligibility at 23:00 check
+
+---
+
+### 2026-05-01 23:16 ICT — auto check
+
+**Window status**: OUTSIDE (09:00–17:00 ICT trading window; 23:00 ICT cron run is outside — journal-log only, no email)
+**Data source**: Web search aggregates (reduced precision — CoinGecko and Binance REST APIs blocked by sandbox egress allowlist; WebFetch returning HTTP 403 on external analysis sites). Indicator values are estimates derived from published technical analyses and web search results. Treat all values as approximate (±5–10%).
+**Price**: $2,258 (Δ ~−0.1% to +0.3% 24h; 24h high $2,275 / low $2,232; volume ~$12.3B USD)
+**Decision**: NO_SETUP
+
+**Market state:**
+- 24h range: high $2,275, low $2,232 (width ~$43, ~1.9% rolling 24h); price drifted from $2,265 (15:00 ICT) to $2,258 (−$7, ~−0.3%) during Asia session open
+- BTC: ~$76,550 — below 200-day EMA ($82,310); ~7.0% below EMA200; has not closed above EMA200 since Oct 2025; May 2026 articles query "Can BTC break EMA200 in May?" — no confirmed break yet
+- 4h structure: LH/LL bearish macro trend intact; price in compression zone ~$2,220–$2,280 during Asia session; no HL forming; 4h MACD: negative, histogram contracting toward zero (est. range [−12, −3] — borderline for range pre-check [−10, +10]; exact value: manual chart verification needed)
+- Indicators (1h): RSI est. ~42–48 (recovering from post-FOMC oversold ~38–40; no directional impulse in Asia session); MACD negative, histogram flat to marginally negative; price below EMA26/EMA100; mid-range consolidation
+- Indicators (4h): RSI est. ~40–45 (approaching neutral-oversold boundary); MACD negative, histogram contracting toward zero; EMA100 est. ~$2,348; price well below EMA100
+- Indicators (1D): RSI ~33–35 (near oversold); Weekly RSI ~30 (historically significant cycle-bottom zone; preceded major recoveries in 2018, 2022); MACD negative (confirmed, flattening); EMA200 (ETH) ~$2,617; EMA50 ~$2,322
+- Funding rate: reported negative to marginally negative in Asia session ("negative taker buy-sell ratios alongside negative funding rates, signaling bearish near-term sentiment" — web aggregates); exact value: manual verification needed; not confirmed < −0.02% (Prohibitive #3 for short threshold)
+- OI: ~$31B est.; Asia session direction: manual verification needed
+- ATR(1h): declining since ~10:30 ICT today (FOMC-spike peak); **12.8h of contraction elapsed** as of 23:16 ICT; needs 24h+ for range pre-check → qualifies at ~10:30 ICT May 2 if no spike; current ATR(1h) est. ~$12–18/hr (reduced from spike peak, still above baseline)
+
+**Pre-checks:**
+- Multi-TF alignment (LONG): FAIL — 4h: LH/LL structure, no HL forming, MACD not crossing from below 0; 1h RSI ~42–48 (not exiting <40 zone on confirmed bounce); 15m reversal candle from confirmed support not established
+- Multi-TF alignment (SHORT): FAIL — 1h RSI ~42–48 (not exiting >65 overbought zone; opposite of requirement); price $2,258 sits mid-range between support $2,220 and resistance $2,280–$2,300; no LH forming at resistance; 15m not showing rejection from overhead level
+- Range pre-check: FAIL — (1) ATR(1h) declining 24h+: NOT met — only 12.8h elapsed since 10:30 ICT spike; threshold not reached until ~10:30 ICT May 2; (2) Clear horizontal range 2x edge rejections each side: lower edge $2,220 — 1 confirmed touch (10:28 ICT today); upper edge $2,275–$2,280 — rejection count unconfirmed; (3) 4h MACD within [−10, +10]: BORDERLINE — histogram contracting, est. [−12, −3]; manual chart check needed; (4) BB(4h) flatness: unconfirmed post-FOMC move
+- News Impact Score: near-neutral; no macro events flagged in searches for next 1–2h; Asia session quiet; next key event CPI May 12 (11 days); funding negativity reflects derivatives sentiment, not a news event; no prohibitive headlines identified
+- Prohibitive conditions (LONG): **TRIGGERED — Prohibitive #6**: 1D MACD <0 AND BTC $76,550 < EMA200 $82,310 → counter-trend bearish regime; longs prohibited. Fifth consecutive run with this prohibitive active.
+- Prohibitive conditions (SHORT): CLEAR for known automated checks — Prohibitive #6 for short not triggered; funding not confirmed < −0.02%; no critical news in next 1–2h
+
+**Reasoning:**
+- **LONG — SKIP**: Prohibitive #6 unchanged (BTC $76,550 vs EMA200 $82,310; 7.0% gap; 1D MACD negative). Multi-TF alignment independently fails. Fifth run today with same prohibitive active; no regime change detected in Asia session.
+- **SHORT — SKIP**: Multi-TF alignment fails. 1h RSI ~42–48 is mid-range / mildly recovering — the opposite of the >65 overbought-exit requirement. Price $2,258 is between support ($2,220) and resistance ($2,280–$2,300+), not at a short entry location. Base conditions: BC5 ✓ (1D not catastrophically bullish); BC1 ✗ (not at resistance); BC2 ✗ (RSI not >65/60); BC3 ✗ (no LH at resistance); BC4: manual. Score 1/5 — below minimum 3. Asia session negative funding is an atmospheric signal, not an entry trigger.
+- **RANGE — SKIP**: Pre-check fails on two hard conditions: (1) ATR(1h) contraction only 12.8h elapsed vs 24h+ required — does not qualify until ~10:30 ICT May 2 if no volatility spike overnight; (2) Edge rejections at both boundaries not established — lower $2,220 has 1 confirmed touch (today's FOMC low), upper $2,275–$2,280 rejection count unconfirmed. 4h MACD borderline and BB(4h) flatness unknown.
+- **Primary blockers**: LONG → Prohibitive #6 (BTC < EMA200 + 1D MACD <0). SHORT → multi-TF fail + base conditions 1/5. RANGE → ATR contraction 12.8h < 24h required + edge rejections unconfirmed.
+- **Notable context vs 15:00 ICT entry**:
+  - ATR clock advancing: 12.8h out of 24h required for range pre-check. If no volatility spike overnight, condition qualifies by ~10:30 ICT May 2.
+  - Asia session funding turned negative (vs near-neutral at 15:00 ICT) — mild bearish sentiment lean; watch if deepens below −0.02% (Prohibitive #3 for short).
+  - Price drift: −$7 from $2,265 → $2,258; staying within tracked $2,220–$2,280 band.
+  - BTC holding $76,550 — no regime shift; same prohibitive picture.
+  - Monthly seasonality: May historically +34.7% for ETH (macro tailwind), but current BTC bear structure overrides seasonal bias; Prohibitive #6 is the correct guard.
+  - "CRT sweep done" note (coinedition.com): monthly candle swept lows; some analysts interpret as bullish for May recovery — informational context only, no entry signal without regime confirmation.
+- **Hypothetical range math (NOT a trade suggestion — pre-check fails)**:
+  - Range $2,220–$2,280 (60 pts, 2.7% width ✓)
+  - If range qualified: RANGE_LONG entry $2,220 / SL $2,204 (15.5 pts) / TP1 50%@$2,250 (R:R 1:1.9) / TP2 50%@$2,280 (R:R 1:3.9) / Size 0.97 ETH (Tier 1 $15 risk)
+  - If range qualified: RANGE_SHORT entry $2,280 / SL $2,296 (16.0 pts) / TP1 50%@$2,250 (R:R 1:1.9) / TP2 50%@$2,220 (R:R 1:3.8) / Size 0.94 ETH (Tier 1 $15 risk)
+  - These are INFORMATIONAL — will only become actionable if all range pre-check conditions confirm on chart
+
+**Pending order eligibility:**
+- LONG: **BLOCKED** — Prohibitive #6 active; no pending LONG
+- SHORT: **WATCH** — conditions still developing; price must rally to $2,280–$2,300+ with rejection candle and 1h RSI → 60+; re-evaluate at 10:00 ICT May 2
+- RANGE: **WATCH** — ATR contraction needs ~11.2h more to qualify; edge rejections and 4h MACD need chart confirmation; potential range pending order eligible at 10:00 ICT May 2 if price holds band overnight and all pre-check conditions confirm; time validity would cap at 17:00 ICT May 2 per trading-hours rule
+
+**Watch conditions for 10:00 ICT May 2 morning scan:**
+- **Range (primary)**: if price holds $2,220–$2,280 through Asia session tonight with no spikes, ATR contraction reaches 24h by ~10:30 ICT May 2; morning scan should confirm: (1) 2x confirmed rejections at lower $2,220 edge (today's touch + any overnight touch), (2) 2x confirmed rejections at upper $2,275–$2,280, (3) 4h MACD within [−10, +10] on chart, (4) BB(4h) flat; if all pass → potential RANGE_LONG/RANGE_SHORT pending order during the 10:00 ICT window
+- **Short**: if ETH rallies overnight to $2,280–$2,300 with clear rejection and 4h LH forming, SHORT alignment may begin; 1h RSI needs to approach 60+ for alignment condition; still needs funding not < −0.02%
+- **Break scenario (downside)**: if $2,220 breaks with volume before 10:00 ICT → Prohibitive #1 for long activates; range invalidated; short continuation setup possible on 4h retest of broken level with alignment confirmation
+- **Macro calendar**: no events in next 24h; CPI May 12 (11 days); Asia session quiet
+
+**Email sent**: no (OUTSIDE window — 23:00 ICT cron run; no email per trading-hours rule even if setup detected)
+
+**Manual verification needed before next scan:**
+- Whale ratio from Bybit Trading Trend (no public API)
+- Funding rate exact % on Bybit (confirm if approaching −0.02% blocker for short; or if funding normalizes overnight)
+- OI Asia session direction (rising = new shorts loading; declining = longs washing out further)
+- 4h MACD exact value on chart (within [−10, +10] for range pre-check? — critical for morning decision)
+- ATR(1h) 24h trend: verify volatility stays contracted through overnight / Asia session (no spike = range pre-check condition 1 qualifies by 10:30 ICT)
+- Trader's eye: confirm $2,220 held overnight; $2,275–$2,280 upper edge behavior; count of confirmed rejection touches at each boundary for range eligibility
