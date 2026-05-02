@@ -23,6 +23,7 @@
 - [[entry-rules-short]] — short entry conditions (mirror page to entry-rules-long)
 - [[range-trade-rules]] — new in v5: range mean-reversion subcategory (4h MACD ≈ 0 + ATR contraction + clear horizontal range)
 - [[pending-orders]] — added 2026-05-01 as v5 supplement: rules for suggesting concrete pending limit orders when a setup is probable but not yet triggered
+- [[trading-hours]] — added 2026-05-01 as v5 supplement: explicit 09:00-17:00 ICT trading window for new entries, every day (replaces older "after 22:00" cutoff)
 - [[trading-journal-v5]] — append-only journal of all market checks (manual + scheduled routine), v5 onward
 
 ## Concepts (planned)

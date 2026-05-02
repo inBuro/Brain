@@ -312,3 +312,32 @@ In the graph, `raw/strategy-v3` becomes a source node with edges to `trading-str
 
 **Follow-up:** none required — routine continues running 3x/day with new pending-order logic; one-shot reminder fires automatically on 2026-05-14.
 
+---
+
+## 2026-05-01 — Trading hours window 09:00-17:00 ICT (v5 supplement)
+
+**Operation:** added explicit trading window to v5 — new entries (live or pending) only allowed 09:00-17:00 ICT, every day including weekends. Replaces the older "after 22:00 local — no new entries" rule with a symmetric morning + evening cutoff.
+
+**Why:** trader question 2026-05-01 about weekend trading prompted this. The crypto market trades 24/7, but liquidity matters: 09-17 ICT covers Asia morning + Europe morning (best ETH liquidity). 17-22 ICT (US morning) brings news pumps and fakeouts; 22-09 ICT is dead/thin. Weekends have lower institutional flow and wider spreads — fitting in the same 09-17 window keeps discipline consistent.
+
+**Created:**
+- `wiki/trading-hours.md` — concept page. Defines the window, what's allowed/not allowed inside vs outside, weekend nuances (lower liquidity → setups should be cleaner, prefer to skip marginal weekend setups), routine handling (23:00 ICT cron is OUTSIDE window — journal entry yes, email no), interaction with other rules (pending-orders cap at 17:00 ICT validity, late-day setups 16:00-17:00 with −25% size, macro-event blocker independent of window).
+
+**Updated:**
+- `wiki/index.md` — added `trading-hours` to active Concepts.
+- `wiki/trading-strategy.md` — added `trading-hours` to Entries subsection of Strategy structure.
+- Routine prompt for `eth-paper-journal` (`trig_0169HXZsfncrZeL5dD3MwMfr`) — added Step 5c (window status check), updated journal entry template (window status field), updated Step 7 (email only when INSIDE window AND setup/pending), updated commit message format to include window status.
+
+**Memory:**
+- `feedback_trading_window.md` — feedback memory for me: in every market analysis, check current ICT time; if outside 09-17 → no new entries suggested even if setup valid; pending suggestions cap time validity at 17:00 ICT.
+- `MEMORY.md` — index updated.
+
+**Linting:** all updates passed Vale + LanguageTool.
+
+**Decided NOT to:**
+- Replace 22:00 rule entirely in v5 raw doc — that document is immutable. The 09-17 window is a supplement that takes precedence; 22:00 remains as legacy fallback in psychology-rules text.
+- Differentiate weekday vs weekend window — single 09-17 rule for simplicity. If weekend behavior diverges meaningfully in the 2-week paper-test review, can split later.
+- Auto-disable routine outside window — routine still runs and journal-logs, just doesn't email. Preserves trend-tracking data continuity.
+
+**Next:** routine 23:00 ICT cron (16:00 UTC) tonight will be the first to evaluate window status — should write `**Window status**: OUTSIDE` and skip email. Verify in journal tomorrow morning.
+
