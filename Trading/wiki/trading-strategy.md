@@ -59,6 +59,7 @@ The strategy unfolds across the concept pages below:
 - [[entry-rules-short]] — short entry conditions (mirror rules)
 - [[range-trade-rules]] — range mean-reversion subcategory (new in v5)
 - [[pending-orders]] — when to suggest pending limit orders for probable setups (v5 supplement, 2026-05-01)
+- [[trading-hours]] — 09:00-17:00 ICT trading window for new entries (v5 supplement, 2026-05-01)
 
 **Trade management:**
 - [[position-sizing]] — position size formula

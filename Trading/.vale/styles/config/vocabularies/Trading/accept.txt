@@ -82,6 +82,11 @@ OHLC
 eth-paper-journal
 [Aa]llowlist(?:ed)?
 [Dd]isqualifiers?
+[Tt]radeable
+[Ff]akeouts?
+XL_Performance
+Gumroad
+[Aa]lgos?
 EMAs?
 [Cc]ron
 [Rr]ecalibrated?
