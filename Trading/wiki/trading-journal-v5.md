@@ -400,3 +400,61 @@ Updated weekly during review (see [[weekly-review]]):
 - BB(4h) flatness: verify on chart for range pre-check condition 4
 - Trader's eye: is $2,280 a true breakout level now, or is price just drifting above it with low volume? Defines whether range is alive ($2,220–$2,280) or evolved/broken; what is the new upper boundary if evolved?
 - Weekend volume note: verify if volume is above average on any ETH moves today (if yes, higher chance of a range breakout; if below average, range may still be valid)
+
+---
+
+### 2026-05-02 15:17 ICT — auto check
+
+**Window status**: INSIDE (09:00–17:00 ICT trading window per wiki/trading-hours.md)
+**Data source**: Web search aggregates (CoinMarketCap, CoinGecko, CoinDesk, Investing.com summaries — Binance & CoinGecko REST APIs blocked 403; indicators estimated from published analyses, precision ±5%)
+**Price**: $2,307 (Δ +0.43–2.09% 24h — conflicting across sources; conservative lower bound used)
+**24h range**: High $2,335.71 / Low $2,220.31 (range width $115.40 = 5.0%)
+**Volume 24h**: ~$10B (aggregate; sources range $5B–$12.8B)
+**Decision**: NO_SETUP
+
+**Market state**:
+- BTC: $78,244 — BELOW EMA200 daily ($82,271) by 4.9%; bearish macro regime unchanged
+- ETH 4h structure: LH/LL bearish — price rejected supply zone $2,380–$2,400, formed LH; 24h low $2,220 = new LL in the sequence
+- ETH below EMA50 daily ($2,322) and EMA200 daily ($2,345) — "Death Cross" zone; both MAs acting as overhead resistance
+- RSI(14) 1D: ~35.0 (approaching oversold); RSI 4h: ~41; RSI 1h: ~37 (near oversold — momentum exhausted to the downside)
+- MACD: NEGATIVE across 1h / 4h / 1D — below signal line; bearish pressure persisting but stabilising
+- ATR(14) daily: ~$84; 1h estimated ~$17
+- BB(20,2) approx: upper ~$2,345 / mid ~$2,288 / lower ~$2,230; price between mid and lower = mildly bearish positioning
+- Key news: Ether ETF $1.6B inflows (bullish fundamental); BTC ETF $175M outflows (mixed); JP Morgan accepts BTC as collateral; U.S. CLARITY Act stablecoin compromise advancing — mild macro positive
+- Funding rate: manual verification needed (no public API)
+- Whale ratio: manual verification needed (no public API)
+- OI 24h trend: manual verification needed
+
+**Pre-checks**:
+- Multi-TF alignment LONG: FAIL — 4h shows no HL forming (LH/LL pattern); 1h RSI at 37, MACD negative, no reversal candle; 15m not showing bounce confirmation
+- Multi-TF alignment SHORT: PARTIAL FAIL — 4h bearish (LH/LL, MACD negative) ✓ aligned; but 1h RSI at 37 is NOT exiting the >65 zone (short entry window was at $2,380–$2,400 when RSI >65; timing has passed); 15m RSI near oversold, not rolling from >70 ✗
+- Range pre-check: FAIL — 4h MACD clearly negative (outside −10 to +10 range); ATR elevated after $115 directional move (not contracting); no clean horizontal range with dual-edge rejections (directional decline visible); BB(4h) expanding not flat
+- Prohibitive #6 for LONG: TRIGGERED — 1D MACD <0 AND BTC <EMA200 daily (seventh consecutive run with this prohibitive active)
+- News Impact Score: manual verification needed; no prohibitive headlines detected from aggregates (no hack, no SEC action, no imminent macro headline)
+
+**Reasoning**:
+- **LONG — BLOCKED**: Prohibitive #6 remains fully active (BTC $78,244 vs EMA200 $82,271 = 4.9% gap; no meaningful narrowing since prior runs). Multi-TF alignment also fails independently on 4h structure (no HL formation) and 1h/15m momentum. Base conditions: BC5 ✓ (marginal in bearish environment — but this is the weakest pass); BC1 ✗ (price $2,307 not at support — above 24h low); BC2 ✗ (RSI not <40 at 1h level or <45 at 4h level required); BC3 ✗ (no HL forming on 4h); BC4 unknown. Score: 1/5 confirmed. Three independent blockers (prohibitive, alignment fail, <3 base conditions). No path to LONG today.
+- **SHORT — NOT CONFIRMED**: The 4h bearish structure is genuine and confirmed — LH/LL pattern with supply rejection is real. However, the short entry window was earlier (ideal: RSI 1h crossing below 65 near $2,380–$2,400). With RSI now at 37 on 1h, we are deep in oversold territory — entering a short here risks catching a bounce. Base conditions: BC3 ✓ (4h LH forming); BC5 ✓ (no catastrophically bullish 1D — it's bearish, passes the non-catastrophic-bullish filter); BC1 ✗ (price not at resistance, $2,307 is $15–38 below nearest resistance at $2,322–$2,345); BC2 ✗ (RSI 1h=37, 4h=41, both far from >65 / >60 thresholds); BC4 unknown. Score: 2/5 confirmed (3 possible if whale ratio favors short, but even 3/5 with partial alignment and RSI-at-oversold risk warrants no entry). Additionally, ETH ETF $1.6B inflows is a significant fundamental contra-signal to new shorts — not prohibitive per rules but noted as counter-argument. SHORT timing has passed for this downward leg.
+- **RANGE — NOT APPLICABLE**: Pre-check fails on all four conditions simultaneously. The market is in a directional bearish move, not consolidation. ATR elevated from 5% intraday swings. No defined horizontal range with validated edge rejections present.
+- **Context update vs 10:10 ICT run**: ETH rallied from $2,291 (10:10 ICT) to $2,307 (+$16, +0.7%) during the trading session. The watch condition from the prior run — "SHORT if price rallies to $2,348–$2,380 with RSI >60" — has not been triggered; price stalled at ~$2,307–$2,336 (24h high) and did not reach the resistance zone. RSI has not recovered to overbought. Range watch conditions (ATR contraction, BB flat, range edge rejections) remain unmet — the weekend factor from the 10:10 run is now irrelevant (today is Saturday → Monday qualifies; today's assessment stands on structural grounds alone). BTC still has not made a meaningful move toward EMA200.
+
+**Pending order eligibility**:
+- LONG: **BLOCKED** — Prohibitive #6 active
+- SHORT: **WATCH** — alignment and base conditions not met; entry zone would be $2,322–$2,350 with RSI 1h recovering to >60; re-evaluate at 23:00 ICT run (note: 23:00 is OUTSIDE window — entry would not be suggested even if setup forms)
+- RANGE: **BLOCKED** — pre-check fails; not applicable in current regime
+
+**Watch conditions for 23:00 ICT run and next-morning 10:00 ICT**:
+- **SHORT watch (primary)**: if price rallies to $2,345–$2,400 and RSI 1h returns to >60 with 4h LH confirmed at that level → partial alignment forming; full alignment requires RSI >65 on 1h; still need BC1 (at resistance), BC2 (RSI overbought), BC3 (LH confirmed) = 3/5 minimum
+- **LONG blocker watch**: BTC needs to close above $82,271 on 1D to remove prohibitive #6; currently 4.9% away — unlikely in this session
+- **Bounce scenario**: RSI 1h at 37 is historically a bounce zone; if BTC shows strength (approaches $80,000) and ETH RSI recovers to 50–55, watch for structural HL formation on 4h — does not trigger a setup today but would be the first sign of a regime shift
+- **Breakdown scenario**: ETH breaks below $2,220 24h low with volume → range structures disrupted; potential SHORT continuation but with RSI already oversold, risk of whipsaw; do not short into fresh breakdown with RSI <35
+
+**Email sent**: no (NO_SETUP — no email regardless of window status per strategy rules)
+
+**Manual verification needed before next entry**:
+- Whale ratio from Bybit Trading Trend (no public API; critical for BC4 both long and short)
+- Funding rate exact % (negative = short squeeze risk building; positive = long overload)
+- OI direction 24h (rising = new short accumulation; falling = position washout)
+- Confirm 4h MACD exact value on chart (is it −5 to −15 range, or deeper negative?)
+- Confirm BB(4h) state on chart (flat = range possible; expanding = confirms trend)
+- News Impact Score for ETH ETF inflows ($1.6B) applied to any LONG setup: Moderate (±1–3% move) × Asset-specific (1.5×) × Trend confirmation (1.25×) = ~7.5 Impact Score — below 10 threshold, informational only; does not affect sizing but adds bullish argument
