@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Update — Fadercraft XL Performance</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="update-page">
+  <main>
+    <h1>Update Fadercraft XL Performance</h1>
+    <p>Enter the license key from your Gumroad receipt to download the latest version.</p>
+    <form id="license-form">
+      <label for="license">License key</label>
+      <input type="text" id="license" name="license" required autocomplete="off"
+             placeholder="XXXX-XXXX-XXXX-XXXX">
+      <button type="submit">Verify and download</button>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+  </main>
+  <script>
+    document.getElementById('license-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const license = document.getElementById('license').value.trim();
+      const status = document.getElementById('status');
+      status.textContent = 'Verifying…';
+      try {
+        const res = await fetch('/api/verify-license', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({license})
+        });
+        const data = await res.json();
+        if (data.ok) {
+          status.textContent = 'Verified. Starting download…';
+          window.location.href = data.download_url;
+        } else {
+          status.textContent = data.error || 'Invalid license.';
+        }
+      } catch (err) {
+        status.textContent = 'Network error. Try again.';
+      }
+    });
+  </script>
+</body>
+</html>
