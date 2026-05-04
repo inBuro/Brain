@@ -68,3 +68,34 @@ The 1.7-point loss came entirely from sending a one-word test email; real produc
 - When scaling beyond 100 emails/day → evaluate Mailgun, Resend, or paid SendGrid.
 - DMARC currently in `p=none` (monitor mode). After 2-4 weeks of clean reports, consider tightening to `p=quarantine` or `p=reject` for stronger spoofing protection.
 - Orphan SendGrid record `em7377.fadercraft.com` (CNAME in CF DNS) can be deleted — leftover from initial wizard run, harmless.
+
+## Buttondown welcome email (draft)
+
+Paste the body below into Buttondown → **Settings → Emails → Welcome email** when the newsletter pipeline is wired up (plan task T11.4). Buttondown supports markdown, but the draft is plain enough that it renders identically as plain text.
+
+**Subject:** Welcome to Fadercraft
+
+**Body:**
+
+```
+Hi {{ subscriber.metadata.first_name | default: "there" }},
+
+Thanks for signing up.
+
+Fadercraft makes small, focused tools for Ableton Live and Max for Live. The first one is XL Performance, a starter kit for the Novation Launch Control XL MK3.
+
+You can expect one short email when a new version ships — usually every four to eight weeks — plus the occasional note on what I'm building next or a tip pulled from the community. No drip sequences, no upsell ladders. The unsubscribe link at the bottom of every email works in one click.
+
+If you'd like to reply with what you're working on, or what you'd like to see in the next release, I read everything.
+
+— Kirill
+{{ email_address }}
+```
+
+Personalisation notes:
+
+- `{{ subscriber.metadata.first_name | default: "there" }}` — fills in the first name if the subscribe form captured one, falls back to "there".
+- `{{ email_address }}` — Buttondown autofills the sending address (e.g. `hello@fadercraft.com`).
+- Replace `— Kirill` with the user's preferred signature once decided.
+
+Length: ~110 words. Tone is intentionally low-pressure to set newsletter expectations and reduce later unsubscribes / spam reports.
