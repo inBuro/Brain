@@ -644,3 +644,110 @@ RANGE_LONG (activates only if: price returns to $2,220–$2,232 + all pre-checks
 - Upper edge $2,330–$2,336: has an overnight 2nd rejection occurred? (This is the key question for May 4 morning)
 - OI direction 24h (rising = new positions building; falling = continued washout)
 - BTC overnight behavior: did it break $80,000 or fall toward $75,000?
+
+---
+
+### 2026-05-04 10:08 ICT — auto check
+
+**Window status**: INSIDE (09:00–17:00 ICT trading window; 10:00 ICT cron run)
+**Data source**: Web search aggregates (CoinGecko, CoinMarketCap, MetaMask, Bybit published data, coinotag, Investing.com; REST APIs blocked 403). All indicator values estimated from published analyses. Precision ±5–10%.
+**Price**: $2,329 (Δ +0.60% 24h; up $14 from $2,315 at 23:07 ICT May 3)
+**Decision**: NO_SETUP
+
+**Market state:**
+- 24h: high $2,334, low $2,299, volume ~$8.78B USD (declining from ~$10B on May 3)
+- BTC: ~$79,900 (median of MetaMask $79,722 / OKX $80,058); EMA200 1D ~$82,228; gap ~$2,330 (~2.83%) below EMA200; BTC rallied +1.9% overnight from $78,400 — most meaningful gap-narrowing since Apr 28 FOMC; approaching $80,000 psychological resistance; has not closed above EMA200 since Oct 2025; BTC MACD 1D: negative
+- ETH 4h structure: LH/LL bearish macro trend intact; 72h consolidation band $2,220–$2,336; no confirmed HL on 4h; price now **above EMA50 1D ($2,322) by +$7** — first EMA50 1D reclaim since macro bearish phase began; still below EMA100 4h (~$2,352) and EMA200 1D (~$2,617 for ETH)
+- Indicators (1h): RSI est. ~53 (neutral-recovering; up from ~51 at 23:07 May 3); MACD histogram est. ~−0.5 to −0.9 (contracting, near zero); BB(20,2) est: upper ~$2,348 / mid ~$2,295 / lower ~$2,242; price between mid and upper band
+- Indicators (4h): RSI est. ~44 (recovering toward neutral); MACD histogram est. ~−0.9 (**borderline within [−10, +10]** — 71.7h of contraction since May 1 FOMC spike); EMA100 4h est. ~$2,352 (price below by ~$23)
+- Indicators (1D): RSI(14) 35.05 (confirmed via multiple sources; near oversold; weekly RSI ~30, historically significant cycle-bottom zone); MACD negative (confirmed, histogram flattening); EMA50 1D ~$2,322; EMA200 (ETH) ~$2,617
+- ATR(14) 1h: est. ~$11 (declining for 71.7h since May 1 10:28 ICT FOMC spike; well past 24h threshold)
+- BB(4h): UNKNOWN — cannot verify from web aggregates; CRITICAL for range pre-check
+- Funding: negative territory (shorts paying longs per aggregates); exact % unknown; not confirmed < −0.02% (Prohibitive #3 for short not triggered)
+- OI: ~13.5M ETH (stable/marginally declining since Apr 18 peak 14.4M; net exposure contraction)
+- Notable news: (1) Bitmine purchased 101,901 ETH (~$236M) — largest institutional buy of year; (2) separate whale cluster: 61,000 ETH ($171.15M) purchased from Binance; (3) Spot ETH ETF outflows ~$184M over 4 days; (4) long-term holders showing persistent net withdrawals from exchanges (accumulation signal)
+
+**Pre-checks:**
+- Multi-TF alignment (LONG): FAIL — 4h: LH/LL structure, no confirmed HL, MACD not crossing from below 0; 1h RSI ~53 (not exiting <40 oversold zone on confirmed bounce); no 15m reversal candle from identified support
+- Multi-TF alignment (SHORT): FAIL — 1h RSI ~53 (not exiting >65 overbought zone, opposite of requirement); price $2,329 is at the upper range edge but below structural short resistance ($2,345–$2,380); no LH forming at resistance; no overbought 15m rejection candle
+- Range pre-check (4 conditions):
+  - (1) 4h MACD in [−10, +10]: **BORDERLINE PASS** — histogram est. ~−0.9; within zone if estimate correct; chart confirmation mandatory
+  - (2) ATR(1h) declining 24h+: **PASS** — 71.7h of decline since May 1 10:28 ICT; no volatility spikes detected May 2–4
+  - (3) Clear horizontal range, 2x edge rejections each side:
+    - Lower $2,220–$2,232: **PASS** — 3 confirmed rejections (Apr 30 24h low; May 1 FOMC low $2,220; May 3 low ~$2,232)
+    - Upper $2,330–$2,336: **BORDERLINE PASS** — (1st) May 2 24h high $2,335.71; (potential 2nd) today's 24h high $2,334 with current price $2,329 (−$5 pullback from high); CANNOT confirm rejection-candle close below $2,330 from web data alone
+  - (4) BB(4h) flat: **UNKNOWN** — CRITICAL unresolved condition; cannot substitute with web aggregates
+  - Pre-check verdict: 3 of 4 conditions borderline-passing; condition 4 unknown → **BORDERLINE WATCH (not PENDING_ELIGIBLE)**
+  - Width note: Range $2,220–$2,336 = 5.09% width — above soft guideline (~3.5% where strategy says "look at trend rules"); explicit prohibitives not triggered; range characterisation supported by 71.7h ATR contraction and MACD near zero; flagged for manual assessment
+- News Impact Score:
+  - Bitmine 101,901 ETH purchase: (2 × 1.0) × 1.0 = **2.0** — informational, no size reduction
+  - ETF outflows ~$184M / 4 days: (2 × 1.5) × 1.25 = **3.75** — informational, no size reduction
+  - No prohibitive headlines: no ETH core hack; no SEC/regulatory action; no FOMC/CPI in next 1–2h (CPI May 12; next FOMC June 16–17)
+- Prohibitive conditions (LONG): **TRIGGERED — 10th consecutive run** — 1D MACD <0 AND BTC ~$79,900 < EMA200 ~$82,228 (gap 2.83%) → counter-trend bearish regime; longs prohibited
+- Prohibitive conditions (SHORT): CLEAR for automated checks — Prohibitive #6 for short not triggered; funding not confirmed < −0.02%; no critical news in next 1–2h
+
+**Reasoning:**
+- **LONG — BLOCKED**: Prohibitive #6 unchanged (BTC ~$79,900 vs EMA200 ~$82,228; 2.83% gap; 1D MACD negative; 10th consecutive run). BTC rallied +1.9% overnight — the gap has narrowed from 6.4% → 2.83%, the most meaningful EMA200 approach since Apr 28. ETH reclaiming EMA50 1D ($2,329 > $2,322) is the first structural improvement since the bearish phase began. However, Prohibitive #6 overrides all LONG setups until BTC closes above ~$82,228 on 1D. Multi-TF alignment independently fails (no confirmed HL on 4h, MACD not from below 0, 1h RSI never exited oversold on a confirmed bounce).
+- **SHORT — WATCH**: No setup. RSI 1h ~53 is neutral-recovering — the opposite of the ≥65 overbought-exit requirement. Price at the upper range edge is a structural location but not a momentum-overbought entry zone. Base conditions: BC5 ✓; BC1 ✗ (range edge ≠ resistance); BC2 ✗ (RSI far from >65/60); BC3 ✗ (no LH at resistance); BC4 manual. Score: 1/5 — below minimum 3. Negative funding continues to signal short-squeeze risk; institutional whale accumulation (~163K ETH / ~$407M) is a contra-signal for aggressive shorts.
+- **RANGE — WATCH (HIGHEST PRIORITY — MOST ACTIONABLE STATE OF ENTIRE TEST PERIOD)**:
+  - Condition 2 (ATR 24h+): CONFIRMED ✓ — 71.7h
+  - Condition 3-lower (edge rejections): CONFIRMED ✓ — 3 rejections
+  - Condition 1 (4h MACD in zone): BORDERLINE ✓ — est. −0.9, within range; needs chart
+  - Condition 3-upper (2nd rejection): BORDERLINE ✓ — 24h high $2,334 in edge zone; current $2,329 is −$5 below; likely a 2nd rejection but needs candle confirmation
+  - Condition 4 (BB(4h) flat): **UNKNOWN** — the single remaining gate condition preventing PENDING_ELIGIBLE
+  - Current price $2,329 is only $4 below the entry level ($2,333) and $7 below the upper boundary ($2,336). This is the most actionable state the range setup has been in during the test period.
+
+**⚠️ TRADER ACTION — INSIDE WINDOW — CHECK CHART NOW:**
+If you are looking at your chart: (1) Is BB(4h) flat (bands not expanding)? (2) Did the $2,334 high today produce a 15m candle that closed back below $2,330? If BOTH = yes → enter RANGE_SHORT now (per parameters below). Price is at the entry zone. Time validity caps at 17:00 ICT today.
+
+**Pending order eligibility:**
+- LONG: **BLOCKED** — Prohibitive #6 active
+- SHORT: **WATCH** — entry zone $2,345–$2,380 with RSI 1h >65 and 4h LH confirmed; not eligible today
+- RANGE_SHORT: **WATCH → PENDING_ELIGIBLE if BB(4h) flat + $2,334 high was rejection candle confirmed on chart**
+
+**Informational range parameters (WATCH status — NOT a formal pending order suggestion; conditional on BB(4h) flat confirmed on chart):**
+
+RANGE_SHORT (upper edge — activates when: BB(4h) flat confirmed + today's $2,334 high confirmed as rejection close below $2,330 + price still ≤ $2,336):
+
+| Field | Value |
+|---|---|
+| Direction | RANGE_SHORT |
+| Order type | Limit (short) with attached TP/SL |
+| Entry price | $2,333 (upper edge midpoint) |
+| SL | $2,349 (16 pt — 0.69% above entry; beyond $2,336 range upper + buffer) |
+| TP1 (50%) | $2,279 (54 pt; R:R 1:3.4) |
+| TP2 (50%) | $2,225 (108 pt; R:R 1:6.8) |
+| Position size | 0.94 ETH (Tier 1 $15 risk / 16 pt SL) |
+| Time validity | Cancel by 17:00 ICT today (window cap per trading-hours rule) |
+| Status | WATCH — NOT actionable without chart confirmation of BB(4h) flat |
+
+**Cancel manually if:**
+- Price closes above $2,340 on a 4h candle with above-average volume (range breakout — invalidates setup)
+- BTC falls below $77,000 (macro breakdown risk; range may follow lower)
+- BTC closes above $82,228 EMA200 on 1D (regime change — Prohibitive #6 removed; cancel range short, re-evaluate LONG)
+- Macro headline appears before fill (FOMC speaker, surprise CPI, crypto regulatory action)
+- Whale ratio shifts to >1.3 (whales strongly long — upper range break risk)
+
+**Manual verification needed before fill:**
+1. News Impact Score from Bybit Feed (primary gate before any entry)
+2. Whale ratio from Bybit Trading Trend — if >1.3: do not enter range short
+3. **BB(4h) flatness on chart — CRITICAL single gate condition automated run cannot verify**
+4. Confirm today's $2,334 high resulted in closed candle(s) rejecting below $2,330 (true rejection, not just intraday high)
+5. Trader's drawn trendlines and custom levels — check for any active breakout trendline above $2,333
+
+**Email sent**: no (NO_SETUP — range pre-check not confirmed; WATCH status does not trigger email per hard constraints; window is INSIDE but neither decision is SETUP_* nor is eligibility PENDING_ELIGIBLE)
+
+**Watch conditions for 15:00 ICT run:**
+- **RANGE_SHORT (primary, INSIDE window)**: if price holds $2,310–$2,336 through midday without a 4h close above $2,340 → upper edge still intact; 15:00 ICT run will reassess upper rejection confirmation and BB(4h) status; if conditions confirmed → RANGE_SHORT becomes PENDING_ELIGIBLE at 15:00 run with time validity capping at 17:00 ICT today (tight window — only 2h validity left by 15:00)
+- **BTC regime watch (highest longer-term priority)**: BTC ~$79,900 approaching $80,000 resistance; a daily close above $82,228 EMA200 removes Prohibitive #6 and opens LONG evaluations for the first time since Oct 2025; this would be a regime-change event
+- **SHORT watch**: if price rallies to $2,345–$2,380 with RSI 1h recovering to >65 and 4h LH confirmed at that level → SHORT alignment begins developing; not expected from $2,329 without a catalyst
+- **Downside watch**: if $2,299 (today's low) breaks → range lower boundary retest; if $2,220 retested → 4th lower rejection; RANGE_LONG parameters: entry $2,225, SL $2,209 (16pt), TP1 50%@$2,279 (R:R 1:3.4), TP2 50%@$2,333 (R:R 1:6.8), 0.94 ETH
+
+**Manual verification needed before next scan:**
+- Whale ratio from Bybit Trading Trend (no public API; critical for any entry decision)
+- Funding rate exact % on Bybit (confirm negative; deepening toward −0.02% = short Prohibitive #3 approaching; positive = longs re-entering, supportive of range upper hold)
+- **BB(4h) flatness on chart — single gate condition that determines RANGE_SHORT eligibility**
+- 4h MACD exact value on chart (verify within [−10, +10]; est. ~−0.9)
+- Did today's $2,334 high produce a rejection candle with close below $2,330? (Determines 2nd upper edge confirmation)
+- OI direction 24h (rising = new positions building; falling = continued washout)
+- BTC price: holding $79,900 or rejected at $80,000? Daily close direction determines timing of potential Prohibitive #6 removal
