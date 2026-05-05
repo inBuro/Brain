@@ -26,17 +26,15 @@ Authenticated domain: `fadercraft.com`. Verified via 3 CNAMEs in Cloudflare DNS 
 
 ## Gmail "Send mail as" relay
 
-Configured in `hellokbbureau@gmail.com` Gmail Settings → Accounts and Import → Send mail as:
+Configured in `hellokbbureau@gmail.com` Gmail Settings → Accounts and Import → Send mail as.
 
-- Email: `hello@fadercraft.com`
-- Name: Fadercraft
-- "Treat as alias": **unchecked**
-- SMTP server: `smtp.sendgrid.net`
-- Port: 587
-- Username: `apikey` (literal string)
-- Password: SendGrid API key
+The display name is `Fadercraft`, the email address is `hello@fadercraft.com`, and the "Treat as alias" checkbox stays **unchecked** so Gmail performs full outbound through the SMTP relay rather than going via its own.
 
-Compose new email in Gmail → From dropdown → choose `Fadercraft <hello@fadercraft.com>` → send through SendGrid relay with proper DKIM signing.
+For the SMTP relay endpoint, port number, and the literal username string SendGrid expects, follow [SendGrid's official SMTP integration guide](https://www.twilio.com/docs/sendgrid/for-developers/sending-email/integrating-with-the-smtp-api). The password field is filled with the API key generated above (stored in the password manager — see §Outbound). TLS-secured connection is selected.
+
+Gmail then sends a verification code to `hello@fadercraft.com`; it arrives via the routes from §Inbound and is pasted back to complete the wizard.
+
+Compose new email in Gmail → From dropdown → choose `Fadercraft <hello@fadercraft.com>` → send through the SendGrid relay with proper DKIM signing.
 
 ## DNS records (Cloudflare, fadercraft.com)
 

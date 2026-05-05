@@ -172,11 +172,9 @@ T12 Bundle upload         ─→ T13 Final verification
   - Email: `hello@fadercraft.com`
   - **Uncheck** "Treat as an alias"
   - **Next Step**
-  - SMTP server: `smtp.sendgrid.net`
-  - Port: `587`
-  - Username: `apikey` (literal string)
-  - Password: paste API key from T2.9
-  - Secured connection using TLS
+
+  On the SMTP relay configuration page, fill in the host, port, username, and authentication method as documented in [SendGrid's official SMTP integration guide](https://www.twilio.com/docs/sendgrid/for-developers/sending-email/integrating-with-the-smtp-api). The password field receives the API key from T2.9. Choose the TLS-secured connection option.
+
   - **Add Account**
   - Gmail sends a verification code to `hello@fadercraft.com` — it arrives in your inbox via T2.3 routes — paste the code.
 
