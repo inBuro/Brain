@@ -31,6 +31,10 @@ Wiki проекта **Max for Live MIDI-устройства `XL_Performance.amx
 | [[Custom Modes Model]] | Как Launch Control XL MK3 выбирает custom-mode по CC30 (14 слотов) |
 | [[Mode Encoding]] | Маппинг номера режима 1..14 → значения CC30 |
 
+## Roadmap
+
+- [[wiki/roadmap|Project roadmap]] — живой checklist Phase 0 + Phase 1, статус каждой задачи, прогресс по тайским правам и Paddle-onboarding'у. Обновляется на каждом крупном шаге.
+
 ## Meta
 
 - [[Novation/log|Project log]] — хронология ingests на уровне проекта.
