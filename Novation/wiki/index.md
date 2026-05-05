@@ -2,7 +2,7 @@
 type: index
 project: Novation
 created: 2026-04-28
-updated: 2026-04-29
+updated: 2026-05-05
 ---
 
 # Wiki Index
@@ -11,9 +11,13 @@ updated: 2026-04-29
 
 **Sources**: —
 
-**Last updated**: 2026-04-29
+**Last updated**: 2026-05-05
 
 ---
+
+## ⚠️ Active Blockers (читать первым)
+
+- [[Paddle Merchant Verification]] — **launch-blocker №1.** Paddle KYC frozen после отказа Stripe; ждёт документ из визита в DLT 2026-05-06. Без разморозки лонч в конце мая под угрозой.
 
 ## Synthesis
 
@@ -35,3 +39,7 @@ updated: 2026-04-29
 - [[CC47 Cross-Mode Transit]] — quick-jump между микшером и инструментами с памятью.
 - [[Solo Follower]] — JS + LiveAPI, держит собственный трек заSOLOенным вместе с внешними; **неотъемлемая часть** XL_Performance.
 - [[MIDI Passthrough]] — verbatim notes/bend/aftertouch/program; CC режутся `[sel 30 31]`.
+
+## Operations
+
+- [[Paddle Merchant Verification]] — статус Paddle KYC, цепочка зависимостей лонча, чек-лист «что записать после визита в DLT».

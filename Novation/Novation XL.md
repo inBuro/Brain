@@ -31,6 +31,12 @@ Wiki проекта **Max for Live MIDI-устройства `XL_Performance.amx
 | [[Custom Modes Model]] | Как Launch Control XL MK3 выбирает custom-mode по CC30 (14 слотов) |
 | [[Mode Encoding]] | Маппинг номера режима 1..14 → значения CC30 |
 
+## Operations / Launch
+
+| Страница | Что это |
+|---|---|
+| [[Paddle Merchant Verification]] | **⚠️ Активный launch-блокер.** Paddle KYC frozen после отказа Stripe. Ждёт документ из визита в DLT 2026-05-06. |
+
 ## Meta
 
 - [[Novation/log|Project log]] — хронология ingests на уровне проекта.
