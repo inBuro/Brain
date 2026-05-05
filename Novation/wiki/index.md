@@ -2,7 +2,7 @@
 type: index
 project: Novation
 created: 2026-04-28
-updated: 2026-04-29
+updated: 2026-05-05
 ---
 
 # Wiki Index
@@ -11,9 +11,13 @@ updated: 2026-04-29
 
 **Sources**: —
 
-**Last updated**: 2026-04-29
+**Last updated**: 2026-05-05
 
 ---
+
+## Roadmap
+
+- [[roadmap]] — живой checklist прогресса Phase 0 + Phase 1, статус каждой задачи, тайские мото-права как backup-документ для KYC. Обновляется при каждом крупном шаге.
 
 ## Synthesis
 

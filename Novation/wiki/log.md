@@ -159,3 +159,88 @@ Append-only журнал операций над вики.
 - Fix 5 (frontmatter в `Novation XL.md`) — пользователь не подтвердил отдельно.
 - Fix 6 (frontmatter в root `Novation/log.md`) — лог явно отметил как «не править».
 - Fix 7–8 — расхождений и пропущенных концептов нет.
+
+## 2026-05-01 — Solo Follower: фокус на «изменённый» трек, без восстановления saved
+
+Запрос пользователя: после un-solo фокус должен оставаться на треке, который только что вышел из solo, а не возвращаться на сохранённую пользовательскую позицию.
+
+**Что изменилось в `solo_follower.js`.**
+
+- Переменная `lastSoloedExternalId` → `lastChangedExternalId`. Обновляется в solo-callback'е независимо от направления (1→0 или 0→1).
+- `forceOwnSolo(v)`:
+  - всегда (при наличии валидного `lastChangedExternalId !== ownTrackId`) делает один `view.set("selected_track", "id " + lastChangedExternalId)`, без двухшаговой логики;
+  - не пропускает view-set, даже если `current === v` (зеркалирование solo уже отработало) — фокус всё равно переводится на изменённый трек.
+- Снят весь focus-restore state machine: `pendingFocusRestore`, `savedSelectionForRestore`, `lastUserSelectedId`, `clearPendingTask`, `scheduleClearPendingFocus`/`cancelClearPendingFocus`, `readTrackSolo`. View-observer оставлен **только** для snap-back из router-трека во время `inSoloEvent`-окна — это единственная защита от Live-побочки `set("solo")`, которая иногда асинхронно прыгает на router.
+- Константа `SOLO_EVENT_WINDOW_MS = 500` вынесена явно (раньше 500 был магическим литералом в `markSoloEvent`).
+
+**Поведение по сценариям.**
+
+1. Solo трека A → фокус на A. Live минимально подскроллит viewport, чтобы A стал виден; если был в кадре — без скролла.
+2. A солирован, юзер солирует B (Live в exclusive-mode снимает A) → два callback'а, последний с B → фокус на B.
+3. Юзер снимает solo с B (последнего соло-трека) → callback `B/0` → `lastChangedExternalId = B` → фокус остаётся на B даже после `forceOwnSolo(0)`.
+4. Юзер во время активного solo кликает на трек C (не солируя) → viewObserver видит ручной клик, в окне `inSoloEvent` фильтр — только snap-back из router; клик на C проходит свободно, фокус на C, пока пользователь сам не сменит solo.
+
+**Trade-off.** Прежнее поведение «после un-solo вернуться на тот трек, где ты работал до solo» больше не реализуется. Если потребуется — добавится одной строкой по запросу. Текущая логика проще, симметричнее (заход и выход из solo обрабатываются одинаково) и не требует state machine.
+
+**Wiki.** `wiki/entities/Solo Follower.md` переписана: Summary, цели, раздел «Перевод фокуса на изменённый трек», таблица состояния, точки тюнинга, известные ограничения. Раздел «Защита viewport (двухшаговый view-set)» удалён вместе с упоминанием `VIEWPORT_NEIGHBOR_SPAN`/`shouldDoSoloedPrescroll`. `Last updated`/`updated:` подняты до 2026-05-01.
+
+## 2026-05-01 — Solo Follower: эксперимент о синхронности `set("solo")` + минимизация скрипта
+
+Эксперимент с инструментацией `forceOwnSolo` и `viewObserverCallback` (DEBUG-логи `[SF +Nms]`) подтвердил гипотезу о природе viewport-побочки.
+
+**Что показал лог.** Последовательность для одного solo-клика на трек id=8:
+
+```
++0ms   solo-cb track=8 0->1
++10ms  forceOwnSolo v=1 selBefore=8 ownId=2
++15ms  view-cb currentId=2 [== own/router]   ← Live re-entrant шифтнул на router
++19ms  snap-back -> 8                        ← viewObserver сработал re-entrant
++22ms  view-cb currentId=8                   ← наш set перевыделил 8
++23ms  after own.set('solo',1) selAfter=8 [no shift]
++24ms  preemptive view.set -> 8              ← redundant, уже 8
+```
+
+**Главный вывод.** `ownTrackApi.set("solo", v)` — **синхронный блокирующий** API-вызов. Внутри него Live: применяет solo на router, делает auto-shift `selected_track` на router, **синхронно re-entrant** дёргает наш JS-callback (viewObserver), тот делает snap-back, всё это завершается, и только потом `set()` возвращает управление. Метка `[no shift]` в строке `after own.set` — иллюзия: shift был, но snap-back починил его внутри того же вызова.
+
+Это означает: **viewObserver был дубликатом post-set view.set'а в `forceOwnSolo`**. Оба механизма перезатирали побочку Live, но oba ровно на одно и то же значение и в одном и том же синхронном кадре.
+
+**Что выкинуто из `solo_follower.js`** (490 → 270 строк):
+- `viewObserver`, `viewObserverCallback`, `installViewObserver`, `uninstallViewObserver` — целиком.
+- `inSoloEvent`, `markSoloEvent`, `soloEventTask`, `SOLO_EVENT_WINDOW_MS` — нужны были только для гейтинга viewObserver.
+- `readSelectedTrackId` — использовался только в viewObserverCallback.
+- `trackPaths` — вестигиальное поле (писалось, никогда не читалось).
+- Вся debug-инфраструктура (`DEBUG`, `dbg()`, `dbgResetClock()`, `debug N` message handler).
+
+**Что осталось.** `forceOwnSolo` делает `ownTrackApi.set("solo", v)` (если состояние реально меняется) и сразу за ним один `view.set("selected_track", "id " + lastChangedExternalId)`. Этого достаточно: синхронность `set("solo")` гарантирует, что побочка Live уже применилась к моменту нашего view.set.
+
+**Известное ограничение, обнаруженное экспериментом.** В пределах ~5–9 мс между Live'овским shift'ом на router (внутри `set("solo")`) и нашим snap-back'ом Live может успеть отрисовать промежуточный кадр. Если router визуально близок (≤1–2 трека от края viewport) — Live не делает реального скролла, и флик не виден. Если router далеко за краем — viewport на 1 кадр уезжает к router и возвращается. Через Live API это не устранить; обходные пути — держать router рядом с обычно-видимыми треками или сменить архитектуру на mute-схему вместо solo на router (требует большой переделки устройства, не реализовано).
+
+**Источник правды переехал.** По просьбе пользователя `Novation/solo_follower.js` удалён из репозитория. Единственный поддерживаемый файл — `~/Music/Ableton/User Library/Max Devices/solo_follower.js` (рядом с устанавливаемым `XL_Performance.amxd`). Это убирает регулярную необходимость синкать две копии и вики-запись «верни состояние из Live в репо», которая раньше периодически расходилась.
+
+- `wiki/entities/Solo Follower.md` — раздел «Перевод фокуса на изменённый трек» переписан, добавлен раздел «Почему хватает одного post-set view.set», таблица состояния урезана до трёх переменных, точки тюнинга — без `SOLO_EVENT_WINDOW_MS`, в «Известных ограничениях» добавлен абзац про микро-флик. Первая строка тела изменена: `[[solo_follower.js]]` → backtick'и + указание на User Library как место хранения.
+- `Novation XL.md` — строка про JS-скрипт фолловера обновлена: убран wiki-link на удалённый файл, добавлено указание на User Library.
+
+## 2026-05-01 — Solo Follower: попытка walk-up для canonical_parent (откат)
+
+После минимизации скрипта пользователь сообщил, что router-трек (с устройством) перестаёт уходить в solo. Гипотеза: `canonical_parent` от `this_device` приводит не к треку, а к chain/rack, если устройство лежит в Drum Rack / Instrument Rack / Audio Effect Rack — у chain нет осмысленного свойства `solo`, set'ится в пустоту.
+
+**Что попробовал.** В `tryInit` после первого `goto("canonical_parent")` — цикл walk-up: пока `ownTrackApi.path` не начинается с `live_set tracks` или `live_set return_tracks`, делаем ещё `goto("canonical_parent")`, до 4 хопов.
+
+**Почему откатил.** После цикла `ownTrackApi.path` оказался **пустым**, а `jsliveapi` начал валить ошибки `get/set: no valid object set`. То есть `goto("canonical_parent")` от track-уровня уходит в `live_set`, потом дальше — и обнуляет объект, при этом `isValidApi` (проверка `id !== 0`) этот переход не ловит. Loop выходит уже из мёртвого состояния, путь пустой, set'ы летят в никуда.
+
+**Итог.** Walk-up откачен. Логика `tryInit` снова: один `goto("canonical_parent")`, без проверки типа результата. У пользователя устройство фактически лежит **на треке** (не в раке), поэтому одного `goto` достаточно, и проблема «router не уходит в solo» в другом месте — вероятно, был кэш-эффект от незавершённой перезагрузки JS либо визуальная путаница.
+
+**Что осталось не сделанным.** Корректный walk-up (если когда-нибудь устройство кладут в рак): нужна проверка `path.indexOf("live_set tracks ") === 0` **с пробелом и числом после**, чтобы отличать `live_set tracks 21` от голого `live_set`, плюс ранний выход при пустом пути или паттерне-`live_set` без хвоста. Сейчас некритично — добавим, если кейс возникнет.
+
+Финальная минимальная версия: 270 строк, debug-инфраструктура снята (включая `dbg/DEBUG/refresh-debug-handler/diagnostic posts в tryInit/forceOwnSolo/makeSoloCallback`).
+
+## 2026-05-05 — добавлен `wiki/roadmap.md`: живой checklist прогресса Fadercraft
+
+Пользователь обнаружил, что не может посмотреть прогресс/план через Obsidian на телефоне — потому что raw-чеклист и backlog жили только в чате с Claude, а в `wiki/` не были запечатлены. Зафиксирован project-wide правилом: **каждый проект с wiki должен иметь `wiki/roadmap.md`** (или эквивалент), всегда поддерживаемый в актуальном состоянии и доступный из Obsidian-mobile.
+
+**Что сделано.**
+- Создан `wiki/roadmap.md` — Phase 0 backlog (49/119 ≈ 41% сделано на 2026-05-05) + Phase 1 пост-launch активности + ветка тайских мото-прав как backup-документ для KYC.
+- В `wiki/index.md` добавлена секция «Roadmap» со ссылкой на новую страницу. `Last updated`/`updated:` подняты до 2026-05-05.
+- В `Novation XL.md` (root-хаб) добавлена секция `## Roadmap` со ссылкой `[[wiki/roadmap|Project roadmap]]`.
+
+**Правило сохранено в memory** (`feedback_project_roadmap_rule.md`): применять ко всем проектам с wiki (Trading, Novation, любые будущие).
