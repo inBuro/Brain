@@ -1,14 +1,14 @@
 # Trading Strategy
 
 **Summary**: Systematic positional swing strategy for ETH/USDT on Bybit perpetual futures. Current version is v5 (2026-04-30), which lowers potential and R:R thresholds, adds a RANGE-trade subcategory, introduces graduated position sizing ($30 → $40), and adds a scheduled remote agent for passive monitoring with email alerts. Main principle: "the trade should work on its own" — enter, set SL and TP, don't micromanage.
-**Sources**: [[strategy-v5]] (current), [[strategy-v4]] (historical reference), [[strategy-v3]] (older reference), chat 2026-04-26..30
-**Last updated**: 2026-04-30 (sync with v5: lowered thresholds, RANGE category, graduated sizing, routine)
+**Sources**: [[strategy-v5]] (current), [[strategy-v4]] (historical reference), [[strategy-v3]] (older reference), chat 2026-04-26..30, chat 2026-05-06 (deposit raised to $3,000)
+**Last updated**: 2026-05-06 (capital scaled $2,200 → $3,000; risk dollars rescaled at fixed v5 percentages — see [[position-sizing]])
 
 ---
 
 ## Context
 
-The strategy targets a trader who can't (and doesn't want to) sit over the chart all day. Attention budget: 30-40 minutes per day. Capital $2,200 on Bybit perpetual futures, leverage 5x (source: strategy-v4.md). Only ETH/USDT is traded, both directions (LONG and SHORT). See [[trader-profile]] for details.
+The strategy targets a trader who can't (and doesn't want to) sit over the chart all day. Attention budget: 30-40 minutes per day. Capital **$3,000** on Bybit perpetual futures, leverage 5x (deposit raised from $2,200 on 2026-05-06; source: chat 2026-05-06). Only ETH/USDT is traded, both directions (LONG and SHORT). See [[trader-profile]] for details, [[position-sizing]] for the live risk schedule.
 
 ## Main principle
 
@@ -18,10 +18,10 @@ The strategy targets a trader who can't (and doesn't want to) sit over the chart
 
 | Parameter | Value (v5) |
 |----------|----------|
-| Risk per trade — Tier 1 (initial) | $30 (1.4% of capital) |
-| Risk per trade — Tier 2 (after 30 valid setups, win rate ≥45%) | $40 (1.8% of capital) |
-| Target profit (full TP3) | $69 (Tier 1) / $92 (Tier 2) |
-| Realistic profit (TP1+TP2 hit, TP3 trailed to BU) | $27 (Tier 1) / $36 (Tier 2) |
+| Risk per trade — Tier 1 (initial) | $42 (1.4% of capital) |
+| Risk per trade — Tier 2 (after 30 valid setups, win rate ≥45%) | $54 (1.8% of capital) |
+| Target profit (full TP3) | ~$97 (Tier 1) / ~$124 (Tier 2) |
+| Realistic profit (TP1+TP2 hit, TP3 trailed to BU) | ~$38 (Tier 1) / ~$49 (Tier 2) |
 | Minimum R:R | 1:2 (down from 1:3 in v4) |
 | Target R:R | 1:3.5 (down from 1:5 in v4) |
 | Trade duration | from hours to 3-4 days |
@@ -78,11 +78,11 @@ The exclusion list matters as much as the entry rules. We don't take setups with
 
 ## Target metrics
 
-With disciplined execution, monthly targets are: trend win rate 50-60%, range win rate 60-65%, net result **$200-350/month at Tier 1** (~9-16% of capital), stretch **$500/month at Tier 2** (~22% of capital with good catch rate). v5 explicitly targets dollar amounts rather than just percentages because absolute monthly income is now the optimization target (source: strategy-v5.md). Worse than that — investigate at [[weekly-review]] what's going wrong. Better — record what's working.
+With disciplined execution, monthly targets are: trend win rate 50-60%, range win rate 60-65%, net result **$280-490/month at Tier 1** (~9-16% of capital), stretch **~$675/month at Tier 2** (~22% of capital with good catch rate). v5 explicitly targets dollar amounts rather than just percentages because absolute monthly income is now the optimization target (source: strategy-v5.md). Dollar targets here scale linearly with the risk schedule on [[position-sizing]] — when capital changes, both risk and these targets are recomputed off the same percentages. Worse than that — investigate at [[weekly-review]] what's going wrong. Better — record what's working.
 
 Carried from v4, weekly review includes **leverage outcome accounting**: a separate P&L tally for trades where a tight SL actually required 5x leverage (that is, without leverage the position size would have been unreachable) vs trades where 5x had no effect on execution. Goal: collect ≥30 observations and assess whether leverage actually provides edge or 5x only inflates variance. This is data collection, not a decision to change leverage. Trigger: the `risk-management` record "High leverage 4x-5x with optimal risk = 0% success / 132 samples / 50% confidence" — sample too small to act on, but alarming enough to measure. Concept page planned at `leverage-accounting`.
 
-New in v5: weekly review also tracks **Tier promotion** (30 valid setups + ≥45% win rate → promote $30 to $40), **Tier demotion** (loss > $300 in any 7-day window → drop to $20), and **range vs trend split** (% of monthly P&L from each subcategory).
+New in v5: weekly review also tracks **Tier promotion** (30 valid setups + ≥45% win rate → promote Tier 1 → Tier 2), **Tier demotion** (loss > $400 in any 7-day window → drop to Tier 0), and **range vs trend split** (% of monthly P&L from each subcategory). The promotion/demotion percentages are fixed in [[strategy-v5]]; live dollar thresholds for the current $3,000 capital are on [[position-sizing]].
 
 ## Version history
 

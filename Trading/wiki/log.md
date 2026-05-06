@@ -2,7 +2,7 @@
 
 **Summary**: Append-only log of wiki operations — ingests, page creation, lints, reviews.
 **Sources**: operational page (no upstream source)
-**Last updated**: 2026-04-30
+**Last updated**: 2026-05-06
 
 ---
 
@@ -341,3 +341,22 @@ In the graph, `raw/strategy-v3` becomes a source node with edges to `trading-str
 
 **Next:** routine 23:00 ICT cron (16:00 UTC) tonight will be the first to evaluate window status — should write `**Window status**: OUTSIDE` and skip email. Verify in journal tomorrow morning.
 
+
+---
+
+## 2026-05-06 — Capital scaled to $3,000 (deposit top-up)
+
+**Trigger**: User raised Bybit deposit from ~$2,200 to $3,000. Asked to bake the v5 risk percentages into a new minimum trade size based on the new sum.
+
+**Decision**: Keep the v5 percentage schedule (1.4% Tier 1 / 1.8% Tier 2 / 0.93% Tier 0) intact; rescale only the absolute dollar values. v5 raw stays untouched per the immutability rule for `raw/`.
+
+**Changes**:
+- Created `wiki/position-sizing.md` (was on the planned list) — captures live capital ($3,000) and the rescaled risk schedule: trend $42 / $54 / $28; range $21 / $27 / $14; demotion threshold $400 / 7d; max margin $1,500. Includes a "When to recompute" recipe for the next deposit change.
+- Updated `wiki/trading-strategy.md`: capital line ($2,200 → $3,000), Target parameters table (Tier 1 $30 → $42, Tier 2 $40 → $54, full TP3 ~$97 / ~$124, moderate ~$38 / ~$49), monthly targets ($280-490 Tier 1, ~$675 Tier 2 stretch), tier promotion/demotion paragraph (now references percentages + position-sizing for live dollars).
+- Updated `wiki/index.md`: moved position-sizing from Concepts (planned) → active under Concepts, with one-line description.
+
+**Math sanity check**: $42 / 1.4% = $3,000 ✓. TP math (30/30/40 split, R:R 1/2/3.5): Tier 1 full TP3 = $42 × (0.3·1 + 0.3·2 + 0.4·3.5) = $96.60 ≈ $97; moderate (TP1+TP2 only) = $37.80 ≈ $38. Tier 2 full TP3 = $124.20 ≈ $124; moderate = $48.60 ≈ $49.
+
+**Not changed**: strategy-v5 raw source (immutable), entry/exit rule pages, trading-hours, pending-orders, range-trade-rules — all rule logic stays the same, only dollar denominations move.
+
+**Next**: next setup taken should use Tier 1 = $42 risk; first time the new size flows through the strategy will show in the journal entry.
