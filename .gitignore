@@ -6,3 +6,4 @@
 .obsidian/plugins/*/data.json
 .trash/
 *.tmp
+.gstack/

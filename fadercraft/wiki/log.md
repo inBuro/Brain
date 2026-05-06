@@ -234,6 +234,19 @@ Append-only журнал операций над вики.
 
 Финальная минимальная версия: 270 строк, debug-инфраструктура снята (включая `dbg/DEBUG/refresh-debug-handler/diagnostic posts в tryInit/forceOwnSolo/makeSoloCallback`).
 
+## 2026-05-06 — добавлен `wiki/payment-rails.md`: матрица платёжных рельсов под профиль «русский паспорт + Таиланд»
+
+После серии тупиков с KYC (PayPal Thailand требует NDID и режет всех иностранцев; Lemon Squeezy / Gumroad / Polar / Stripe Thailand упираются в санкционный screening на русское гражданство либо в требование тайской компании; Wise по 19-му пакету ЕС режет карты для русских/белорусов без EEA-резиденции) зафиксирован decision-matrix всех рассмотренных рельсов с явными вердиктами и choke-point'ами.
+
+**Что сделано.**
+- Создан `wiki/payment-rails.md` (тип `reference`) — таблица из 13 платформ + раздел «What Thai documents unlock what» (мотопра́ва ↔ tax ID ↔ work permit ↔ Thai company ↔ PR ↔ citizenship), realistic onboarding order, тройной screening (citizenship / residence / Thai national ID).
+- В `wiki/index.md` добавлена секция `## Reference` со ссылкой на новую страницу. `Last updated`/`updated:` подняты до 2026-05-06.
+- Профиль пользователя (русский паспорт, тайская резиденция, Bangkok Bank в собственном имени) сохранён в auto-memory как `user_citizenship_residence.md` + `user_thai_banking.md` — будет применяться ко всем будущим рекомендациям payment-платформ.
+
+**Главный вывод страницы.** Тайские мото-права (получение запланировано на 2026-07-01) разблокируют не «новый класс KYC», а более узкое — служат вторичным photo ID для Sumsub-style проверок (Paddle и т.п.) и proof-of-address для Payoneer / Wise / residence-checks. Они **не обходят** citizenship-based санкционный screening и не заменяют тайский national ID (NDID), который выдаётся только гражданам и нужен для PayPal Thailand. Самый широкий unlock даёт **тайская компания + work permit** (через LTR/BOI/Smart Visa) → Stripe Thailand → каскад через Stripe Connect, но это 3–6 месяцев и значительный капитал.
+
+**Reactionable recommendations:** (1) Payoneer открывать сейчас, (2) Isotonik писать как только XL_Performance готов, (3) crypto-чекаут (Cryptomus/NOWPayments) на лендинге как параллельный канал, (4) Paddle ждать, (5) Georgian Individual Entrepreneur закладывать на следующий шаг при выручке ≥ $500–1000/мес.
+
 ## 2026-05-05 — добавлен `wiki/roadmap.md`: живой checklist прогресса Fadercraft
 
 Пользователь обнаружил, что не может посмотреть прогресс/план через Obsidian на телефоне — потому что raw-чеклист и backlog жили только в чате с Claude, а в `wiki/` не были запечатлены. Зафиксирован project-wide правилом: **каждый проект с wiki должен иметь `wiki/roadmap.md`** (или эквивалент), всегда поддерживаемый в актуальном состоянии и доступный из Obsidian-mobile.
@@ -244,3 +257,10 @@ Append-only журнал операций над вики.
 - В `Novation XL.md` (root-хаб) добавлена секция `## Roadmap` со ссылкой `[[wiki/roadmap|Project roadmap]]`.
 
 **Правило сохранено в memory** (`feedback_project_roadmap_rule.md`): применять ко всем проектам с wiki (Trading, Novation, любые будущие).
+
+## 2026-05-06 — Landing narrative locked
+
+- Created `wiki/landing-narrative.md` — 10-beat psychological arc for `fadercraft.com`. Drives section order, component priorities, and explicit deviations from the original spec (added beat 5 "How it works", moved bundle visuals from #4 to #8).
+- Added pointer in `wiki/index.md` Roadmap section.
+- Implementation workspace at `~/Projects/Claude/Fadercraft/`: `ModeButton` + `ModeGrid` built on both Figma and React side, parity confirmed via browser smoke test.
+- Token parity report: `~/Projects/Claude/Fadercraft/artifacts/parity-report-2026-05-06.md` (3 Figma fixes applied: action/secondary→coral, focus shadow→lavender, coral primitive value).
