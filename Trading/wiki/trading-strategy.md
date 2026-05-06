@@ -1,14 +1,14 @@
 # Trading Strategy
 
-**Summary**: Systematic positional swing strategy for ETH/USDT on Bybit perpetual futures. Current version is v5 (2026-04-30), which lowers potential and R:R thresholds, adds a RANGE-trade subcategory, introduces graduated position sizing ($30 → $40), and adds a scheduled remote agent for passive monitoring with email alerts. Main principle: "the trade should work on its own" — enter, set SL and TP, don't micromanage.
-**Sources**: [[strategy-v5]] (current), [[strategy-v4]] (historical reference), [[strategy-v3]] (older reference), chat 2026-04-26..30
-**Last updated**: 2026-04-30 (sync with v5: lowered thresholds, RANGE category, graduated sizing, routine)
+**Summary**: Systematic positional swing strategy for ETH/USDT on Bybit perpetual futures. Current version is v5 (2026-04-30), which lowers potential and R:R thresholds, adds a RANGE-trade subcategory, introduces graduated position sizing (Tier 1 1.4% → Tier 2 1.8% of capital), and adds a scheduled remote agent for passive monitoring with email alerts. Main principle: "the trade should work on its own" — enter, set SL and TP, don't micromanage.
+**Sources**: [[strategy-v5]] (current), [[strategy-v4]] (historical reference), [[strategy-v3]] (older reference), chat 2026-04-26..30, chat 2026-05-06 (deposit raised to $3,000)
+**Last updated**: 2026-05-06 (capital scaled $2,200 → $3,000; risk dollars rescaled at fixed v5 percentages — see [[position-sizing]])
 
 ---
 
 ## Context
 
-The strategy targets a trader who can't (and doesn't want to) sit over the chart all day. Attention budget: 30-40 minutes per day. Capital $2,200 on Bybit perpetual futures, leverage 5x (source: strategy-v4.md). Only ETH/USDT is traded, both directions (LONG and SHORT). See [[trader-profile]] for details.
+The strategy targets a trader who can't (and doesn't want to) sit over the chart all day. Attention budget: 30-40 minutes per day. Small retail capital on Bybit perpetual futures, leverage 5x. Live capital amount and the derived risk schedule are pinned on [[position-sizing]] — that's the single source of truth for current dollars. Only ETH/USDT is traded, both directions (LONG and SHORT). See [[trader-profile]] (planned) for further profile details.
 
 ## Main principle
 
@@ -18,17 +18,18 @@ The strategy targets a trader who can't (and doesn't want to) sit over the chart
 
 | Parameter | Value (v5) |
 |----------|----------|
-| Risk per trade — Tier 1 (initial) | $30 (1.4% of capital) |
-| Risk per trade — Tier 2 (after 30 valid setups, win rate ≥45%) | $40 (1.8% of capital) |
-| Target profit (full TP3) | $69 (Tier 1) / $92 (Tier 2) |
-| Realistic profit (TP1+TP2 hit, TP3 trailed to BU) | $27 (Tier 1) / $36 (Tier 2) |
+| Risk per trade — Tier 1 (initial) | 1.4% of capital |
+| Risk per trade — Tier 2 (after 30 valid setups, win rate ≥45%) | 1.8% of capital |
+| Risk per trade — Tier 0 (demoted: loss >13% of capital in 7d) | 0.93% of capital |
+| Target profit (full TP3) | ~2.3 R per trade (R = risk per trade) |
+| Realistic profit (TP1+TP2 hit, TP3 trailed to BU) | ~0.9 R per trade |
 | Minimum R:R | 1:2 (down from 1:3 in v4) |
 | Target R:R | 1:3.5 (down from 1:5 in v4) |
 | Trade duration | from hours to 3-4 days |
 | Frequency target | 2-3 valid setups per day max |
 | Frequency realistic | 10-15 valid setups per month |
 
-Detailed sizing math lives on [[position-sizing]]. Minimum movement to take a trend trade — **2.5-4% from current price** (down from 4-7% in v4); for [[range-trade-rules]] the minimum is 1.5% range width (different metric). Otherwise, commissions eat the result (source: strategy-v5.md, see [[commission-management]]).
+Live dollar values for the current capital and detailed sizing math (ETH size per SL distance, max margin, after-loss size) live on [[position-sizing]] — that page is the single source of truth for dollars; this page stays in percentages so it doesn't go stale when the deposit changes. Minimum movement to take a trend trade — **2.5-4% from current price** (down from 4-7% in v4); for [[range-trade-rules]] the minimum is 1.5% range width (different metric). Otherwise, commissions eat the result (source: strategy-v5.md, see [[commission-management]]).
 
 ## Pre-checks before each entry
 
@@ -59,7 +60,7 @@ The strategy unfolds across the concept pages below:
 - [[entry-rules-short]] — short entry conditions (mirror rules)
 - [[range-trade-rules]] — range mean-reversion subcategory (new in v5)
 - [[pending-orders]] — when to suggest pending limit orders for probable setups (v5 supplement, 2026-05-01)
-- [[trading-hours]] — 09:00-17:00 ICT trading window for new entries (v5 supplement, 2026-05-01)
+- [[trading-hours]] — 09:00-22:00 ICT trading window for new entries (v5 supplement; widened from 09-17 on 2026-05-06)
 
 **Trade management:**
 - [[position-sizing]] — position size formula
@@ -78,11 +79,11 @@ The exclusion list matters as much as the entry rules. We don't take setups with
 
 ## Target metrics
 
-With disciplined execution, monthly targets are: trend win rate 50-60%, range win rate 60-65%, net result **$200-350/month at Tier 1** (~9-16% of capital), stretch **$500/month at Tier 2** (~22% of capital with good catch rate). v5 explicitly targets dollar amounts rather than just percentages because absolute monthly income is now the optimization target (source: strategy-v5.md). Worse than that — investigate at [[weekly-review]] what's going wrong. Better — record what's working.
+With disciplined execution, monthly targets are: trend win rate 50-60%, range win rate 60-65%, net result **~9-16% of capital at Tier 1**, stretch **~22% of capital at Tier 2** (with good catch rate). v5 explicitly targets a steady monthly income rather than a growth multiplier; dollar targets at the current capital live on [[position-sizing]] and recompute mechanically from these percentages whenever the deposit changes. Worse than that — investigate at [[weekly-review]] what's going wrong. Better — record what's working.
 
 Carried from v4, weekly review includes **leverage outcome accounting**: a separate P&L tally for trades where a tight SL actually required 5x leverage (that is, without leverage the position size would have been unreachable) vs trades where 5x had no effect on execution. Goal: collect ≥30 observations and assess whether leverage actually provides edge or 5x only inflates variance. This is data collection, not a decision to change leverage. Trigger: the `risk-management` record "High leverage 4x-5x with optimal risk = 0% success / 132 samples / 50% confidence" — sample too small to act on, but alarming enough to measure. Concept page planned at `leverage-accounting`.
 
-New in v5: weekly review also tracks **Tier promotion** (30 valid setups + ≥45% win rate → promote $30 to $40), **Tier demotion** (loss > $300 in any 7-day window → drop to $20), and **range vs trend split** (% of monthly P&L from each subcategory).
+New in v5: weekly review also tracks **Tier promotion** (30 valid setups + ≥45% win rate → promote Tier 1 → Tier 2), **Tier demotion** (loss > 13% of capital in any 7-day window → drop to Tier 0), and **range vs trend split** (% of monthly P&L from each subcategory). The triggers are stated as percentages here; live dollar thresholds for the current capital are on [[position-sizing]].
 
 ## Version history
 
@@ -90,7 +91,7 @@ New in v5: weekly review also tracks **Tier promotion** (30 valid setups + ≥45
 - **v2** — refined timeframes and R:R (no working notes preserved)
 - **v3** — added shorts, weekly review, realistic profit expectations. Source: [[strategy-v3]]. Built from a series of live trading sessions 2026-04-26..29. Kept as historical reference.
 - **v4** — iteration after ingesting the `risk-management` and `market-news-analyst` skills, plus [[strategy-v3-baseline-backtest]]. Adds: multi-TF alignment as pre-check, 2 new prohibitive conditions (mixed-market momentum, counter-trend by 1D MACD + BTC EMA200), news Impact Score, weekly leverage accounting. Source: [[strategy-v4]]. Full changelog inside the v4 document.
-- **v5 (current)** — frequency-and-coverage iteration. Lowered potential threshold (4-7% → 2.5-4%), lowered R:R (min 1:3 → 1:2, target 1:5 → 1:3.5), added RANGE-trade subcategory, graduated position sizing ($30 → $40 after 30 valid setups with ≥45% win rate), scheduled remote agent for passive monitoring + email alerts. First version that explicitly targets monthly dollar income ($200-500) rather than capital growth percentage. Source: [[strategy-v5]]. Full changelog inside the v5 document.
+- **v5 (current)** — frequency-and-coverage iteration. Lowered potential threshold (4-7% → 2.5-4%), lowered R:R (min 1:3 → 1:2, target 1:5 → 1:3.5), added RANGE-trade subcategory, graduated position sizing (Tier 1 → Tier 2 after 30 valid setups with ≥45% win rate), scheduled remote agent for passive monitoring + email alerts. First version that explicitly targets a monthly absolute income (single-digit % of capital) rather than capital growth percentage. Source: [[strategy-v5]]. Full changelog inside the v5 document.
 
 A version bump only happens after real-world live testing and discussion at the weekly review. Intermediate edits to specific rules (for example, nudging an RSI threshold) live in commit history; a new major version is a separate document in `raw/` (in the v4 case — a separate file, so v3 stays immutable per CLAUDE.md).
 

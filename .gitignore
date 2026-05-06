@@ -6,3 +6,14 @@
 .obsidian/plugins/*/data.json
 .trash/
 *.tmp
+.gstack/
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+**/credentials.json
+**/secrets.json
+.dev.vars

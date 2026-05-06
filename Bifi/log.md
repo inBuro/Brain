@@ -8,7 +8,7 @@
 
 Создана структура проекта по шаблону [[../_Inbox/llm-wiki|llm-wiki]]:
 
-- `Claude.md` — правила ведения wiki (копия из `Novation/Claude.md`).
+- `Claude.md` — правила ведения wiki (копия из `fadercraft/Claude.md`).
 - `Bifi.md` — корневой хаб проекта (пустые таблицы Sources / Entities / Concepts до первого ingest).
 - `log.md` — этот файл.
 - `raw/` — пусто, ждёт первый источник.

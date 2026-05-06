@@ -2,7 +2,7 @@
 type: index
 project: Novation
 created: 2026-04-28
-updated: 2026-05-05
+updated: 2026-05-06
 ---
 
 # Wiki Index
@@ -11,13 +11,18 @@ updated: 2026-05-05
 
 **Sources**: —
 
-**Last updated**: 2026-05-05
+**Last updated**: 2026-05-06
 
 ---
 
 ## Roadmap
 
 - [[roadmap]] — живой checklist прогресса Phase 0 + Phase 1, статус каждой задачи, тайские мото-права как backup-документ для KYC. Обновляется при каждом крупном шаге.
+- [[landing-narrative]] — 10-битная психологическая дуга лендинга `fadercraft.com`, маппинг бит → секция → компонент, обоснование отклонений от исходной спеки.
+
+## Reference
+
+- [[payment-rails]] — матрица платёжных рельсов (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) с вердиктами под профиль «русский паспорт + Таиланд», расшифровка какие тайские документы что разблокируют.
 
 ## Synthesis
 
