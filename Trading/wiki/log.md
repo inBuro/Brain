@@ -2,7 +2,7 @@
 
 **Summary**: Append-only log of wiki operations — ingests, page creation, lints, reviews.
 **Sources**: operational page (no upstream source)
-**Last updated**: 2026-04-30
+**Last updated**: 2026-05-06
 
 ---
 
@@ -341,3 +341,91 @@ In the graph, `raw/strategy-v3` becomes a source node with edges to `trading-str
 
 **Next:** routine 23:00 ICT cron (16:00 UTC) tonight will be the first to evaluate window status — should write `**Window status**: OUTSIDE` and skip email. Verify in journal tomorrow morning.
 
+
+---
+
+## 2026-05-06 — Capital scaled to $3,000 (deposit top-up)
+
+**Trigger**: User raised Bybit deposit from ~$2,200 to $3,000. Asked to bake the v5 risk percentages into a new minimum trade size based on the new sum.
+
+**Decision**: Keep the v5 percentage schedule (1.4% Tier 1 / 1.8% Tier 2 / 0.93% Tier 0) intact; rescale only the absolute dollar values. v5 raw stays untouched per the immutability rule for `raw/`.
+
+**Changes**:
+- Created `wiki/position-sizing.md` (was on the planned list) — captures live capital ($3,000) and the rescaled risk schedule: trend $42 / $54 / $28; range $21 / $27 / $14; demotion threshold $400 / 7d; max margin $1,500. Includes a "When to recompute" recipe for the next deposit change.
+- Updated `wiki/trading-strategy.md`: capital line ($2,200 → $3,000), Target parameters table (Tier 1 $30 → $42, Tier 2 $40 → $54, full TP3 ~$97 / ~$124, moderate ~$38 / ~$49), monthly targets ($280-490 Tier 1, ~$675 Tier 2 stretch), tier promotion/demotion paragraph (now references percentages + position-sizing for live dollars).
+- Updated `wiki/index.md`: moved position-sizing from Concepts (planned) → active under Concepts, with one-line description.
+
+**Math sanity check**: $42 / 1.4% = $3,000 ✓. TP math (30/30/40 split, R:R 1/2/3.5): Tier 1 full TP3 = $42 × (0.3·1 + 0.3·2 + 0.4·3.5) = $96.60 ≈ $97; moderate (TP1+TP2 only) = $37.80 ≈ $38. Tier 2 full TP3 = $124.20 ≈ $124; moderate = $48.60 ≈ $49.
+
+**Not changed**: strategy-v5 raw source (immutable), entry/exit rule pages, trading-hours, pending-orders, range-trade-rules — all rule logic stays the same, only dollar denominations move.
+
+**Next**: next setup taken should use Tier 1 = $42 risk; first time the new size flows through the strategy will show in the journal entry.
+
+---
+
+## 2026-05-06 (afternoon) — Window widened 09-22 ICT + dollars cleared from strategy page
+
+**Trigger**: Two design questions raised after the morning capital rescale.
+
+**Decision A — trading hours**: Widen `trading-hours.md` window from 09:00-17:00 ICT to **09:00-22:00 ICT** (single 13-hour window). Rationale: trader checks the terminal throughout the day anyway to send scan requests, so a single wide window beats two narrow ones; widening to 22:00 captures the London/NY overlap (20:00-22:00 ICT = 13:00-15:00 UTC), which is the highest-volume slice of the crypto day for ETH. Upper bound now matches the original v5 source rule ("no entries after 22:00 local").
+
+**Decision B — dollars vs percentages**: Make `position-sizing.md` the **single source of truth for current dollar values**. Strip explicit dollar amounts from `trading-strategy.md` Target-parameters table and Target-metrics paragraph; restate everything in % of capital and R-multiples. Capital line in Context section now points to position-sizing instead of stating a number. Rationale: dollar values rot when capital changes (deposit, withdrawal, drift); percentages are invariant under capital changes; one place to edit on rescale.
+
+**Changes**:
+- `wiki/trading-hours.md`: Summary, "The window", "Why this window", weekend nuance, pending-orders cap, late-day setup window, macro example, Migration history — all rewritten for 09-22.
+- `wiki/trading-strategy.md`: Summary (graduated sizing now stated as 1.4% → 1.8%), Context paragraph (capital fact moved to position-sizing), Target parameters table (rows now in % / R), Target metrics paragraph (monthly targets in % of capital), Tier promotion/demotion paragraph (in %), v5 changelog (no dollars).
+- `wiki/index.md`: trading-hours line updated to mention 09-22 widening; position-sizing line clarifies role as single source of truth for dollars.
+
+**Math sanity check on Tier promotion percentages**: 1.4% / 1.8% / 0.93% match the absolute dollars on position-sizing.md ($42 / $54 / $28 at $3,000 capital). Demotion threshold $400 = 13.3% of $3,000 ≈ 13% as stated.
+
+**Not changed**: `position-sizing.md` (still has the dollar table — it's where dollars now live), entry/range/pending-orders rule pages, raw sources.
+
+**Open question for next session**: should `trader-profile` finally be created? Capital fact currently lives in position-sizing because there's no profile page; profile would be a more natural home, with position-sizing referencing it for the capital input.
+
+---
+
+## 2026-05-06 (evening) — Setup Verdict Format
+
+**Source:** chat 2026-05-06 (live market session where the verdict got buried under multiple rounds of indicator-config back-and-forth before the trader could tell whether action was needed).
+
+**Trigger:** trader explicitly requested an at-a-glance header at the top of every market-check response. Quote: "выделяется в этом сложившийся сетап, так чтобы я сразу увидел, что сетап есть или что сетапа нет." Without it, the verdict drifts into the body and the 30-40 min/day attention budget is spent on triage instead of decision.
+
+**Created:**
+- `wiki/setup-verdict-format.md` — concept page. Defines the standard header opening every market analysis response. Three states: 🟢 СЕТАП ЕСТЬ / 🟡 СЕТАП ФОРМИРУЕТСЯ / 🔴 СЕТАПА НЕТ. Each header carries three lines: тип, главная причина (one sentence, no hedging), следующее действие или следующая проверка (absolute ICT time + what to send). Full chart reading and checklists go BELOW the header after `---`. Mapping table aligns the colored states with the [[trading-journal-v5]] decision codes (`SETUP_LONG` / `PENDING_ELIGIBLE` / watch / `NO_SETUP` / `RUN_ERROR`). Anti-pattern list captures the failure modes: indicator-config preamble, multi-verdict hedging, "you decide" punts, hedging inside Главная причина, relative time, buried-verdict summaries.
+
+**Updated:**
+- `wiki/index.md` — `setup-verdict-format` added to active Concepts; "Last updated" line extended.
+- `Claude.md` — "Live market analysis behavior" section now opens with a bullet pointing to `[[setup-verdict-format]]` so the verdict-first rule is enforced before the existing "no setup → next checkpoint" rule.
+
+**Decided NOT to:**
+- Add a fourth state (e.g. 🟠 "marginal — your call"). The strategy is binary on entries (rules met or not); ambiguity belongs in the body, not the header. Trader still makes the final click, but Claude doesn't punt the decision into the header.
+- Apply this to the `eth-paper-journal` routine output yet — the routine already produces structured journal entries with decision codes; adding the colored header to its emails is a separate small change to do after the 2026-05-14 2-week review if the format proves itself in manual sessions first.
+
+**Re-do note:** an earlier attempt to ship this from a parallel agent session (commit `8bca590` on a `claude/suspicious-johnson-e3961f` git `worktree`) was rolled back because the branch had been forked from `origin/main` instead of `chore/rename-to-fadercraft` — its baseline still had the 09-17 trading window and would have re-introduced stale text on merge. Re-implemented here on the correct base; content essentially the same, but text examples (e.g. "Outside trading window" example) reference the current 09:00-22:00 ICT window from [[trading-hours]].
+
+**Next:** apply the header on every subsequent market analysis response. Re-check the format after the 2026-05-14 2-week review — if the trader reports it's redundant (e.g. always reading full body anyway), drop the body sections he ignores; if useful, port it into routine emails.
+
+---
+
+## 2026-05-06 (evening, late) — Asset Context Read protocol
+
+**Trigger:** trader shared LINKUSDT chart and asked for an analysis. Strategy v5 is explicitly bound to ETH/USDT, so a strict-discipline answer was 🔴 "off-instrument" — but the trader still benefits from a structured analytical read of correlated/curiosity assets, especially BTC (which already has a privileged role via prohibitive condition #6 in [[entry-rules-long]]). Without a documented protocol, off-instrument reads risk drifting into pseudo-setups with phantom R:R numbers.
+
+**Decision:** add a fourth verdict state 🔵 КОНТЕКСТНОЕ ЧТЕНИЕ, scoped exclusively to non-ETH assets, which can't carry entry / SL / TP / size. Strategy verdicts (🟢🟡🔴) and context reads (🔵) never mix in one response. This isn't the previously-rejected "🟠 marginal" 4th state — that one would have hedged within ETH decisions, which we still refuse. 🔵 is a different axis (instrument scope), not a hedge.
+
+**Created:**
+- `wiki/asset-context-read.md` — full protocol page. Defines: (a) two-mode separation table — Strategy analysis (ETH only, 🟢🟡🔴) vs Context read (other assets, 🔵); (b) the 🔵 header template (Инструмент / Что вижу / Применимость к ETH); (c) body sections — TF structure, Bybit Data context, synthesis, applicability to ETH, mandatory non-action note; (d) what body MUST NOT contain — entry/SL/TP, R:R numbers, "looks like a setup" language, Tier sizing references; (e) special-case roles per asset (BTC privileged via prohibitive #6; alts as regime check; Bybit pre-IPO stocks with thin-market disclaimer); (f) trigger table for choosing mode; (g) anti-patterns.
+
+**Updated:**
+- `wiki/setup-verdict-format.md` — added the 🔵 fourth state section between the 🔴 template and Strict rules; updated Strict rules header bullet to mention all four states; updated "One verdict per response" rule to clarify ETH and off-instrument reads never mix.
+- `Claude.md` — Live market analysis bullet now references both 🟢🟡🔴 (ETH) and 🔵 (off-instrument) routing into [[asset-context-read]].
+- `wiki/index.md` — `asset-context-read` added to Concepts; setup-verdict-format line updated to mention 🔵.
+
+**Decided NOT to:**
+- Backtest v5 on LINK/BTC and produce per-instrument Tier sizes. That's a 1-month research project and wasn't what the trader asked for. The asked-for capability is **analytical reads**, not multi-asset trading. If the trader later wants to actually trade LINK/SOL with v5-style discipline, that's a v6 conversation requiring fresh backtests.
+- Allow 🔵 on ETH/USDT during a "neutral" period. ETH is the traded instrument; on ETH the strategy must commit to 🟢🟡🔴 every time. Punting ETH into 🔵 would re-introduce the "ambiguity in header" anti-pattern.
+- Add a separate context-read journal yet. Manual context reads aren't worth journaling individually; if patterns emerge later (e.g. BTC-context reads consistently flip the prohibitive #6 verdict on subsequent ETH trades), we can add a small `context-read-log.md` later.
+
+**Next:** apply the 🔵 protocol on the next non-ETH question. The LINKUSDT response sent in the same chat (just before this log entry) is the canonical first example — header, structural read, on-chain context, "Применимость к ETH" line, explicit non-action close.
+
+**2026-05-06 (refinement, same evening):** trader clarified that BTC charts specifically are **never** to be treated as a standalone analysis request — they're always input data for the in-progress ETH analysis. Updated `wiki/asset-context-read.md`: BTC special case now states the header should be the ETH verdict (🟢🟡🔴) with BTC findings folded into "Главная причина" or body sections (multi-TF alignment, prohibitive #6 check); 🔵 standalone is reserved for alts and stocks. Added an example response shape and a fallback question for the edge case where only a BTC chart arrives with no prior ETH context. Triggers table updated accordingly.

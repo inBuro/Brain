@@ -14,4 +14,4 @@ Append-only журнал операций над вики.
 
 - Создан скелет вики: `index.md` (этот TOC), `log.md` (этот файл), пустые папки `concepts/`, `entities/`, `sources/`.
 - Корневой хаб проекта — [[Bifi]] (на уровне проекта, не внутри `wiki/`).
-- Правила ведения — [[Claude]] (копия `Novation/Claude.md`).
+- Правила ведения — [[Claude]] (копия `fadercraft/Claude.md`).
