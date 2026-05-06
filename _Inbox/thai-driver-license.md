@@ -66,6 +66,47 @@ After 2 years: renew without exam → 5-year license.
 
 ---
 
+## Roadmap — pending tasks
+
+Ordered by what unblocks the next step.
+
+### 1. Decide license category — DECIDED 2026-05-06
+- [x] **Motorbike** — for KYC now; car postponed to a separate block (no driving experience → needs paid lessons first)
+
+### ⚠ Document expiry constraint
+- Residence Cert + Medical Cert obtained 2026-05-05 → **expire ~2026-06-04** (30-day validity)
+- Exam slot 2026-07-01 is **27 days after expiry** → either move exam ≤2026-06-04 OR re-do both certs in late June
+- Slot movement is no longer optimization, it's the cheaper path
+
+### 2. Try to move slot earlier than 2026-07-01 (parallel, ongoing)
+- [ ] Call/visit Pran Buri DLT branch → ask which weekday(s) they handle foreigners
+- [ ] Refresh DLT Smart Queue 2×/day (08-09 and 18-20 ICT) for cancellations
+- [ ] Check alternative offices in app: DLT Prachuap Khiri Khan, DLT Hua Hin
+- [ ] If found earlier slot → cancel 2026-07-01 in app to free it for someone else
+
+### 3. Pre-exam prep (start ~1 week before exam date)
+- [ ] Install **DLT QR LICENCE** app, run practice quizzes in English/Russian until ≥48/50 consistently
+- [ ] Watch the official safety video on YouTube once (search "DLT safety video English")
+- [ ] If car: rehearse parallel parking + hill-start at empty lot
+- [ ] If motorbike: rehearse slow-speed balance, tight U-turn, narrow plank ride
+
+### 4. Document refresh (≤30 days before exam)
+- [ ] Verify Residence Certificate is still valid on exam day (re-issue if expired)
+- [ ] Verify Medical Certificate is still valid on exam day (re-do if expired) — both must be ≤30 days old at the DLT counter
+- [ ] Take/print 2 photos 1×1 inch (or rely on on-site)
+- [ ] Make fresh copies of passport (visa page, entry stamp, all photo pages)
+
+### 5. Exam day
+- [ ] Arrive 15 min before slot time, bring: passport + copies, Residence Cert, Medical Cert, photos, cash 200-300 THB, own bike/car if practical needed
+- [ ] Document check → physicals → safety video → theory → practical → photo → license printed
+
+### 6. Post-license
+- [ ] Photograph the license front+back, store in 1Password
+- [ ] Submit to KYC (whichever exchange/service triggered this) → confirm verification passes
+- [ ] Calendar reminder for renewal at month 22 (5-year card after first renewal, no exam)
+
+---
+
 ## Sources / verification
 
 Process described from general knowledge of Thai DLT procedure as of ~2024-2025; confirm current details on `dlt.go.th` or by checking DLT Smart Queue app on visit. Fees and document validity may have changed.

@@ -2,16 +2,18 @@
 type: roadmap
 project: Novation
 created: 2026-05-05
-updated: 2026-05-05
+updated: 2026-05-06
 ---
 
 # Fadercraft Roadmap
 
 **Summary**: Живой checklist прогресса по запуску **Fadercraft XL Performance** (M4L-устройство для Novation Launch Control XL MK3). Основной хаб проекта — [[Novation XL]]. Спека и план — `docs/superpowers/specs/2026-05-01-fadercraft-launch-design.md` и `docs/superpowers/plans/2026-05-01-fadercraft-phase-0.md`.
 
+**Implementation workspace**: `~/Projects/Claude/Fadercraft/` (раньше `novation/`, переименовано 2026-05-06). Там живут: design system tokens, React-компоненты, Figma parity. Эта папка (Brain) — только планирование.
+
 **Sources**: spec + Phase 0 plan + chat-history с Claude.
 
-**Last updated**: 2026-05-05
+**Last updated**: 2026-05-06
 
 ---
 
@@ -102,43 +104,45 @@ updated: 2026-05-05
 
 ## 🆕 Тайские мото-права (backup-документ для KYC)
 
-Цель — иметь тайские DL как местный government-issued ID, чтобы пройти Stripe-зависимые KYC если Paddle с загранпаспортом откажет (или для будущих платформ).
+Цель — иметь тайские DL как местный government-issued ID, чтобы пройти Stripe-зависимые KYC если Paddle с загранпаспортом откажет (или для будущих платформ). Категория: **motorbike** (car отложен — нет опыта вождения, потребует отдельного блока с уроками).
 
-### Pre-flight (сделано 2026-05-04 вечером)
+Полный чеклист и тактика ускорения: [`_Inbox/thai-driver-license.md`](../../_Inbox/thai-driver-license.md).
 
-- [x] Связаться с landlord, подтвердить регистрацию TM.30
-- [x] Получить копию TM.30 receipt
-- [x] Получить копию паспорта/ID landlord'а
-- [x] Получить копию Tabien Baan от landlord'а
-- [x] Сделать 2 фото 4×6 см
-- [x] Подготовить 500 THB наличными
-- [x] Сложить документы в папку
+### Pre-flight ✅ (2026-05-04)
 
-### Day 1 (2026-05-05)
+- [x] Связаться с landlord, TM.30 receipt, копии Tabien Baan и ID, фото 4×6, 500 THB
 
-- [x] **08:30** — Bluport Immigration: подать на CR
-- [x] **~11:00** — забрать Certificate of Residence
-- [ ] **11:00-12:00** — медсправка «for driving license» в любой клинике
-- [ ] **13:00-15:00** — Hua Hin DLT:
-  - [ ] Подать пакет документов
-  - [ ] Сдать theory test (English version)
-  - [ ] Сдать physical test (зрение, цвета, реакции)
-  - [ ] Записаться на practical test (вторник/четверг)
+### Day 1 ✅ (2026-05-05)
 
-### Day 2 (через 1-3 дня после Day 1)
+- [x] Bluport Immigration → Certificate of Residence
+- [x] Медсправка «for driving license»
 
-- [ ] **08:30** — Hua Hin DLT: practical riding test
-  - [ ] Slalom между конусами
-  - [ ] Низкоскоростной баланс
-  - [ ] Фигура восемь
-  - [ ] Экстренное торможение
-- [ ] Получить пластиковую карту прав
+### Booking ✅ (2026-05-06)
+
+- [x] DLT Smart Queue: слот **2026-07-01** в **Prachuap Khiri Khan Provincial Land Transport Office, Pran Buri Branch**
+- [x] Категория решена: **motorbike**
+
+### До экзамена
+
+- [ ] Двигать слот раньше 1 июля (рефреш приложения, walk-in утром, альтернативные офисы Prachuap/Hua Hin)
+- [ ] Подготовка: DLT QR LICENCE app до стабильных ≥48/50, safety video, практика баланса/восьмёрки
+- [ ] Освежить Residence Cert + Medical Cert ≤30 дней до экзамена
+
+### Экзамен-день
+
+- [ ] Документы → physicals → safety video → theory (50 вопросов) → practical (slalom, баланс, восьмёрка, торможение) → пластик
 
 ### После получения прав
 
 - [ ] Загрузить тайские права в Sumsub (если Paddle ещё не одобрил по загранпаспорту)
 - [ ] Получить Paddle approval
 - [ ] (Опц.) Альтернативно — зарегистрироваться на FastSpring как backup-канал
+
+### Отдельный трек (позже): car license
+
+- [ ] Найти автошколу в Hua Hin (Honda/Toyota DLT-certified)
+- [ ] Пройти курс уроков вождения
+- [ ] Сдать на категорию car (теория уже зачтётся? — проверить)
 
 ---
 
