@@ -124,6 +124,7 @@ When the user asks you to lint or audit the wiki:
 
 When the user shares market screenshots/context for a trading setup analysis:
 
+- **Always open the response with the standard verdict header** — see [[setup-verdict-format]]. Four states: 🟢 СЕТАП ЕСТЬ / 🟡 СЕТАП ФОРМИРУЕТСЯ / 🔴 СЕТАПА НЕТ for ETH/USDT analysis; 🔵 КОНТЕКСТНОЕ ЧТЕНИЕ for any other asset (BTC, LINK, SOL, stocks). For off-instrument reads (🔵) follow the [[asset-context-read]] protocol — analytical only, never with entry/SL/TP/size. The verdict goes at the very top, before any chart reading or indicator discussion. Body goes after `---`.
 - If a valid setup exists → walk through entry rules, suggest size/SL/TP per the strategy.
 - **If no valid setup exists** → don't just say "no entry right now". Always propose a concrete time window for the next market check, e.g. "Сейчас setup'а нет. Возвращайся примерно через ~6 часов с новыми скриншотами 4h/1h."
 

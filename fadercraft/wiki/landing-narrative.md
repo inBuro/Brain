@@ -3,68 +3,142 @@ type: narrative
 project: Fadercraft
 created: 2026-05-06
 updated: 2026-05-06
+version: 2
 ---
 
 # Landing Narrative — Fadercraft XL Performance
 
-**Summary**: The 10-beat psychological arc that drives the `fadercraft.com` landing page. Each beat maps to a section, each section maps to one or more components. Living document — re-open any beat as the launch evolves.
+**Summary**: The 8-beat psychological arc for the `fadercraft.com` landing page. Each beat = one section, one component instance, one source of truth. Living document — re-open any beat as the launch evolves.
 
-**Sources**: derived from `docs/superpowers/specs/2026-05-01-fadercraft-launch-design.md` (sections 5–6) plus 2026-05-06 narrative review.
+**Sources**: `docs/superpowers/specs/2026-05-01-fadercraft-launch-design.md` (sections 5–6) + 2026-05-06 narrative review v1 + 2026-05-06 v2 consolidation (merged "Lost Modes" + "All 16" + "How it works" → single beat, dropped before/after framing).
+
+**Figma prototype**: page **Prototype** in file [`OdPRdjodGO3WiR6tgSP7AA`](https://www.figma.com/design/OdPRdjodGO3WiR6tgSP7AA/Novation-XL?node-id=373-3).
 
 **Last updated**: 2026-05-06
 
 ---
 
-## The 10-beat arc
+## The 8-beat arc (v2)
 
-Each beat is the exact thought we want in the reader's head at that moment.
+Each beat = one thought we want in the reader's head at that moment.
 
 | # | Beat | Goal | Reader's reaction |
 |---|---|---|---|
-| 1 | **Hook** — "Your LCXL has 16 modes" | Establish relevance | "Yes, I have one" |
-| 2 | **Pain** — "Most people use 3" | Recognition | "Damn, me too" |
-| 3 | **Stakes** — "You bought a pro instrument, you're using a basic mixer" | Emotional lever | "I want more" |
-| 4 | **Promise** — "Fadercraft gives you all 16. Out of the box. In 5 minutes" | Solution | "Show me how" |
-| 5 | **Mechanism** — Layered architecture + CC47 transit + Solo Follower | Trust the solution | "OK, this actually works" |
-| 6 | **Proof** — 5-min demo video in a real Live session | Counter "you're probably oversimplifying" | "It really works" |
-| 7 | **Fit** — 3 ICPs (newbie / studio / live) | Self-identification | "This is for me" |
-| 8 | **Value stack** — what's in the bundle ($39 of material value) | Justify the price | "$39 isn't much for all this" |
-| 9 | **Trust** — tech requirements + FAQ + refund | Final objections | "Safe to buy" |
-| 10 | **Action** — Buy + newsletter | Convert | Click |
+| 1 | **Hook + Pain** — "Your LCXL has 16 modes. Most use 3." | Establish relevance + recognition in one screen | "Yes I have one — and yes I use 3" |
+| 2 | **How it works** — Two layers, one button between them, Solo Follower | Show the device transformed; explain the mechanism via the visual | "OK now I see what it actually does" |
+| 3 | **Proof** — full demo video in a real Live session | Counter "you're probably oversimplifying" | "It really works" |
+| 4 | **Fit** — 3 ICPs (just unboxed / studio producer / live performer) | Self-identification | "This is for me" |
+| 5 | **Value stack** — what's in the bundle ($39 of material value) | Justify the price *after* fit lands | "$39 isn't much for all this" |
+| 6 | **Tech requirements** | Disqualify incompatible buyers cleanly | "Yes my setup matches" |
+| 7 | **FAQ** — 6 questions covering MK1/MK2 compat, Suite, updates, customisation, refund, Live versions | Last objections | "Safe to buy" |
+| 8 | **Action** — Buy + newsletter | Convert | Click |
 
-## Beat → section mapping
+## Beat → section mapping (v2)
 
-| Beat | Section | Existing in Figma? | Notes |
-|---|---|---|---|
-| 1 + 2 | **Hero** (Hook + Pain in one screen) | 🟢 `HeroProduct` SET | Pain is one line under headline. Use `ModeGrid` `lost` variant on the visual side instead of product image. |
-| 3 + 4 (in two screens) | **The 13 Lost Modes** + **All 16, in your hand** | 🔴 New | Two consecutive sections built around `ModeGrid` (`lost` then `full`). Two-punch effect to drive the same theme home. |
-| 5 | **How it works** | 🔴 **New section** (not in original spec) | Mechanism explainer — diagram of layered architecture, CC47 cross-mode transit, Solo Follower. V1: static. V2: animation post-launch. |
-| 6 | **Watch it work** | 🟢 `VideoCard` SET | YouTube embed. |
-| 7 | **For you, specifically** | 🟡 `WhyChooseNovation` → 3 columns | Adapt: 3 ICP columns instead of 4. |
-| 8 | **What's in the kit** | 🟢 `CatalogSection` + `ProductCard` | 4–5 cards: M4L device, Custom Modes, Live Set, docs, video. **Moved from spec position #4 to #8** (after fit, before trust). |
-| 9 | **Tech + FAQ** | 🔴 Both new | `RequirementsList` + `FAQAccordion`. Can be merged into one collapsible-style section or split. |
-| 10 | **Final CTA** | 🟢 `NewsletterSection` | Add Buy button before the newsletter form. |
+| Beat | Section component | Notes |
+|---|---|---|
+| 1 | `HeroProduct` (Layout=horizontal) | Eyebrow + 16-modes headline + pain line + CTA + video loop |
+| 2 | `All16Section` (renamed: "How your LCXL works") | ModeGrid (rectangular pads, all 16 lit) — visual carries the mechanism story; copy explains layers + CC47 + Solo Follower |
+| 3 | `VideoCard` (Layout=1440 desktop) | YouTube embed; **must be 16:9 aspect, capped at content max-width (1200px)** |
+| 4 | `ICPColumns` | 3 columns; adapted from WhyChooseNovation 4-col |
+| 5 | `CatalogSection` (rewrite needed) | 5 cards: M4L device, Custom Modes, Live Set, Quickstart, Demo video |
+| 6 | `RequirementsSection` | RequirementsList composed of SpecRow atoms |
+| 7 | `FAQSection` | FAQAccordion with 6 default items |
+| 8 | `NewsletterSection` (rewrite needed) | Add Buy CTA above email form; headline "Ready to play all 16?" |
 
-## Changes from the original spec
+## Changes from v1 (2026-05-06)
 
-**Added beat 5 — "How it works"**: not in the original 9-section spec (the 3 mechanism bullets were tucked inside "All 16"). Treating as **critical**: readers skip videos, but a text + visual mechanism walkthrough removes the "what aren't they telling me" anxiety before the demo.
+**Dropped beats 2 + 3 + 5 (Lost Modes / All 16 split / Mechanism)** — collapsed into a single beat 2 ("How it works") that uses a single ModeGrid (all 16 lit, rectangular pads matching LCXL MK3 bottom-row proportions) AS the mechanism explainer. Reasoning: showing "before / after" with two ModeGrid variants wasted screen real estate; the same visual + richer copy carries both the "promise" and the "how" simultaneously.
 
-**Reordered "What's in the kit"**: from spec position #4 (right after promise) to position #8 (after fit, before trust). Reasoning: bundle cards justify price, which lands hardest **after** the reader has already decided "this is for me." Shipping bundle visuals before fit is premature.
+**Stakes beat dropped**: the original v1 had a separate "stakes" beat ("you bought a pro instrument…"). It overlapped with pain. Pain line in Hero is enough.
 
-**Pain placement**: pain stays both in the Hero (one short line under the headline) and as its own section ("13 Lost Modes"). Two-punch — quick recognition, then visual confirmation.
+**Net beat count: 10 → 8**.
 
-**Mechanism medium**: V1 = static diagram + text. V2 (post-launch) = animation showing layer transit and Solo Follower in motion. Cheap iteration from V1.
+## Design decisions (v2)
 
-## Components needed (priority order)
+- **ModeButton shape**: 120×72 rectangles (~1.67:1), matching LCXL MK3 bottom-row track-select button proportions. Was 80×80 squares.
+- **Single ModeGrid variant in use**: only `Layout=full` (all 16 lit). The `Layout=lost` variant exists in the SET but is unused on the landing.
+- **Video aspect ratio**: 16:9, never breaks out of `max-width: 1200px` content wrapper.
+- **Section structure**: every section is an organism component (5 masters, instances per breakpoint). No inline section duplicates. See feedback memory `feedback_repeated_layouts_components.md`.
+- **Width constraints**: outer section padding 24px (mobile breathing room only); inner content wrapper `maxWidth: 1200px`, centered. See feedback memory `feedback_max_width_not_padding.md`.
 
-1. ✅ **`ModeGrid`** — built. Used in Hero + Sections 2 + 3.
-2. 🔴 **`MechanismDiagram`** — new organism. Visual of layered architecture (Mixer Layer 11–14, Instruments Layer 1–10), CC47 transit arrow, Solo Follower indicator.
-3. 🔴 **`FAQAccordion`** — new atom (`AccordionItem`) + organism wrapper.
-4. 🔴 **`RequirementsList`** — likely just composition of existing atoms (Text + horizontal rule), no new component required.
-5. 🟡 **`ICPColumns`** — adapt `WhyChooseNovation` from 4 columns to 3 ICP columns.
+## Copy by beat (current Figma state)
+
+### Beat 1 — Hero (Hook + Pain)
+- Eyebrow: `FADERCRAFT · XL PERFORMANCE`
+- Headline: `Your LCXL has 16 modes.`
+- Body: `Most people figure out 3. Fadercraft XL Performance is the kit that lets you play all 16 — out of the box, in 5 minutes.`
+- Primary CTA: `Buy on Gumroad — $39`
+- Secondary CTA: `Watch the demo`
+
+### Beat 2 — How it works
+- Eyebrow: `HOW YOUR LCXL WORKS`
+- Headline: `Two layers. One button between them.`
+- Body: `Modes 1–10 hold your instruments. Modes 11–14 hold your mixer. CC47 jumps between them with state memory. Solo Follower keeps your fader row in sync with whatever track you solo.`
+- Visual: ModeGrid full (4×4 rectangular pads, all lit, lavender LED text)
+
+### Beat 3 — Proof (Watch it work)
+- Eyebrow: `IN ACTION`
+- Headline: `See it in your workflow`
+- Visual: VideoCard (YouTube embed, 16:9, ≤1200px wide)
+- *(label below video to be rewritten from "Launch Control XL MK3 — Deep Dive" → "Fadercraft XL Performance — full demo")*
+
+### Beat 4 — Fit (For you)
+- Eyebrow: `FOR YOU, SPECIFICALLY`
+- Headline: `Three players. One kit.`
+- Column 1 — Just unboxed: `Brand new to LCXL? You'll have all 16 modes mapped and ready before your first track is laid down.`
+- Column 2 — Studio producer: `Stop tap-tap-tapping back to your mixer. One button gets you there with state memory of where you were.`
+- Column 3 — Live performer: `Mixer ↔ Instruments transit in one stroke. Solo Follower keeps your faders synced to whichever track you solo.`
+
+### Beat 5 — Value stack (What's in the kit) — REWRITE PENDING
+- Eyebrow: `WHAT'S IN THE KIT`
+- Headline: `Everything you need. Nothing else to buy.`
+- Cards (5):
+  1. `XL_Performance.amxd` — The Max for Live device that does the heavy lifting. Drop into a track, done.
+  2. `Custom Modes (×16)` — Pre-mapped configurations for Components — you import once.
+  3. `XL_Performance_starter.als` — Live Set with all routings, racks, and Solo Follower wired up.
+  4. `Quickstart guide` — One-page install + first-track walkthrough.
+  5. `Demo video` — The same one you just watched, included offline.
+
+### Beat 6 — Tech requirements
+- Eyebrow: `TECH REQUIREMENTS`
+- Headline: `Will it run for you?`
+- Specs:
+  - Ableton Live: Suite 11.3.20+ / 12.x
+  - Max for Live: Version 11+
+  - Operating system: macOS 12+ / Windows 10+
+  - Hardware: Novation Launch Control XL MK3
+  - RAM: 8 GB minimum
+  - Disk space: ~50 MB
+
+### Beat 7 — FAQ
+- Eyebrow: `FAQ`
+- Headline: `Last questions before you buy.`
+- 6 items: MK1/MK2 compat, Live Suite requirement, free updates, customisation, refund (14-day), Live versions tested.
+
+### Beat 8 — Action — REWRITE PENDING
+- Headline: `Ready to play all 16?`
+- Sub: `Start in the next 5 minutes. Or join the list and we'll ping you when v1.1 lands.`
+- Primary CTA: `Buy on Gumroad — $39` (above newsletter form)
+- Secondary: email field + `Subscribe`
+
+## Sections to remove from existing 1920 ProductPage (legacy Novation content)
+
+The 1920 / 1440 / 960 / 640 / 360 ProductPage breakpoints inherited 11 sections from the original Novation product page. After narrative consolidation, these need pruning:
+
+- **DROP**: `FeatureSlider` (Explore the hardware), `FeatureSplit` (Built for flow), `WorkflowSection` (See it in your workflow), `Frame` (unnamed slider), `PullQuoteSection` (no real testimonials yet) — all duplicate or redundant
+- **KEEP & REWRITE**: `CatalogSection` (becomes "What's in the kit"), `NewsletterSection` (becomes "Final CTA"), Header/Footer (already rebranded)
+
+## Open questions (still to resolve)
+
+1. **Hook headline alternatives**: "Your LCXL has 16 modes." vs "16 modes. You're using 3." vs "What if your LCXL had 16 working modes?"
+2. **"5 minutes" honesty**: is this measurable? Lock in a real install time or soften ("under 10 minutes")?
+3. **Value stack price tags**: should each kit card show "$15 value" to total $75 → reframe $39 as a steal? Or this reads as bazaar?
+4. **FAQ additions**: "Why $39?" — explain pricing? Risk: opens a can of worms.
+5. **CC47 disclosure level**: keep "CC47" in beat 2 body (signal of seriousness) or hide as "one button" only?
 
 ## Related pages
 
-- [[XL_Performance — как это работает]] — source of mechanism details for beat 5
-- [[Mixer Layer]] / [[Instruments Layer]] / [[CC47 Cross-Mode Transit]] / [[Solo Follower]] — entity pages, source for the diagram
-- [[roadmap]] — broader project progress
+- [[XL_Performance — как это работает]] — source of mechanism details for beat 2
+- [[Mixer Layer]] / [[Instruments Layer]] / [[CC47 Cross-Mode Transit]] / [[Solo Follower]] — entity pages
+- [[roadmap]] — broader Phase 0 progress
