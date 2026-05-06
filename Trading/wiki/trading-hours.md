@@ -1,16 +1,16 @@
 # Trading Hours
 
-**Summary**: New entries are only allowed during **09:00-17:00 ICT** (8-hour window, every day including weekends). Outside this window, no new positions are opened — but existing positions continue to run via their pre-set SL/TPs. Replaces the older "after 22:00 local — no new entries" rule with an explicit window. Added 2026-05-01 as a v5 supplement.
-**Sources**: [[strategy-v5]] + chat 2026-05-01
-**Last updated**: 2026-05-01 (created)
+**Summary**: New entries are only allowed during **09:00-22:00 ICT** (13-hour window, every day including weekends). Outside this window, no new positions are opened — but existing positions continue to run via their pre-set SL/TPs. Replaces the older "after 22:00 local — no new entries" rule with an explicit start time. Added 2026-05-01 as a v5 supplement; window widened from 09-17 to 09-22 on 2026-05-06.
+**Sources**: [[strategy-v5]] + chat 2026-05-01 + chat 2026-05-06 (widening)
+**Last updated**: 2026-05-06 (widened window 09-17 → 09-22 to capture London/NY overlap; trader checks terminal throughout the day anyway, so a single wide window beats two narrow ones)
 
 ---
 
 ## The window
 
-**09:00 ICT → 17:00 ICT, daily (Mon-Sun).**
+**09:00 ICT → 22:00 ICT, daily (Mon-Sun).**
 
-This covers Asia morning + Europe morning, which together provide the best liquidity and the cleanest setup formation for ETH/USDT. Outside the window, the trader is off-shift.
+This covers Asia morning, Europe session, and the start of the US session — the highest-volume slice of the crypto day for ETH/USDT. Outside the window, the trader is off-shift (sleep / next-day buffer).
 
 ## What's allowed inside the window
 
@@ -32,10 +32,10 @@ This covers Asia morning + Europe morning, which together provide the best liqui
 
 ## Why this window
 
-- **Asia morning (09:00-12:00 ICT)** is high-liquidity for ETH (Asian retail + early European algos). Many setup formations happen here.
-- **Europe morning (12:00-17:00 ICT)** adds European institutional flow. Clean trends often develop in this overlap.
-- **17:00-22:00 ICT (US morning)** is high-vol but high-risk: news pumps, US-driven volatility, fakeouts before/after market open. Skipping this is conservative but acceptable — better to miss a setup than chase a US-driven fakeout.
-- **22:00-09:00 ICT** is dead/thin liquidity (US close → Asian morning). High whipsaw risk, low reward density.
+- **Asia morning (09:00-15:00 ICT)** is moderate liquidity for ETH (Asian retail + early European desks). Setups often form but are sometimes thin and prone to retests.
+- **London open + Europe session (15:00-20:00 ICT = 08:00-13:00 UTC)** brings the first major institutional flow of the day. This is when many of yesterday's overnight fakeouts get cleanly resolved.
+- **NY pre-open / US morning (20:00-22:00 ICT = 13:00-15:00 UTC)** is the **peak volume window** for crypto — London afternoon overlapping with US morning. Cleanest setup quality, but also highest news/macro risk. Capturing this slice is the main reason the window was widened from 09-17 to 09-22 on 2026-05-06.
+- **22:00-09:00 ICT** is the trader's off-shift block (sleep + buffer). The US main session technically continues until ~05:00 ICT but the trader can't watch it without wrecking sleep, so the rule is hard 22:00 cutoff.
 
 ## Weekend nuances
 
@@ -44,13 +44,13 @@ This covers Asia morning + Europe morning, which together provide the best liqui
 - **Less institutional flow** (ETF closed, OTC quieter)
 - **Whale-specific transfers can move price more** — wallet-specific news has higher Breadth Multiplier impact effectively
 
-Weekends are still tradeable in the 09-17 window, but if a setup forms with marginal conditions (only 3 base conditions hit, not 4-5), prefer to skip — weekend setups should be cleaner than weekday setups to compensate for thinner books.
+Weekends are still tradeable in the 09-22 window, but if a setup forms with marginal conditions (only 3 base conditions hit, not 4-5), prefer to skip — weekend setups should be cleaner than weekday setups to compensate for thinner books. Note that on weekends the London/NY volume boost is muted (institutional desks closed), so the second half of the window (15:00-22:00 ICT) loses its main edge — weekend trading effectively reverts to the old 09-17 character.
 
 ## Interaction with other rules
 
-- **Pending orders time validity**: cap at "Cancel by 17:00 ICT today" if the suggestion is made between 09:00 and 17:00. Don't suggest pending orders that would fill overnight (per [[pending-orders]]).
-- **Late-day setups (16:00-17:00 ICT)**: still allowed but with reduced size (−25%) — less time to react if structure breaks before TP1.
-- **Macro events in next 1-2h**: window is irrelevant — macro blocker is independent. If FOMC at 16:30 ICT and we're at 15:30, no entry regardless of window.
+- **Pending orders time validity**: cap at "Cancel by 22:00 ICT today" if the suggestion is made inside the window. Don't suggest pending orders that would fill overnight (per [[pending-orders]]).
+- **Late-day setups (21:00-22:00 ICT)**: still allowed but with reduced size (−25%) — less time to react if structure breaks before TP1, and trader is winding down for sleep.
+- **Macro events in next 1-2h**: window is irrelevant — macro blocker is independent. If FOMC at 21:30 ICT and we're at 20:30, no entry regardless of window. (FOMC announcements at 01:00 ICT, when the trader is asleep, are a routine block on next-morning entries until structure resolves.)
 
 ## How the routine handles this
 
@@ -58,14 +58,13 @@ The `eth-paper-journal` routine (cron 0 3,8,16 * * * UTC = 10/15/23 ICT) still r
 
 The 10:00 and 15:00 ICT slots are inside the window — emails fire normally on detected setups or pending eligibility.
 
-## Migration from older "after 22:00" rule
+## Migration history
 
-Previously v5 said "Late evening (after 22:00 local) — no new entries". This was a one-sided cutoff with no explicit start. The new 09-17 window:
-- Tightens evening cutoff from 22:00 → 17:00 (5h earlier)
-- Adds explicit morning start at 09:00 (was implicit in the daily routine)
-- Is symmetric and easier to evaluate at any given time
+**v5 source rule (pre-2026-05-01):** "Late evening (after 22:00 local) — no new entries". One-sided cutoff with no explicit start.
 
-The 22:00 rule remains in legacy psychology-rules text as a fallback, but the 09-17 window takes precedence.
+**2026-05-01 → 09-17 window:** Added explicit morning start at 09:00 and tightened evening cutoff to 17:00 — chosen to keep the trader strictly in Asia/early-Europe sessions. Symmetric and clean, but in practice missed the highest-volume part of the crypto day.
+
+**2026-05-06 → 09-22 window (current):** Widened back to 22:00 evening cutoff so the trader can act on London/NY-overlap setups (20:00-22:00 ICT). The decision rationale: the trader is already glancing at Bybit throughout the day to send scan requests anyway, so a single wide window beats two narrow ones. Aligns the upper bound back with the original v5 22:00 rule.
 
 ## Related pages
 
