@@ -48,7 +48,7 @@ T12 Bundle upload         ─→ T13 Final verification
 
 ## 2. File structure (what gets created where)
 
-**Web (Cloudflare Pages repo, recommend new sibling repo `~/Brain/Novation/web/`):**
+**Web (Cloudflare Pages repo, recommend new sibling repo `~/Brain/fadercraft/web/`):**
 - `web/index.html` — landing page, single long-scroll
 - `web/style.css` — styles (vanilla, no framework)
 - `web/main.js` — light interactivity (smooth scroll, video autoplay control)
@@ -63,13 +63,13 @@ T12 Bundle upload         ─→ T13 Final verification
 - `update_check.js` — new
 - `solo_follower.js` — no changes
 
-**Brand assets (`~/Brain/Novation/brand/`):**
+**Brand assets (`~/Brain/fadercraft/brand/`):**
 - `brand/logo.svg`
 - `brand/wordmark.svg`
 - `brand/colors.md`
 - `brand/social-tiles/`
 
-**Bundle build (`~/Brain/Novation/dist/`):**
+**Bundle build (`~/Brain/fadercraft/dist/`):**
 - `dist/Quickstart.md`, `dist/Quickstart.pdf`
 - `dist/README.md` (extended ref)
 - `dist/XL_Performance_starter.als`
@@ -377,7 +377,7 @@ This task is design work — exact steps depend on tooling (Figma, Illustrator, 
 - [ ] **T6.1: Bootstrap web/ as a git-tracked directory**
 
   ```bash
-  cd ~/Brain/Novation
+  cd ~/Brain/fadercraft
   mkdir -p web/api web/functions/api web/assets
   ```
 
@@ -505,7 +505,7 @@ This task is design work — exact steps depend on tooling (Figma, Illustrator, 
 - [ ] **T6.5: Initial commit of web/**
 
   ```bash
-  cd ~/Brain/Novation
+  cd ~/Brain/fadercraft
   git add web/api/version.json web/update.html web/functions/api/verify-license.js
   git commit -m "feat(web): initial Fadercraft web shell with version endpoint and license verification"
   ```
@@ -513,7 +513,7 @@ This task is design work — exact steps depend on tooling (Figma, Illustrator, 
 - [ ] **T6.6: Connect `web/` to Cloudflare Pages**
 
   Cloudflare → **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
-  - Connect the `Brain/Novation` repo (assuming it's pushed to GitHub; if not — push first or use direct upload via Wrangler).
+  - Connect the `Brain/fadercraft` repo (assuming it's pushed to GitHub; if not — push first or use direct upload via Wrangler).
   - Project name: `fadercraft`
   - Production branch: `main`
   - Root directory: `web`

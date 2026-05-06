@@ -37,6 +37,6 @@ Wiki проекта **Max for Live MIDI-устройства `XL_Performance.amx
 
 ## Meta
 
-- [[Novation/log|Project log]] — хронология ingests на уровне проекта.
+- [[fadercraft/log|Project log]] — хронология ingests на уровне проекта.
 - [[wiki/log|Wiki log]] — журнал операций над wiki.
 - [[wiki/index|Wiki TOC]] — альтернативный плоский список всех страниц.

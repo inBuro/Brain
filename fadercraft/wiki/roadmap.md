@@ -50,7 +50,7 @@ updated: 2026-05-05
 - [x] Домен `fadercraft.com` куплен на Cloudflare Registrar
 - [x] DNS namervers активны (anita / rohin)
 - [x] CNAME `www`
-- [x] CF Pages подключён к GitHub `inBuro/Brain`, root `Novation/web`
+- [x] CF Pages подключён к GitHub `inBuro/Brain`, root `fadercraft/web`
 - [x] Custom domain `fadercraft.com` замаплен на CF Pages, SSL активен
 
 ## ✅ T2 Email infrastructure
