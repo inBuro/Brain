@@ -39,16 +39,25 @@ Risk in dollars comes from the graduated schedule below. SL distance comes from 
 
 The 1.4% / 1.8% / 0.93% percentages and the tier triggers are inherited from [[strategy-v5]]. Only the dollar values were rescaled when the deposit moved from $2,200 to $3,000.
 
-## Examples (Tier 1, $42 risk)
+## Examples (Tier 1, $42 risk, capital = $3,000, ETH ≈ $2,300)
 
-| SL points | ETH size | Margin at 5x | Notional |
-|-----------|----------|--------------|----------|
-| 25 | 1.68 | $773 | $3,864 |
-| 30 | 1.40 | $644 | $3,220 |
-| 50 | 0.84 | $387 | $1,932 |
-| 100 | 0.42 | $193 | $966 |
+| SL points | ETH size | Margin at 5x | % of deposit | Notional | Notional / deposit |
+|-----------|----------|--------------|--------------|----------|--------------------|
+| 25 | 1.68 | $773 | **26%** | $3,864 | 1.29× |
+| 30 | 1.40 | $644 | **21%** | $3,220 | 1.07× |
+| 50 | 0.84 | $387 | **13%** | $1,932 | 0.64× |
+| 100 | 0.42 | $193 | **6%** | $966 | 0.32× |
 
-ETH size is rounded to two decimals; margin uses ETH price ≈ $2,300 as a reference (recompute against live price at entry).
+ETH size rounded to two decimals; margin uses ETH ≈ $2,300 (recompute against live price at entry). The **% of deposit** column shows how much of the $3,000 deposit is locked as margin for that trade — the everyday-language number for "сколько от депозита заходит в сделку". Cap is 50% of deposit per [[strategy-v5]] → tight SL <15 pt would breach this and gets clipped.
+
+**Equivalent table at Tier 2 ($54 risk):**
+
+| SL points | ETH size | Margin at 5x | % of deposit |
+|-----------|----------|--------------|--------------|
+| 25 | 2.16 | $994 | **33%** |
+| 30 | 1.80 | $828 | **28%** |
+| 50 | 1.08 | $497 | **17%** |
+| 100 | 0.54 | $248 | **8%** |
 
 ## Margin and after-loss rules
 

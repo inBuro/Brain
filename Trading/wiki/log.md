@@ -360,3 +360,24 @@ In the graph, `raw/strategy-v3` becomes a source node with edges to `trading-str
 **Not changed**: strategy-v5 raw source (immutable), entry/exit rule pages, trading-hours, pending-orders, range-trade-rules — all rule logic stays the same, only dollar denominations move.
 
 **Next**: next setup taken should use Tier 1 = $42 risk; first time the new size flows through the strategy will show in the journal entry.
+
+---
+
+## 2026-05-06 (afternoon) — Window widened 09-22 ICT + dollars cleared from strategy page
+
+**Trigger**: Two design questions raised after the morning capital rescale.
+
+**Decision A — trading hours**: Widen `trading-hours.md` window from 09:00-17:00 ICT to **09:00-22:00 ICT** (single 13-hour window). Rationale: trader checks the terminal throughout the day anyway to send scan requests, so a single wide window beats two narrow ones; widening to 22:00 captures the London/NY overlap (20:00-22:00 ICT = 13:00-15:00 UTC), which is the highest-volume slice of the crypto day for ETH. Upper bound now matches the original v5 source rule ("no entries after 22:00 local").
+
+**Decision B — dollars vs percentages**: Make `position-sizing.md` the **single source of truth for current dollar values**. Strip explicit dollar amounts from `trading-strategy.md` Target-parameters table and Target-metrics paragraph; restate everything in % of capital and R-multiples. Capital line in Context section now points to position-sizing instead of stating a number. Rationale: dollar values rot when capital changes (deposit, withdrawal, drift); percentages are invariant under capital changes; one place to edit on rescale.
+
+**Changes**:
+- `wiki/trading-hours.md`: Summary, "The window", "Why this window", weekend nuance, pending-orders cap, late-day setup window, macro example, Migration history — all rewritten for 09-22.
+- `wiki/trading-strategy.md`: Summary (graduated sizing now stated as 1.4% → 1.8%), Context paragraph (capital fact moved to position-sizing), Target parameters table (rows now in % / R), Target metrics paragraph (monthly targets in % of capital), Tier promotion/demotion paragraph (in %), v5 changelog (no dollars).
+- `wiki/index.md`: trading-hours line updated to mention 09-22 widening; position-sizing line clarifies role as single source of truth for dollars.
+
+**Math sanity check on Tier promotion percentages**: 1.4% / 1.8% / 0.93% match the absolute dollars on position-sizing.md ($42 / $54 / $28 at $3,000 capital). Demotion threshold $400 = 13.3% of $3,000 ≈ 13% as stated.
+
+**Not changed**: `position-sizing.md` (still has the dollar table — it's where dollars now live), entry/range/pending-orders rule pages, raw sources.
+
+**Open question for next session**: should `trader-profile` finally be created? Capital fact currently lives in position-sizing because there's no profile page; profile would be a more natural home, with position-sizing referencing it for the capital input.
