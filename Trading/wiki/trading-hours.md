@@ -70,6 +70,6 @@ The 10:00 and 15:00 ICT slots are inside the window — emails fire normally on 
 
 - [[trading-strategy]] — main strategy page
 - [[entry-rules-long]] / [[entry-rules-short]] / [[range-trade-rules]] — entry rules respect this window
-- [[pending-orders]] — pending suggestions cap at 17:00 ICT validity
+- [[pending-orders]] — pending suggestions cap at 22:00 ICT validity
 - [[psychology-rules]] (planned) — broader psychological constraints
 - [[trading-journal-v5]] — entries tagged with within/outside window flag
