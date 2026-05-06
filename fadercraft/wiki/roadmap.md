@@ -15,6 +15,8 @@ updated: 2026-05-06
 
 **Last updated**: 2026-05-06
 
+**Payment rails matrix**: [[payment-rails]] — вердикты по всем рассмотренным платформам (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) под профиль русский паспорт + Таиланд + Bangkok Bank, без тайского national ID.
+
 ---
 
 ## Сводка прогресса
@@ -27,6 +29,7 @@ updated: 2026-05-06
 | T6 Server endpoints | 6 | 6 | 100% |
 | T7 Placeholder pages | 6 | 6 | 100% |
 | Paddle onboarding | 5 | 6 | 83% |
+| Payment rails (Payoneer/Isotonik/crypto/GE) | 0 | 14 | 0% |
 | Тайские мото-права | 9 | 22 | 41% |
 | T3 Brand identity | 0 | 6 | 0% |
 | T5 Instagram | 0 | 3 | 0% |
@@ -88,6 +91,41 @@ updated: 2026-05-06
 - [x] `web/privacy.html` (~620 слов)
 - [x] `web/refund.html` (~310 слов)
 - [x] Footer-навигация на всех страницах
+
+## 🆕 Payment rails (parallel to Paddle)
+
+После ресёрча 2026-05-06 (см. [[payment-rails]]) зафиксированы рабочие рельсы для профиля «русский паспорт + Таиланд + Bangkok Bank, без тайского ID». Идут параллельно Paddle, не блокируют его.
+
+### Payoneer (USD-приёмник)
+
+- [ ] Регистрация на Payoneer: passport + Thai address proof (Bangkok Bank statement / lease / TM.30 / motorbike DL после получения)
+- [ ] Verify identity (1–3 рабочих дня)
+- [ ] Linked Bangkok Bank THB receiving — настроить
+- [ ] Тестовый incoming USD transfer
+
+### Isotonik Studios (B2B reseller)
+
+- [ ] Дождаться готового XL_Performance + демо-видео
+- [ ] Email на sales@ isotonikstudios.com с pitch + демо
+- [ ] Согласовать revenue share, подписать developer agreement
+- [ ] Указать payout (Payoneer USD или Wise / Bangkok Bank SWIFT)
+
+### Crypto checkout (direct sales)
+
+- [ ] Сравнить **Cryptomus** vs **NOWPayments** vs **Coinbase Commerce** — комиссии, поддерживаемые сети, UX чекаута, anti-fraud
+- [ ] Выбрать провайдера, интегрировать на лендинг (Cloudflare Pages Function для verify-payment + license-issue)
+- [ ] Тестовая покупка end-to-end
+- [ ] Off-ramp: USDT → Bybit P2P → Bangkok Bank THB, проверить лимиты и спред
+
+### Georgian Individual Entrepreneur (deferred)
+
+- [ ] Триггер: выручка ≥ $500–1000/мес стабильно
+- [ ] Найти регистратора в Тбилиси с remote-PoA-сервисом (~$1–1.5k setup)
+- [ ] Регистрация ИП с режимом 1% (до 500k GEL/год)
+- [ ] Открыть Wise Business на грузинскую сущность
+- [ ] (опц.) Stripe Georgia → unlocks Lemon Squeezy / Polar / Paddle через грузинский entity
+
+---
 
 ## ⏳ Paddle onboarding
 
