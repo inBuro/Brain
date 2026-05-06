@@ -1,14 +1,13 @@
 ---
 type: hub
 project: Instrument Follower
-parent: Fader Craft
 created: 2026-05-06
 updated: 2026-05-06
 ---
 
 # Instrument Follower
 
-Wiki проекта **Instrument Follower** (под брендом [[Fader Craft]]). Корневой хаб: TOC по источникам, сущностям и концептам. Структура и правила ведения — см. [[Claude]].
+Wiki проекта **Instrument Follower**. Корневой хаб: TOC по источникам, сущностям и концептам. Структура и правила ведения — см. [[Claude]].
 
 См. главную сборку: _(synthesis-страница появится после первого ingest)_.
 
