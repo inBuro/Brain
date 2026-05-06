@@ -2,7 +2,7 @@
 
 **Summary**: Entry point for the entire Trading knowledge base. Each page gets one descriptive line.
 **Sources**: operational page (no upstream source)
-**Last updated**: 2026-05-06 (capital scaled to $3,000; position-sizing.md promoted from planned to active; trading window widened 09-17 → 09-22 ICT; trading-strategy.md cleared of dollar amounts in favor of percentages)
+**Last updated**: 2026-05-06 (capital scaled to $3,000; position-sizing.md promoted from planned to active; trading window widened 09-17 → 09-22 ICT; trading-strategy.md cleared of dollar amounts in favor of percentages; setup-verdict-format.md added; asset-context-read.md added — 🔵 fourth verdict state for off-instrument analysis)
 
 ---
 
@@ -25,6 +25,8 @@
 - [[pending-orders]] — added 2026-05-01 as v5 supplement: rules for suggesting concrete pending limit orders when a setup is probable but not yet triggered
 - [[trading-hours]] — explicit 09:00-22:00 ICT trading window for new entries, every day (added 2026-05-01 as 09-17 v5 supplement; widened to 09-22 on 2026-05-06 to capture London/NY-overlap volume)
 - [[position-sizing]] — added 2026-05-06: live capital + risk schedule (single source of truth for dollars; trading-strategy.md stays in percentages)
+- [[setup-verdict-format]] — added 2026-05-06: standard at-a-glance header (🟢/🟡/🔴/🔵 + type + reason + next action) at the top of every market-check response
+- [[asset-context-read]] — added 2026-05-06: protocol for analytical reads of non-ETH assets (BTC, LINK, SOL, stocks); 🔵 verdict, no order parameters
 - [[trading-journal-v5]] — append-only journal of all market checks (manual + scheduled routine), v5 onward
 
 ## Concepts (planned)
