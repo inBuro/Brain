@@ -6,7 +6,7 @@
 
 ## [2026-05-06] init
 
-Создана структура проекта по шаблону [[../../_Inbox/llm-wiki|llm-wiki]] (паттерн Карпати):
+Создана структура проекта по шаблону [[../_Inbox/llm-wiki|llm-wiki]] (паттерн Карпати):
 
 - `Claude.md` — правила ведения wiki (копия из `Novation/Claude.md`).
 - `Instrument Follower.md` — корневой хаб проекта (пустые таблицы Sources / Entities / Concepts до первого ingest).
