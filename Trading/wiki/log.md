@@ -451,3 +451,28 @@ In the graph, `raw/strategy-v3` becomes a source node with edges to `trading-str
 - `raw/strategy-v5.md` — immutable per CLAUDE.md; still mentions 10/15/23 ICT, will be reconciled at next major strategy revision
 
 **Next:** verify first 09:00 ICT run tomorrow (2026-05-08) appends to journal correctly. If 2-week review on 2026-05-14 produces double output (regular + review), document interaction.
+
+---
+
+## 2026-05-07 — News-Impact-Score page + "Claude pulls the news himself" rule
+
+**Trigger:** live market session 2026-05-07. After analyzing 4h/1h/15m ETH charts, Claude offered to fetch news instead of asking the trader to provide them. Trader's response: "запиши в вики самостоятельно всегда смотреть на новости" — i.e. codify it as a permanent rule. The previous wording in [[entry-rules-long]] / [[entry-rules-short]] said "open Bybit Feed → News", which was ambiguous about who opens it; the trader's intent: Claude does, every time.
+
+**Created:**
+- `wiki/news-impact-score.md` — full protocol page (was on the planned list since strategy-v4). Defines: who pulls the news (Claude, via WebSearch + WebFetch on Fed FOMC calendar + BLS CPI schedule + reading any Bybit Feed screenshot the trader includes); the formula `(Price Impact × Breadth Multiplier) × Forward Modifier`; thresholds (≥20 skip / 10-20 halve size / <10 informational); prohibitive headlines (core-protocol/L2 hack, regulatory action, macro within next 1-2h); output format in market-check responses (macro-blocker table, top 3-5 headlines, BTC-context line, computed score, sources block).
+
+**Updated:**
+- `wiki/entry-rules-long.md` — Pre-check 2 paragraph rewritten: "Claude pulls the news himself (WebSearch + Fed/BLS calendar fetch + reading any Bybit Feed screenshot the trader provided)" + pointer to the new page. Inline formula tables left in place (one source of truth still here for now; a follow-up consolidation could move them to `news-impact-score.md` and reference from here).
+- `wiki/entry-rules-short.md` — mirror update.
+- `wiki/index.md` — `news-impact-score` promoted from "Concepts (planned)" to active "Concepts" with description; "Last updated" line refreshed.
+
+**Decided NOT to:**
+- Move the formula tables out of `entry-rules-long.md` yet. The page still acts as a self-contained checklist for setup evaluation; pulling tables out now would make readers chase links mid-checklist. If the formula evolves (separate scales for crypto vs macro news, for example), then split.
+- Add the rule to [[Claude.md]] root section. The "Live market analysis behavior" block already routes through [[setup-verdict-format]] which now references [[news-impact-score]] indirectly via the entry-rules pages. Adding another bullet would duplicate.
+- Auto-pull news inside the `eth-paper-journal` routine. The routine already documents in [[trading-journal-v5]] that news Impact Score is "flagged for manual verification" — Claude-pulls-news applies to chat sessions where a real LLM is in the loop. Routine remains scoped to deterministic chart math.
+
+**Memory:** new feedback memory `feedback_news_pulled_by_claude.md` in trading namespace + MEMORY.md index entry.
+
+**Linting:** Vale + LanguageTool clean on the new page and updated paragraphs.
+
+**Next:** apply the rule on every subsequent market check. The current 2026-05-07 session is the canonical first example — News Impact Score subsection in the verdict body, computed score, sources block at the end.
