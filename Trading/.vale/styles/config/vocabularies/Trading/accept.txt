@@ -134,3 +134,4 @@ yfinance
 namespace
 chat_id
 env
+parse_mode
