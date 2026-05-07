@@ -1983,3 +1983,122 @@ If trader placed the RANGE_SHORT from the 23:37 run notification: **CANCEL IMMED
 - Coinbase Q1 earnings ~22:00–23:00 ICT tonight: strong beat could lift crypto overnight; set TP2 before close of trading window
 
 **Telegram sent**: no (PENDING_ELIGIBLE — curl attempt made; Telegram API blocked by sandbox egress — "Host not in allowlist"; 4th consecutive run blocked; trader should check journal directly)
+
+---
+
+### 2026-05-07 18:16 ICT — auto check
+
+**Window status**: INSIDE (18:16 ICT is within 09:00–22:00 ICT trading window per wiki/trading-hours.md)
+**Data source**: Web search aggregates (Bybit REST API blocked — sandbox egress "Host not in allowlist"; CoinGecko, Binance also blocked. Price cross-referenced from Barchart $2,364, MetaMask $2,380, blockchainreporter session analysis, AltIndex; 6+ sources. Structural context carried from 15:12/16:04/17:09 ICT runs updated with 18:16 ICT web search data. Indicators estimated from published analyses — not computed from raw klines. Precision ±5–10%.)
+**Price**: ~$2,368 (Δ ~+1.1% 24h; session HH $2,415 at 14:06 ICT → intraday low ~$2,336 → recovering to ~$2,368 at run time)
+**Decision**: NO_SETUP (SHORT: PENDING_ELIGIBLE — REVIEW cancel condition; LONG: WATCH; RANGE: BLOCKED)
+
+**Market state**:
+- 24h: high $2,415 (session HH, 14:06 ICT); intraday low ~$2,336 (post-$2,415 rejection, below EMA100 4H $2,352); current ~$2,368; volume ~$23B USD; OI ~$34.4B declining (last confirmed; fragile longs)
+- **Key development**: price tested BELOW EMA100 4H ($2,352) to ~$2,336 between 17:09 and 18:16 ICT, then recovered to ~$2,368. Whether the 1H candle 17:00–18:00 ICT CLOSED below $2,352 (cancel trigger for pending SHORT) or just wicked — requires chart verification (see "Pending order status" below)
+- 4H structure: current 4H candle (15:00–19:00 ICT, 3h16m of data at run time) — open ~$2,365; high ~$2,365–$2,370; wicked to $2,336; recovering to ~$2,368. Prior candle (11:00–15:00 ICT): high $2,415 = session HH. Current candle high ~$2,370 << $2,415 → **4H LH confirmed** (3h16m of data, strong confirmation). 4H structure: HL@$2,220 (May 3–4) + HH@$2,415 (11:00–15:00 candle) + LH@~$2,370 (15:00–19:00 candle, ongoing)
+- **Note**: price ($2,368) is currently AT 1D EMA200 ($2,367.4) — the key test level. Session ran above it to $2,415 (intraday spike) then retreated. Daily candle (closes 07:00 ICT tomorrow) is the definitive close-above / close-below signal for longer-term direction. Currently sitting 1 point above EMA200.
+- BTC: ~$81,270 (est.); EMA200 1D ~$82,228; BTC BELOW EMA200 (gap ~$958); testing zone, no confirmed daily close above; SHORT Prohibitive #6 second condition unmet ✓
+- EMA landscape: EMA100 4H ~$2,352 (tested as support — wick to $2,336 then recovery); EMA50 1D ~$2,361.6 (price $7 above); EMA200 1D ETH ~$2,367.4 (price $1 above — key test); EMA200 1D ETH full context ~$2,617 (price $249 below)
+- Indicators (1H): RSI(14) est. ~52 (recovering from session low; was ~67–70 at $2,415 HH; well out of >65 zone ✓); MACD histogram est. ~−7 (negative; continuing the post-rejection bearish momentum; SHORT 1H alignment ✓)
+- Indicators (4H): RSI(14) est. ~48 (declining from 46–52 at 17:09); MACD line est. ~−12 (approaching −10 boundary from below; outside [−10,+10] range zone; contracting from −17.2 at 15:12 ICT — bullish trajectory but not yet in range/neutral zone)
+- Indicators (1D): RSI ~56; MACD line ~+29.72 POSITIVE (7th consecutive run confirmation; LONG Prohibitive #6 deactivated: 1D MACD>0 ✓; SHORT Prohibitive #6 requires BTC>EMA200, still unmet ✓); MACD histogram ~−0.7 (recent bearish signal-line cross, minor)
+- ATR(14) 1H: elevated est. ~20 pts (no confirmed contraction; range pre-check condition 2 FAIL)
+- Funding: ~−0.0020% (slightly negative; last confirmed from prior runs; LONG bonus; above −0.02% SHORT prohibitive ✓)
+- OI: ~$34.4B declining (last confirmed; consistent with short-term fragility)
+- Long/Short ratio: manual verification needed (no public API; Binance reference 55.6/44.4 = 1.25)
+- Macro: FOMC April 29, 2026 complete (held 3.50–3.75%); next FOMC June 16–17 ✓. CPI April data ~May 12 ✓. **NFP April 2026 tomorrow May 8 at ~19:30 ICT** (major macro, within tomorrow's window; manage any open positions before 19:00 ICT May 8). Coinbase Q1 earnings after US close (~09:00 ICT May 8, outside today's window). No prohibitive events within next 1–2h ✓
+
+**Pre-checks**:
+- **Multi-TF alignment (SHORT)**: PARTIAL PASS (sustained since 15:12 run; 4H LH strongest confirmation yet at 3h16m)
+  - (4H) LH: current candle high ~$2,370 vs prior HH $2,415 → confirmed LH with 3h16m of data; price recovered to $2,368 above EMA100 4H; 4H MACD ~−12 (negative, not crossed 0 from above — persistent partial gap)
+  - (1H) RSI ~52: firmly out of >65 zone ✓; MACD hist ~−7 (negative and falling ✓); LH on 1H confirmed ✓
+  - (15M) Rejection at $2,407–$2,415 ✓ (from prior run data); EMA100 4H wick at $2,336 = potential 15M rejection candle from below EMA100 (support test, not short setup candle)
+  - Verdict: **PARTIAL PASS** — 1H + 15M alignment hold; 4H LH confirmed; 4H MACD not crossed 0 from above (persistent gap, same as all prior runs)
+- **Multi-TF alignment (LONG)**: FAIL
+  - (4H) MACD ~−12 (not crossed 0 from below ✗); price may have found HL support at $2,336 but MACD confirmation absent
+  - (1H) RSI ~52 — uncertain whether 1H RSI dipped to <40 at $2,336 low (would require RSI to have been ~38–42 during that wick); if it did, 1H alignment improving; if not, FAIL
+  - (15M) Bounce from $2,336 may show rejection candle — if yes, partial match; still insufficient without 4H MACD
+  - Verdict: FAIL (4H MACD the binding gap; 1H RSI dip to <40 at $2,336 unconfirmed)
+- **Range pre-check**: FAIL / BLOCKED — 4H MACD ~−12 (outside [−10,+10] ✗); ATR elevated ~20 ✗; no clean horizontal range structure; earliest re-eligibility May 9–10+ if ATR contracts 24h+
+- **News Impact Score**:
+  - Macro blockers next 1–2h (11:00–13:00 UTC): NONE ✓ (no FOMC, no CPI; NFP is 26h away, not in next 2h)
+  - Top ETH news (last 48h):
+    1. ETH ETF inflows returning: ~$200M+ added in May; $101.2M on May 1 (Bullish; asset-specific 1.5×; trend confirmation 1.25×; score = 2×1.5×1.25 = **3.75** → informational)
+    2. Whale accumulation: 230K ETH bought at $2,300 zone; 140K ETH in 4-day buying spree (Bullish; wallet-specific 1.0×; trend confirmation 1.25×; score = 2×1.0×1.25 = **2.5** → informational)
+    3. BTC testing EMA200 $82,228 (Neutral — no confirmed close above; key macro inflection)
+    4. No hack, no regulatory action, no prohibitive headline ✓
+  - BTC context: BTC below EMA200 (macro cautious; no confirmed bullish regime)
+  - Bullish news score (against SHORT direction): max 3.75 → <10 → Informational; size unchanged
+  - Manual Bybit Feed verification recommended before order fill
+- **Prohibitive conditions (SHORT)**: All 7 clear ✓
+  - #1 (fresh daily resistance break upward): No — price rejected EMA200 1D zone, not broken above on daily close ✓
+  - #2 (whale ratio >1.3): L/S Binance ~1.25 < 1.3; Bybit Trading Trend = MANUAL VERIFICATION NEEDED (whale buying reports could push this above 1.3)
+  - #3 (funding <−0.02%): ~−0.002% → not strongly negative ✓
+  - #4 (outflow dominates): Not confirmed ✓
+  - #5 (mixed-market momentum): 1D MACD +29.72 (not near zero) ✓
+  - #6 (counter-trend in bullish market): 1D MACD +29.72 ✓ BUT BTC below EMA200 $82,228 → second condition unmet → NOT triggered ✓
+  - #7 (critical news): None ✓
+- **Prohibitive conditions (LONG)**: All clear ✓ (Prohibitive #6 deactivated: 1D MACD +29.72 positive)
+
+**Reasoning**:
+- **SHORT — NO_SETUP (live) + PENDING_ELIGIBLE REVIEW**:
+  - **Base conditions check** (at current price ~$2,368, which is AT 1D EMA200 $2,367.4):
+    - ✓ BC1: Price at strong resistance — at 1D EMA200 ($2,367.4) + EMA50 1D ($2,361.6) convergence zone; strong structural resistance confirmed by session rejection
+    - ✗ BC2: RSI overbought (1H >65 or 4H >60) — RSI 1H ~52, 4H ~48 (neutral); session reached RSI ~67–70 at $2,415 peak but is now well below threshold. NOT overbought at current price. Confirmed FAIL.
+    - ✓ BC3: 4H LH forming — LH ~$2,370 vs HH $2,415 confirmed with 3h16m data (strongest confirmation across all runs today)
+    - ✗ BC4: Whale ratio <0.8 (whales short) — L/S ~1.25 (Binance); whale buying reports (230K ETH, 140K ETH) suggest bullish positioning. NOT on short side. Confirmed FAIL.
+    - ✓ BC5: Daily trend not catastrophically bullish — 1D MACD +29.72 positive but histogram −0.7 (minor bearish cross); not a destructive uptrend; PASS
+    - **Result: 3 of 5 base conditions (BC1, BC3, BC5)** — meets the minimum 3. However, the two failures (RSI not overbought at current resistance, whale ratio not on short side) are strategically significant: they signal the SHORT isn't confirmed from sentiment or momentum perspective at current price level.
+  - **4H alignment gap** (persistent): 4H MACD not crossed 0 from above. This has been noted in all 4 runs today. The SL-above-HH structure at $2,440 still self-validates directionally, but the purist pre-check interpretation would be PARTIAL FAIL, not FULL PASS.
+  - **Pending order status — CRITICAL REVIEW**: Cancel condition from 17:09 run: "EMA100 4H ($2,352) breaks on 1H candle close with above-average volume → pending order entry zone shifts lower; $2,400 becomes stale." Price reached $2,336 (well below $2,352 EMA100). The key question: did the 17:00–18:00 ICT 1H candle CLOSE below $2,352?
+    - **If YES (close at $2,336–$2,349)**: Cancel condition FIRED. Trader must cancel the $2,400 SHORT pending order immediately. No replacement order this run (RSI not overbought at any resistance, only 3/5 conditions).
+    - **If NO (wick to $2,336, close at or above $2,352)**: EMA100 held as support; bounce from EMA100 wick is scenario A from 17:09 run. Pending order at $2,400 remains valid with 3h44m until 22:00 ICT close.
+  - **NFP note**: Non-Farm Payrolls tomorrow May 8 at 19:30 ICT. Any open SHORT from the $2,400 pending order would be exposed to NFP volatility. Ensure TP1 ($2,360) review plan is in place before 19:00 ICT tomorrow.
+  - Live SHORT at $2,368 NOT recommended: at EMA200 1D but RSI not overbought; only 3/5 base conditions; no alignment confirmation; poor R:R vs. the structured $2,400 entry
+- **LONG — WATCH (elevated)**:
+  - The $2,336 wick could be the HL forming for a LONG setup if: (a) 1H RSI touched <40 at the low, (b) 4H candle (15:00–19:00) closes as a hammer/doji with the long lower wick, (c) 4H MACD begins turning toward 0
+  - Currently: 4H MACD ~−12 (must become positive for full 4H alignment — 1–2 days away at current trajectory); 1H RSI ~52 (uncertain if it hit <40 at $2,336 low)
+  - LONG watch trigger: if price holds $2,352–$2,368 zone and 4H MACD closes above −10 at next 4H candle close (19:00 ICT) → range zone approaching; re-evaluate LONG alignment at 19:00 run
+  - LONG prohibitive #6 remains deactivated (1D MACD +29.72) — longs are conceptually eligible once alignment passes
+- **RANGE — BLOCKED**: 4H MACD ~−12; ATR elevated; no horizontal range; earliest eligibility ~May 9–10
+
+**Live setup details**: N/A
+
+**Pending order status update** (SHORT — from 15:12 ICT; 4th carry-forward; now in REVIEW):
+
+| Field | Value |
+|---|---|
+| Direction | SHORT |
+| Order type | Limit with attached TP/SL |
+| Entry price | $2,400 (retest of $2,393–$2,415 session rejection zone) |
+| SL | $2,440 (40 pt — 25 pt above session HH $2,415; LH invalidated above) |
+| TP1 (30%) | $2,360 (R:R 1:1 — EMA50 1D / 1D EMA200 zone) |
+| TP2 (30%) | $2,320 (R:R 1:2 — prior range midpoint / structural support) |
+| TP3 (40%) | $2,260 (R:R 1:3.5 — below prior range lower edge; 5.8% move) |
+| Position size | 0.75 ETH (Tier 1: $30 risk / 40 pt SL) |
+| Notional | ~$1,800; Margin at 5× ≈ $360 (16.4% of $2,200 capital ✓) |
+| Time validity | Cancel by 22:00 ICT today (2026-05-07) — 3h44m remaining |
+
+**STATUS**: REVIEW — **verify from chart whether the 17:00–18:00 ICT 1H candle CLOSED below $2,352 (EMA100 4H)**:
+- CLOSED BELOW $2,352 → **CANCEL the $2,400 order immediately** (cancel condition from 17:09 run triggered)
+- CLOSED AT/ABOVE $2,352 → order remains valid with 3h44m until 22:00 ICT
+
+**Cancel manually if** (any of the below):
+- 17:00–18:00 ICT 1H candle confirmed CLOSED below $2,352 (EMA100 break → entry zone stale)
+- Any 1H candle closes above $2,415 (session HH exceeded → LH invalidated; SHORT thesis broken)
+- BTC closes 4H or 1D candle above $82,228 (EMA200 confirmed → SHORT Prohibitive #6 activated)
+- 1H MACD histogram reverses to clearly positive and expanding (bullish momentum resumes)
+- Prohibitive news event (macro speaker, regulatory action, hack, exchange closure) within 1–2h
+- Window close: cancel any unfilled portion at 22:00 ICT today (3h44m from now)
+
+**Manual verification needed before fill**:
+- **FIRST**: confirm 1H candle 17:00–18:00 ICT close vs $2,352 (cancel or keep decision)
+- Whale ratio from Bybit Trading Trend (if >1.3 → Prohibitive #2 = cancel immediately)
+- BTC EMA200: confirm BTC still below $82,228 at time of fill
+- 1D EMA200 daily candle direction: at $2,368, ETH is $1 above 1D EMA200 ($2,367.4) — if daily closes above EMA200 = bullish breakout signal, SHORT thesis weakens significantly; plan exit if fill happens and daily closes above
+- 1H RSI at time of $2,400 retest: should ideally be recovering toward 65 (not already above 65)
+- 4H MACD direction at 19:00 ICT candle close: if turns more negative → SHORT confirmation strengthens; if turns positive → LONG alignment approaching, SHORT thesis weakens
+- NFP May 8 at 19:30 ICT: plan TP1 exit review before 19:00 ICT tomorrow; do not hold TP3 unattended through NFP
+
+**Telegram sent**: no (NO_SETUP heartbeat — 4th run today with Telegram blocked by sandbox egress — curl returned "Host not in allowlist"; alert not delivered; trader should check journal directly)
