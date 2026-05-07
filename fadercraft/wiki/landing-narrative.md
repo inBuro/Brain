@@ -2,8 +2,8 @@
 type: narrative
 project: Fadercraft
 created: 2026-05-06
-updated: 2026-05-06
-version: 2
+updated: 2026-05-07
+version: 3
 ---
 
 # Landing Narrative — Fadercraft XL Performance
@@ -14,7 +14,7 @@ version: 2
 
 **Figma prototype**: page **Prototype** in file [`OdPRdjodGO3WiR6tgSP7AA`](https://www.figma.com/design/OdPRdjodGO3WiR6tgSP7AA/Novation-XL?node-id=373-3).
 
-**Last updated**: 2026-05-06
+**Last updated**: 2026-05-07
 
 ---
 
@@ -74,8 +74,19 @@ Each beat = one thought we want in the reader's head at that moment.
 ### Beat 2 — How it works
 - Eyebrow: `HOW YOUR LCXL WORKS`
 - Headline: `Two layers. One button between them.`
-- Body: `Modes 1–10 hold your instruments. Modes 11–14 hold your mixer. CC47 jumps between them with state memory. Solo Follower keeps your fader row in sync with whatever track you solo.`
-- Visual: ModeGrid full (4×4 rectangular pads, all lit, lavender LED text)
+- Body: `Modes 1–10 hold your instruments. Modes 11–14 hold your mixer. One button jumps you between them, and brings you back on the next press.`
+- Visual: ModeGrid (4×4 grid; pads 1–10 lit as Instruments, 11–14 lit as Mixer, 15–16 dim as visual placeholders — no tooltip)
+- Tech detail (deferred to expandable / tech-section, not first read): the jump button sends `CC47` and Solo Follower listens to your selected track.
+
+#### Beat 2.1 — State memory (supporting block, after the grid)
+- Eyebrow: `STATE MEMORY`
+- Headline: `You don't lose your place.`
+- Body: `Press the jump button from instrument page 7 — you're in the mixer. Press it again — you're back on page 7. Not page 1, not the mixer's idea of "home." Page 7. Your hands keep their muscle memory across the whole set.`
+
+#### Beat 2.2 — Knob doubling (supporting block, after state memory)
+- Eyebrow: `PAGE A / PAGE B`
+- Headline: `Six controls per channel, not three.`
+- Body: `Page A and Page B layer two mappings onto the same encoders. Volume + send on Page A, EQ on Page B — no menu-diving, no remapping mid-set. Hands stay put; the controls multiply.`
 
 ### Beat 3 — Proof (Watch it work)
 - Eyebrow: `IN ACTION`
@@ -131,11 +142,13 @@ The 1920 / 1440 / 960 / 640 / 360 ProductPage breakpoints inherited 11 sections 
 
 ## Open questions (still to resolve)
 
-1. **Hook headline alternatives**: "Your LCXL has 16 modes." vs "16 modes. You're using 3." vs "What if your LCXL had 16 working modes?"
+1. **Hero headline** — flagged for full rewrite (user 2026-05-07: "мне он сейчас не нравится"). Existing "Your LCXL has 16 modes." is a placeholder pending a stronger angle. Pending decision is bigger than 14-vs-16 wording — full reframe expected.
 2. **"5 minutes" honesty**: is this measurable? Lock in a real install time or soften ("under 10 minutes")?
 3. **Value stack price tags**: should each kit card show "$15 value" to total $75 → reframe $39 as a steal? Or this reads as bazaar?
 4. **FAQ additions**: "Why $39?" — explain pricing? Risk: opens a can of worms.
-5. **CC47 disclosure level**: keep "CC47" in beat 2 body (signal of seriousness) or hide as "one button" only?
+5. **CC47 disclosure level**: ~~keep "CC47" in beat 2 body~~ — resolved 2026-05-07. CC47 is dropped from the first read; lives in an expandable / tech-section only. Body uses "the jump button" / "one button" framing.
+6. **Knob doubling — "vs two" or "vs three"?**: ~~user to confirm~~ — resolved 2026-05-07 to **6 vs 3** (one Page = 3 encoder rows × 8 channels; Page A + B = 6 mappings per channel). Headline reads "Six controls per channel, not three."
+7. **Tooltips on grey 15–16 pads**: resolved 2026-05-07 — no tooltip. Grey reads universally as "unused/unavailable" and any label ("service channels," "reserved," "factory preset") would falsely imply a hardware role. The greys exist for visual symmetry with the 4×4 grid, nothing more.
 
 ## Related pages
 

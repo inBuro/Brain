@@ -8,6 +8,31 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-07 — landing-narrative v3: Beat 2 rewrite + supporting blocks
+
+Перенесённый из claude.ai-сессии диалог про лендинг XL_Performance: упор сместили с "докудоки" на "пользователь / юзабилити / восприятие". Зафиксировал в `wiki/landing-narrative.md` v3.
+
+**Что изменилось.**
+
+- **Beat 2 body** переписан с CC47-first на user-first. Старая версия начиналась с "CC47 jumps between them with state memory" — слишком технично для первого экрана. Новая версия (Variant B): `Launch Control XL holds 14 layouts in memory. Most people switch them by hand. Fadercraft XL Performance flips between them on demand and never loses your place — jump to the mixer, tweak, jump back to the exact instrument page you came from.` CC47 ушёл в expandable / tech-секцию.
+- **Beat 2.1 (State Memory)** — новый supporting-блок после ModeGrid. Объясняет что значит "не теряет место": нажал из page 7 → mixer → нажал → опять page 7, не page 1.
+- **Beat 2.2 (Page A / Page B)** — новый supporting-блок про удвоение ручек. "Six controls per channel, not two." С маркером открытого вопроса: "vs two" или "vs three" (зависит от того, с чем сравниваем — типовой 2-send view или все 3 ряда энкодеров).
+
+**Решённые open questions.**
+
+- #5 (CC47 disclosure): закрыт — CC47 не на первом экране.
+- #7 (tooltips на 15–16): закрыт — никаких. Серый цвет уже коммуницирует "unused"; текст ("service channels", "reserved") создаст fake-role и привлечёт внимание.
+
+**Новые open questions (на момент v3 рефреша 2026-05-07 в течение того же дня).**
+
+- #1 (hero headline): пользователь обозначил, что Hero "ему сейчас не нравится" — переписан будет полностью, не только цифра 14/16. Ставлю флаг "rewrite pending", не разрешаю микро-правкой.
+- #6 (knob doubling — vs two / vs three): пользователь подтвердил **6 vs 3** (3 ряда энкодеров × Page A/B). Beat 2.2 headline зафиксирован: "Six controls per channel, not three."
+
+**Что НЕ тронуто.**
+
+- React-имплементация (`~/Projects/Claude/Fadercraft/app/`) — там сейчас ModeGrid без цветового кодирования и без tooltip-механизма. Скриншот, который пользователь обсуждал в claude.ai, видимо был из Antigravity-сессии или Figma, не из этой кодовой базы. Имплементация — следующий шаг, после того как пользователь согласует копию.
+- Hero (Beat 1) — оставлен как есть с "16 modes", флаг в open question #1.
+
 ---
 
 ## 2026-05-07 — Figma: Tooltip atom + hover-показ на ModeButton 1–16
