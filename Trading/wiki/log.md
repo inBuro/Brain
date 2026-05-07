@@ -429,3 +429,25 @@ In the graph, `raw/strategy-v3` becomes a source node with edges to `trading-str
 **Next:** apply the 🔵 protocol on the next non-ETH question. The LINKUSDT response sent in the same chat (just before this log entry) is the canonical first example — header, structural read, on-chain context, "Применимость к ETH" line, explicit non-action close.
 
 **2026-05-06 (refinement, same evening):** trader clarified that BTC charts specifically are **never** to be treated as a standalone analysis request — they're always input data for the in-progress ETH analysis. Updated `wiki/asset-context-read.md`: BTC special case now states the header should be the ETH verdict (🟢🟡🔴) with BTC findings folded into "Главная причина" or body sections (multi-TF alignment, prohibitive #6 check); 🔵 standalone is reserved for alts and stocks. Added an example response shape and a fallback question for the edge case where only a BTC chart arrives with no prior ETH context. Triggers table updated accordingly.
+
+---
+
+## 2026-05-07 — Routine schedule shifted to symmetric 09/15/21 ICT
+
+**Operation:** moved `eth-paper-journal` routine cron from `0 3,8,16 * * *` UTC (10/15/23 ICT) to `0 2,8,14 * * *` UTC (**09/15/21 ICT**). All three slots now fall inside the 09-22 ICT trading window — outside-window 23:00 ICT run cancelled.
+
+**Why:** the morning slot at 10:00 ICT created a 1h gap between window opening and first automated check, leaving the trader without fresh routine data when the trading day starts. The 23:00 ICT outside-window run produced informational journal entries with no email — useful for backtesting continuity but not actionable. Symmetric layout 09/15/21 places one run at window open, one at midpoint, one near close — full coverage with no idle slots.
+
+**Updated:**
+- Routine `eth-paper-journal` (`trig_0169HXZsfncrZeL5dD3MwMfr`) — cron updated via `schedule` skill; prompt simplified by removing outside-window branch (all runs now INSIDE)
+- `wiki/trading-hours.md` — "How the routine handles this" rewritten; obsolete 23:00 ICT outside-window bullet removed; `Last updated` bumped
+- `wiki/trading-journal-v5.md` — header schedule line updated to 09/15/21 ICT
+- `wiki/trading-strategy.md` — new "Passive monitoring routine" section added
+
+**What didn't change:**
+- One-shot review routine `eth-paper-journal-2week-review` (`trig_01SgfeZ7dayRSNiEjbR8NmWp`) — still scheduled for 2026-05-14 09:00 ICT, which now coincides with the regular 09:00 ICT slot (same morning will produce both a normal journal entry and the 2-week review email)
+- Journal entry format in `wiki/trading-journal-v5.md` — unchanged
+- Email logic — still triggered only on SETUP_* or PENDING_ELIGIBLE; informational/no-setup runs still don't email
+- `raw/strategy-v5.md` — immutable per CLAUDE.md; still mentions 10/15/23 ICT, will be reconciled at next major strategy revision
+
+**Next:** verify first 09:00 ICT run tomorrow (2026-05-08) appends to journal correctly. If 2-week review on 2026-05-14 produces double output (regular + review), document interaction.
