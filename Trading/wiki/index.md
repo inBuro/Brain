@@ -2,7 +2,7 @@
 
 **Summary**: Entry point for the entire Trading knowledge base. Each page gets one descriptive line.
 **Sources**: operational page (no upstream source)
-**Last updated**: 2026-05-06 (capital scaled to $3,000; position-sizing.md promoted from planned to active; trading window widened 09-17 → 09-22 ICT; trading-strategy.md cleared of dollar amounts in favor of percentages; setup-verdict-format.md added; asset-context-read.md added — 🔵 fourth verdict state for off-instrument analysis)
+**Last updated**: 2026-05-07 (news-impact-score.md promoted from planned to active — codifies "Claude pulls the news himself" rule; entry-rules-long/short Pre-check 2 sections updated to point at the new page)
 
 ---
 
@@ -27,6 +27,7 @@
 - [[position-sizing]] — added 2026-05-06: live capital + risk schedule (single source of truth for dollars; trading-strategy.md stays in percentages)
 - [[setup-verdict-format]] — added 2026-05-06: standard at-a-glance header (🟢/🟡/🔴/🔵 + type + reason + next action) at the top of every market-check response
 - [[asset-context-read]] — added 2026-05-06: protocol for analytical reads of non-ETH assets (BTC, LINK, SOL, stocks); 🔵 verdict, no order parameters
+- [[news-impact-score]] — added 2026-05-07: Impact Score formula + the rule that Claude pulls news himself (WebSearch + Fed calendar + Bybit Feed screenshot) on every market check, instead of asking the trader to forward headlines
 - [[trading-journal-v5]] — append-only journal of all market checks (manual + scheduled routine), v5 onward
 
 ## Concepts (planned)
@@ -41,7 +42,6 @@ These pages are referenced from `[[trading-strategy]]` via wiki-links but not ye
 - `bybit-data` — Bybit Data tab (funding, OI, whale ratio)
 - `bybit-chart-markers` — B/S markers on Bybit charts mean executed orders, not signals
 - `multi-tf-alignment` — multi-TF pre-check concept: what "alignment 4h+1h+15m" means, when it's satisfied, link to the underlying risk-management pattern
-- `news-impact-score` — Impact Score formula, Price Impact / Breadth / Forward Modifier scales, decision thresholds
 - `leverage-accounting` — separate P&L tracking for trades where 5x leverage was actually required vs not (for weekly review)
 - `news-check` — taxonomy of financial news (older concept, now partially absorbed by `news-impact-score`; merge-or-keep decision pending)
 - `daily-routine` — trading day routine

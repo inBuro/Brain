@@ -28,7 +28,7 @@ Source rule — `risk-management` skill, pattern "Multi-timeframe bearish alignm
 
 ## Pre-check 2 — News Impact Score
 
-After multi-TF alignment — open Bybit Feed → News (or another ETH news feed) and score the top headlines via the formula:
+After multi-TF alignment — Claude pulls the news himself (WebSearch + Fed/BLS calendar fetch + reading any Bybit Feed screenshot the trader provided) and scores the top headlines via the formula. Full protocol on the dedicated page [[news-impact-score]]; the rule "Claude pulls the news, doesn't ask the trader to forward headlines" was added 2026-05-07.
 
 ```
 Impact Score = (Price Impact × Breadth Multiplier) × Forward Modifier

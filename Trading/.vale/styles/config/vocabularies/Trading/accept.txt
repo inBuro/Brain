@@ -131,3 +131,4 @@ Linode
 Mozilla
 GitLab
 yfinance
+namespace
