@@ -8,6 +8,9 @@
 *.tmp
 .gstack/
 
+# Claude Code worktrees — independent git repos under .claude/worktrees/, never embed as submodules
+**/.claude/worktrees/
+
 # Secrets — never commit
 .env
 .env.*
