@@ -507,3 +507,30 @@ In the graph, `raw/strategy-v3` becomes a source node with edges to `trading-str
 - Migrate `eth-paper-journal-2week-review` (one-shot) to Telegram in this pass — that routine fires once on 2026-05-14 09:00 ICT and may want a longer-form output. Decide format closer to the date.
 
 **Next:** verify the first hourly fire at 14:00 ICT today (manual run was triggered immediately after the update). If the journal entry shows the new prompt executed correctly and (in case of a setup) the Telegram pipeline fired, the routine is locked in. Watch for: Bybit egress allow/block, Telegram message size overflow on long pending-order suggestions, character escaping in Markdown parse mode.
+
+---
+
+## 2026-05-07 (evening) — Telegram heartbeat on every run + Markdown parse mode dropped
+
+**Trigger:** trader had received zero Telegram messages from the routine over the first ~5 hours after the morning switch and started doubting the bot was alive. Reason: the previous prompt only sent on `SETUP_*` / `PENDING_ELIGIBLE`, and every run so far returned `NO_SETUP` (no setup window touched in this period). Silence was indistinguishable from broken pipeline.
+
+Also discovered: Telegram `parse_mode=Markdown` chokes on bare `*` and `_` characters that appear in `SETUP_*`, `MACD_12_26_9`, decision codes, etc. The original test message used Markdown and worked because none of those characters were present; the first heartbeat retry today failed with `Bad Request: can't parse entities` until parse_mode was dropped.
+
+**Updated:**
+- Routine `eth-paper-journal` (`trig_0169HXZsfncrZeL5dD3MwMfr`) — Step 7 rewritten with **three message templates**:
+  - 7a `NO_SETUP` heartbeat (~6-10 lines): time, price, RSI/MACD on 1h+4h, daily-context one-liner, main blocker, next-check time. Confirms the bot is alive every hour without spamming setup-grade detail.
+  - 7b `SETUP_*` / `PENDING_ELIGIBLE` full alert (entry/SL/TPs/size/validity/reason/manual-verify/GitHub link) — same as before
+  - 7c `RUN_ERROR` minimal note (time, error, next-check)
+  - All three use plain text (no parse_mode); the prompt now explicitly forbids `parse_mode=Markdown` as a hard constraint.
+- Goal-each-run bullet rewritten: "Always send a Telegram message" (no more "only on setup").
+- Hard-constraints list updated: "DO send Telegram on EVERY run" replaces "DO send only on setup".
+
+**Decided NOT to:**
+- Use HTML parse mode for richer formatting. Plain text + emoji is sufficient for the heartbeat read; HTML would re-introduce a class of escaping bugs (entity refs, tag closing) for marginal visual gain.
+- Send the heartbeat to a separate Telegram chat / channel from setup alerts. Single channel keeps the trader's mental model simple ("if Market Guard sent something, glance at it"). If setup alerts get drowned out by hourly heartbeats, can split later.
+- Skip heartbeat outside trading window. The cron only fires inside 09:00-22:00 ICT anyway, so all 14 daily heartbeats are window-internal by construction.
+- Throttle heartbeat (e.g. every 2 hours instead of hourly). Hourly matches the cron cadence directly — adding throttle logic would just add bugs.
+
+**14× heartbeats/day spam concern:** acknowledged. If the trader complains about phone-noise after 1-2 days, the easy fix is to drop heartbeat to every 2nd cron run via a counter check. For now, "I want to see it's alive" outweighs "I'd rather have silence". Re-evaluate after 48h of live data.
+
+**Next:** verify the manual run sent a `NO_SETUP` heartbeat. If yes, the routine is fully wired. After that, watch the cron for the next ~3 hours (14:00, 15:00, 16:00 ICT slots) — any silent slot indicates a routine-level failure (vs the previous "decision didn't trigger send" silent path).
