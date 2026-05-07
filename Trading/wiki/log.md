@@ -476,3 +476,34 @@ In the graph, `raw/strategy-v3` becomes a source node with edges to `trading-str
 **Linting:** Vale + LanguageTool clean on the new page and updated paragraphs.
 
 **Next:** apply the rule on every subsequent market check. The current 2026-05-07 session is the canonical first example — News Impact Score subsection in the verdict body, computed score, sources block at the end.
+
+---
+
+## 2026-05-07 — Routine moved hourly + email replaced with Telegram pushes
+
+**Trigger:** trader asked to drop the email channel in favor of cross-device push notifications (iPhone + MacBook). Same session also asked to tighten cron from 3×/day to higher frequency. The schedule skill imposed a hard minimum of 1h interval (`*/30` rejected), so settled on hourly across the full 09:00-22:00 ICT window.
+
+**Updated:**
+- Routine `eth-paper-journal` (`trig_0169HXZsfncrZeL5dD3MwMfr`):
+  - **Cron**: `0 3,8,16 * * *` UTC (10/15/23 ICT — was 3 runs, last one outside window) → `0 2-15 * * *` UTC = **every hour 09:00 to 22:00 ICT inclusive (14 runs/day)**. All runs now inside trading window — OUTSIDE branch removed from prompt.
+  - **Notification channel**: Gmail MCP → Telegram bot `@marketguardbbot` via `curl https://api.telegram.org/bot.../sendMessage`. Bot token + chat_id (540660068) hard-coded in the routine prompt (NOT in repo). Gmail MCP detached via `clear_mcp_connections: true`.
+  - **Step 7 rewritten**: replaces the email block with a Markdown-formatted Telegram message including the setup type, entry/SL/TP1-3, size, one-line reason, manual-verify bullets, and a GitHub link to the full journal entry. Includes a 4000-char budget with cut-from-bottom priorities (setup+price always; manual-verify bullets drop first if needed).
+  - **Step 5c (window status check) removed**: redundant since all 14 cron slots are inside window.
+  - **Strategy file list extended**: now also reads `Trading/wiki/news-impact-score.md` (added in the prior log entry).
+  - **Hard constraint added**: never write the Telegram bot token to a file in the repo or echo in commit messages.
+
+**Why hourly and not 30-min**: schedule skill enforces a 1h minimum (`*/30` rejected by API). Hourly = 14 runs/day (vs 3 before), 4.7× improvement without additional tooling. If hourly turns out to miss critical setup-zone touches in the 30-min window between fires, the upgrade path is a Bybit WebSocket watcher on a $4-6/mo VPS that pings the routine's `/run` endpoint on real-time triggers.
+
+**Telegram setup:**
+- Bot: `@marketguardbbot` (display name: Market Guard), created by trader via @BotFather
+- Chat ID: 540660068 (private chat with @yellowshoess)
+- Token: stored in `~/.config/telegram/marketguard.env` mode 600 on the trader's local machine for local-side scripts; hard-coded in the routine prompt for remote access (the routine has no env-var support)
+- Test message sent successfully end-to-end before the routine update; trader confirmed receipt on iPhone + MacBook
+
+**Decided NOT to:**
+- Send Telegram on `NO_SETUP` runs — would create constant noise, defeats the alert purpose. Only `SETUP_*` and `PENDING_ELIGIBLE` trigger notifications.
+- Send Telegram on `RUN_ERROR` — no actionable signal for the trader; the journal entry + commit log is enough for post-hoc debugging.
+- Move the bot token out of the routine prompt into a managed secret store — schedule API doesn't expose env vars; the prompt itself is the only place to put it. Token leak surface is limited (bot can only message the trader's chat_id, not arbitrary users).
+- Migrate `eth-paper-journal-2week-review` (one-shot) to Telegram in this pass — that routine fires once on 2026-05-14 09:00 ICT and may want a longer-form output. Decide format closer to the date.
+
+**Next:** verify the first hourly fire at 14:00 ICT today (manual run was triggered immediately after the update). If the journal entry shows the new prompt executed correctly and (in case of a setup) the Telegram pipeline fired, the routine is locked in. Watch for: Bybit egress allow/block, Telegram message size overflow on long pending-order suggestions, character escaping in Markdown parse mode.

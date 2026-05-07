@@ -10,6 +10,12 @@ Append-only журнал операций над вики.
 
 ---
 
+## 2026-05-07 — Figma: Tooltip atom + hover-показ на ModeButton 1–16
+
+Не вики, а соседний design-репо `~/Projects/Claude/Fadercraft/`, но решение касается DS-парности. Подробности — `docs/log.md` от 2026-05-07. Кратко: Tooltip оформлен как атом с `Direction=top|bottom` variant и component-property `text`, лежит карточкой в сетке `02 — Atoms`. На `OneActionBetweenThem` 16 тултипов с `layoutPositioning='ABSOLUTE'` (1–8 над, 9–16 под), их `visible` забинден на 16 BOOLEAN-переменных коллекции `Prototype`, hover-реакции `MOUSE_ENTER`/`MOUSE_LEAVE` на каждой ModeButton выставляют `mode-N=true|false`. Заодно удалены 10 unused-вариантов `State=hover-*` ModeButton (апрельский эксперимент с радужной палитрой stroke без привязки к токенам, 0 usage).
+
+
+
 ## 2026-04-28 — ingest `raw/XL_Performance — как это работает.md`
 
 - Прочитан новый source-файл (synthesis-документ, frontmatter `type: synthesis`).

@@ -132,3 +132,5 @@ Mozilla
 GitLab
 yfinance
 namespace
+chat_id
+env
