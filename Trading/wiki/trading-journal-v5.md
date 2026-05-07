@@ -1337,3 +1337,93 @@ If trader placed the RANGE_SHORT from the 23:37 run notification: **CANCEL IMMED
 8. Did ETH pull back to $2,310–$2,320 zone (2nd lower-edge touch)? Required for range pre-check condition 3
 9. ATR(14) 1h from chart — verify ongoing contraction; current est. ~13.84; confirm no volatility spike
 10. BB(4h) from chart — beginning to flatten (supports range embryo) or still expanding (trend continuation)?
+
+---
+
+### 2026-05-07 10:02 ICT — auto check
+
+**Window status**: INSIDE (10:02 ICT is within 09:00–22:00 ICT trading window per wiki/trading-hours.md — window was widened from 09:00–17:00 to 09:00–22:00 ICT on 2026-05-06)
+**Data source**: Web search aggregates (CoinGecko API 403, Binance API 403 — sandbox egress blocked). Price and indicators sourced from CoinMarketCap, TradingView, Investing.com, AltIndex, Cryptonomist, CoinEdition, Finance Magnates, SpotedCrypto, Coinalyze; cross-referenced 10+ sources. Precision ±5–10%.
+**Price**: ~$2,352 (Δ approx. −0.5% from prior run; sources range $2,347–$2,365; CoinMarketCap $2,346.86, TradingView ETHUSDT $2,364.02)
+**Decision**: NO_SETUP
+
+**Market state**:
+- 24h: high ~$2,396 (CoinMarketCap), low ~$2,345; volume ~$21–23B USD; ETH in tight consolidation for 48h+ since May 5 breakout; range $2,310–$2,396 persisting
+- BTC: ~$81,250–$82,320 across sources; testing EMA200 1D zone (~$82,184–$82,228); Finance Magnates: "BTC Tests $82K 200 EMA and Three-Month Highs"; CoinEdition: "Can BTC Break The 200-Day EMA?"; **no confirmed May 6 UTC daily close above EMA200** per available sources — May 6 UTC candle closed at 07:00 ICT May 7; manual chart verification strongly recommended
+- 4h structure: range-bound consolidation $2,310–$2,396 persisting; tentative HL forming at $2,310 (higher than prior low $2,220) — not confirmed 2nd 4h HL; upper ceiling at $2,393–$2,396 tested on May 5 and again today (2nd visit, both with rejection); transitioning from LH/LL toward range-bound; no confirmed HH or uptrend resumption
+- EMA landscape: EMA50 1D ~$2,361 (price oscillating around this level for 2+ days — first sustained EMA50 1D reclaim of test period); EMA100 4h ~$2,352 (price approximately at this level); EMA200 1D (ETH) ~$2,617 (price well below — long-term bearish)
+- Indicators (1h): RSI(14) ~57–58 (neutral; below 65 threshold; has structurally exited the <40 zone since May 5 recovery); MACD(12,26,9): below signal line, histogram ~−0.7 and contracting (selling pressure weakening; momentum slightly negative but not deepening — overnight pullback from +2.05 at 15:10 ICT May 6); BB(20,2): upper ~$2,391, mid ~$2,362, lower ~$2,333 (price between mid and upper band)
+- Indicators (4h): RSI(14) ~48–50 (neutral; recovered from ~38 oversold at May 1); MACD line ~−17.2 (estimated; bearish; outside [−10,+10] range; histogram contracting toward 0 — early bullish crossover forming but no confirmed cross yet; line has NOT crossed 0 from below); EMA100 4h: price at or slightly above
+- Indicators (15m): RSI estimated 50–65 range based on 1h RSI; no oversold condition present; no reversal timing confirmed
+- Indicators (1D): RSI(14) ~48.58 (neutral; recovered from ~35 May 1); MACD LINE ~+29.72 (POSITIVE; signal ~31.60; histogram ~−1.88 — momentum slowing but trend line above zero; confirmed positive at 15:10 ICT May 6 run); price above EMA50 1D ($2,361) for 2nd+ consecutive day; ATR(1D) ~72.79
+- ATR(14) 1h: ~13.84 (CONTRACTING; sustained ~48h+ decline from ~$27–30 breakout peak on May 5 — **first PASS on range pre-check condition 2 in the test period**)
+- Funding: ~−0.0020% (slightly negative; shorts paying longs; bonus for LONG; well above −0.02% SHORT prohibitive threshold)
+- OI: ~$5.0B ETH; 61–64% long bias; stable; no extreme readings
+- Top-100 L/S ratio: manual verification needed (no public Bybit API)
+- News context: no FOMC until June 17; next CPI May 12; no ETH core hack; no SEC action; no confirmed macro events within 1–2h today (NFP was flagged in May 6 analyses — manual verification recommended for timing); Glamsterdam hard fork (H1 2026) bullish medium-term backdrop; ETH ETF inflows continuing; CLARITY Act / GENIUS Act advancing (regulatory positive)
+
+**Pre-checks**:
+- **Multi-TF alignment (LONG)**: FAIL — (4h) MACD line ~−17.2 has NOT crossed 0 from below ✗ (binding requirement; histogram contracting is directionally positive but condition requires line cross); potential HL at $2,310 ✓ but unconfirmed as 2nd 4h HL; price above EMA100 ✓; (1h) RSI ~57–58 ✓ (has structurally exited <40 zone); MACD histogram ~−0.7 contracting — NOT growing positively ✗ (alignment requires histogram GROWING; currently slightly negative and shrinking toward 0, not expanding positive; overnight reversal from +2.05 at 15:10 ICT May 6); (15m) RSI not at reversal <30 zone; no entry timing confirmation ✗. Verdict: FAIL on 4h MACD (line not crossed 0) and 1h MACD hist (not growing positive)
+- **Multi-TF alignment (SHORT)**: FAIL — (4h) LH not confirmed (only 1 high at $2,393–$2,396; no second lower high below it ✗); (1h) RSI ~57–58 has NOT exited >65 overbought zone ✗; MACD hist ~−0.7 contracting toward 0 — NOT falling sharply into negative territory ✗ (SHORT alignment requires histogram FALLING; currently recovering from negative position); (15m) RSI not at rollback from >70 ✗. Verdict: FAIL on all three alignment components
+- **Range pre-check (4 conditions)**:
+  - (1) 4h MACD between −10 and +10: **FAIL** — line estimated ~−17.2; outside neutral zone; improving directionally but binding blocker remains
+  - (2) ATR(1h) declining 24h+: **PASS** ✓ — ATR ~13.84, sustained ~48h+ continuous decline from ~$27–30 since May 5 breakout; **first confirmed PASS on this condition in test period**
+  - (3) Clear horizontal range with 2× rejections per edge: **PARTIAL FAIL** — upper edge $2,393–$2,396: today's high ~$2,396 closely matches May 5–6 ceiling $2,393; 2 tests of upper zone now confirmed (May 5 + May 7) ✓; lower edge $2,310: today's low ~$2,345 does NOT revisit the May 5 low ($2,310); only 1 confirmed lower-edge touch ✗ (need 2× per edge); upper edge borderline ✓, lower edge ✗ → condition PARTIAL FAIL
+  - (4) BB(20,2) flat on 4h: **UNKNOWN** — ATR contraction suggests bands may be flattening; chart verification mandatory
+  - Pre-check verdict: **FAIL** (condition 1 definitive fail; condition 3 partial fail on lower edge; condition 4 unknown)
+- **News Impact Score**: ETH 24h Δ ~−0.5% = Minor (2 pts) × Asset-specific (1.5×) × Isolated (1.0×) ≈ 3 (< 10 → informational; no size penalty); no prohibitive headlines confirmed; manual verification required from Bybit Feed
+- **Prohibitive conditions (LONG)**: **NOT TRIGGERED** — all 7 clear:
+  - #1 (fresh support break): no — price above $2,241 lower BB ✓
+  - #2 (whale ratio <0.8): unknown — manual verification required
+  - #3 (funding >0.025%): no — funding ~−0.0020% ✓
+  - #4 (inflow dominating): unknown — manual verification required
+  - #5 (mixed-market momentum): no — 1D MACD line +29.72 (positive, not wandering near zero) ✓
+  - #6 (counter-trend bearish — 1D MACD <0 AND BTC <EMA200): ETH 1D MACD LINE = +29.72 (POSITIVE) → first condition FALSE → prohibitive NOT triggered regardless of BTC status ✓
+  - #7 (critical news): no ✓
+- **Prohibitive conditions (SHORT)**: **NOT TRIGGERED** for automated check:
+  - #1 (fresh resistance break): no ✓; #2 (whale ratio >1.3): unknown — flag; #3 (funding <−0.02%): no ✓; #4 (outflow dominating): unknown — flag; #5 (mixed-market momentum): no ✓; #6 (counter-trend bullish — 1D MACD >0 AND BTC >EMA200 fresh break): ETH 1D MACD +29.72 (positive ✓) BUT BTC has NOT confirmed daily close above EMA200 — both conditions not simultaneously confirmed → NOT triggered ✓; #7: no ✓
+
+**Reasoning**:
+- **LONG — NO_SETUP** (not blocked by prohibitive; alignment and base conditions not met):
+  - Prohibitive #6 remains deactivated: ETH 1D MACD line +29.72 confirmed. This is the core structural improvement vs first 16 runs and holds for a 2nd consecutive run.
+  - 4h MACD line (~−17.2) fails alignment requirement (must cross 0 from below). The contracting histogram means the line is improving, but crossing 0 may require 10–20 more sessions at current pace.
+  - 1h MACD histogram reversed to −0.7 overnight (was +2.05 at 15:10 May 6). The 1h momentum boost from the May 5–6 recovery has faded. Histogram must GROW positively for LONG alignment — currently the opposite.
+  - Entry timing: RSI 57–58 on 1h and price at $2,352 (mid-range) provides no fresh reversal opportunity. Clean LONG entry requires a pullback to $2,300–$2,330 with RSI reset to <35–40 on 15m.
+  - Base conditions: BC5 ✓ (1D MACD positive, not catastrophically bearish); BC3 potential but unconfirmed (single HL at $2,310); BC1 fails (price at mid-range, not at strong support); BC2 fails (RSI 57–58, not <40); BC4 unknown. Score: 1/5 confirmed. Need ≥3. NO_SETUP.
+  - **LONG watch scenario**: pullback to $2,300–$2,330 → RSI 15m <30–35 → 4h HL confirmed (2nd touch of $2,310–$2,330 support) → 1h MACD histogram turns positive → re-evaluate at 15:00 ICT run
+- **SHORT — NO_SETUP** (alignment and base conditions not met):
+  - 1h RSI at 57–58: SHORT alignment requires reaching >65 (overbought) then rolling back. Currently 7+ points below threshold.
+  - 1h MACD hist at −0.7 recovering toward 0: SHORT alignment requires histogram FALLING (deepening negative). Current direction opposes this.
+  - No confirmed 4h LH: $2,393–$2,396 has been tested twice but no second lower high printed below it — a second lower high requires price to rally and then fail BELOW $2,393, which hasn't happened.
+  - Base conditions: BC5 borderline ✓; BC1/BC2/BC3/BC4 all fail or unknown. Score: 0–1/5. NO_SETUP.
+  - **SHORT watch scenario**: rally to $2,393–$2,420 → RSI 1h exceeds 65 → price rejects with upper wick from $2,400–$2,409 zone → RSI rolls back below 65 → 1h MACD hist turns negative → 4h prints candle close below prior high confirming LH → SHORT alignment passes + ≥3 base conditions → potential PENDING_ELIGIBLE at 15:00 ICT run
+- **RANGE — DEVELOPING** (pre-check condition 2 now PASSES for first time in test period):
+  - ATR(1h) contraction is now 48h+ and confirmed — condition 2 is the first full PASS. This is meaningful structural progress.
+  - Upper edge $2,393–$2,396 has 2 confirmed visits (May 5 and today) with no breakout; upper edge rejections trending toward PASS.
+  - Lower edge $2,310: today's low $2,345 did NOT revisit the lower boundary. Lower edge has only 1 touch. Condition 3 PARTIAL FAIL.
+  - 4h MACD line ~−17.2: still the binding blocker for condition 1. Histogram contracting → line is slowly approaching 0 from below. Estimated 4h MACD line could reach [−10,+10] in approximately 48–72h at current pace if ETH continues to consolidate.
+  - **RANGE trajectory**: conditions 2 (✓ PASS), 3 (upper edge ✓, lower edge ✗), 4 (unknown). Blocking condition: 4h MACD line outside neutral zone. If lower edge retested ($2,310–$2,330) AND 4h MACD line moves toward [−10,+10] over next 1–2 sessions → range pre-check could achieve full PASS by 23:00 ICT May 7 or 10:00 ICT May 8.
+- **BTC regime change status (critical for next runs)**: BTC trading at $81,250–$82,320 and testing the EMA200 ($82,184–$82,228). Finance Magnates headline "BTC Tests $82K 200 EMA and Three-Month Highs" suggests testing but not confirmed close. May 6 UTC daily candle closed at 07:00 ICT May 7. If BTC May 7 UTC daily candle closes above $82,200, SHORT Prohibitive #6 would activate (1D MACD >0 AND BTC >EMA200 → shorts counter-trend in bullish market → no shorts). Manual chart check required.
+
+**Pending order eligibility**:
+- LONG: **WATCH** — prohibitive #6 deactivated (confirmed 2nd run); alignment incomplete (4h MACD not crossed 0; 1h MACD hist negative); no pending order eligible; watch for pullback to $2,300–$2,330 with RSI reset
+- SHORT: **WATCH** — approaching resistance zone but 7+ RSI points from alignment threshold; no pending order eligible; watch for $2,393–$2,420 rally + rejection scenario
+- RANGE: **DEVELOPING** — ATR condition PASS (first time); upper edge 2 touches ✓; lower edge needs 2nd touch; 4h MACD needs ~48–72h more to reach neutral zone; no pending order eligible this run
+
+**Email sent**: no (NO_SETUP — hard constraint: no email on NO_SETUP; all directions at WATCH or DEVELOPING)
+
+**Manual verification needed before next scan or any entry**:
+1. BTC May 6 UTC daily close (occurred at 07:00 ICT May 7) — did it close above $82,184–$82,228? If yes, BTC EMA200 component of Prohibitive #6 is relevant to SHORT evaluation going forward
+2. ETH 1D MACD line on chart — confirm +29.72 (positive); verify not declining toward 0 (which would shift Prohibitive #6 status for LONG back toward risk)
+3. 4h MACD line exact value from chart — has it moved from −17.2? Rate of approach to [−10,+10] determines RANGE setup timeline
+4. ATR(14) 1h from chart — confirm ongoing contraction below 13.84; verify no spikes during Asia session
+5. BB(4h) status — flattening (supports range pre-check condition 4) or still expanding?
+6. Did lower edge ($2,310–$2,330) get retested during Asia session overnight? (2nd lower-edge touch critical for range pre-check condition 3)
+7. 1h MACD histogram — current value and direction; did it recover to positive again after overnight fade to −0.7? If positive and growing → LONG alignment condition improves
+8. Whale ratio from Bybit Trading Trend (no public API; BC4 for both directions)
+9. Funding exact % — confirm still ~−0.0020%; significant move toward +0.025% = SHORT bonus; further negative = LONG bonus
+10. OI direction — rising (new longs at highs → SHORT fragility signal) or declining?
+11. Any ETH-specific or macro news from Bybit Feed — NFP timing verification (is there a US macro event within 1–2h today?), any Glamsterdam fork update, any regulatory development
+12. 15m MACD and RSI — confirm entry timing conditions for either direction; chart review recommended
+
+---
