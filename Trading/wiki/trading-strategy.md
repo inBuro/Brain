@@ -73,6 +73,12 @@ The strategy unfolds across the concept pages below:
 - [[commission-management]] — commission minimization
 - [[trading-journal-v5]] — append-only journal of every market check (manual + scheduled routine)
 
+## Passive monitoring routine
+
+A scheduled remote agent (`eth-paper-journal`) runs **3x per day at 09:00 / 15:00 / 21:00 ICT** (cron `0 2,8,14 * * *` UTC), all inside the [[trading-hours|trading window]]. Each run appends a structured entry to [[trading-journal-v5]] with market state, pre-checks, and the strategy decision (SETUP_LONG / SETUP_SHORT / SETUP_RANGE / NO_SETUP). On SETUP_* or PENDING_ELIGIBLE, an email alert is sent so the trader can act inside the window.
+
+Slot intent: 09:00 covers window open with fresh data for the morning scan; 15:00 catches setups that formed during the European session; 21:00 covers the London/NY overlap one hour before window close.
+
 ## What we don't trade
 
 The exclusion list matters as much as the entry rules. We don't take setups with potential under 4% movement. We don't take counter-trend against a strong daily trend in the opposite direction. After two consecutive SLs in one day — pause until the next day. Late evening (after 22:00 local) — no new entries. If tired or emotional — no trading at all. Full list: [[psychology-rules]].
