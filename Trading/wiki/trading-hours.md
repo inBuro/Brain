@@ -2,7 +2,7 @@
 
 **Summary**: New entries are only allowed during **09:00-22:00 ICT** (13-hour window, every day including weekends). Outside this window, no new positions are opened — but existing positions continue to run via their pre-set SL/TPs. Replaces the older "after 22:00 local — no new entries" rule with an explicit start time. Added 2026-05-01 as a v5 supplement; window widened from 09-17 to 09-22 on 2026-05-06.
 **Sources**: [[strategy-v5]] + chat 2026-05-01 + chat 2026-05-06 (widening)
-**Last updated**: 2026-05-06 (widened window 09-17 → 09-22 to capture London/NY overlap; trader checks terminal throughout the day anyway, so a single wide window beats two narrow ones)
+**Last updated**: 2026-05-07 (routine cron shifted to symmetric 09/15/21 ICT — all slots inside window; outside-window logic removed)
 
 ---
 
@@ -28,7 +28,6 @@ This covers Asia morning, Europe session, and the start of the US session — th
 
 - Existing positions opened earlier inside the window — they keep running with their pre-set SL/TP
 - Pending orders that were set inside the window AND have time validity that lapses before window-close — they fire if price touches in-window
-- The scheduled remote agent `eth-paper-journal` cron at 23:00 ICT — still runs, still appends to the journal, but **emails marked with a "OUTSIDE WINDOW" tag** so the trader knows not to act on them until next morning
 
 ## Why this window
 
@@ -54,9 +53,13 @@ Weekends are still tradeable in the 09-22 window, but if a setup forms with marg
 
 ## How the routine handles this
 
-The `eth-paper-journal` routine (cron 0 3,8,16 * * * UTC = 10/15/23 ICT) still runs all three slots. The 23:00 ICT slot is **outside** the trading window. Its journal entries are tagged as `OUTSIDE_WINDOW` — the entry/setup analysis is still computed for trend tracking and backtesting, but no email alert is sent (or if sent, subject prefixed with "INFO ONLY — OUTSIDE WINDOW").
+The `eth-paper-journal` routine (cron `0 2,8,14 * * *` UTC = **09:00 / 15:00 / 21:00 ICT**) runs three slots, all inside the 09:00-22:00 ICT trading window. Email alerts fire normally on detected setups or pending eligibility — no outside-window tagging needed.
 
-The 10:00 and 15:00 ICT slots are inside the window — emails fire normally on detected setups or pending eligibility.
+Slot rationale:
+
+- **09:00 ICT** — runs at window open, gives fresh data for the trader's morning scan
+- **15:00 ICT** — midpoint check, catches setups that formed during European session
+- **21:00 ICT** — one hour before window close, covers London/NY-overlap setups
 
 ## Migration history
 
