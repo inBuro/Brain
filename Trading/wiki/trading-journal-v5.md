@@ -3173,3 +3173,86 @@ Both orders should be considered closed. No replacement orders for this run.
 **Pending order suggestion**: N/A (NFP April 2026 at 19:30 ICT today — macro event within 12h; blocked per pending-orders.md)
 
 **Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 20th consecutive run with Telegram blocked by sandbox egress; check journal directly)
+
+### 2026-05-08 20:02 ICT — auto check
+
+**Data source**: Web search aggregates (Bybit/CoinGecko/Binance REST blocked — sandbox egress allowlist; 21st consecutive affected run). Sources: Yahoo Finance, CoinGabbar, Blockchainreporter, MEXC, OKX, Investing.com, AltIndex, Spotedcrypto, FinanceMagnates, BLS.gov, CNBC, cryptotimes.io, Stocktwits, E8Markets.
+**Price**: $2,285 est. (Δ −2.6% 24h; 24h high $2,356, 24h low $2,270; vol ~$21B USDT)
+**Decision**: NO_SETUP
+
+**Market state**:
+- Post-NFP context: April 2026 NFP released at 19:30 ICT today — actual +115K vs forecast +62K (strong beat, ~85% above consensus); prior March revised up to +185K; ADP private payrolls (May 6): +109K (beat). Beat delays rate-cut timeline → slightly risk-off for crypto
+- 24h: high $2,356 (rejected near 200D EMA $2,367 on May 7), LL $2,270 (today); current ~$2,285 (stabilizing near LL, small pre-NFP short-cover bounce); vol ~$21B
+- BTC: ~$79,500–$80,200 (below 200D EMA $82,127; opened Friday ~$80,015; tested $82K on May 6, failed; broad LH/LL pattern continuing)
+- 1D: RSI est. ~56 (neutral, declining from April rally highs); MACD line est. +9 (positive but declining — daily candle extending bearish; was +10.69 at 18:04 run); EMA50 ~$2,362, EMA200 ~$2,367 — price BELOW both by ~$77–$82; 1D MACD POSITIVE (Prohibitive #6 NOT triggered)
+- 4H structure: LH/LL confirmed — LH at ~$2,400 (May 7 rejection), LL at $2,270 (today); no 4H HL forming; MACD 4H est. ~−11 to −12 (negative, below signal; stabilizing but not reversing from bearish zone since price action is flat near LL); EMA50 4H ~$2,361, EMA100 4H ~$2,340 — price below both by ~$55–$76
+- 4H RSI(14): est. ~43–44 (neutral-low; not recovering toward 50)
+- 1H: RSI est. ~43 (approaching oversold zone; no bounce signal yet); MACD histogram negative, possibly flattening as selling impulse digests NFP print; EMA50 1H ~$2,350, EMA100 1H ~$2,335, EMA200 1H ~$2,324 — price BELOW all three; price near lower BB 1H (~$2,285)
+- 15m RSI: est. ~42 (stabilizing from ~35 at 18:04 run; no confirmed reversal candle)
+- ATR(14) 1H: ~$13.5 (elevated; no 24h contraction confirmed)
+- BB 4H: Lower $2,241 / Mid $2,325 / Upper $2,409 — price ~$84 below mid; bands expanding
+- Funding: −0.0020% per 8h (negative; shorts paying longs — mild bullish structural signal for longs; per Binance aggregate)
+- OI: ~$5B Binance est. — manual verification needed (API blocked)
+- L/S ratio (account ratio): est. 56% long / 44% short ≈ 1.27 — manual verification needed (no public API)
+
+**Pre-checks**:
+- **Multi-TF alignment (LONG)**: FAIL
+  - (4H) LH/LL intact; MACD ~−12 (not crossing 0 from below); no HL forming ✗
+  - (1H) RSI ~43, not exiting <40 zone with clear bounce; MACD histogram negative (flattening not growing); no HL on 1H ✗
+  - (15m) RSI ~42, stabilizing not reversing; no reversal candle confirmation ✗
+  - Verdict: FAIL — no structural reversal confirmed on any timeframe
+
+- **Multi-TF alignment (SHORT)**: FAIL
+  - Price ~$2,285 at 24h LL zone — not at resistance ✗
+  - 1H RSI ~43 — not exiting >65 overbought zone ✗
+  - 4H EMA100 ~$2,340 is ~$55 above price; no LH forming at resistance ✗
+  - Verdict: FAIL (shorting here = chasing a fully extended ~2.6% move)
+
+- **Range pre-check**: FAIL
+  - Gate 1 — 4H MACD in [−10,+10]: est. ~−12 → FAIL ✗
+  - Gate 2 — ATR(14) 1H declining 24h+: FAIL (elevated ~$13.5; not contracting) ✗
+  - Gate 3 — horizontal range, 2+ rejections each edge: FAIL ($2,270 = fresh LL, not a 2-touch rejected floor; no clean horizontal range defined) ✗
+  - Gate 4 — BB(20,2) 4H flat: FAIL (expanding) ✗
+  - Verdict: FAIL (all 4 gates)
+
+- **News Impact Score**:
+  - Macro-blocker table (20:02–21:02 ICT window):
+
+    | Event | Time ICT | Blocker? |
+    |---|---|---|
+    | NFP April 2026 (BLS) | 19:30 ICT — RELEASED 32 min ago | No (past event; no new macro in window) |
+    | FOMC | Not scheduled (next: June 16–17) | No |
+    | CPI | Not scheduled | No |
+    | Fed Chair speech | Not scheduled | No |
+
+  - NFP April 2026 (released): Actual +115K vs forecast +62K (strong beat); prior revised to +185K; ADP +109K. Score = 4 (moderate ETH 24h move −2.6%) × 3 (systemic, macro-wide USD/rate impact) × 1.25 (trend confirmation — consecutive beats = rate-cut delay sustained) = **15.0** → ≥10 and against LONG: halve position size
+  - US-Iran tensions (ongoing, ceasefire fragile; oil briefly >$100; BTC fell from $82K→$79K partly on this): Score = 4 × 3 × 1.0 (isolated — each escalation event treated individually) = **12.0** → ≥10 and against LONG: halve position size
+  - BTC Spot ETF outflows $268.5M (Thursday May 7, ended 5-day inflow streak): Score = 4 × 2 (cross-asset) × 1.25 (trend confirmation — outflow after sustained inflow is a sentiment shift) = **10.0** → ≥10 and against LONG: halve position size
+  - ETH Spot ETF inflows $11.57M (May 6; declining from $97.6M May 5): Score = 2 × 1.5 × 1.0 = **3.0** → informational; bullish signal for LONG, unchanged size
+  - Whale accumulation 140K ETH in 96h / BitMine nearing 5% supply goal: Score = 2 × 1 × 1.25 = **2.5** → informational; mild LONG support
+  - Glamsterdam hard fork target (June 2026): Score = 1 × 1.5 × 1.0 = **1.5** → informational forward catalyst
+  - BNY Mellon Abu Dhabi custody (May 7): Score = 2 × 2 × 1.25 = **5.0** → informational; institutional expansion signal
+  - No prohibitive headlines: no ETH core or major L2 hack, no regulatory action, no active macro event within 1–2h ✓
+  - Net effect on any LONG: three stacked impact-≥10 events (NFP 15, Iran 12, ETF outflows 10) — all directionally against LONG; strategy rule is to halve size per single event at ≥10; with three stacking, effective Tier 1 risk would be ~$7.50 (notional too small to justify execution costs)
+
+- **Prohibitive (LONG)**:
+  - #1: Price $2,285 near/below broken $2,287 daily support (break confirmed at 17:03 ICT run; only $1–$2 recovery — within data uncertainty; not a confirmed structural reclaim above $2,287). BORDERLINE TRIGGERED ✗
+  - #6: NOT triggered — ETH 1D MACD est. +9 (still positive; Prohibitive #6 requires BOTH 1D MACD <0 AND BTC <EMA200; first condition not met) ✓
+  - #7: NOT triggered — NFP released 32 min ago; no macro event scheduled in next 1–2h ✓
+  - #2–#5: not assessed (alignment fails first; Prohibitive #1 borderline active)
+
+- **Prohibitive (SHORT)**: Academic — alignment fails first
+
+**Reasoning**:
+- **LONG — NO_SETUP**: Multi-TF alignment fails on all three required timeframes simultaneously. (a) 4H: LH/LL structure intact (LH ~$2,400 May 7, LL ~$2,270 today), MACD ~−12 (deeply negative, no upward cross from below 0), no HL forming on 4H. (b) 1H: RSI ~43, approaching oversold zone but not bouncing from it with clear reversal; MACD histogram negative (flattening post-NFP but not growing); no HL on 1H. (c) 15m: stabilizing not reversing, no confirmed reversal candle. Additionally, Prohibitive #1 is borderline active (price ~$2,285 near broken $2,287 support). Even if alignment were marginally satisfied, three stacked news Impact ≥10 events (NFP +15, Iran tensions +12, BTC ETF outflows +10) would reduce effective Tier 1 risk to ~$7.50, which is below the minimum meaningful trade size. The 1D MACD remaining positive (+9) is the one structural positive — it means Prohibitive #6 is NOT triggered, keeping the long direction structurally viable at the daily level; however, short-term setup quality is absent.
+- **SHORT — NO_SETUP**: Alignment fails. Price at $2,285 is at the 24h LL zone, not at resistance. The 4H structure is technically bearish (LH/LL), but a short setup requires a retrace to resistance first ($2,287 former support-turned-resistance, or $2,340 EMA100 4H) before taking a short. 1H RSI at ~43 is nowhere near the >65 required for short alignment. Entering a short at the daily low would be chasing a 2.6% completed move with no structural setup.
+- **RANGE — NO_SETUP**: All 4 pre-check gates fail independently. The market is in trend mode (4H MACD −12), not range mode.
+- **Post-NFP context**: NFP beat (115K vs 62K) is now a known event. Rate-cut expectations are pushed further out. Market absorbed the print without a violent spike in either direction — ETH is stable at ~$2,285, BTC at ~$79,500–$80,200. This suggests the beat was partially priced in via the ADP beat (May 6). The immediate volatility window is now over; next scheduled macro risk is June 16–17 FOMC.
+- **Watch for 21:00 ICT run** (informational, not a pending order suggestion): If by 21:00 ICT the following occur simultaneously — (a) 1H RSI bounce cleanly above 40 with a 1H green close, (b) 4H MACD histogram stops widening and starts flattening toward −10, (c) price closes 1H above $2,287 (reclaims broken support) — a minimal LONG setup might qualify. With three Impact ≥10 news items stacked against LONG, effective Tier 1 risk would be halved to $15; SL would sit below $2,241 (BB lower 4H buffer at ~$2,235) = ~50 pts → size ~0.30 ETH. TP1 ~$2,330 (R:R 1:1), TP2 ~$2,367 (R:R 1:2, at 200D EMA), TP3 ~$2,410 (R:R ~1:3.5). However, given that this would be a late-window entry (1h before 22:00 ICT window close per trading-hours.md), any pending order from the 21:00 run would have only 1h of fill time — very constrained. The 21:00 run should evaluate carefully whether setup quality justifies a 1-hour window.
+- **Primary blocker**: 4H LH/LL in progress with MACD −12; no reversal signal on any timeframe post-NFP.
+
+**Live setup details**: N/A
+
+**Pending order suggestion**: N/A (no qualifying setup; structural pre-checks fail all directions)
+
+**Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 21st consecutive run with Telegram blocked by sandbox egress; check journal directly)
