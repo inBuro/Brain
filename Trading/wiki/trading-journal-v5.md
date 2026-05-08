@@ -3256,3 +3256,84 @@ Both orders should be considered closed. No replacement orders for this run.
 **Pending order suggestion**: N/A (no qualifying setup; structural pre-checks fail all directions)
 
 **Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 21st consecutive run with Telegram blocked by sandbox egress; check journal directly)
+
+### 2026-05-08 21:12 ICT — auto check
+
+**Data source**: Web search aggregates (Bybit/CoinGecko/Binance REST APIs blocked — sandbox egress allowlist; 22nd consecutive affected run). Sources: MEXC News, Blockchainreporter, Yahoo Finance, AltIndex, Investing.com, Spotedcrypto, CoinGlass, CoinDesk, CryptoWaves, MacroMicro, themarketperiodical.com.
+**Price**: $2,284 est. (Δ −2.6% 24h; 24h high $2,356, 24h low $2,261; vol ~$21B USDT)
+**Decision**: NO_SETUP
+
+**Market state**:
+- 24h: high $2,356 (rejected near 1D EMA200 $2,367 on May 7 close), low $2,261 (intraday print); current ~$2,284 (flat-to-slightly-down since 20:02 ICT entry; no meaningful bounce or further breakdown)
+- BTC: ~$79,340 (below 1D EMA200 $82,127; rejection from $82K zone on May 6 confirmed as resistance; weekly LH/LL structure continuing)
+- 1D: RSI est. ~44 (neutral-bearish, declining from April rally highs); MACD hist est. +6 (positive but declining — daily sell-off candle continuing; was +9 at 20:02 run, +10.69 at 18:04 run); EMA200 1D ~$2,367 / EMA50 1D ~$2,211 — price BELOW EMA200 by ~$83 (−3.7%), ABOVE EMA50 by +$73 (+3.2%); daily candle: sellers in control, no bounce from LL
+- 4H structure: LH/LL in progress — LH ~$2,400 (May 7), LL ~$2,261 (today); no 4H HL forming; 4H MACD hist est. ~−11 (negative; no sign of cross from below 0); EMA50 4H ~$2,361 / EMA100 4H ~$2,340 — price below both by ~$56-77; BB 4H: Lower $2,241 / Mid $2,325 / Upper $2,409 — bands expanding
+- 4H RSI(14): est. ~42 (neutral-low, no recovery signal)
+- 1H: RSI est. ~41 (approaching oversold; watch criteria from 20:02 run NOT met — RSI has not bounced cleanly above 40 with 1H green close); MACD hist ~−3.2 (negative, stabilizing post-NFP but not reversing); EMA50 1H ~$2,350, EMA100 1H ~$2,335, EMA200 1H ~$2,324 — price below all three; price near lower BB 1H
+- 15m RSI: est. ~39 (approaching oversold floor; no confirmed reversal candle; price grinding sideways near lows)
+- ATR(14) 1H: ~$13.5 pts (elevated; no 24h contraction)
+- Funding: −0.0020% / 8h (slightly negative; shorts pay longs — mild structural LONG support, unchanged since prior entry)
+- OI: ~$5B Binance est. (manual verification needed — API blocked)
+- L/S ratio: est. 1.27 (56% long / 44% short) — manual verification needed
+
+**Pre-checks**:
+- **Watch criteria from 20:02 ICT entry (LONG candidate) — evaluation**:
+  - Criterion A (1H RSI bounce above 40 with 1H green close): NOT MET — RSI est. ~41, hovering near threshold without confirmed bounce candle ✗
+  - Criterion B (4H MACD histogram stabilizing toward −10): NOT MET — hist ~−11, no measurable improvement from 20:02 estimate ✗
+  - Criterion C (1H price close above $2,287): NOT MET — price ~$2,284, still ~$3 below reclaim level ✗
+  - Verdict: Watch criteria NOT met. No LONG candidate elevates to setup.
+
+- **Multi-TF alignment (LONG)**: FAIL
+  - (4H) LH/LL intact; MACD ~−11 (not reversing from below 0); no HL confirmed ✗
+  - (1H) RSI ~41, no clean exit of <40 zone; MACD hist negative (stabilizing, not growing); no 1H HL above $2,287 ✗
+  - (15m) RSI ~39, no reversal candle confirmed ✗
+  - Verdict: FAIL — no reversal signal on any TF
+
+- **Multi-TF alignment (SHORT)**: FAIL
+  - Price ~$2,284 at/near daily LL zone, not at resistance ✗
+  - 1H RSI ~41 — not exiting >65 overbought zone ✗
+  - 4H EMA100 ~$2,340 is ~$56 above price; no LH at resistance ✗
+  - Verdict: FAIL (chasing already-extended −2.6% move; wrong position for short entry)
+
+- **Range pre-check**: FAIL (all 4 gates)
+  - Gate 1 — 4H MACD in [−10,+10]: est. ~−11 → FAIL ✗
+  - Gate 2 — ATR(14) 1H declining 24h+: ~$13.5, elevated → FAIL ✗
+  - Gate 3 — horizontal range 2+ touch rejections: $2,261 = fresh LL, not a tested floor → FAIL ✗
+  - Gate 4 — BB 4H flat: expanding → FAIL ✗
+
+- **News Impact Score** (post-NFP window, 21:12–22:00 ICT):
+
+  | Event | Score | Direction |
+  |---|---|---|
+  | NFP April 2026 (+115K vs +62K forecast, released 19:30 ICT) | 15.0 (4 × 3 × 1.25) | Against LONG |
+  | US-Iran tensions (oil >$100, geopolitical risk-off ongoing) | 12.0 (4 × 3 × 1.0) | Against LONG |
+  | BTC Spot ETF outflows $268.5M (Thursday May 7) | 10.0 (4 × 2 × 1.25) | Against LONG |
+  | ETH TrustedVolumes exploit $5.9M + NK hacker freeze $30.8M on Arbitrum | 8.0 (4 × 2 × 1.0) | Informational |
+  | No macro event scheduled in 21:12–22:00 ICT window | — | Clear ✓ |
+
+  Stacked halving effect on LONG: 3 events ≥10 → $30 × 0.5 × 0.5 × 0.5 = $3.75 effective Tier 1 risk → below minimum viable trade size. Even if alignment were satisfied, news stacking would make LONG effectively untradeable today.
+
+- **Prohibitive (LONG)**:
+  - #6 NOT triggered: 1D MACD est. +6 (still positive; condition requires BOTH 1D MACD <0 AND BTC <EMA200; MACD condition not met) ✓
+  - #1 BORDERLINE: price $2,284 ≈ $3 below broken $2,287 support floor — structural reclaim not confirmed ✗
+  - #7 NOT triggered: no macro event in next 1–2h; NFP is past event ✓
+
+- **Prohibitive (SHORT)**: Academic — alignment fails first; no new prohibitive conditions to note
+
+**Reasoning**:
+- **LONG — NO_SETUP**: Watch criteria from the 20:02 ICT entry are the three-condition gate that would have elevated this to a minimal LONG candidate. None of the three criteria materialized in the 70 minutes between the entries: price did not reclaim $2,287, 1H RSI did not bounce cleanly above 40 with a green close, and 4H MACD did not show measurable improvement from −11. The structural picture is unchanged: 4H LH/LL in progress, MACD −11, no reversal candle on any TF. Additionally, even if alignment had marginally improved, the three stacked news Impact ≥10 events (NFP +115K beat, US-Iran tensions, BTC ETF outflows) would have reduced effective Tier 1 risk to $3.75 — below any sensible minimum trade size. Note that 1D MACD remains positive (+6 est.), so Prohibitive #6 (counter-trend bearish regime block) is still NOT triggered — the long direction is regime-allowed but not setup-ready.
+- **SHORT — NO_SETUP**: Alignment fails. Price at LL zone, not at distribution top. 1H RSI ~41 is the opposite of what a short entry requires. The strategy requires price to retrace to resistance first ($2,330–$2,350 zone: former support now resistance, near 1H EMA200 at ~$2,324) before a short setup can be evaluated.
+- **RANGE — NO_SETUP**: All 4 pre-check gates fail. Trending market, expanding ATR, no horizontal range.
+- **Window close in 48 min**: This is the second-to-last cron slot of today's trading window (22:00 ICT is the last). Any setup identified here would have only ~48 min before the mandatory session close. No pending order can be placed with 22:00 ICT validity cap on a 48-min horizon — fill probability too low, risk-management too compressed.
+- **Structural note**: The positive 1D MACD (+6) is the key regime indicator to watch overnight. If today's daily candle closes with MACD still positive, tomorrow morning's 09:00 ICT run will face the same regime (LONG structurally allowed, SHORT counter-trend risk-off rule relaxed). If the bearish daily candle pushes MACD below zero before tomorrow, Prohibitive #6 will trigger and block all longs until regime shifts. Tomorrow's morning run should re-evaluate MACD with fresh daily close data.
+- **Primary blocker**: Watch criteria not met (price did not reclaim $2,287; RSI did not bounce above 40 with green close; 4H MACD no improvement); 48 min to window close makes any pending order impractical.
+
+**Live setup details**: N/A
+
+**Pending order suggestion**: N/A (no qualifying setup; 48 min to 22:00 ICT window close — fill window too compressed for any pending order; see tomorrow's 09:00 ICT run)
+
+**Short watch for tomorrow (not a pending order — informational only)**:
+- If tomorrow 09:00–11:00 ICT: price bounces to $2,324–$2,350 zone (1H EMA200 / former support-turned-resistance) AND 1H RSI reclaims >60 from below, AND 4H MACD hist stabilizes above −10 → re-evaluate SHORT alignment. This would represent a classic dead-cat-bounce short at resistance after a breakdown, with the daily structure (LH/LL) providing directional bias.
+- Key tomorrow invalidation: price closes 1D above $2,367 (1D EMA200 reclaim) → invalidates the bearish 4H structure thesis.
+
+**Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 22nd consecutive run with Telegram blocked by sandbox egress; check journal directly)
