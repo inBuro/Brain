@@ -3337,3 +3337,74 @@ Both orders should be considered closed. No replacement orders for this run.
 - Key tomorrow invalidation: price closes 1D above $2,367 (1D EMA200 reclaim) → invalidates the bearish 4H structure thesis.
 
 **Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 22nd consecutive run with Telegram blocked by sandbox egress; check journal directly)
+
+---
+
+### 2026-05-08 22:12 ICT — auto check (WINDOW CLOSE)
+
+**Data source**: Web search aggregates (Bybit/CoinGecko/Binance REST APIs blocked — sandbox egress allowlist; 23rd consecutive affected run). Market state carried forward from 21:12 ICT run + trajectory extrapolation; NFP released 19:30 ICT (actual +115K vs +62K forecast); post-NFP period ongoing. Precision ±10%.
+**Price**: ~$2,284 est. (Δ −2.6% 24h; 24h high $2,356, 24h low $2,261; vol ~$21B USDT; flat vs 21:12 ICT run)
+**Decision**: NO_SETUP
+
+**Window close note**: This run is the 22:00 ICT scheduled slot, executing at 22:12 ICT (+12 min late). The trading window closed at 22:00 ICT per [[trading-hours]]. No new entries permitted regardless of market state; all evaluations below are informational for tomorrow's 09:00 ICT run.
+
+**Market state** (carried from 21:12 ICT + trajectory extrapolation):
+- 24h: high $2,356, low $2,261, vol ~$21B USDT; price flat ~$2,284 into window close (no meaningful bounce or breakdown in final hour)
+- BTC: ~$79,340–$79,743 — below 1D EMA200 ($82,127); BTC ~3.3% below EMA200; no structural improvement into close
+- 1D: RSI est. ~44–48 (neutral-bearish, declining from April rally highs); MACD line est. +4–6 (positive but declining through today's session — was +10.69 at 18:04 ICT, +9 at 20:02, +6 at 21:12, ~+4 at 22:12 est.; bearish daily candle compressing MACD; REMAINS POSITIVE — Prohibitive #6 NOT triggered); EMA200 1D ~$2,367 / EMA50 1D ~$2,211; price BELOW EMA200 by ~$83; daily candle closing near lows
+- 4H structure: LH/LL in progress — LH ~$2,400 (May 7 rejection), LL ~$2,261 (today); no 4H HL forming; 4H MACD est. ~−9.5 (trajectory: −11 at 21:12 → ~+1.5 pts/hr → ~−9.5 at 22:12; approaching [−10,+10] for the third time today — same phenomenon as the 14:15 ICT borderline −9.8 read); has NOT crossed 0 from below; EMA100 4H ~$2,340 (price below by ~$56)
+- 4H RSI: est. ~41–43 (flat-to-declining; no recovery signal)
+- 1H RSI: est. ~38–41 (at or entering oversold zone; no confirmed reversal candle with 1H green close)
+- 15m RSI: est. ~33–37 (approaching oversold floor; no reversal confirmation)
+- ATR(14) 1H: ~$13.5 (elevated; no confirmed 24h contraction)
+- BB 4H: Lower $2,241 / Mid $2,325 / Upper $2,409 (expanding; bands widened through session)
+- Funding: −0.0020% / 8h (unchanged; slightly negative — shorts pay longs; mild structural LONG support)
+- OI / L/S ratio: manual verification needed (API blocked throughout); background: 56% long / 44% short est. from prior sessions
+
+**Pre-checks** (informational — trading window closed at 22:00 ICT; no entries permitted):
+- **Multi-TF alignment (LONG)**: FAIL (+ window closed)
+  - (4H) MACD ~−9.5: approaching [−10,+10] threshold for third time today (same borderline read as 14:15 ICT run ~−9.8); has NOT crossed 0 from below (required gate for LONG alignment); no HL forming on 4H ✗
+  - (1H) RSI ~38–41: approaching oversold but no confirmed bounce with 1H green close; MACD histogram negative ✗
+  - (15m) RSI ~33–37: approaching oversold floor; no reversal candle ✗
+  - Verdict: FAIL — and window closed; academic
+- **Multi-TF alignment (SHORT)**: FAIL (+ window closed)
+  - Price $2,284 near 24h LL, not at resistance ✗; 1H RSI not exiting >65 ✗; no LH at resistance ✗
+- **Range pre-check**: FAIL (+ window closed)
+  - Gate 1 — 4H MACD ~−9.5: borderline (third approach to threshold today; same as 14:15 run); window closed
+  - Gates 2/3/4: FAIL (ATR elevated/expanding, $2,261 LL = 1 confirmed touch only, BB 4H expanding)
+
+**News Impact Score** (end-of-session summary):
+
+| Event | Score | Direction vs LONG |
+|---|---|---|
+| NFP April 2026 (+115K vs +62K forecast, released 19:30 ICT) | 15.0 (4 × 3 × 1.25) | Against |
+| US-Iran tensions (geopolitical risk-off, oil >$100) | 12.0 (4 × 3 × 1.0) | Against |
+| BTC Spot ETF outflows $268.5M (Thursday May 7) | 10.0 (4 × 2 × 1.25) | Against |
+| No macro event scheduled in 22:12–22:00 window | — | Clear ✓ |
+
+Three stacked Impact ≥10 events against LONG: effective Tier 1 risk = $30 × 0.5 × 0.5 × 0.5 = $3.75 (below minimum viable trade size). No LONG could be entered today even if alignment had satisfied.
+
+**Prohibitive (LONG)** (informational):
+- #6: NOT triggered — 1D MACD est. +4–6 (positive; condition requires BOTH 1D MACD <0 AND BTC <EMA200; MACD condition not met) ✓
+- #1: BORDERLINE — price $2,284 ≈ $3 below broken $2,287 daily support (no confirmed structural reclaim today) ✗
+- #7: NOT triggered — NFP released at 19:30 ICT; no macro event in current window ✓
+- **Window**: CLOSED (22:00 ICT) — unconditional no-entry rule, overrides all other conditions
+
+**Reasoning**:
+- **LONG — NO_SETUP**: Trading window closed at 22:00 ICT — primary rule. Additionally: (a) multi-TF alignment fails (4H MACD ~−9.5 approaching but not crossing 0, 1H RSI near oversold without reversal candle, no HL on any TF); (b) Prohibitive #1 borderline active (price $3 below broken $2,287 support); (c) three stacked Impact ≥10 news events reduce effective Tier 1 risk to $3.75 — below any viable trade size. The 1D MACD remaining positive (+4–6 est.) is the sole structural positive — Prohibitive #6 has NOT triggered today despite a −2.6% session.
+- **SHORT — NO_SETUP**: Window closed. Price at LL zone, not at distribution top. Alignment fails.
+- **RANGE — NO_SETUP**: Window closed. Gates 2/3/4 fail; gate 1 borderline but irrelevant.
+- **Session close summary (May 8, 2026)**: A full-day bearish session following the $2,400 rejection (May 7). New LL at $2,261, extending the 4H LH/LL structure from May 7. ETH underperformed BTC (ETH −2.6%, BTC est. −1.5%). NFP April 2026 beat (+115K vs +62K forecast) delayed rate-cut timeline — macro headwind. Three consecutive Impact ≥10 news events stacked against LONG all session. Despite all this, the 1D MACD closed the day positive (~+4–6), meaning Prohibitive #6 (counter-trend bearish regime block) did NOT trigger on May 8. The 4H MACD approached [−10,+10] three times today (14:15, 16:00, 22:12) but was pushed back each time by renewed selling.
+- **Tomorrow's 09:00 ICT watch list**:
+  - **1D daily candle close** (00:00 ICT May 9): Does MACD stay positive into close? If MACD turns negative overnight → Prohibitive #6 triggers, blocking all LONG setups at 09:00 run
+  - **4H MACD overnight**: At −9.5 and +1.5 pts/hr, MACD could cross 0 around 04:00–06:00 ICT if price holds; enters [−10,+10] zone immediately; range pre-check gate 1 may pass by morning
+  - **$2,261 LL hold**: Does the LL hold overnight? 2nd rejection of $2,261–$2,270 zone → potential range lower edge forming for May 9 range assessment (gate 3 progress)
+  - **ATR contraction**: 24h contraction needed before gate 2 passes; no earlier than May 9 afternoon
+  - **BTC EMA200**: BTC needs daily close above $82,127; extremely unlikely tonight (BTC ~$79,743, gap ~2.8%)
+  - Key levels: Support $2,261 / $2,241 (BB 4H lower) / $2,211 (MEXC key level); Resistance $2,287 (broken support) / $2,324 (1H EMA200) / $2,340 (EMA100 4H) / $2,367 (1D EMA200)
+
+**Live setup details**: N/A
+
+**Pending order suggestion**: N/A (trading window closed at 22:00 ICT; no new entries or pending orders until 09:00 ICT May 9, 2026)
+
+**Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 23rd consecutive run with Telegram blocked by sandbox egress; check journal directly)
