@@ -2944,3 +2944,76 @@ Both orders should be considered closed. No replacement orders for this run.
 **Pending order suggestion**: N/A (NFP at 19:30 ICT today — macro event within 12h; pending orders blocked per pending-orders.md)
 
 **Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 17th consecutive run with Telegram blocked by sandbox egress; check journal directly)
+
+### 2026-05-08 17:03 ICT — auto check
+
+**Data source**: Web search aggregates (Bybit/CoinGecko/Binance REST blocked — sandbox egress allowlist; 18th consecutive affected run). Sources: CoinMarketCap, MEXC News, blockchainreporter.net, CoinDesk, invezz.com, crypto-economy.com, newscord.org, themarketperiodical.com.
+**Price**: $2,272 est. (Δ −2.9% 24h; 24h high $2,356, new LL est. $2,270; vol ~$21B USDT)
+**Decision**: NO_SETUP
+
+**Market state**:
+- 24h: high $2,356, new LL est. $2,270 (fresh break below prior support $2,287; ongoing selling per MEXC)
+- BTC: $79,340 — slipped below $80K on Friday; below 200D EMA ($82,228); rejected from $82K weekly high (May 6), gave back ~$2,700; analysts split: CryptoQuant/Enflux see "fragile macro relief rally", Glassnode sees early structural recovery signs
+- 1D: RSI est. ~59 (unchanged); MACD line est. +22 (declining from +29.7 over 2-day drop, but POSITIVE — Prohibitive #6 NOT triggered); EMA50 $2,361.6 / EMA200 $2,367.4; price $2,272 below both by ~$92; daily candle extending lower
+- 4H structure: LH/LL confirmed; new LL ~$2,270 (below prior $2,287); no HL forming; EMA100 4H est. ~$2,345 (price below by ~$73); MACD 4H est. ~−10.0 (at boundary of [−10,+10] range zone; improving +1.5 pts/h in theory but bearish price action likely neutralizing recovery)
+- 4H RSI(14): est. ~44 (sideways to slightly declining)
+- 1H: RSI est. ~40 (declining from ~43 at 16:00 ICT as price falls $18 to $2,270; approaching <40 zone but not yet bouncing); MACD histogram negative and widening; price below EMA20 < EMA50 < EMA200 on 1H (full bearish alignment)
+- ATR(14) 1H: elevated; no 24h contraction confirmed; price range expanding further
+- Funding: −0.0020% (mildly negative; longs favored; carried — manual re-verify)
+- OI: manual verification needed (API blocked)
+- L/S ratio: manual verification needed (no public API)
+- News context: (1) TrustedVolumes $6.7M DeFi resolver exploit on Ethereum (NOT a major L2 hack — DeFi resolver only); (2) US Court froze 30,766 ETH at Arbitrum DAO (legal action by North Korea terrorism creditors on Kelp DAO rsETH exploit funds — NOT an Arbitrum infrastructure hack); (3) BTC rejected at 200D EMA $82,228 and pulled back to $79,340; (4) ETH ETF net inflows $356M in April (constructive long-term); (5) NFP April 2026 due 19:30 ICT today (8:30 AM ET, 147 min from this run)
+
+**Pre-checks**:
+- **Multi-TF alignment (LONG)**: FAIL
+  - (4H) New LL confirmed at $2,270; MACD ~−10.0 at boundary but declining price risks pushing back below −10; no HL forming ✗
+  - (1H) RSI ~40, declining toward <40 zone but not bouncing; MACD hist negative, widening ✗; no HL forming ✗
+  - (15m) N/A — higher TF alignment fails first
+  - Verdict: FAIL — structure still LH/LL; no reversal confirmation on any timeframe
+- **Multi-TF alignment (SHORT)**: FAIL
+  - Price $2,272 at new LL — near support, not resistance ✗
+  - 1H RSI ~40 — not exiting >65 overbought zone ✗
+  - 4H EMA100 est. ~$2,345 (~$73 above current price) — no LH forming at resistance ✗
+  - Verdict: FAIL
+- **Range pre-check**: FAIL
+  - Gate 1 — 4H MACD in [−10,+10]: est. −10.0 (at exact boundary; declining price action likely keeps it at/below −10) — borderline FAIL
+  - Gate 2 — ATR(14) 1H declining 24h+: FAIL (elevated; range expanding with new LL) ✗
+  - Gate 3 — horizontal range, 2+ rejections each edge: FAIL — new LL at $2,270 broke through prior $2,287 LL; range structure invalidated; no 2-touch rejection at lower edge ✗
+  - Gate 4 — BB(20,2) 4H flat: FAIL (bearish price action expanding bands) ✗
+  - Verdict: FAIL (all 4 gates; range structure broken by fresh LL)
+- **News Impact Score**:
+  - Macro-blocker table (18:03–19:03 ICT window):
+
+    | Event | Time | Blocker? |
+    |---|---|---|
+    | FOMC | Not scheduled | No |
+    | CPI | Not scheduled | No |
+    | Fed Chair speech | Not scheduled | No |
+    | NFP April 2026 | 19:30 ICT (147 min away) | No — outside 1-2h window at this check time |
+
+  - NFP April 2026 (pending): Prior month 178K, forecast 62K. Score = 4 (moderate move 24h) × 3 (systemic, USD/macro-wide) × 1.5 (regime change potential on large miss) = **18** → >10: if any setup fires, halve size. Pending orders blocked all day per pending-orders.md.
+  - BTC rejected at 200D EMA: Score = 4 × 2 (cross-asset) × 1.25 (trend confirmation, multi-day sustained) = **10** → against LONG: borderline halve-size; informational for this no-setup run.
+  - TrustedVolumes $6.7M exploit: Score = 4 × 2 (ETH DeFi cross-asset) × 1.0 (isolated) = **8** → informational; NOT a prohibitive headline (resolver exploit, not major L2 hack).
+  - Arbitrum court freeze: Score = 4 × 2 × 1.0 = **8** → informational; NOT a prohibitive headline (legal action on DAO funds, not Arbitrum infrastructure hack).
+  - No prohibitive headlines: no ETH core/L2 hack, no regulatory action, no macro event within 1–2h of this run ✓
+- **Prohibitive (LONG)**:
+  - **#1 TRIGGERED**: Fresh break of $2,287 key daily support → new LL at est. $2,270 ✗
+  - #2–#5: not triggered
+  - #6: NOT triggered (1D MACD est. +22, still positive)
+  - #7: not triggered (no prohibitive headlines in next 1-2h)
+- **Prohibitive (SHORT)**: All clear (academic — alignment fails first)
+
+**Reasoning**:
+- **LONG — NO_SETUP**: Two independent blocks. (a) Prohibitive #1 triggered: price extended below $2,287 key daily support to new LL ~$2,270, representing a fresh breakdown that structurally invalidates the support-retest long thesis. (b) Multi-TF alignment fails: no HL on 4H, MACD borderline negative at −10.0, 1H RSI at ~40 and declining rather than bouncing from oversold. The 4H MACD improvement narrative from prior runs (+1.5 pts/h) has been countered by the bearish price extension. Even with 1D MACD still positive (+22) and Prohibitive #6 NOT triggered, the short-term structure has deteriorated.
+- **SHORT — NO_SETUP**: Price is at a new 24h low, not at resistance. Taking a short here would mean chasing a ~2.9% completed move from the daily high with RSI at ~40 — no momentum signal. Alignment fails.
+- **RANGE — NO_SETUP**: The new LL at $2,270 invalidates the prior $2,287 range floor (only 1 touch, no rejection bounce). Gates 2 (ATR not contracting), 3 (range broken), and 4 (BB expanding) all fail. Gate 1 is borderline at −10.0 but irrelevant given other failures.
+- **BTC context**: BTC dropped from $82K to $79,340, slipping below the $80K psychological level and staying below 200D EMA ($82,228). This confirms macro risk-off pressure. However, ETH 1D MACD is still positive (~+22), so counter-trend prohibitive #6 is NOT triggered and structural LONG bets remain theoretically allowed — just not supported by current setup quality.
+- **Post-NFP watch (informational)**: NFP at 19:30 ICT in ~2.5h. Forecast 62K vs prior 178K — a potential large miss. If weak NFP → risk-on rotation possible (rate cut bets), which could benefit ETH. Watch 20:00 and 21:00 ICT runs for: (a) 1H RSI bounce from <40 with growing MACD histogram, (b) 4H MACD crossing into [−10,+10], (c) 1H HL forming above $2,270. If those three align, a LONG setup could form in the 20:00–21:00 ICT window with NFP Impact Score ~18 → effective Tier 1 risk $15 (halved), size ~0.38 ETH ($15 / $40 SL), TP3 est. ~$2,415 (+6.2% from $2,275). Next support below $2,270: $2,240–$2,211 per MEXC analysis.
+- **Primary blocker**: Fresh break of $2,287 support (Prohibitive #1) + multi-TF alignment fails all directions.
+- **Pending orders**: Blocked (NFP April 2026 within 12h per pending-orders.md).
+
+**Live setup details**: N/A
+
+**Pending order suggestion**: N/A (NFP at 19:30 ICT today — macro event within 12h; blocked per pending-orders.md)
+
+**Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 18th consecutive run with Telegram blocked by sandbox egress; check journal directly)
