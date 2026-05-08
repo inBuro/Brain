@@ -2688,3 +2688,72 @@ Both orders should be considered closed. No replacement orders for this run.
 **Pending order suggestion**: N/A (NFP within 12h — pending orders blocked per pending-orders.md; no pending orders appropriate today)
 
 **Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 13th consecutive run with Telegram blocked by sandbox egress; trader should check journal directly)
+
+---
+
+### 2026-05-08 13:11 ICT — auto check
+
+**Data source**: Web aggregates (Bybit/CoinGecko/Binance REST APIs blocked by sandbox egress — 14th consecutive affected run; confirmed: all 7 Bybit endpoints return 21-byte "Host not in allowlist"). Sources: CoinMarketCap, TradingView, Yahoo Finance, MEXC, CryptoTimes, Fortune, HeyGoTrade, Cryptometer. Indicator values estimated from published technical analyses + trajectory extrapolation from prior entries (precision ±10%). Raw klines unavailable.
+**Price**: ~$2,300 est. (24h range: $2,287–$2,356; 24H low $2,287.05 confirmed; recovering; Δ ~−2.4% 24h est.)
+**Decision**: NO_SETUP
+
+**Market state**:
+- 24h: high $2,356.05, low $2,287.05 (overnight LL), vol ~$22B USD
+- BTC: ~$81,000–$82,000 (near EMA200 1D ~$82,173; regime pivot zone; not yet confirmed above EMA200)
+- ETH 1D: price ~$2,300 below EMA50 1D ($2,361) and EMA200 1D ($2,367); both MAs converged within $5.8 band; 1D RSI ~54 (neutral); 1D MACD line +29.72 (positive), signal +31.60, hist −1.88 (bearish cross on MACD — line fell below signal — but line remains clearly positive at +29.72)
+- 4H structure: LL confirmed at $2,287 (new lower low vs May 7 floor $2,318); current 4H candle (11:00–15:00 ICT) opening ~$2,289 and recovering toward ~$2,300–$2,310 — potential HL forming, UNCONFIRMED until 15:00 ICT close; EMA100 4H est. ~$2,340–$2,355 (price below)
+- 4H RSI: ~45–48 est. (neutral-to-recovering; improving slightly from prior run ~44)
+- 4H MACD: est. ~−11 to −12 (trajectory: −8.1 May 7 22:02 ICT → −18 at LL 09:02 ICT → −13.5 at 12:14 ICT → ~−11 to −12 now; improving ~1.5–2 pts/h; still outside [−10,+10])
+- 1H RSI: ~48–52 est. (recovered from ~30 oversold at 09:02; neutral; oversold timing window closed — RSI already exited <40 zone at 10:01–11:00 ICT without 4H gate confirming)
+- 1H MACD: negative, histogram improving toward zero (contracting; not yet zero)
+- ATR(14) 1H: ~16–19 pt est. (elevated; overnight range ~$69; no confirmed 24h contraction)
+- BB(20,2) 4H: likely still widening — no close-confirmation of flattening yet (awaiting 15:00 ICT candle close)
+- Funding: −0.0020% (confirmed from prior run; slightly negative — shorts pay longs; above −0.02% prohibitive threshold ✓; mildly supportive for longs)
+- OI: ~$5B ETH perps est. (manual verification needed; API blocked)
+- Whale ratio (L/S): manual verification needed (no public API); whale accumulation context: ~140K ETH bought in prior 96h (bullish background signal)
+- Macro: NFP April 2026 at 19:30 ICT today (6.3h from run time); ADP private payrolls May 6: +109K vs ~80K expected (pre-NFP bullish beat); consensus NFP ~55K vs 178K prior (first tariff-era NFP, high uncertainty); macro NOT within 1–2h window → no immediate block on live entries ✓; pending orders blocked all day (NFP within 12h)
+
+**Pre-checks**:
+- **Multi-TF alignment (LONG)**: FAIL
+  - (4H) MACD est. ~−11 to −12: outside [−10,+10]; has NOT crossed 0 from below; LL at $2,287 confirmed; HL forming in current candle but unconfirmed until 15:00 ICT ✗
+  - (1H) RSI ~49: neutral — oversold timing window passed (RSI already exited <40 zone 10:01–11:00 ICT without 4H confirming; no longer "exiting <40 zone") ✗
+  - (15M) No raw data; inferred neutral/recovering ✗
+  - Verdict: FAIL — 4H gate fails; 1H timing window closed
+- **Multi-TF alignment (SHORT)**: FAIL — price ~$2,300 is $80–$115 below resistance $2,380–$2,415 ✗; 1H RSI ~49 (not exiting >65 zone) ✗
+- **Range pre-check**: FAIL (all 4 gates fail)
+  - Gate 1 — 4H MACD in [−10,+10]: est. ~−12 ✗
+  - Gate 2 — ATR(14) 1H declining 24h+: ~16–19 pts elevated, no confirmed contraction ✗
+  - Gate 3 — Clear horizontal range, 2+ edge rejections: LL $2,287 is 1 touch only ✗
+  - Gate 4 — BB(20,2) 4H flat: likely still expanding ✗
+  - Earliest range eligibility: May 9–10 (requires MACD inside [−10,+10], 24h ATR contraction, 2nd confirmed rejection of $2,287 zone, BB flat)
+- **News Impact Score**:
+  - Macro in next 1–2h (13:11–15:11 ICT): NONE identified ✓
+  - NFP 19:30 ICT: 6.3h away — NOT prohibitive for this run's window ✓; IS within 12h → pending orders blocked all day
+  - NFP forward impact estimate: ETH ~−2.4% 24h = Moderate (4 pts) × Systemic macro (3×) × Regime change 1.5× (first tariff-era NFP) = **18.0** → 10–20 range; would halve size if entry triggered today (no entry due to alignment failure)
+  - ADP May 6: 109K vs 80K (bullish tilt); if actual NFP strong (>100K) → rate-cut probability drops → near-term crypto headwind; if weak (<50K) → rate cuts sooner → bullish medium-term
+  - Other headlines (informational): whale accumulation 140K ETH/96h (bullish, ~3 pts); BNY Mellon Abu Dhabi BTC/ETH custody (bullish, ~10 pts); ETH ETF inflows $11.57M May 6 (bullish, ~5 pts); Glamsterdam upgrade June 2026 (bullish background)
+  - No prohibitive headlines: no hack, no regulatory action, no FOMC/CPI within 1–2h ✓
+- **Prohibitive (LONG)**: All clear ✓ — rule #6 NOT triggered (1D MACD +29.72 positive; first condition fails)
+- **Prohibitive (SHORT)**: All clear ✓ (academic since alignment fails)
+
+**Reasoning**:
+- **LONG — NO_SETUP; watch 15:00 ICT 4H close + post-NFP window**:
+  - 4H MACD est. ~−11 to −12 is the binding constraint (same as prior four runs). Improvement trajectory: ~+1.5 pts/h (−18 at 09:02 → ~−12 at 13:11 = +6 pts in 4.1h). At this rate, MACD crosses −10 around 15:00–16:00 ICT (RANGE pre-check gate 1 may pass) and 0 around 19:00–21:00 ICT (LONG 4H gate passes). Both milestones fall in or near the post-NFP window.
+  - 1H RSI timing window: closed. RSI bounced from <30 to ~49 since 09:02 ICT without 4H confirming. Next oversold window requires price retrace below $2,293 and 1H RSI re-entering <40 zone — would imply new LL attempt below $2,287; low probability in current recovery pattern.
+  - Base conditions (informational — pre-check blocks before evaluation): BC5 ✓ (1D MACD positive); BC1 partial (price near 24h low, EMA100 4H overhead); BC2 FAIL (1H/4H RSI not oversold); BC3 UNCONFIRMED (4H HL → closes 15:00 ICT); BC4 UNKNOWN (whale ratio needs manual verification). Est. 1–2 of 5.
+- **SHORT — NO_SETUP**: Price $80–$115 below resistance. 0–1 base conditions met.
+- **RANGE — NO_SETUP**: Gate 1 (4H MACD ~−12) fails immediately.
+- **Primary blocker**: 4H MACD ~−11 to −12 — same binding constraint as 09:02, 10:01, 11:00, 12:14 ICT runs. Improving but outside threshold.
+- **Secondary blocker**: NFP 6.3h away — pending orders blocked all day; live pre-NFP window closes at ~18:30 ICT.
+- **Watch triggers remaining today**:
+  - 15:00 ICT: 4H candle close — confirm HL above $2,287? → BC3 locked; MACD update (~−10 threshold check)
+  - 4H MACD crosses −10: est. 15:00–16:00 ICT → range pre-check gate 1 may pass; full range assessment then
+  - 4H MACD 0-cross from below: est. 19:00–21:00 ICT → LONG 4H alignment gate passes (post-NFP)
+  - 19:30 ICT: NFP release — reaction: weak (<50K) = bullish medium-term + setup window 20:30–22:00 ICT; strong (>100K) = near-term pressure, MACD recovery may stall
+  - If post-NFP setup: Impact Score ~18 → halve position size (Tier 1 risk $15 instead of $30)
+
+**Live setup details**: N/A
+
+**Pending order suggestion**: N/A (NFP within 12h — pending orders blocked per pending-orders.md; no pending orders appropriate today)
+
+**Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 14th consecutive run with Telegram blocked by sandbox egress; check journal directly)
