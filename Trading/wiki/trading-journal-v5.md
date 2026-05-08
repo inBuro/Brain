@@ -2413,3 +2413,75 @@ Both orders should be considered closed. No replacement orders for this run.
 **Pending order suggestion**: N/A (window closed; NFP tomorrow)
 
 **Telegram sent**: no (NO_SETUP heartbeat attempted — curl returned "Host not in allowlist"; 9th consecutive run with Telegram blocked by sandbox egress; trader should check journal directly)
+
+---
+
+### 2026-05-08 09:02 ICT — auto check
+
+**Data source**: Web aggregates (Bybit/CoinGecko/Binance REST APIs blocked by sandbox egress allowlist). Sources: CoinMarketCap, Fortune, Investing.com, MEXC, crypto.news, blockchainreporter.net, altindex.com, themarketperiodical.com, FXStreet. Indicator values are estimates derived from published web analyses (precision ±10%); 1D MACD value carried forward from previous entry (confirmed +29.72 at 22:02 ICT May 7).
+**Price**: $2,289 (Δ −2.57% 24h)
+**Decision**: NO_SETUP
+
+**Market state**:
+- 24h: high $2,356, low $2,287, volume ~$20.9B USD
+- BTC: ~$82,000 (+2.13% 24h); EMA200 1D ≈ $82,173 — BTC is 0.2% BELOW EMA200 (testing from below, rejected again)
+- ETH vs BTC divergence today: ETH −2.57% while BTC +2.13% — ETH significantly underperforming
+- 1D structure: Price below both EMA50 ($2,361.6) and EMA200 ($2,367.4); both MAs converging within a $6 band (defining technical event for May 2026). Overhead dual-MA resistance cluster at $2,361–$2,367. ETH failed at $2,400 on May 7, pulled back.
+- 1D RSI(14): ~59.8 (web source); 1D MACD: +29.72 (confirmed positive — carried from 22:02 ICT May 7 entry, still valid as daily candle ongoing)
+- 4H structure: Yesterday's session low was $2,318; overnight price briefly bounced to $2,356 then sold off to NEW LOWER LOW at $2,287 (< $2,318) — LL confirmed, bearish continuation. 4H MACD: was −8.1 at 22:02 ICT yesterday; estimated ~−18 now after overnight LL selloff (reverted well outside [−10,+10] range). No HL forming. EMA100 4H est. ~$2,340–$2,355 (price below).
+- 4H RSI(14): ~45 est. (neutral-to-oversold)
+- 1H RSI(14): ~30 est. (oversold; web source cites 28.7 — near oversold floor)
+- 1H MACD: negative/bearish (following 4H directional momentum)
+- 15m: insufficient data; inferred bearish given overnight sharp selloff and LL
+- Funding rate: manual verification required (API blocked)
+- OI 24h change: manual verification required (API blocked)
+- Top-100 L/S ratio / whale ratio: manual verification required (no public API); was ~1.28 Binance at May 7 close
+
+**Pre-checks**:
+- **Multi-TF alignment (LONG)**: FAIL
+  - (4H) MACD est. ~−18: outside [−10,+10]; has NOT crossed 0 from below; new LL at $2,287 — no HL forming; 4H structure bearish continuation ✗
+  - (1H) RSI ~30: exits the <40 oversold zone ✓ (one TF aligns); MACD negative ✗ (histogram not growing)
+  - (15m) No reversal candle data available ✗
+  - Verdict: FAIL — all three TFs must align simultaneously; 4H fails decisively
+- **Multi-TF alignment (SHORT)**: FAIL
+  - Price at $2,289 is near lows / bottom of range, not at resistance ($2,380–$2,415) ✗
+  - 1H RSI ~30 (oversold, not exiting >65 overbought zone) ✗
+  - No LH forming at resistance ✗
+  - Verdict: FAIL — structural position wrong; short setup requires price at resistance, not at support lows
+- **Range pre-check**: FAIL (3 of 4 conditions fail)
+  - 4H MACD ~−18: FAIL ✗ (requires [−10,+10]; gate condition fails immediately)
+  - ATR(14) 1H: FAIL ✗ (session range ~$69 overnight; ATR elevated, no confirmed 24h contraction)
+  - Clear horizontal range: FAIL ✗ (lower edge $2,287 is a new LL — only 1 touch so far; needs 2+ rejections within 24–48h; upper edge $2,400–$2,415 still valid with 2+ rejections)
+  - BB(20,2) 4H: likely FAIL ✗ (overnight volatility expansion; bands not confirmed flat)
+  - Earliest range setup re-eligibility: May 9–10 if 4H MACD returns to [−10,+10], ATR contracts 24h+, and $2,287–$2,300 zone gets a 2nd confirmed rejection
+- **News Impact Score**:
+  - Pre-NFP macro environment: ETH −2.57% = Moderate price impact (4 pts) × Systemic macro (3×) × Trend confirmation (1.25×) = **15.0** — in 10–20 range → would halve position size if entering; however all alignment checks fail so no entry anyway
+  - Upcoming NFP (U.S. Non-Farm Payrolls): release at 8:30 AM ET = ~19:30 ICT today — 10.5h from now; NOT within 1–2h prohibitive window; IS within 12h → no pending orders today
+  - Other active headlines: ETH spot ETF inflows ($101.2M on May 1, BlackRock+Fidelity ongoing) — bullish, informational, score ~4; Glamsterdam upgrade June 2026 (catalyst) — bullish background; whale accumulation 140K ETH in 96h prior — bullish
+  - Prohibitive headlines: NONE (no hack, no regulatory action, no FOMC/CPI within 1–2h)
+- **Prohibitive conditions (LONG)**: All clear ✓
+  - #6 Counter-trend in bearish market: requires 1D MACD <0 AND BTC <EMA200. BTC <EMA200 = TRUE; BUT 1D MACD = +29.72 (positive) → first condition unmet → Prohibitive #6 NOT triggered ✓
+- **Prohibitive conditions (SHORT)**: All clear ✓ (academic since alignment fails)
+
+**Reasoning**:
+- **LONG — NO_SETUP**: Multi-TF alignment fails at the 4H gate. Overnight price formed a new LL ($2,287 < yesterday's $2,318 session low) with estimated 4H MACD deteriorating back to ~−18 after briefly recovering to −8.1 yesterday. 4H shows bearish continuation, not reversal. The 1H RSI is oversold (~30), which is one positive TF signal, but all three timeframes (4H + 1H + 15M) must align simultaneously per v5 rules — and 4H fails definitively. Note: 1D MACD remains positive (+29.72), so Prohibitive #6 is NOT triggered; longs are not prohibited by regime, only blocked by alignment failure.
+- **SHORT — NO_SETUP**: Price at $2,289 is at/near support lows. Short setup requires price at resistance ($2,380–$2,415) with RSI >65 and LH forming. Neither condition exists. RSI ~30 (oversold) is the opposite of what a short entry needs. Max 1–2 of 5 base conditions for short at current price.
+- **RANGE — NO_SETUP**: Pre-check fails at gate 1: 4H MACD ~−18 is well outside [−10,+10]. The overnight selloff re-expanded the MACD in the negative direction after yesterday's recovery milestone. Range setup cannot be evaluated.
+- **Primary blocker**: 4H MACD est. ~−18 — blocks both range (gate 1) and long alignment (4H not crossing 0 from below). This is the single most binding constraint.
+- **Secondary blocker**: New LL at $2,287 — confirms 4H bearish structure rather than HL-forming reversal needed for long.
+- **NFP constraint**: Non-Farm Payrolls today at 19:30 ICT (10.5h away). No pending orders appropriate (within 12h macro window). Entries today only valid 09:00–18:00 ICT window (before NFP approach restriction). Post-NFP volatility could reset the picture in either direction.
+- **ETH vs BTC divergence**: BTC +2.13% while ETH −2.57% today is a notable negative for ETH. When ETH underperforms BTC on a recovery day, it signals relative weakness and makes long entries riskier until the divergence resolves.
+- **Watch for next checks**: (a) Does 4H MACD recover above −10 in the London session? (b) Does $2,287 hold as support on retests? (c) Does BTC close above EMA200 ($82,173) on the 1D? (d) Does a 4H HL form above $2,287 by 11:00–13:00 ICT? If yes to all — LONG alignment may pass in a later run today before 18:00 ICT.
+- **Reference levels for potential LONG if conditions align** (not a pending order — conditions not met):
+  - Entry zone: $2,290–$2,330 (HL zone — wait for 4H HL confirmation + MACD 0-cross)
+  - SL: $2,255 (below LL structure; ~75pt from zone top)
+  - TP1 (1:1): $2,405 | TP2 (1:2): $2,480 | TP3 (1:3.5+): $2,593
+  - Size: 0.4 ETH (Tier 1: $30 risk / 75pt SL)
+  - NFP halve-size note: pre-event Impact Score 15 → would reduce to 0.2 ETH if entering during NFP window
+  - DO NOT enter before 4H MACD confirms; DO NOT place pending orders today (NFP <12h away)
+
+**Live setup details**: N/A
+
+**Pending order suggestion**: N/A (NFP within 12h — pending orders blocked per pending-orders.md rule: "Macro event in next 12h")
+
+**Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 10th consecutive run with Telegram blocked by sandbox egress; trader should check journal directly)
