@@ -2563,3 +2563,43 @@ Both orders should be considered closed. No replacement orders for this run.
 **Pending order suggestion**: N/A (NFP within 12h — per pending-orders.md rule, pending orders blocked for all of today)
 
 **Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 11th consecutive run with Telegram blocked by sandbox egress; trader should check journal directly)
+
+---
+
+### 2026-05-08 11:00 ICT — auto check
+
+**Data source**: Web aggregates (Bybit/Binance/CoinGecko REST APIs blocked by sandbox egress — all return 21-byte empty responses; data sourced from Fortune, CoinMarketCap, MEXC, CoinDesk, Yahoo Finance aggregates)
+**Price**: $2,289 (Δ −2.57% 24h)
+**Decision**: NO_SETUP
+
+**Market state**:
+- 24h: high $2,356, low $2,287, volume ~$20.93B
+- BTC: ~$82,000 — at/borderline below EMA200 (~$82,173); regime pivot zone, not yet confirmed break
+- 4h structure: partial recovery from April lows underway; fresh 24h pullback from $2,356 → $2,287; no confirmed HL on 4h yet; structure ambiguous
+- Indicators (1h): RSI ~50 (neutral); MACD line positive but histogram negative (bearish MACD cross vs signal); price below EMA50; mid-Bollinger range
+- Indicators (4h): RSI ~51 (neutral); MACD line +29.72, signal +31.60, histogram −1.88 (bearish cross, momentum weakening though still above zero)
+- Indicators (1D): RSI ~55 (neutral); MACD line ~+29.72 (positive — above zero); 50d EMA ~$2,361 and 200d EMA ~$2,367 converged — ETH price ~4.3% below both
+- Funding: −0.0020% (mildly negative — shorts pay longs; minor tailwind for longs)
+- OI change 24h: manual verification needed (API blocked)
+- Whale ratio (L/S): manual verification needed (no public API)
+
+**Pre-checks**:
+- Multi-TF alignment (LONG): FAIL — 1h RSI ~50 (not exiting <40 zone); no HL forming confirmed on 1h/15m; no reversal candle at 24h low
+- Multi-TF alignment (SHORT): FAIL — 1h RSI ~50 (not exiting >65 zone); price at $2,289 is $61–$111 below resistance ($2,350–$2,400); no LH forming at upper BB
+- Range pre-check: FAIL — 4h MACD line +29.72 exceeds ≤+10 threshold (gate 1 blocked); clear trend signal still present on 4h
+- Prohibitive (long rule #6): NOT triggered — 1D MACD line +29.72 is positive (above zero), so the "1D MACD <0 AND BTC <EMA200" dual condition is not met; borderline BTC situation worth monitoring
+- News Impact Score: BNY Mellon launched BTC/ETH custody in Abu Dhabi (May 7) → Score ≈ 10 (Moderate 4pts × cross-asset 2× × trend-confirmation 1.25× = 10.0); below SKIP threshold; "halve size" would apply if a trade triggered. No prohibitive headline found. Manual verification of live Bybit news feed recommended.
+
+**Reasoning**:
+- Primary blocker: multi-TF alignment fails on all three setup types (long, short, range) — 1h RSI neutral (~50), no directional extreme on any timeframe, price mid-range between support ($2,230–$2,250) and resistance ($2,350–$2,400)
+- For LONG: base conditions review (informational only, alignment already blocks) — RSI 1h/4h not at extremes (cond. 2 fails); no confirmed HL on 4h (cond. 3 fails); whale ratio unknown; only cond. 1 (price near 24h low) and cond. 5 (1D MACD > 0) partially met — 2/5 known, need ≥3
+- For SHORT: price not at resistance; RSI not overextended; 0–1 conditions met — insufficient
+- Range excluded: 4h MACD too elevated (+29.72 vs ≤+10 threshold); trend momentum still present
+- Mild long-side tailwind from negative funding (−0.0020%) and whale accumulation news (~140K ETH bought in 96h) not enough to override alignment failure
+- BNY Mellon institutional custody (Impact Score ~10) is bullish context; would warrant halved size if setup triggered, not a blocker
+
+**Live setup details**: N/A
+
+**Pending order suggestion**: N/A (no setup detected; no pending order eligible)
+
+**Telegram sent**: no (curl returned "Host not in allowlist" — sandbox egress blocks api.telegram.org; 12th consecutive run with Telegram blocked; check journal directly)
