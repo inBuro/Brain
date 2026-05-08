@@ -2833,3 +2833,58 @@ Both orders should be considered closed. No replacement orders for this run.
 **Pending order suggestion**: N/A (NFP within 12h — pending orders blocked per pending-orders.md)
 
 **Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 15th consecutive run with Telegram blocked by sandbox egress; check journal directly)
+
+---
+
+### 2026-05-08 15:00 ICT — auto check
+
+**Data source**: Web search aggregates (Bybit/Binance/CoinGecko REST blocked — egress allowlist; 16th consecutive affected run). Sources: CoinMarketCap, Yahoo Finance, web search aggregates (MarketPeriodical, CoinSpectator, MEXC, financemagnates.com). 4H candle close outcome inferred from price trajectory vs 14:15 ICT entry; 1D MACD carried from 14:15 entry (1D candle still open until 00:00 ICT).
+**Price**: $2,289 (Δ est. −2.1% 24h; 24h high $2,356, low $2,287; vol ~$23B USDT)
+**Decision**: NO_SETUP
+
+**4H close verdict (key update this run)**: 4H candle 11:00–15:00 ICT closed BEARISH — opened ~$2,305, high ~$2,330, close $2,289. The expected HL from the 14:15 entry did NOT confirm. Price rejected at $2,330 and returned near the 24h low ($2,287). MACD trajectory improvement paused; est. back to ~−11.5 after the bearish close (was ~−9.8 at 14:15 ICT).
+
+**Market state**:
+- 24h: high $2,356, low $2,287, vol ~$23B USDT
+- BTC: ~$82,000 — still at/below 200-day EMA ($82,127–$82,164); "BTC hits 200 EMA wall" narrative unchanged; not confirmed above
+- 1D: RSI ~59 (neutral); MACD line +29.72 (POSITIVE — 1D MACD <0 condition FALSE → Prohibitive #6 NOT triggered); EMA50 $2,361.6 / EMA200 $2,367.4; price $2,289 below both by ~$73; candle bearish (open ~$2,320, low $2,287)
+- 4H structure: HL NOT confirmed — bearish 4H close at $2,289 after $2,330 rejection; LH/LL pattern intact; EMA100 4H est. ~$2,345 (price below by ~$56); MACD est. ~−11.5 (improved from −18 at 09:02 ICT but bearish close paused recovery; was borderline −9.8 at 14:15)
+- 4H RSI(14): est. ~44 (declining again after partial recovery)
+- 1H: RSI ~42 (declined from ~52 at 14:15 ICT on $41 drop in ~45 min); MACD bearish — negative histogram widening; price below EMA20 < EMA50 < EMA200 (full bearish alignment)
+- ATR(14) 1H: elevated (overnight range $69); no confirmed 24h contraction
+- Funding: −0.0020% (mildly negative; longs favored; carried from prior run — manual re-verify needed)
+- OI: manual verification needed (API blocked)
+- Top-100 L/S ratio: manual verification needed (no public API); background: ~230K ETH accumulated by whales in prior 96–120h (bullish context)
+
+**Pre-checks**:
+- **Multi-TF alignment (LONG)**: FAIL
+  - (4H) Bearish 15:00 close confirms no HL above $2,287; MACD ~−11.5 not crossed 0 from below ✗
+  - (1H) RSI ~42, approaching <40 zone but not exiting it upward from oversold; no HL forming ✗
+  - Verdict: FAIL — MACD 4H 0-cross now est. ~22:40 ICT (past 22:00 ICT window close at +1.5 pts/h from −11.5)
+- **Multi-TF alignment (SHORT)**: FAIL — price $2,289 near 24h low, not at resistance; RSI ~42 (not exiting >65); no LH at resistance ✗
+- **Range pre-check**: FAIL
+  - Gate 1 — 4H MACD in [−10,+10]: est. ~−11.5 at 15:00 close → FAIL (borderline pass from 14:15 reversed by bearish close) ✗
+  - Gate 2 — ATR(14) 1H declining 24h+: not confirmed; elevated; no contraction ✗
+  - Gate 3 — Horizontal range, 2+ edge rejections: only 1 confirmed LL touch at $2,287; no 2nd rejection yet ✗
+  - Gate 4 — BB(20,2) 4H flat: unconfirmed; bearish candle likely widening bands ✗
+- **News Impact Score**:
+  - No macro event in next 1–2h (15:00–17:00 ICT) ✓
+  - NFP April 2026 at 19:30 ICT (~4.5h): Impact Score est. 18 (4 × 3 × 1.5); >10 → halve size if trigger fires; pending orders blocked all day per pending-orders.md
+  - Informational: whale accumulation ~230K ETH (~4.0), ETH ETF inflows $11.57M (~3.75), BNY Mellon custody (~8.0) — all <10, size unchanged
+  - No prohibitive headlines: no ETH/L2 hack, no regulatory action, no macro within 1–2h ✓
+- **Prohibitive (LONG)**: All clear ✓ — #6 NOT triggered (1D MACD line +29.72 positive)
+- **Prohibitive (SHORT)**: All clear ✓ (academic — alignment fails first)
+
+**Reasoning**:
+- **LONG — NO_SETUP**: 4H HL did not confirm. The 4H candle opened ~$2,305, briefly recovered to $2,330, then reversed to close $2,289 — a bearish candle that pushes MACD back to ~−11.5 and invalidates the HL watch from the 14:15 entry. MACD 0-cross now estimated ~22:40 ICT, after the 22:00 ICT window close. No LONG alignment window today. Structurally viable (Prohibitive #6 clear; 1D MACD positive; mildly negative funding); 4H alignment timing is the gating constraint.
+- **SHORT — NO_SETUP**: Price at $2,289 is ~$56 below 4H EMA100 (~$2,345) and ~$73 below the 1D EMA cluster ($2,362–$2,367). Not at resistance. 1H RSI ~42 — no overbought condition. Alignment fails.
+- **RANGE — NO_SETUP**: 4H MACD ~−11.5 now outside [−10,+10] (gate 1 failed; bearish close reversed the borderline reading from 14:15). Gates 2/3/4 also fail. Earliest range setup: May 9 if overnight prints 2nd LL rejection at $2,287 + MACD recovers into range + ATR contracts.
+- **Primary blocker**: 4H HL rejection + MACD 0-cross after window close (LONG); not at resistance (SHORT); range gates 1–4 unmet (RANGE)
+- **Post-NFP watch (informational)**: If NFP at 19:30 ICT is neutral/weak and price holds $2,287 LL, 1H RSI may dip below 40 → alignment gate start forming in 20:00–21:00 ICT runs. With NFP Impact Score ~18: effective Tier 1 risk = $15 (halved); hypothetical size = $15 / ~$30 SL pts = 0.50 ETH. Hypothetical TP3 (entry ~$2,290, SL $2,250, TP3 1:3.5 = $2,290 + $140 = $2,430): +6.1% potential — meets 2.5% min comfortably.
+- **1D macro note**: Daily candle bearish (low $2,287, close approaching lows). 1D MACD line still +29.72 — will update at daily close (00:00 ICT May 9). Monitor that it stays positive.
+
+**Live setup details**: N/A
+
+**Pending order suggestion**: N/A (NFP at 19:30 ICT today — within 12h; pending orders blocked per pending-orders.md)
+
+**Telegram sent**: no (heartbeat attempted — curl returned "Host not in allowlist"; 16th consecutive run with Telegram blocked by sandbox egress; check journal directly)
