@@ -3712,3 +3712,100 @@ Max individual score: 4.5 < 10 → informational, no size reduction. No prohibit
 **Telegram sent**: no (curl returned "Host not in allowlist"; 26th consecutive run with Telegram blocked by sandbox egress; check journal directly)
 
 ---
+
+### 2026-05-09 19:14 ICT — auto check
+
+**Data source**: Web search aggregates (Bybit/CoinGecko/Binance REST APIs blocked — sandbox egress allowlist; 27th consecutive affected run). Sources: CoinGecko, CoinMarketCap, Gate.com, AltIndex, Investing.com, Barchart, CoinGlass, Fortune (May 8 article), CryptoRank (May 6 BTC data). Price cross-referenced across three spot venues; precision ±1% on price, ±5% on indicator estimates. 4H MACD directional consensus carried from 09:11/10:09/12:08 ICT Python computations and web aggregates.
+
+**Price**: $2,316 (Δ +0.94% 24h; 24h high $2,321; 24h low $2,265; vol ~$19.8B USDT)
+
+**Decision**: NO_SETUP
+
+**Market state**:
+- 24h: high $2,321, low $2,265, vol ~$19.8B USDT (spot; futures vol ~$39.4B per CoinGlass)
+- Key observation: ETH has consolidated in a tight $2,312–2,321 band for approximately 10 hours (since 09:11 ICT). Price delta over 10h: ~$0. This is the 4th consecutive run with no material price change.
+- BTC: est. ~$80,500–$81,500 (May 9; May 6 confirmed $81,250 vs EMA200 ~$82,128–$82,228; still below EMA200; manual verification needed for May 9 exact value)
+- 1D: RSI est. ~48–52 (neutral, recovering); MACD line est. positive (+5; carried from 10:09/12:08 ICT runs) → Prohibitive #6 NOT triggered (requires BOTH 1D MACD <0 AND BTC <EMA200; only 1 leg active); EMA200 1D ~$2,616 (price 12.3% below); EMA50 1D ~$2,265 (Barchart; price above by ~$51)
+- 4H structure: HH $2,400 (May 6) → HL $2,261 (May 8; confirmed HL vs prior LL $2,220; bullish structure developing). Recovery from $2,261 to $2,316. ~10h sideways consolidation at $2,312–2,321. 4H EMA100 est. ~$2,340 (not yet reclaimed); 4H EMA50 est. ~$2,298–2,307 (price above).
+- 4H MACD: Three Python runs this session (09:11/10:09/12:08 ICT) placed MACD line in range [−3.6, +5.0]; all within [−10, +10] gate. Web aggregate (AltIndex/Investing.com) histogram est. ~−0.7 (contracting). Consensus: MACD near zero, slightly negative to slightly positive, histogram shrinking. MACD cross-of-zero not confirmed.
+- 4H RSI: est. ~46–52 (neutral; web aggregates; declining from ~59 at 10:09 ICT estimate with sideways price action)
+- 1H: RSI est. ~52–58 (neutral; stayed above 50 through 10h consolidation); MACD histogram est. +3 to +5 (positive; 12:08 ICT Python: line +14.6/signal +10.9/hist +3.7)
+- 15m: RSI est. ~50–55 (neutral; sideways consolidation); no reversal candle at $2,316 (price mid-range, not at any support level)
+- ATR(14) 1H: est. ~$11–14 (declining since May 8 LL; approx 15–17h of contraction elapsed as of 12:08 ICT; now ~22–24h elapsed — approaching or meeting 24h threshold)
+- BB 4H: lower ~$2,241, mid ~$2,330, upper ~$2,419 (stabilizing after expansion; flatness not yet confirmed)
+- Funding: −0.0020%/8h (negative — shorts pay longs; consistent across all session runs; structural LONG bonus)
+- OI: ~$33.6B–$35.6B cross-exchange (manual verification needed; API blocked)
+- L/S ratio: est. ~1.27–1.30 (56% long / 44% short; web aggregates; manual verification needed from Bybit Trading Trend)
+- ETH spot ETF flows: May 1–6 cumulative ~$270M+ (confirmed); May 7–9 pending manual verification
+- Whale activity: 140K–230K ETH accumulated by large wallets in prior 96h per web reports (~$322M notional; bullish signal — unverified)
+- Fear & Greed Index: 11 (Extreme Fear)
+
+**Pre-checks**:
+
+**Multi-TF alignment (LONG)**: FAIL — price not at actionable entry point
+- 4H: HL $2,261 confirmed ✓ | MACD near zero, contracting (histogram ✓ trend) | price below 4H EMA100 ($2,340) ✗ | MACD cross-of-zero unconfirmed ✗
+- 1H: RSI exited <40 zone ✓ | MACD histogram positive ✓ | 15m reversal candle absent ✗ (price mid-range at $2,316, not at support — cannot form reversal entry trigger)
+- 15m: RSI neutral ~50–55 ✓ | Reversal candle: ABSENT ✗ (mid-range floating; no retest of support)
+- Verdict: FAIL — structural direction improving but entry timing missing
+
+**Multi-TF alignment (SHORT)**: FAIL — 4H MACD near zero (not bearish); 1H MACD positive; RSI neutral (~52–58); no LH forming at resistance; no short alignment
+
+**Range pre-check**: DEVELOPING (gate 1 passed 4th consecutive run; gates 2/3/4 progressing)
+- Gate 1 — 4H MACD in [−10, +10]: PASS ✓ (4th consecutive hourly run passing)
+- Gate 2 — ATR(14) 1H declining 24h+: BORDERLINE ✗/✓ — est. ~22–24h elapsed since May 8 LL when ATR began contracting; threshold is 24h; may have just met or still 1–2h short. If ATR contraction started at May 8 ~21:00 ICT, threshold is met at May 9 ~21:00 ICT. Treat as BORDERLINE.
+- Gate 3 — horizontal range 2+ rejections each edge: FAIL ✗ — lower edge $2,265: 1 confirmed touch (May 8 LL); upper edge $2,321: 1 confirmed touch (today's 24h high); second rejection touches at each edge not yet confirmed in data
+- Gate 4 — BB(20,2) 4H flat: PARTIAL ✗ — bands stabilizing but not confirmed flat; trajectory improving
+- Verdict: FAIL — gate 1 continues, gate 2 borderline/approaching, gates 3/4 still developing
+
+**News Impact Score** (window 19:14–20:14 ICT; no macro events scheduled; FOMC next June 16–17; CPI not today):
+
+| Event | Score | Direction vs LONG |
+|---|---|---|
+| BNY Mellon ETH/BTC custody (Abu Dhabi ADGM launch) | 2 × 2 × 1.25 = 5.0 | Pro-LONG |
+| Digital Asset Market Clarity Act push (Jul 4 target) | 2 × 3 × 1.25 = 7.5 | Pro-LONG |
+| 1inch exploit $5.87M (isolated DeFi incident) | 2 × 1.5 × 1.0 = 3.0 | Against LONG |
+| ETH spot ETF inflows $11.57M (May 6; trend confirm) | 2 × 1.5 × 1.25 = 3.75 | Pro-LONG |
+| Morgan Stanley crypto launch on E*Trade | 2 × 2 × 1.25 = 5.0 | Pro-LONG |
+| No macro event in next 1–2h | — | Clear ✓ |
+
+Max Impact Score: 7.5 < 10 → informational only; no size reduction. No prohibitive headlines. ✓
+
+**Prohibitive conditions (LONG)** — all checked:
+- #1 (fresh daily support break): NOT triggered — $2,316 above $2,265 support ✓
+- #2 (whale ratio <0.8): Likely NOT triggered — L/S est. 1.27–1.30; manual check needed ✓?
+- #3 (funding strongly positive >0.025%): NOT triggered — funding −0.0020%/8h ✓
+- #4 (inflow dominates): Manual verification needed; ETF data suggests exchange outflows (bullish) ✓?
+- #5 (mixed-market momentum): NOT applicable ✓
+- #6 (counter-trend bearish — 1D MACD <0 AND BTC <EMA200): NOT triggered — 1D MACD estimated positive; only BTC leg active; both conditions required ✓
+- #7 (critical news): NOT triggered ✓
+
+**Base conditions (LONG)** at $2,316:
+- BC1 (price at strong support): FAIL ✗ — $2,316 mid-range; HL support zone at $2,261–2,287 is $29–$51 below
+- BC2 (RSI 1H <40 OR RSI 4H <45): FAIL ✗ — RSI 1H ~52–58; RSI 4H ~46–52; both neutral
+- BC3 (4H structure reversing — HL forming): PASS ✓ — HL $2,261 > prior LL $2,220 confirmed; bullish 4H structure developing
+- BC4 (whale ratio >1.2 long): LIKELY PASS ✓ — L/S est. 1.27–1.30; manual verification needed
+- BC5 (1D trend not catastrophically bearish): PASS ✓ — 1D MACD positive; Prohibitive #6 not triggered
+- Score: 2–3 of 5 (BC3 confirmed + BC5 confirmed + BC4 likely; BC1 and BC2 fail). Borderline; needs manual BC4 confirmation to reach 3/5 firmly. Entry still not actionable without BC1/BC2.
+
+**Reasoning**:
+- LONG — NO_SETUP: For the 4th consecutive run, the structural picture is unchanged. The bullish thesis (HL confirmed, 1D MACD positive, funding negative, no prohibitives triggered) remains intact. However, price at $2,316 is 10 hours into a consolidation, not at an actionable support level. BC1 (price at support) and BC2 (RSI oversold) both fail. The entry trigger requires a pullback to the HL zone ($2,265–$2,290) with a 15m reversal candle. Without that, no entry. Conditions confirmed: BC3/BC5 (2 of 5). BC4 likely but unconfirmed. Max confirmed base conditions: 2 of 5, below the required ≥3 for entry.
+- SHORT — NO_SETUP: No change from prior runs. 4H MACD near zero (not bearish alignment); 1H MACD positive; RSI neutral; price not at resistance with volume rejection. Short alignment fails, base conditions <2 of 5.
+- RANGE — NO_SETUP: Gate 1 continues to pass (4th run). Gate 2 approaching 24h threshold (could pass by 20:00–21:00 ICT if ATR contraction holds). Gate 3 requires second edge touches — not yet observed in available data. Gate 4 stabilizing. Range setup may develop for the 21:00–22:00 ICT runs if gates 2/3/4 converge.
+- Primary blocker: Price mid-range at $2,316 — not at support (BC1 fail) and RSI neutral (BC2 fail). Base conditions insufficient at 2/5. No reversal candle trigger on 15m.
+- Watch for 20:00 ICT: (a) Pullback to $2,265–$2,290 + 15m reversal candle → evaluate LIVE LONG; (b) Second rejection at upper edge $2,321 → range gate 3 progressing; (c) ATR confirmed declining 24h+ → range gate 2 passes; (d) BTC crosses above EMA200 $82,128 → removes last leg of Prohibitive #6 (note: already not triggered).
+
+**Live setup details**: N/A
+
+**Pending order suggestion**: N/A — pending-orders.md condition 3 (structural pre-checks pass NOW) not met at current price. Pre-emptive limit at $2,278 remains WATCH scenario only; requires live 15m confirmation before placing.
+
+**Manual verification needed before any entry**:
+- Whale ratio from Bybit Trading Trend (app; est. 1.27–1.30 — unconfirmed; needed to lock in BC4)
+- 15m live chart: reversal candle at support (mandatory for alignment)
+- BTC price vs EMA200 on May 9 (May 6 data used; gap ~$1K; manual check needed)
+- ETH spot ETF flows May 7–9 (Farside Investors / The Block)
+- Exchange net inflow/outflow (Prohibitive #4; web data suggests outflows = bullish, unverified)
+- ATR 1H on live chart (Python/web estimates diverge; live chart required)
+- Custom trendlines on chart (trader's levels may differ from EMA-based estimates)
+
+**Telegram sent**: no (curl returned "Host not in allowlist"; 27th consecutive run with Telegram blocked by sandbox egress; check journal directly)
+
