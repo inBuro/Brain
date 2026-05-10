@@ -298,7 +298,7 @@ News Impact Score: ~3.0 est. (<10); no prohibitive headlines
 - 4H structure: LH ($2,400 May 6) → LL ($2,261 May 8) → consolidation/HL attempt $2,315–$2,328; price reached $2,328 intraday before pulling back to $2,322; HL forming (unconfirmed)
 - Indicators (1H): RSI ~53 (neutral per Investing.com snippet); MACD ~+0.21 above signal line (bullish, confirmed this run); EMA50 ~$2,306; BB: Upper ~$2,326 / Mid ~$2,314 / Lower ~$2,302
 - Indicators (4H): RSI ~53 (neutral); MACD hist ~0 to +2 (turning positive from near-zero; in [−10,+10] gate)
-- Indicators (1D): RSI ~50 (neutral); MACD hist ~−0.7 (bearish, confirmed); EMA50 ~$2,362; EMA200 ~$2,365 (web) — critical discrepancy with prior journal ($2,617) flagged; using web estimate this run
+- Indicators (1D): RSI ~50 (neutral); MACD hist ~−0.7 (bearish, confirmed); EMA50 ~$2,362; EMA200 ~$2,365 (web est.) — critical discrepancy with prior journal ($2,617) flagged; using web estimate this run
 - Funding: ~−0.0015%/8h est.; OI ~$35.6B; L/S ~1.28 est.
 
 **Pre-checks**:
@@ -685,3 +685,63 @@ Prohibitive conditions: LONG Prohibitive #6 TRIGGERED; SHORT alignment fails; RA
 - 1H RSI exact value (est. ~61)
 
 **Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 38th consecutive run; check journal directly)
+
+---
+
+### 2026-05-10 18:11 ICT — auto check
+
+**Data source**: Web search aggregates (Bybit/CoinGecko/Binance REST APIs blocked — sandbox egress allowlist, 32nd+ consecutive affected run). Sources: CoinCodex daily market update, AltIndex, Investing.com, CoinGlass, Yahoo Finance, CoinMarketCap; indicators carried/updated from 17:06 ICT entry trajectory. Precision ±5%.
+
+**Price**: $2,328 (Δ +0.50% 24h; 24h high ~$2,355; 24h low ~$2,261; vol ~$11.8B USDT)
+
+**Decision**: NO_SETUP
+
+**Market state**:
+- 24h: high ~$2,355, low ~$2,261, vol ~$11.8B USDT
+- BTC: ~$80,702 (below 1D EMA200 est. ~$82,127; gap ~$1,425; Prohibitive #6 active for 34th consecutive run)
+- 4H structure: LH/LL bearish macro intact — LH $2,400 (May 6) → LL $2,261 (May 8) → bounce to ~$2,328; potential HL forming off $2,261 but still unconfirmed (no pullback-and-hold sequence on 4H); price has held above $2,300 for ~20h
+- Indicators (1H): RSI ~57–58 (recovered from 53 at session open; below the 61 peak seen at 16:00 ICT; not yet in overbought territory); MACD hist ~+2.0 (mildly positive, flattening from earlier peak); EMA50 ~$2,308; BB: upper ~$2,342 / mid ~$2,318 / lower ~$2,294; price above BB mid
+- Indicators (4H): RSI ~52 (neutral); MACD hist ~+3 to +4 (positive — turned from deeply negative; inside [−10,+10] range gate but on the bullish side); EMA50 ~$2,318; EMA100 ~$2,348–$2,352 (overhead resistance); BB: upper ~$2,430 / mid ~$2,335 / lower ~$2,240 (wide ~8.1%, not flat)
+- Indicators (1D): RSI ~49 (neutral; recovering from Apr lows ~35); MACD hist ~−0.8 (negative, confirmed bearish, contracting); EMA200 ~$2,367 (price ~−$39, −1.7% below); ETH below all daily EMAs (20/50/100/200)
+- Indicators (15M): RSI ~55 (neutral-bullish bias); MACD hist ~+1.5 (mildly positive)
+- Funding: ~−0.0018%/8h (negative throughout session; structural LONG bonus if not blocked by other conditions)
+- OI: ~$35.61B (CoinGlass; API blocked — manual verification needed for change direction)
+- L/S ratio: ~1.28 (est. 56% long / 44% short per web aggregates; manual verification needed from Bybit Trading Trend)
+
+**Pre-checks**:
+- Multi-TF alignment LONG: FAIL — Prohibitive #6 hard-blocks all longs (1D MACD hist −0.8 confirmed <0 + BTC $80,702 < EMA200 $82,127; gap widened from 17:06 ICT by ~$798; 34th consecutive blocked run)
+- Multi-TF alignment SHORT: FAIL — 1H RSI ~57–58 (needs >65, 7–8pt below threshold); 4H MACD hist +3 to +4 (positive/bullish, active contra-short signal); 15M RSI ~55 (needs >70 for 15M trigger confirmation)
+- Range pre-check: FAIL — Gate 4: 4H BB width ~8.1% (far above "flat" threshold); Gate 3 sub-check: upper edge ($2,331–$2,355 zone) needs 2x clear rejection with bearish wicks — not confirmed (only 1 touch visible); Gates 1+2 PASS (4H MACD +3-4 inside [−10,+10], ATR(14) 1H flat/contracting ~$18)
+- News Impact Score:
+  - CLARITY Act Senate vote ~May 14 (systemic regulatory): IS = 1 × 3 × 1.5 = **4.5** (approaching but not within 1–2h; not a current blocker; no trade within 1–2h of the May 14 vote)
+  - Ethereum ETF inflows $101M on May 1 (institutional, 9d old): IS = 4 × 1.5 × 1.0 = **6.0** (informational; supports bullish bias but not a directional trigger)
+  - No prohibitive headlines (hack, regulatory action, FOMC/CPI within 1–2h)
+  - Max IS: 6.0 < 10 → informational; no size adjustment
+- Prohibitive conditions: LONG Prohibitive #6 active; SHORT multi-TF alignment fails; RANGE Gates 3+4 fail
+
+**Reasoning**:
+- **LONG — HARD BLOCKED**: Prohibitive #6 in force for 34th consecutive run. BTC $80,702 below 1D EMA200 $82,127 (gap ~1.7%). 1D MACD histogram negative. Per strategy: "longs not considered in this regime." Next re-evaluation: BTC daily close at ICT 07:00 May 11 (UTC 00:00). Ironically, multi-TF alignment for LONG would PASS if Prohibitive #6 lifted — 4H MACD bullish, 1H MACD positive, 15M MACD positive.
+- **SHORT — NO_SETUP**: Price at $2,328 is nowhere near actionable SHORT resistance. 4H EMA100 at ~$2,348–$2,352 is the nearest overhead level; 1D EMA200 ~$2,367 is the next. For a SHORT setup: need rally to $2,360–$2,410, 1H RSI >65, 4H MACD hist turning negative, 15M LH rejection candle. Current 4H MACD +3-4 actively contra-short. At today's trajectory price has moved only +$3 since 17:06 ICT — RSI not escalating toward 65.
+- **RANGE — NO_SETUP**: Gate 1 PASS (+3-4 inside [−10,+10]). Gate 2 PASS (ATR contracting, ~$18/h flat). Gate 3 partial — the full 24h range ($2,261–$2,355) is 4.2% wide (sufficient), but upper-edge rejections not confirmed (needs 2 clear wick rejections from $2,348–$2,355 zone). Gate 4 FAIL — 4H BB width 8.1% indicates trend volatility still elevated, not the "flat bands" characteristic of a mature range. RANGE conditions are getting closer but not there yet.
+- **Primary blocker**: LONG blocked by Prohibitive #6 (BTC macro); SHORT blocked by 1H RSI below threshold + 4H MACD bullish; RANGE blocked by BB still wide + upper edge unconfirmed.
+- **Context**: ETH has held above $2,300 for ~20h straight — first extended hold above $2,300 since May 6. The 4H MACD turning positive is a notable structural shift from prior weeks of bearish readings. The market is in a recovery drift but no clean setup yet.
+
+**Live setup details**: N/A
+
+**Pending order suggestion**: N/A
+
+**Watch triggers**:
+- SHORT (active watch): rally to $2,360–$2,410 + 1H RSI >65 + 4H MACD hist turning down + 15M LH rejection → hypothetical SHORT $2,370, SL $2,420 ($50), TP1 $2,320 / TP2 $2,270 / TP3 $2,193 (7.4% move), size 0.60 ETH Tier 1
+- RANGE upper edge: watch for a second bearish wick rejection from $2,348–$2,355 on 1H chart with declining volume — would confirm upper boundary (still need Gate 4 BB to flatten)
+- LONG re-evaluation: BTC daily close vs EMA200 May 11 ~07:00 ICT
+- CLARITY Act vote May 14: avoid new positions ~2h before the expected vote time
+
+**Manual verification needed**:
+- 1D EMA200 exact value (web est. ~$2,367; earlier journal entries carried $2,617 — live chart verification needed)
+- BTC 1D EMA200 exact value (est. $82,127)
+- Whale ratio from Bybit Trading Trend (est. ~1.28; no public API)
+- Current funding 8h cycle exact value (est. ~−0.0018%/8h)
+- OI 24h change direction (est. ~$35.61B; manual check)
+- Confirm whether $2,331 print on 17:06 run was a wick rejection or clean close (affects range upper-edge count)
+
+**Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 39th consecutive run; check journal directly)
