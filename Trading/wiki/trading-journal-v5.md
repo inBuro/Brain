@@ -1004,3 +1004,52 @@ Arbitrum judicial resolution scoring: ETH 24h move +0.97% = Minor = 2 pts × Cro
 **Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 51st consecutive run; check journal directly)
 
 ---
+
+### 2026-05-11 16:16 ICT — auto check
+
+**Data source**: Web aggregates (Bybit/CoinGecko/Binance APIs blocked by sandbox egress; TradingView $2,332.53 ETHUSDT; MetaMask $2,349.96; CoinMarketCap $2,345.38; using ~$2,332 mid as of 09:16 UTC)
+**Price**: $2,332 (+0.32% 24h)
+**Decision**: NO_SETUP
+
+**Market state**:
+- 24h: high $2,379, low $2,320, volume ~$18.6B (web aggregate)
+- BTC context: ~$81,030 (below 1D EMA200 ~$82,228); DailyForex May 11 headline "Bitcoin Pulls Back from 200" confirms BTC tested ~$82K zone but failed to sustain close above EMA200 — Prohibitive #6 remains active
+- 4h structure: HL/HH hypothesis intact but unconfirmed — price softened $13 from 15:15's $2,345 to $2,332; if $2,320 (24h low) holds, current pullback may form HL; if price loses $2,320, HL thesis weakens; no 4h closing candle confirmation available
+- Indicators (1h): RSI ~51 (neutral; slight decline from prior run's ~54 as price softened); MACD hist ~-0.35 (slightly negative, contracting); BB mid-zone; price near 1h BB midpoint ~$2,335
+- Indicators (4h): RSI ~47 (neutral-bearish); MACD hist ~-1.0 (negative, contracting toward 0); EMA100(4h) ~$2,334 (price just below); overhead resistance: 1D EMA50 ~$2,362, EMA200 ~$2,367
+- Indicators (1D): RSI ~50 (neutral, unchanged); MACD line ~+18.78 but below signal ~27.08 → histogram ~-8.30 (fading momentum on last closed daily candle); EMA50 ~$2,362 (overhead); EMA200 ~$2,367 (overhead); both MAs clustered in ~$5 band — resistance zone $2,362–$2,367
+- Indicators (15m): RSI ~49 (neutral); MACD flat; price softening in micro-trend; no reversal pattern
+- Funding rate: ~-0.0020% (Binance est.; negative — shorts paying longs; manual verification needed — Bybit API blocked)
+- OI: ~$33–35B est. (manual verification needed — Bybit API blocked)
+- Whale ratio (Trading Trend): manual verification needed (Bybit API blocked); web context: L/S ratio 1.28 (56% long / 44% short) — net-bullish positioning; 140K+ ETH accumulated by large wallets recently vs 113K ETH transferred to exchanges by ETF entities — net-mixed signal
+
+**Pre-checks**:
+- Multi-TF alignment LONG: FAIL — Prohibitive #6 triggered (BTC ~$81,030 < 1D EMA200 ~$82,228; ETH 1D MACD fading: line +18.78 but histogram negative -8.30 and ETH below all daily EMAs → conservative FAIL); additionally 4h MACD still negative and no confirmed HL on 4h closing basis
+- Multi-TF alignment SHORT: FAIL — 1h RSI ~51 not exiting the >65 zone required for SHORT entry timing; price declining by drift not momentum-reversal; 4h structure ambiguous (HL/HH vs LH not confirmed); no 4h LH rejection candle on closing basis; 15m RSI ~49 (no >70 rollback)
+- Range pre-check: FAIL — ATR(14) 1h elevated (~$28) after $321 swing ($2,058→$2,379); no 24h+ ATR contraction; no 2x-tested horizontal edges within 48h; 4h BB not flat (only 1 of 4 conditions passes: 4h MACD hist ~-1.0 within the -10/+10 band)
+
+**News Impact Score**:
+
+| Event | Date/Time | Blocker? |
+|---|---|---|
+| CPI Apr 2026 release | May 12 @ 08:30 ET = 19:30 ICT | Tomorrow — no blocker for 16:16 ICT slot |
+| FOMC meeting | Jun 16–17, 2026 | No |
+| ETH-Nasdaq correlation ~0.78 | Ongoing (30-day high) | Elevated sensitivity; not a standalone blocker |
+
+No macro-blocker active for 16:16 ICT slot. ETH 24h move +0.32% = Minor = 2 pts × asset-specific breadth = 1.5× × isolated forward modifier = 1.0× → Score = **3.0** (< 10, informational, size unchanged). No prohibitive headlines (no hack, no regulatory action, no FOMC/CPI within 2h of this slot).
+
+**Reasoning**:
+- Prohibitive #6 (LONG) active: BTC confirmed below 1D EMA200 by May 11 DailyForex headline; ETH below all daily EMAs (EMA50 $2,362, EMA200 $2,367) and 1D MACD histogram -8.30 (fading momentum) → conservative application of Prohibitive #6 maintained; all LONG setups remain blocked until BTC confirms 1D close above EMA200 AND ETH 1D MACD turns unambiguously positive
+- SHORT case: price softened $13 ($2,345→$2,332) but 1h RSI at ~51 never entered >65 zone — no valid SHORT timing signal; the pullback looks like drift (micro-correction inside daily range $2,320–$2,379), not a momentum reversal from overextension; for SHORT to fire, ETH must first rally to the $2,362–$2,367 resistance cluster with 1h RSI ≥65 and a 4h LH confirmed on close
+- RANGE: same structural failures as all prior runs today; ATR too elevated, no clean range framework, 4h BB still expanding; would need ~24h of sideways calm at minimum to form eligible range setup
+- 4h structural note (awareness, not a trigger): if price holds $2,320 and 4h closes confirm a HL above $2,058 then a push above $2,379 would establish HH → full bullish reversal structure; this would be the prerequisite for LONG alignment once Prohibitive #6 is lifted
+
+**Watch points for next checks (17:00 ICT)**:
+- LONG UNLOCK conditions (both required): (1) BTC confirmed 1D close above $82,228; (2) ETH 1D MACD line crosses above 0 — BTC retreated from EMA200 zone today, so earliest plausible confirmation remains May 12 09:00 ICT run (after midnight UTC daily close)
+- SHORT WATCH (low probability): requires ETH rally to $2,362–$2,367 with 1h RSI ≥65 and 4h LH rejection candle; currently price is drifting downward, not approaching that zone
+- CPI BLOCKER (CRITICAL REMINDER): May 12 @ 08:30 ET = 19:30 ICT; starting from the 19:00 ICT run tomorrow, flag as BLOCKED (macro headline within 2h); 20:00, 21:00, 22:00 ICT runs also blocked
+- Key structural support: if $2,320 (24h low) breaks, next cluster ~$2,280–$2,300; would further delay any LONG setup
+
+**Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 52nd consecutive run; check journal directly)
+
+---
