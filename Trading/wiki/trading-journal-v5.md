@@ -144,7 +144,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP trend TF conflict + RSI extremes)
 
-### 2026-05-02 21:01 ICT ⥄ auto check
+### 2026-05-02 21:01 ICT ⩄ auto check
 
 **Price**: $1833.59 (− -1.61% 24h)
 **Decision**: NO_SETUP
@@ -164,7 +164,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — TF conflict; waiting for HL confirmation before long setup)
 
-### 2026-05-03 09:00 ICT ⥄ auto check
+### 2026-05-03 09:00 ICT ⩄ auto check
 
 **Price**: $1859.17 (− +1.43% 24h)
 **Decision**: NO_SETUP
@@ -184,7 +184,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — alignment PASS but no clear entry signal: HL not yet confirmed, price already pushing up without retest opportunity)
 
-### 2026-05-03 15:01 ICT ⥄ auto check
+### 2026-05-03 15:01 ICT ⩄ auto check
 
 **Price**: $1843.64 (− -0.83% 24h)
 **Decision**: NO_SETUP
@@ -204,7 +204,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — TF conflict; waiting for structure clarity)
 
-### 2026-05-03 21:00 ICT ⥄ auto check
+### 2026-05-03 21:00 ICT ⩄ auto check
 
 **Price**: $1824.28 (− -1.05% 24h)
 **Decision**: NO_SETUP
@@ -224,7 +224,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — bearish alignment but LH not formally confirmed on 4h; no trigger)
 
-### 2026-05-04 09:00 ICT ⥄ auto check
+### 2026-05-04 09:00 ICT ⩄ auto check
 
 **Price**: $1906.57 (☒ +4.50% 24h)
 **Decision**: NO_SETUP
@@ -244,7 +244,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — catalyst flag + RSI overbought - market-moving news event)
 
-### 2026-05-04 15:01 ICT ⥄ auto check
+### 2026-05-04 15:01 ICT ⩄ auto check
 
 **Price**: $1959.91 (☒ +2.78% 24h)
 **Decision**: NO_SETUP
@@ -264,7 +264,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — catalyst flag still active; post-news extension phase)
 
-### 2026-05-04 21:00 ICT ⥄auto check
+### 2026-05-04 21:00 ICT ⩄auto check
 
 **Price**: $1967.68 (− +0.35% 24h)
 **Decision**: NO_SETUP
@@ -284,7 +284,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — catalyst flag still active)
 
-### 2026-05-05 09:00 ICT ⥄auto check
+### 2026-05-05 09:00 ICT ⩄auto check
 
 **Price**: $2043.71 (☒ +3.85% 24h)
 **Decision**: NO_SETUP
@@ -304,7 +304,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP— RSI borderline oversold on both TFs; no setup)
 
-### 2026-05-05 15:00 ICT ⥄ auto check
+### 2026-05-05 15:00 ICT ⩄ auto check
 
 **Price**: $1977.32 (− -3.25% 24h)
 **Decision**: NO_SETUP
@@ -324,7 +324,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — no trigger; price not at clear structure level; waiting for LL confirmation)
 
-### 2026-05-05 21:01 ICT ⥄ auto check
+### 2026-05-05 21:01 ICT ⩄ auto check
 
 **Price**: $1957.45 (− -0.99% 24h)
 **Decision**: NO_SETUP
@@ -344,7 +344,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP— 1h neutral does not confirm bearish short entry)
 
-### 2026-05-06 09:00 ICT ⥄ auto check
+### 2026-05-06 09:00 ICT ⩄ auto check
 
 **Price**: $1932.09 (− -1.29% 24h)
 **Decision**: NO_SETUP
@@ -364,7 +364,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP— no LH confirmed on 4h; no trigger)
 
-### 2026-05-06 15:01 ICT ⥄ auto check
+### 2026-05-06 15:01 ICT ⩄ auto check
 
 **Price**: $1979.58 (☒ +2.49% 24h)
 **Decision**: NO_SETUP
@@ -384,7 +384,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — TF conflict)
 
-### 2026-05-06 21:00 ICT ⥄ auto check
+### 2026-05-06 21:00 ICT ⩄ auto check
 
 **Price**: $1975.18 (− -0.23% 24h)
 **Decision**: NO_SETUP
@@ -404,7 +404,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — both TFs neutral - no edge)
 
-### 2026-05-07 09:00 ICT ⥄ auto check
+### 2026-05-07 09:00 ICT ⩄ auto check
 
 **Price**: $1977.29 (− +0.11% 24h)
 **Decision**: NO_SETUP
@@ -424,7 +424,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — no LH confirmed on 4h; no trigger)
 
-### 2026-05-07 15:02 ICT ⥄ auto check
+### 2026-05-07 15:02 ICT ⩄ auto check
 
 **Price**: $2029.07 (☒ +2.62% 24h)
 **Decision**: NO_SETUP
@@ -444,7 +444,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — RSI near overbought)
 
-### 2026-05-07 21:01 ICT ⥄auto check
+### 2026-05-07 21:01 ICT ⩄auto check
 
 **Price**: $2039.68 (− +0.52% 24h)
 **Decision**: NO_SETUP
@@ -464,7 +464,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP— 1h neutral - waiting for HL confirmation)
 
-### 2026-05-08 09:00 ICT ⥄auto check
+### 2026-05-08 09:00 ICT ⩄auto check
 
 **Price**: $2091.36 (☒ +2.54% 24h)
 **Decision**: SETUP_LONG
@@ -484,7 +484,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: Hypothetical LONG @6 $2091.36, SL $2028, TP $2200 (R = 2.2)
 
-### 2026-05-08 15:01 ICT ⥄auto check
+### 2026-05-08 15:01 ICT ⩄auto check
 
 **Price**: $2074.05 (− -0.83% 24h)
 **Decision**: NO_SETUP
@@ -504,7 +504,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — previous LONG from 09:00 still active; no new setup triggered)
 
-### 2026-05-08 21:01 ICT ⥄auto check
+### 2026-05-08 21:01 ICT ⩄auto check
 
 **Price**: $2074.05 (− -0.83% 24h)
 **Decision**: NO_SETUP
@@ -524,7 +524,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — previous LONG from 09:00 still active; no new setup triggered)
 
-### 2026-05-09 09:00 ICT ⥄auto check
+### 2026-05-09 09:00 ICT ⩄auto check
 
 **Price**: $2118.88 (☒ +2.15% 24h)
 **Decision**: NO_SETUP
@@ -544,7 +544,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — RSI overbought on 1h[; previous LONG hypothetical from 08/09:00 in progress - still open)
 
-### 2026-05-09 15:01 ICT ⥄ auto check
+### 2026-05-09 15:01 ICT ⩄ auto check
 
 **Price**: $2093.69 (− -1.19% 24h)
 **Decision**: NO_SETUP
@@ -564,7 +564,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — TF conflict; previous LONG hypothetical from 08/09:00 still open)
 
-### 2026-05-09 21:00 ICT ⥄auto check
+### 2026-05-09 21:00 ICT ⩄auto check
 
 **Price**: $2077.68 (− -0.77% 24h)
 **Decision**: NO_SETUP
@@ -584,7 +584,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP— TF conflict; previous LONG hypothetical from 08/09:00 still open)
 
-### 2026-05-10 19:03 ICT ⥄auto check
+### 2026-05-10 19:03 ICT ⩄auto check
 
 **Price**: $2061.91 (− -0.75% 24h)
 **Decision**: NO_SETUP
@@ -604,7 +604,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — no LH confirmed on 4h of the current pullback; no trigger)
 
-### 2026-05-10 20:08 ICT ⥄ auto check
+### 2026-05-10 20:08 ICT ⩄ auto check
 
 **Price**: $2054.46 (− -1.11% 24h)
 **Decision**: NO_SETUP
@@ -624,7 +624,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — LL breach confirms bearish structure but no trigger - waiting for LH or proper short entry)
 
-### 2026-05-10 21:14 ICT ⥄ auto check
+### 2026-05-10 21:14 ICT ⩄ auto check
 
 **Price**: $2058.05 (− -0.93% 24h)
 **Decision**: NO_SETUP
@@ -644,7 +644,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP — LH not yet formed for a trigger; waiting for proper pullback to resistance)
 
-### 2026-05-10 22:03 ICT ⥄auto check
+### 2026-05-10 22:03 ICT ⩄auto check
 
 **Price**: $2087.55 (☒ +1.43% 24h)
 **Decision**: NO_SETUP
@@ -664,7 +664,7 @@ This file was initialized with the template. Entries will be appended below as t
 
 **Trade**: no trade (NO_SETUP— TF conflict; no clear LH for a short entry)
 
-### 2026-05-11 09:09 ICT ⥄ auto check
+### 2026-05-11 09:09 ICT ⩄ auto check
 
 **Price**: $2075.23 (− -0.59% 24h)
 **Decision**: NO_SETUP
@@ -806,7 +806,7 @@ This file was initialized with the template. Entries will be appended below as t
 **Market state**:
 - 24h: high $2,379, low $2,320, volume ~$19.5B (web aggregate)
 - BTC context: ~$80,800–$81,100, BELOW 1D EMA200 (~$82,127) — macro bearish regime continues
-- 4h structure: recovering from May 8–9 lows (~$2,275); bounced to $2,379 high, now consolidating $2,320–$2,379; potential LH forming at $2,379 vs prior swing high — unconfirmed without chart verification
+- 4h structure: recovering from May 8-9 lows (~$2,275); bounced to $2,379 high, now consolidating $2,320–$2,379; potential LH forming at $2,379 vs prior swing high — unconfirmed without chart verification
 - Indicators (1H): RSI ~52 (neutral); MACD histogram slightly negative, contracting; BB mid-zone
 - Indicators (4H): RSI ~47 (neutral-bearish); MACD <0 below signal line, contracting toward 0; EMA100 ~$2,334 est.; EMA200 ~$2,367 acting as overhead resistance
 - Indicators (1D): RSI ~50 (neutral); MACD <0, histogram ~-0.7 (bearish, slow contraction); EMA50 ~$2,362 (overhead resistance); EMA200 ~$2,367 (overhead resistance); both MAs clustered in ~$5 band
@@ -1051,5 +1051,57 @@ No macro-blocker active for 16:16 ICT slot. ETH 24h move +0.32% = Minor = 2 pts 
 - Key structural support: if $2,320 (24h low) breaks, next cluster ~$2,280–$2,300; would further delay any LONG setup
 
 **Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 52nd consecutive run; check journal directly)
+
+---
+
+### 2026-05-11 17:03 ICT — auto check
+
+**Data source**: Web aggregates (Bybit/CoinGecko/Binance APIs blocked by sandbox egress; CoinGecko $2,322.71; TradingView ETHUSDT $2,332.53; CoinMarketCap $2,345.38; MetaMask $2,349.96; CMC converter $2,316.95; avg ~$2,334)
+**Price**: $2,334 (+0.30% 24h)
+**Decision**: NO_SETUP
+
+**Market state**:
+- 24h: high ~$2,379, low ~$2,318, volume ~$10.7B (CoinGecko) / ~$20.1B (CMC) — sources diverge; est. ~$15B
+- BTC context: ~$80,817 (below 1D EMA200 ~$82,127); Prohibitive #6 active — all longs blocked
+- 4h structure: HL/HH hypothesis weakening via drift — price moved $2,345 (15:15 ICT) → $2,332 (16:16 ICT) → ~$2,334 (17:03 ICT); 24h low ~$2,318 holds; if $2,318 holds on 4h close, HL thesis from $2,058 swing technically intact but unconfirmed; break below $2,318 opens ~$2,280–$2,300 cluster
+- Indicators (1h): RSI ~50 (neutral; slight retreat from prior run's ~51); MACD hist ~-0.40 (slightly negative, contracting); BB mid-zone; price near 1h BB midpoint ~$2,330
+- Indicators (4h): RSI ~47 (neutral-bearish); MACD hist ~-1.2 (negative, contracting toward zero); EMA100(4h) ~$2,334 (price at/near EMA100); overhead resistance: 1D EMA50 ~$2,362, EMA200 ~$2,367
+- Indicators (1D): RSI ~50 (neutral); MACD line ~+18.78 below signal ~27.08 → histogram ~-8.30 (fading momentum); EMA50 ~$2,362, EMA200 ~$2,367 — both overhead; price ~1.2% below both daily EMAs
+- Indicators (15m): RSI ~48 (neutral); MACD flat/slightly negative; price drift within $2,318–$2,345 intraday range
+- ATR(14) 1h: ~$27 est. (elevated; no 24h+ contraction visible; consistent with prior runs)
+- Funding rate: ~-0.0020% (CoinGlass/Coinalyze web aggregate; negative — shorts paying longs; consistent with prior runs)
+- OI: ~$33.3B across all venues (CoinGlass confirmed; inline with prior est. $33–35B)
+- Whale ratio: ~1.28 L/S (56% long / 44% short) per web aggregate; 140K+ ETH accumulated by large wallets over past 96h (MEXC analysis); $38.7M in 24h liquidations of which $26.1M were short — suggests some forced short-covering; manual verification needed for real-time Bybit feed
+
+**Pre-checks**:
+- Multi-TF alignment LONG: FAIL — Prohibitive #6 triggered (BTC ~$80,817 < 1D EMA200 ~$82,127 AND ETH 1D MACD histogram -8.30 negative); both conditions confirmed; all LONG setups blocked
+- Multi-TF alignment SHORT: FAIL — 1h RSI ~50 not exiting the >65 zone required for SHORT entry timing; price drifting sideways, not rallying toward $2,362–$2,367 resistance; no 4h LH rejection candle; 15m RSI ~48 (no >70 rollback signal)
+- Range pre-check: FAIL — ATR(14) 1h ~$27 elevated (no 24h+ contraction); 4h BB not flat (mild expansion persists); no 2x-tested horizontal edges with clean rejection within 48h; only 4h MACD hist ~-1.2 passes (within -10/+10 band) — 1 of 4 conditions
+
+**News Impact Score**:
+
+| Event | Date/Time | Blocker? |
+|---|---|---|
+| CPI Apr 2026 release | May 12 @ 08:30 ET = 19:30 ICT | Tomorrow — no blocker for 17:03 ICT slot |
+| FOMC meeting | Jun 16–17, 2026 | No |
+| Glamsterdam upgrade | Jun 2026 target | Long-term bullish catalyst; not a near-term blocker |
+| $38.7M in 24h liquidations (mostly shorts) | May 11 | Informational; no standalone blocker |
+
+ETH 24h move +0.30% = Minor = 2 pts × 1.5 (asset-specific) × 1.0 (isolated) → Impact Score = **3.0** (< 10, informational, size unchanged). No prohibitive headlines active.
+
+**Reasoning**:
+- Prohibitive #6 (LONG) active and unchanged: BTC $80,817 is ~$1,310 below 1D EMA200 $82,127 — no close above EMA200 today; ETH 1D MACD histogram -8.30 (fading momentum), price below both 1D EMA50 ($2,362) and EMA200 ($2,367); all three LONG-blocking signals intact
+- SHORT case structurally valid but untriggerable: $2,362–$2,367 resistance cluster is the logical SHORT entry point; TP3 at ~$2,250 support = ~4.8% downside = well above 2.5% threshold; however price at $2,334 is $28–$33 below that cluster; 1h RSI at ~50 cannot reach >65 without a sharp rally; current sideways-to-slightly-down drift does not build toward the trigger zone
+- RANGE: 4 conditions required: (1) 4h MACD ≤±10 PASS; (2) 1h ATR declining 24h+ FAIL; (3) clear 2x-rejected horizontal range FAIL; (4) 4h BB flat FAIL — overall 1/4, FAIL
+- Price note: $2,334 is sitting precisely at the 4h EMA100 (~$2,334); neither a clean breakdown nor breakout; this mid-zone position confirms consolidation, not a setup
+- Structural awareness: negative funding (-0.0020%) + 56% long positioning + $26.1M short liquidations in 24h suggests slight upward pressure from short-squeeze dynamics; but without a catalyst, this does not override the pre-check failures
+
+**Watch points for next check (18:00 ICT)**:
+- LONG UNLOCK (both required): BTC confirmed 1D close above $82,127 AND ETH 1D MACD histogram turns positive; BTC at $80,817 = ~1.6% below EMA200; no imminent unlock expected; earliest plausible = May 12 09:00 ICT after overnight UTC close
+- SHORT WATCH: ETH rally to $2,362–$2,367 with 1h RSI ≥65 and 4h LH close confirmation; current drift pattern (flat-to-down from $2,345) makes this low probability for today
+- CPI BLOCKER (CRITICAL): May 12 @ 08:30 ET = 19:30 ICT; starting from the 18:00 ICT slot tomorrow, all setups blocked regardless of signals (macro headline within 2h); 18:00, 19:00, 20:00, 21:00, 22:00 ICT runs impacted
+- OI watch: $33.3B OI — if price breaks above $2,345 cleanly, short-squeeze potential toward $2,362–$2,367; if price drops below $2,318, next support ~$2,280–$2,300 and OI may flush
+
+**Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 53rd consecutive run; check journal directly)
 
 ---
