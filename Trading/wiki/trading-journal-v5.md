@@ -1143,7 +1143,7 @@ This file was initialized with the template. Entries will be appended below as t
 - CPI BLACKOUT NOTE: Today's 18:00 ICT run (this run) is clear of the CPI blackout; tomorrow's 18:00–22:00 ICT runs (May 12) all blocked (CPI at 19:30 ICT = within 2h buffer)
 
 **Watch points for next check (19:00 ICT)**:
-- LONG UNLOCK (both required): BTC 1D close above $82,127 AND ETH 1D MACD hist turns positive; BTC ~1.5% below; no catalyst; earliest plausible = May 12 09:00 ICT after UTC overnight close
+- LONG UNLOCK (both required): BTC 1D close above $82,127 AND ETH 1D MACD hist turns positive; BTC ~1.5% below; no catalyst; earliest plausible = May 12 09:00 ICT after UTC midnight close
 - SHORT WATCH: ETH rally to $2,362–$2,367 + 1h RSI ≥65 + 4h LH close; sideways drift makes this low probability in next 1–3h
 - OI ESCALATION WATCH: $35.61B — simultaneous OI + price rise → potential squeeze toward $2,362–$2,367; OI + price drop → cascade toward $2,280–$2,300
 - CPI BLOCKER (CRITICAL): May 12 @ 08:30 ET = 19:30 ICT; ALL setups blocked at May 12 18:00 ICT onward; affected runs: 18:00, 19:00, 20:00, 21:00, 22:00 ICT May 12
@@ -1210,3 +1210,64 @@ This file was initialized with the template. Entries will be appended below as t
 **Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 55th consecutive run; check journal directly)
 
 ---
+
+### 2026-05-11 19:00 ICT — auto check
+
+**Data source**: Web aggregates (Bybit/CoinGecko/Binance APIs blocked by sandbox egress; CoinGecko $2,322.71; TradingView $2,332.53; CMC $2,345.38; MetaMask $2,349.96; CoinGlass futures $2,372.49; consensus ~$2,345)
+**Price**: $2,345 (+0.5% 24h)
+**Decision**: NO_SETUP
+
+**Market state**:
+| Field | Value |
+|---|---|
+| ETH price | ~$2,345 |
+| 24h change | +0.5% |
+| BTC price | ~$81,070 (Coinbase $80,880; CoinGecko $81,030; TradingView $81,259; Kraken $81,111) |
+| BTC vs 1D EMA200 | $81,070 vs ~$82,127 — BELOW (~−1.3%; Prohibitive #6 active) |
+| ETH 1D RSI | ~50 (neutral) |
+| ETH 1D MACD hist | ~−8.5 (negative; fading from +14.2 peak at 09:01 ICT) |
+| ETH 1D EMA50 | ~$2,362 (overhead resistance) |
+| ETH 1D EMA200 | ~$2,367 (overhead resistance; tight cluster with EMA50) |
+| ETH 4h RSI | ~47 (neutral-bearish) |
+| ETH 4h MACD hist | ~−1.5 (negative, contracting toward zero) |
+| ETH 4h EMA100 | ~$2,333 (price slightly above) |
+| ETH 1h RSI | ~49 (neutral) |
+| ETH 1h MACD hist | ~−0.7 (flat/contracting) |
+| Funding rate | ~−0.0020% (negative — shorts paying longs; prior run; API blocked, manual verify) |
+| Open Interest | $35.61B (CoinGlass) |
+| L/S ratio | ~1.28 (prior run; API blocked — manual verify) |
+| 1h ATR | ~$27 (elevated from intraday swings) |
+
+**Pre-checks**:
+- Multi-TF alignment (LONG): FAIL — 4h MACD hist −1.5 (bearish), 1h RSI ~49 (not in <40 demand zone), 4h structure ambiguous after HH rejection at $2,390
+- Multi-TF alignment (SHORT): FAIL — 1h RSI ~49 far below ≥65 trigger; 4h only partially bearish; 15m data unavailable (API blocked)
+- Range pre-checks (all 4 required):
+  - (1) 4h MACD hist ≤±10: ~−1.5 → PASS
+  - (2) ATR(14) 1h declining 24h+: ATR ~$27, flat-to-elevated from intraday drop; no confirmed 24h sustained decline → FAIL
+  - (3) 2x-tested horizontal range with clean edge bounces: consolidation $2,330–$2,345 too recent; no 2x clean rejections confirmed → FAIL
+  - (4) 4h BB flat: slight downward slope still present from prior day high → FAIL
+  - Score: 1/4 → RANGE pre-checks FAIL
+- Macro blocker (within 1-2h): NONE — CPI is May 12 @ 19:30 ICT (~24h away) → PASS today
+
+**Prohibitive #6 check**: BTC $81,070 < 1D EMA200 $82,127 AND ETH 1D MACD hist −8.5 < 0 → FIRES → ALL LONGS BLOCKED
+
+**News Impact Score**:
+- No prohibitive headlines: no ETH hack, no regulatory action, no macro event within 1-2h today
+- Identified catalysts: (1) Glamsterdam upgrade June 2026 — ETH-specific forward positive; not imminent; (2) Spot ETH ETFs cross $14B YTD inflows — asset-specific bullish context; (3) Whale accumulation 140K ETH in 96h window (early May) — bullish undercurrent; (4) BNY Mellon ETH custody in Abu Dhabi — isolated minor positive
+- NIS calc: 24h +0.5% = minor = 2 pts; Breadth = asset-specific (Glamsterdam + ETH ETF) = 1.5x; Forward = trend confirmation (sustained institutional inflows) = 1.25x → NIS = 2 × 1.5 × 1.25 = **3.75** → informational (<10, no size adjustment)
+- Manual news feed verification recommended before any entry
+
+**Reasoning**:
+- Market essentially unchanged from the 18:08 ICT run (~+$10 ETH, ~+$200 BTC; no new signals)
+- Prohibitive #6 remains the binding constraint: BTC needs a confirmed 1D close above $82,127 to unlock the LONG regime; at $81,070 it is $1,057 (1.3%) below the EMA200; no catalyst for tonight's UTC close is visible
+- SHORT is structurally valid in principle: EMA50/EMA200 cluster at $2,362/$2,367 is the logical resistance entry zone; hypothetical SHORT from $2,362 with SL $2,407 (+45 pts) would give TP1 $2,317 / TP2 $2,272 / TP3 $2,204 (6.7% downside > 2.5% minimum — exceeds threshold); 0.67 ETH at Tier 1 $30 risk; HOWEVER 1h RSI ~49 is far below the ≥65 trigger and price is ~$17 below the resistance entry zone; setup not triggering
+- ETH consolidating for 4+ hours in $2,330–$2,350 band; no momentum in either direction; characteristic of pre-event positioning ahead of tomorrow's CPI
+- OI steady at $35.61B: no significant change vs 18:00 run, consistent with derivative positioning in stasis
+
+**Watch points for next check (20:00 ICT)**:
+- LONG UNLOCK (both required): BTC 1D close above $82,127 AND ETH 1D MACD hist turns positive; BTC ~1.3% below; earliest plausible unlock = May 12 09:00 ICT (after UTC midnight close); not expected tonight
+- SHORT WATCH: ETH rally to $2,362–$2,367 + 1h RSI ≥65 + 4h LH confirmed (next rally must close below $2,390 to form LH); current sideways drift makes this low probability for today's remaining 3 slots
+- CPI BLACKOUT (CRITICAL): May 12 CPI at 08:30 AM EDT = 19:30 ICT tomorrow; 2h pre-event window activates ~17:30 ICT May 12; all slots 18:00–22:00 ICT May 12 blocked regardless of signals
+- If BTC breaks above $82,000 overnight: recheck 1D MACD trajectory at 09:00 ICT May 12 before considering LONG regime unlock
+
+**Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 56th consecutive run; check journal directly)
