@@ -1339,3 +1339,72 @@ This file was initialized with the template. Entries will be appended below as t
 - CPI BLACKOUT (CRITICAL): All setups blocked May 12 from ~17:30 ICT onward (within 2h of 19:30 ICT CPI release); today's 21:00 and 22:00 ICT runs are still clear
 
 **Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 57th consecutive run; check journal directly)
+---
+
+### 2026-05-11 21:00 ICT — auto check
+
+**Data source**: Web aggregates (Bybit/CoinGecko/Binance APIs blocked by sandbox egress; Fortune $2,330.99 @ 9:15am ET = 21:15 ICT; MetaMask $2,349.96; TradingView $2,332.53; CMC $2,345; consensus ~$2,333; BTC: Fortune $81,224 @ 21:15 ICT)
+**Price**: $2,333 (+0.3% 24h)
+**Decision**: NO_SETUP
+
+**Market state**:
+| Field | Value |
+|---|---|
+| ETH price | ~$2,333 |
+| 24h change | ~+0.3% |
+| 24h high / low | $2,379 / $2,320 |
+| BTC price | ~$81,224 (+$189 vs 20:06 ICT run) |
+| BTC vs 1D EMA200 | $81,224 vs ~$82,127 — BELOW (−$903, −1.1%; Prohibitive #6 active) |
+| BTC open today | $82,164 (strongest opening since Jan 31; briefly above EMA200 then reversed) |
+| ETH 1D RSI | ~50 (neutral; unchanged) |
+| ETH 1D MACD hist | ~−8.5 (negative; unchanged — well below zero) |
+| ETH 1D EMA50 | ~$2,362 (overhead resistance) |
+| ETH 1D EMA200 | ~$2,367 (overhead resistance; tight cluster with EMA50) |
+| ETH 4h RSI | ~47 (neutral-bearish; unchanged) |
+| ETH 4h MACD hist | ~−1.5 (negative, contracting toward zero; unchanged) |
+| ETH 4h EMA100 | ~$2,333 (price at) |
+| ETH 1h RSI | ~49 (neutral; unchanged) |
+| ETH 1h MACD hist | ~−0.7 (flat-bearish; unchanged) |
+| Funding rate | ~−0.0020% (negative; API blocked, prior-run estimate; manual verify) |
+| Open Interest | ~$35.6B (API blocked; prior-run estimate) |
+| L/S ratio | ~1.28 (API blocked; prior-run estimate; manual verify) |
+| 1h ATR | ~$27 (elevated; no confirmed 24h sustained decline) |
+| 4h BB | Upper ~$2,420 / mid ~$2,350 / lower ~$2,280 (~6% width; flat, not expanding) |
+
+**Pre-checks**:
+- Multi-TF alignment (LONG): FAIL — 4h MACD hist −1.5 (bearish); 1h RSI ~49 (not exiting <40 demand zone); 4h LH structure active
+- Multi-TF alignment (SHORT): FAIL — 1h RSI ~49 far below ≥65 trigger; price ~$29–34 below resistance cluster; 15m unavailable (API blocked)
+- Range pre-check (all 4 required):
+  - (1) 4h MACD hist ≤±10: ~−1.5 → PASS
+  - (2) ATR(14) 1h declining 24h+: ~$27 flat-to-elevated; no confirmed 24h sustained decline → FAIL
+  - (3) 2x-tested horizontal range with clean edge bounces: no confirmed 2x clean rejections at defined edges → FAIL
+  - (4) 4h BB flat: slight downward slope still present → FAIL
+  - Score: 1/4 → RANGE pre-checks FAIL
+- Macro blocker (within 1-2h): NONE — CPI May 12 @ 19:30 ICT (~22.5h away) → PASS for this run
+
+**Prohibitive conditions**:
+- LONG #6: ETH 1D MACD hist ~−8.5 < 0 AND BTC $81,224 < 1D EMA200 $82,127 → FIRES → ALL LONGS BLOCKED
+- SHORT: No prohibitive fires on available data; however trigger conditions not met (1h RSI ~49 far below ≥65; price not at resistance) → SHORT not triggering
+- RANGE: Pre-checks fail (3/4 conditions absent) → RANGE BLOCKED
+
+**News Impact Score**:
+- No prohibitive headlines: no ETH hack, no regulatory action, no macro event within 1-2h today
+- BTC notable: opened at $82,164 today (briefly above EMA200 $82,127) then sold off to $81,224 — failed breakout; bearish signal for short-term BTC structure; reinforces Prohibitive #6 persistence
+- Key catalysts: (1) Glamsterdam upgrade June 2026 — ETH-specific forward positive, not yet priced; (2) Spot ETH ETFs continued inflows; (3) Whale accumulation 140K ETH in 96h window (early May); (4) BNY Mellon ETH custody in Abu Dhabi
+- NIS: 24h +0.3% = minor = 2 pts; Breadth = asset-specific (ETH ETF + Glamsterdam) = 1.5x; Forward = isolated = 1.0x → NIS = 2 × 1.5 × 1.0 = **3.0** → informational (<10, no size adjustment needed if setup emerges)
+- Manual news feed verification recommended before any entry
+
+**Reasoning**:
+- Conditions essentially unchanged from 20:06 ICT run; ETH flat (~$2,333 vs ~$2,333); BTC slightly higher (+$189 to $81,224) but still below 1D EMA200
+- Critical BTC note: BTC opened at $82,164 today (above the $82,127 EMA200 threshold), which was the strongest opening since Jan 31 — but immediately reversed intraday to $81,224. This failed breakout is a bearish structural signal and actually reinforces the Prohibitive #6 regime: the market tested EMA200 as resistance and rejected it, suggesting a genuine 1D close above $82,127 is not imminent today
+- Prohibitive #6 remains binding for all LONGs: need BTC 1D close above $82,127 AND ETH 1D MACD hist to turn positive; today's UTC midnight close looks unlikely to break above given current price of $81,224 and the failed morning breakout attempt
+- SHORT structurally valid in principle: 4h LH at $2,390 confirmed; overhead EMA cluster $2,362/$2,367 is the logical entry zone; hypothetical SHORT from $2,362 SL $2,407 (+45 pts) → TP1 $2,317 / TP2 $2,272 / TP3 $2,204 (6.8% downside > 2.5% minimum); however price at $2,333 is $29–34 below trigger zone with 1h RSI ~49, no overbought momentum; short-trigger will not fire in remaining today's window barring a sudden $30 spike
+- RANGE: 4h MACD hist at −1.5 remains the only passing criterion; ATR, range-edge definition, and 4h BB conditions all fail; not actionable
+- Today's window closes at 22:00 ICT; one more check at 22:00 ICT remains
+
+**Watch points for 22:00 ICT (final today)**:
+- LONG UNLOCK (both required): BTC 1D close above $82,127 AND ETH 1D MACD hist turns positive; UTC midnight close is ~7h away; today's failed breakout at $82,164 reduces probability of tonight's close being above EMA200; earliest plausible LONG unlock = May 12 09:00 ICT if BTC recovers overnight
+- SHORT WATCH: ETH spike to $2,362–$2,367 + 1h RSI ≥65 + 4h LH confirmation; sideways drift + late-session fatigue makes this very low probability for 22:00 ICT slot
+- CPI BLACKOUT (CRITICAL): May 12 CPI @ 08:30 AM EDT = 19:30 ICT tomorrow; 2h pre-event window activates ~17:30 ICT May 12; today's 22:00 ICT run is still clear; tomorrow's affected runs: 18:00, 19:00, 20:00, 21:00, 22:00 ICT May 12
+
+**Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 58th consecutive run; check journal directly)
