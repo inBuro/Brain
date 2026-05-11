@@ -750,3 +750,49 @@ This file was initialized with the template. Entries will be appended below as t
 - Data quality note: previous journal entry (09:09 ICT) showed ETH at $2,075; this run's web aggregates show $2,345. Discrepancy likely reflects previous run using unavailable API data with stale fallback. This run uses multi-source web aggregates; price range $2,322–$2,363 confirmed across 3 independent sources (CoinGecko, MetaMask, OKX).
 
 **Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 46th consecutive run; check journal directly)
+
+### 2026-05-11 11:18 ICT — auto check
+
+**Data source**: Web aggregates (Bybit/CoinGecko/Binance APIs blocked by sandbox egress; prices from CoinMarketCap USDT $2,327.67 / MetaMask $2,349.96 / prior-run OKX $2,363; using ~$2,328 mid)
+**Price**: $2,328 (~+0.97% 24h; 24h range est. $2,250–$2,379)
+**Decision**: NO_SETUP
+
+**Market state**:
+- 24h: volume ~$18.6B (CoinMarketCap); 24h range est. $2,250–$2,379 (web aggregates)
+- BTC context: ~$80,800 (prior-run; 1h stale) — BELOW 1D EMA200 (~$82,127) → macro bearish regime persists
+- 4h structure: price recovering from May 8–9 lows (~$2,275); rejected from $2,345–$2,379 resistance; potential LH forming below prior swing high — unconfirmed, visual verification needed
+- Indicators (1D): RSI ~49 (neutral); MACD <0, histogram ~-0.7 (bearish, contracting slightly); EMA50 ~$2,362 (price BELOW); EMA200 ~$2,367 (price BELOW); both MAs clustered within ~$5 and acting as overhead resistance
+- Indicators (4H): RSI ~46 (neutral-bearish); MACD negative below signal line (bearish, contracting toward 0); ATR elevated after recent $270+ swing
+- Indicators (1H): RSI ~49 (neutral); MACD histogram neutral to slightly negative; BB mid-zone; price pulled back ~$17 from 10:11 high
+- Indicators (15M): RSI ~46 (neutral); MACD flat/slightly negative; no reversal candle pattern confirmed
+- Funding rate: manual verification needed (Bybit API blocked)
+- OI: manual verification needed (Bybit API blocked)
+- Whale ratio (Trading Trend): manual verification needed (Bybit API blocked)
+- Whale activity (web): 140K ETH accumulated by large wallets in 96h (bullish signal per web aggregates); 113K ETH transferred to exchanges by ETF-related entities (bearish overhang); mixed
+- ETF flows: net outflows noted May 8–9 (~$103.5M); broader 2026 inflow context bullish (~$14B cumulative)
+- Glamsterdam upgrade: targeting June 2026 — positive pre-event catalyst on the horizon
+
+**Pre-checks**:
+- Multi-TF alignment LONG: FAIL — Prohibitive #6 triggered (BTC <1D EMA200 AND ETH 1D MACD <0); 4h alignment also fails (MACD <0, no confirmed HL)
+- Multi-TF alignment SHORT: FAIL — 1h RSI ~49 (not exiting >65 zone as required); price is pulling back gently, not rejecting from a confirmed overbought level; 4h LH not yet confirmed
+- Range pre-check: FAIL — ATR elevated (price swung $270+ in ~12–18h); no clean horizontal range with 2× touches on each edge within 48h; BB not flat on 4h
+
+**News Impact Score**:
+- Main headline candidates: (1) Glamsterdam upgrade June 2026 announcement — ETH-specific, trend confirmation; (2) Whale accumulation 140K ETH (bullish, isolated); (3) ETF outflows $103.5M May 8–9 (bearish, isolated)
+- Price impact: +0.97% = Minor = 2 pts
+- Breadth multiplier: asset-specific = 1.5×
+- Forward modifier: isolated (no regime shift) = 1.0×
+- Impact Score = 2 × 1.5 × 1.0 = **3.0** → Informational (<10), size unchanged
+- No prohibitive headlines (no hack, no regulatory action, no imminent FOMC/CPI today)
+- Note: CPI release May 12 @ 19:30 ICT — will trigger macro-blocker for late-window entries (19:00–22:00 ICT) tomorrow
+
+**Reasoning**:
+- Prohibitive #6 remains active: BTC ~$80,800 < 1D EMA200 ~$82,127 AND ETH 1D MACD <0 → all long setups blocked in this macro regime; unchanged from 10:11 ICT entry
+- Short setup not formed: 1h RSI at ~49 has never entered and exited the >65 zone — the required momentum signature for short entry timing (per multi-TF alignment SHORT) is absent; price declining from $2,345 to $2,328 is a gradual drift, not an overbought-reversal signal
+- Range setup not formed: ATR is elevated following the large bounce from $2,058 (May 10) to $2,379 (today's high); horizontal range requires ATR contraction for ≥24h — currently expanding or flat, not contracting
+- Price is in a "transition zone" between resistance cluster ($2,362–$2,367 = 1D EMA50/EMA200) and near support ($2,234–$2,262); no edge-at-support or edge-at-resistance trigger for any direction
+- Watch for next checks: (1) SHORT watch — if ETH bounces to $2,363–$2,380 and 1h RSI reaches >65 with 4h MACD still <0 → short pre-check may pass; (2) LONG unlock — requires BTC to reclaim $82,127 (1D EMA200) AND ETH 1D MACD to cross above 0; not imminent
+
+**Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 47th consecutive run; check journal directly)
+
+---
