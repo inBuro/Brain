@@ -1480,3 +1480,88 @@ This file was initialized with the template. Entries will be appended below as t
 - ⚠️ CPI BLACKOUT: 17:30 ICT today — pre-event 2h window opens; all setups blocked at 18:00 ICT run; post-CPI window opens ~21:00 ICT (1.5h after print at 19:30 ICT)
 
 **Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 59th consecutive run; check journal directly)
+
+### 2026-05-12 11:00 ICT — auto check
+
+**Data source**: Web aggregates (Bybit/CoinGecko/Binance APIs blocked by sandbox egress; TradingView ETHUSDT ~$2,332.53; MetaMask ~$2,349.96; CoinMarketCap ~$2,345; investing.com RSI indicators; BTC Yahoo Finance $81,155; altindex.com 1D MACD=+20.02; 60th consecutive run without direct API access; derivatives data carried from prior run with web-aggregate updates)
+**Price**: $2,333 (+0.33% 24h)
+**Decision**: NO_SETUP
+
+**Market state**:
+| Field | Value |
+|---|---|
+| ETH price | ~$2,333 |
+| 24h change | +0.33% |
+| 24h range est. | ~$2,310 / ~$2,360 |
+| BTC price | ~$81,155 (−$83 vs 10:09 run; broadly flat) |
+| BTC vs 1D EMA200 | $81,155 vs ~$82,127 — BELOW (−$972, −1.2%; Prohibitive #6 ACTIVE) |
+| ETH 1D RSI | ~50 (neutral; unchanged) |
+| ETH 1D MACD LINE | ~+$20 (EMA12−EMA26; positive; per altindex.com web aggregate) |
+| ETH 1D MACD hist | ~−8.0 (MACD−signal; bearish cross from May 11 remains in force; price flat since then) |
+| ETH 1D EMA50 | ~$2,362 (overhead resistance) |
+| ETH 1D EMA200 | ~$2,367 (overhead resistance; tight cluster with EMA50) |
+| ETH 4h RSI | ~48 (slight recovery; consistent with 10:09 run) |
+| ETH 4h MACD hist | ~−1.0 (continuing to contract from −1.2 at 10:09 ICT; approaching zero) |
+| ETH 4h EMA100 | ~$2,321 (support; price $12 above) |
+| ETH 4h EMA200 | ~$2,275 (deeper support) |
+| ETH 1h RSI | ~50–52 (est.; consistent with 10:09 reading; web source reporting 28.7 flagged as likely different TF / stale data given <$8 price move from prior run) |
+| ETH 1h MACD hist | ~−0.1 to 0.0 (approaching zero-cross; mild recovery) |
+| Funding rate | ~−0.0020% (API blocked; prior-run estimate; shorts paying longs — mild bullish bias) |
+| Open Interest | ~$35.6B (API blocked; prior-run estimate) |
+| L/S ratio | ~1.28 (API blocked; prior-run estimate; manual verify) |
+| 1h ATR | ~$25 (stable; mild improvement from $27) |
+| 4h BB | Upper ~$2,420 / mid ~$2,350 / lower ~$2,280 (~6% width; flat; consistent with prior run) |
+
+**Pre-checks**:
+- Multi-TF alignment (LONG): FAIL — Prohibitive #6 active (both conditions met; see below); stops evaluation before MTA; even setting that aside: 4h structure shows LH/LL bias per web aggregates (near-term bearish drift from $2,390 peak), not HL; 4h alignment fails independently
+- Multi-TF alignment (SHORT): FAIL — 1h RSI ~50–52 far below ≥65 exit-zone trigger; ETH $29–34 below $2,362–$2,367 resistance entry zone; no overbought momentum on any TF; price not approaching trigger zone
+- Range pre-check (all 4 required):
+  - (1) 4h MACD hist ≤±10: ~−1.0 → **PASS** (improving)
+  - (2) ATR(14) 1h declining 24h+: ~$25 (down from $27 peak); 24h sustained decline not yet confirmed; 1h ATR has shown marginal improvement over last 3 runs but not a clean 24h+ declining trend → **BORDERLINE FAIL**
+  - (3) 2x-tested horizontal range with clean edge rejections: consolidation in $2,310–$2,360 band; no confirmed 2x clean rejection bounces at both edges; lower edge not yet defined by 2x rejection candles → **FAIL**
+  - (4) 4h BB flat: bands ~6% wide; consolidating but slight residual downward slope still present → **BORDERLINE FAIL**
+  - Score: 1/4 → **RANGE pre-checks FAIL**
+- ⚠️ CPI MACRO BLOCKER TODAY: US CPI (April data) @ 08:30 AM EDT = **19:30 ICT** (8.5h from this run). Pre-event 2h window activates at ~17:30 ICT. This run (11:00 ICT) is **CLEAR** of the blocker. Next affected run: **18:00 ICT** and all subsequent slots today.
+
+**Prohibitive conditions**:
+- LONG #6: ETH 1D MACD hist ~−8.0 < 0 AND BTC $81,155 < 1D EMA200 $82,127 → **FIRES → ALL LONGS BLOCKED**
+  - *MACD disambiguation*: altindex.com reports 1D MACD = +20.02; this is the MACD LINE (EMA12−EMA26 = positive, bullish underlying). The histogram (MACD LINE − signal) remains estimated negative from the May 11 bearish cross. Per established journal convention (histogram for Prohibitive #6 evaluation), the prohibitive remains active. Note: if the literal strategy text "1D MACD <0" is interpreted as the MACD LINE, then the condition would NOT fire; however BTC remains below EMA200 regardless.
+- SHORT: No prohibitive fires; entry conditions not met (RSI far below threshold, price below resistance) → SHORT not triggering
+- RANGE: 1/4 pre-checks pass → RANGE BLOCKED
+- Pending orders: **BLOCKED** — CPI within 12h per pending-orders.md rule; no pending-order suggestion possible today
+
+**News Impact Score (web search best-effort; manual news feed verification recommended before any entry)**:
+
+| Macro event | Scheduled time | Blocker status |
+|---|---|---|
+| US CPI (April 2026) | 19:30 ICT today (08:30 EDT) | Pre-event window opens 17:30 ICT; this run clear |
+| FOMC meeting | Next ~June 2026 | No blocker |
+| ETH core/L2 hack | None found | No |
+| SEC regulatory action vs ETH | None (ETH classified as commodity Mar 2026) | No |
+
+- US CPI at 19:30 ICT today: Price Impact 2 (ETH +0.33% = minor) × Breadth 3× (systemic macro) × Forward 1.5× (regime change potential) = **NIS 9.0** (informational for this run; pre-event blackout prohibitive takes over at 17:30 ICT independently of NIS)
+- Senate Digital Asset Market Clarity Act vote May 14: Price Impact 2 × Breadth 1.5× (asset-specific, codifies ETH as commodity) × Forward 1.5× (regulatory regime change) = **NIS 4.5** (informational; positive for ETH medium-term; 2 days away, no immediate trade impact)
+- Base "Azul" L2 upgrade May 13 (tomorrow): NIS 2 × 2× (ETH cross-asset, ETH+L2) × 1.0× (isolated) = **4.0** (informational; positive ETH ecosystem signal)
+- Whale accumulation 140K ETH in 96h window (early May): NIS = 2 × 1.0× (wallet-specific) × 1.0× = **2.0** (informational)
+- BTC context: BTC at $81,155 consolidated below EMA200 ($82,127); yesterday's failed breakout above EMA200 (BTC opened $82,164, then reversed) reinforces bearish BTC structure and Prohibitive #6 persistence
+- Overall NIS: No score ≥10; no prohibitive headlines; macro CPI pre-event blackout is the binding constraint from 17:30 ICT
+
+**Reasoning**:
+- Conditions stable vs 10:09 ICT run: ETH −$7 (−0.3%), BTC −$83 (−0.1%); no structural change on any timeframe
+- Prohibitive #6 is the binding constraint on LONGS: BTC at $81,155 remains $972 (1.2%) below 1D EMA200 ($82,127); yesterday BTC tested and rejected EMA200 ($82,164 open, reversed to $81,224), a failed breakout and bearish structural signal; next plausible LONG unlock requires BTC to close 1D above $82,127 — earliest opportunity is tonight's UTC midnight close (~13h away), though prior-day failed BOS reduces confidence
+- SHORT structurally valid in principle but trigger not approaching: 4h LH confirmed at $2,390; EMA50/EMA200 cluster at $2,362/$2,367 is the logical SHORT entry zone; hypothetical SHORT from $2,362 / SL $2,407 (+45 pts) → TP1 $2,317 / TP2 $2,272 / TP3 $2,204 (6.8% downside, well above 2.5% minimum); however price at $2,333 is $29–34 below entry zone and 1h RSI ~50 shows no overbought momentum; no catalyst for a $30 rally visible
+- RANGE improving but not actionable: 4h MACD hist contracting (−1.5 → −1.2 → −1.0 across last 3 runs); approaching the ±10 interior zone firmly; ATR at $25 showing mild improvement; however the critical conditions 3 (clean 2x-rejection edges) and 4 (confirmed flat BB on 4h) are not yet satisfied; RANGE remains on watch for future runs IF ETH consolidates further in $2,310–$2,370 band
+- CPI today is the dominant session risk: all pending orders blocked; all LIVE setups blocked from 17:30 ICT (within 2h of 19:30 ICT print); post-CPI resume expected at ~21:00–22:00 ICT depending on volatility; a hot CPI print would be bearish for risk assets and reinforce the SHORT structural case; a cold CPI would be bullish and may create a LONG setup if BTC simultaneously closes above EMA200 tonight
+- 1D MACD LINE at +$20 (positive) is a constructive longer-term signal: the underlying trend momentum (EMA12 > EMA26) is still bullish; what has inverted is the signal line crossover (MACD histogram negative). This means the 1D downtrend from the May 11 reversal is a correction within a still-intact longer-term bullish MACD LINE. If price stabilizes and EMA12 holds above EMA26 through tonight's close, the histogram will naturally contract and may turn positive in the coming days
+
+**Watch points for 12:00 ICT**:
+- LONG UNLOCK (both required): BTC 1D close ≥$82,127 AND ETH 1D MACD hist positive; gap −$972 (−1.2%); no catalyst visible; earliest plausible = May 13 09:00 ICT
+- SHORT WATCH: ETH spike to $2,362–$2,367 + 1h RSI ≥65 + 4h LH confirmation (next local high < $2,390); price $29–34 below trigger zone; low probability for near-term runs
+- RANGE WATCH: If 4h MACD hist continues contracting and approaches 0, and ATR decline continues into evening, RANGE_SHORT at $2,360–$2,380 / SL $2,405 (above EMA cluster) with TP1 $2,340 / TP2 $2,315 may become a post-CPI WATCH candidate for the 21:00/22:00 ICT slots
+- ⚠️ CPI BLACKOUT from 17:30 ICT: runs 18:00, 19:00 ICT blocked (within 2h of 19:30 print); 20:00 ICT marginal (0.5h after CPI); post-CPI resume 21:00 ICT (1.5h settle)
+
+**GitHub Issue**: skipped (NO_SETUP)
+
+**Telegram sent**: no (api.telegram.org blocked by sandbox egress allowlist — 60th consecutive run; check journal directly)
+
+---
