@@ -534,3 +534,25 @@ Also discovered: Telegram `parse_mode=Markdown` chokes on bare `*` and `_` chara
 **14× heartbeats/day spam concern:** acknowledged. If the trader complains about phone-noise after 1-2 days, the easy fix is to drop heartbeat to every 2nd cron run via a counter check. For now, "I want to see it's alive" outweighs "I'd rather have silence". Re-evaluate after 48h of live data.
 
 **Next:** verify the manual run sent a `NO_SETUP` heartbeat. If yes, the routine is fully wired. After that, watch the cron for the next ~3 hours (14:00, 15:00, 16:00 ICT slots) — any silent slot indicates a routine-level failure (vs the previous "decision didn't trigger send" silent path).
+
+---
+
+## 2026-05-12 — Wiki reconciled with real hourly schedule
+
+**Operation:** brought three wiki pages back in sync with the live routine config. The 2026-05-07 morning entry above (PR #8) documented a `0 2,8,14 * * *` UTC / 09:00–15:00–21:00 ICT schedule that was never actually committed to the `eth-paper-journal` routine — the trader switched to hourly (`0 2-15 * * *` UTC) later the same day (see "Routine moved hourly" entry above), but the wiki kept describing the 3-slot version, leaving a multi-day drift between docs and reality.
+
+**Updated:**
+- `wiki/trading-hours.md` — "How the routine handles this" section: cron `0 2,8,14 * * *` → `0 2-15 * * *` (every hour 09–22 ICT, 14 runs/day); slot-rationale bullet list replaced with continuous-hourly coverage paragraph; `Last updated` bumped.
+- `wiki/trading-journal-v5.md` — header schedule line: `3x/day at 09:00 / 15:00 / 21:00 ICT` → `hourly 09:00–22:00 ICT, 14 runs/day`.
+- `wiki/trading-strategy.md` — `Passive monitoring routine` section: rewritten for hourly cadence; notification line generalized to "Telegram or email" (Telegram is currently used; email is the contingency if egress allowlist breaks Telegram).
+
+**Why now:** trader reported no Telegram messages received over the last several days and asked to diagnose. Sequence of findings during that diagnosis:
+1. Journal entries on the remote env have been failing to reach Telegram for 20+ consecutive runs (`Host not in allowlist` for `api.telegram.org` in the sandbox egress) — separate issue, tracked below.
+2. Local working tree was 44 commits behind `origin/main`; once pulled, all 2026-05-09…2026-05-11 hourly journal entries appeared. So the routine IS firing and IS pushing — just the Telegram step is silently failing inside the remote sandbox.
+3. Wiki still described the 3-slot schedule from PR #8 even though reality moved to hourly the same afternoon. Reconciled here.
+
+**Outstanding (not fixed in this entry, tracked for next session):**
+- **Telegram egress blocked**: `api.telegram.org` is not in the allowlist of the remote env (`env_01QW2NCAhfwhFkaKjayBLWYd`) where the routine runs. Routine prompt acknowledges Bybit/CoinGecko/Binance may be blocked but doesn't account for Telegram itself being blocked. Fix options: (a) request Anthropic to add `api.telegram.org` to the env's allowlist; (b) switch notification delivery to Gmail MCP (already attached to the 2-week-review routine, untested at send-step but worth trying); (c) wait until the allowlist is broadened. For now `notification = Telegram or email` reflects the contingency rather than the steady state.
+- **2-week review** scheduled 2026-05-14 09:00 ICT — uses Gmail MCP; will be the natural test of whether email-via-MCP works on this env.
+
+**Next:** decide on the Telegram-fix path and apply. Then verify the next hourly run actually delivers a notification (currently silent for ~5 days).

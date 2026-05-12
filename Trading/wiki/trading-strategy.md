@@ -75,9 +75,9 @@ The strategy unfolds across the concept pages below:
 
 ## Passive monitoring routine
 
-A scheduled remote agent (`eth-paper-journal`) runs **3x per day at 09:00 / 15:00 / 21:00 ICT** (cron `0 2,8,14 * * *` UTC), all inside the [[trading-hours|trading window]]. Each run appends a structured entry to [[trading-journal-v5]] with market state, pre-checks, and the strategy decision (SETUP_LONG / SETUP_SHORT / SETUP_RANGE / NO_SETUP). On SETUP_* or PENDING_ELIGIBLE, an email alert is sent so the trader can act inside the window.
+A scheduled remote agent (`eth-paper-journal`) runs **hourly during the 09:00-22:00 ICT trading window** (cron `0 2-15 * * *` UTC, 14 runs/day), all inside the [[trading-hours|trading window]]. Each run appends a structured entry to [[trading-journal-v5]] with market state, pre-checks, and the strategy decision (SETUP_LONG / SETUP_SHORT / SETUP_RANGE / NO_SETUP). On SETUP_* or PENDING_ELIGIBLE, a notification is dispatched (Telegram or email) so the trader can act inside the window. On NO_SETUP the entry is committed to the journal but no notification is sent unless the prompt explicitly requests a heartbeat.
 
-Slot intent: 09:00 covers window open with fresh data for the morning scan; 15:00 catches setups that formed during the European session; 21:00 covers the London/NY overlap one hour before window close.
+Hourly cadence (instead of fewer, denser slots) means every setup-forming window has at most one missed hour of latency, and the journal serves as a continuous record of the strategy's reaction to every market state inside the window.
 
 ## What we don't trade
 
