@@ -8,6 +8,56 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-12 (вечер) — Gumroad product draft, Receipt, Share, tags
+
+Продолжение того же дня. Прошли четыре вкладки продукта Gumroad:
+
+- **Product**: создан draft `Fadercraft XL Performance`, slug `xl-performance`, $39, описание из landing-narrative Beat 1–2, CTA `Buy now`, три Additional Details (Hardware/DAW/License), VAT e-publication ON, refund policy ON с 14-day money back и fine print на support@ + /refund.
+- **Content**: пуст — bundle ещё не собран (T12 не сделан). License keys toggle в новом Gumroad UI живёт здесь, рядом с файлом, появляется только после upload — зафиксировано как gotcha в setup-doc.
+- **Receipt**: Button text `Download XL Performance` (24/26 chars). Custom message прошёл через две итерации — Gumroad **silently truncates на ≈580 символов mid-word**, без ошибки в UI; финальная версия ≈480 chars, проверена в Preview. Этот лимит залит в setup-doc как gotcha.
+- **Share**: Category `Music & Sound Design`, 5 тегов (Gumroad жёстко лимитит 5): `max for live`, `ableton live`, `launch control xl`, `novation`, `live performance`. Отвергнуты `m4l`/`ableton`/`launch control` как substring-дубликаты или amgibuous-match.
+
+**Critical lesson:** в один момент пользователь нажал Publish при пустом Content. Если бы кто-то нашёл URL и купил — получил бы пустоту, что запустило бы Gumroad Risk Review с негативным signal'ом на первой же продаже. Откатили через Unpublish. Правило: Publish только после (а) bundle ZIP в Content, (б) license keys toggle ON, (в) cover image, (г) env vars `GUMROAD_PRODUCT_ID` + `LATEST_BUNDLE_URL` в CF Pages. Записано в setup-doc.
+
+**Текущее состояние Gumroad-онбординга:** product в draft со всеми мета-полями, ждёт T12 (bundle assembly) в коде-репо `~/Projects/Claude/Fadercraft/`. После T12: upload ZIP → license keys ON → cover → publish → копировать product ID в `GUMROAD_PRODUCT_ID` env → smoke-test через 100% off discount.
+
+---
+
+## 2026-05-12 — Gumroad payout setup + seller_id залит в CF Pages env
+
+После сессии настройки на стороне Gumroad зафиксированы конкретные значения и архитектурное решение:
+
+- **Payout**: Bank Account, code 002 (Bangkok Bank), THB, Weekly schedule, min $100. Аккаунт привязан как Individual / Thailand resident на имя Kirill Bush.
+- **Billing**: Business name `Fadercraft`, address Huahin TH 77110, invoice PDF на каждый receipt — ON.
+- **Third-party analytics**: toggle включён, ID пока пусто (отложено до GA4 setup и до момента запуска платного трафика).
+- **Seller ID** `KqksizqwmpYMmR0vaDfEjA==` записан как Secret `GUMROAD_SELLER_ID` в CF Pages → fadercraft → Variables and Secrets (Production environment).
+- **Ping endpoint в Gumroad Advanced**: первый attempt поставил туда `https://fadercraft.com/api/verify-license`, но это endpoint Flow A (live license verification, ожидает JSON), а Gumroad шлёт form-urlencoded webhook (Flow B). Решено: Ping endpoint оставить пустым на MVP, Flow B handler будем писать только когда понадобится custom welcome email / Buttondown auto-subscribe.
+
+**Создан `brand/gumroad-setup.md`** — single source of truth по всей Gumroad-интеграции (seller account, payout, identifiers, two-flow architecture, env vars table, что НЕ настраиваем сейчас и почему).
+
+**Pending env vars** (нужны до live-флоу license verification): `GUMROAD_PRODUCT_ID` (после создания продукта), `LATEST_BUNDLE_URL` (после T12 bundle assembly). До их заполнения endpoint вернёт 500 — это намеренно, чтобы не анонсировать license flow раньше готовности.
+
+Roadmap-чеклист Gumroad-секции расширен и переразбит: 4/15 done. Paddle-секция уже была переведена в `⏸` ранее в этой же сессии.
+
+## 2026-05-12 — Gumroad verification passed, primary MoR разблокирован
+
+Пользователь сообщил, что Gumroad seller verification пройдена на профиль «русский паспорт + Таиланд + Bangkok Bank». Это снимает главный блокер запуска и переворачивает payment-стратегию.
+
+**Изменения в вики.**
+
+- `payment-rails.md`: Gumroad перевернут из **Blocked** в **Works ✅ (verified 2026-05-12)**. Onboarding-order переписан: Gumroad стал #1 primary MoR, Paddle сполз на #5 (deprioritized). Шапка last-updated обновлена.
+- `roadmap.md`: добавлена секция **✅ Gumroad** с подробным чеклистом настройки на стороне платформы (W-8BEN, payout → Bangkok Bank, product setup, license keys, ping-webhook, custom domain опц.). Paddle-секция переименована в `⏸ Paddle onboarding (deprioritized)`. Сводка прогресса дополнена строкой Gumroad 1/10. T12 переименован «Bundle assembly + **Gumroad** product» (был Paddle), env var `PADDLE_PRODUCT_ID` → `GUMROAD_PRODUCT_ID`.
+
+**Что НЕ тронуто.**
+
+- `verify-license.js` на `main` уже Gumroad-версия (Paddle-вариант жил на ветке `t6/paddle-license`) — код менять не надо.
+- `landing-narrative.md` уже содержит `Buy on Gumroad — $39` CTA — попадание один-в-один, не правлю.
+- T6 endpoint статус не меняется (уже ✅).
+
+**Открытый вопрос.** Стоит ли поднимать витрину параллельно на дополнительных площадках (Isotonik, maxforlive.com, KVR, Reverb, Plugin Boutique, Splice) — отвечено в чате, решение пока не зафиксировано в вики до подтверждения пользователем.
+
+---
+
 ## 2026-05-07 — landing-narrative v3: Beat 2 rewrite + supporting blocks
 
 Перенесённый из claude.ai-сессии диалог про лендинг XL_Performance: упор сместили с "докудоки" на "пользователь / юзабилити / восприятие". Зафиксировал в `wiki/landing-narrative.md` v3.
