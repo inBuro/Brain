@@ -43,3 +43,57 @@ Every entry follows this format (markdown subsection per check):
 ### 2026-04-30 - journal initialized
 
 This file was initialized with the template. Entries will be appended below as the paper-trading test proceeds.
+
+### 2026-05-12 14:05 ICT — auto check
+
+**Data source**: web search aggregates (Bybit/CoinGecko/Binance REST APIs blocked by sandbox egress allowlist; data synthesised from CoinMarketCap, TradingView aggregated signals, Investing.com snippets, search result summaries)
+**Price**: $2,320 (Δ −0.96% 24h)
+**Decision**: NO_SETUP
+
+**Market state**:
+- Price context: ETH consolidating in $2,200–$2,400 range since April; current price $2,320 sits at ~56% of the $2,260–$2,367 sub-range (midpoint ~$2,314)
+- 1D structure: ETH below both EMA50 ($2,361) and EMA200 ($2,367) — key resistance cluster; bearish macro structure
+- 1D RSI: 53.46 (neutral, no extreme)
+- 1D MACD: below signal line, histogram ≈ −0.7 (slightly bearish, but contracting — flattening momentum)
+- 4h structure: Bollinger Band squeeze in progress; bands contracting, price coiling; 4h MACD near zero (within −10/+10 band); ATR declining (implied by BB squeeze)
+- 1h RSI: ~48.6 (neutral; not at oversold/overbought extreme)
+- BTC: $82,127 — below its 1D EMA200 ($82,228); bearish macro regime confirmed
+- Funding rate: slightly positive (~+0.005%, longs paying); not at prohibitive level (>0.025%)
+- OI: $35.61B (elevated); no sharp directional change data available
+- Whale ratio / L/S ratio: not available via API — **manual verification needed**
+- Whale on-chain: 140,000 ETH accumulated in ~96h (approximately $322M) — bullish accumulation signal
+- Spot ETH ETF inflows: positive streak continuing (BlackRock/Fidelity led $101M single-session on 2026-05-01); institutional demand rebuilding
+- News: U.S. Senate Banking Committee hearing on Digital Asset Market Clarity Act on 2026-05-14 (2 days away, no immediate impact); Base blockchain "Azul" upgrade 2026-05-13 (tomorrow, L2 news, asset-specific at most); Glamsterdam upgrade targeting June 2026 (not imminent). No prohibitive headlines.
+
+**Pre-checks**:
+- Multi-TF alignment LONG: **FAIL** — 4h MACD already below zero (no cross from below), 1h RSI ~48 (not exiting <40 oversold zone), price at midrange not at support edge
+- Multi-TF alignment SHORT: **FAIL** — 1h RSI ~48 (not exiting >65 overbought zone), no LH forming on 1h, price at midrange not at resistance
+- Prohibitive — counter-trend in bearish market (LONG): **TRIGGERED** — 1D MACD histogram <0 AND BTC below 1D EMA200 ($82,127 < $82,228). Longs blocked by this prohibitive regardless of base conditions.
+- Prohibitive — mixed-market momentum (SHORT): **APPLIES** — 4h MACD near zero, no clear directional trend; momentum-based short would be invalid in this regime
+- News Impact Score: estimated ~1 (negligible 24h move <1%, no catalyst within 1–2h) — below 10 threshold; informational only
+- No prohibitive headlines: **PASS**
+- Trading window (09:00–22:00 ICT): **PASS** — current time 14:05 ICT
+
+**Reasoning**:
+- LONG is doubly blocked: (1) hard prohibitive — counter-trend in bearish market (1D MACD <0, BTC <EMA200 1D); (2) multi-TF alignment fails — 4h MACD not crossing 0 from below, 1h RSI neutral
+- SHORT fails on alignment — 1h RSI at 48 has not exited an overbought zone; no LH confirmed on 1h; price is not at a resistance edge that would justify a short trigger
+- RANGE pre-checks 3/4 pass (4h MACD near zero, ATR declining, BB flat), but price is at the midpoint of the range ($2,320 ≈ midpoint $2,314), not at a tradeable edge; no valid entry
+- RANGE_LONG would require price approaching $2,260 lower edge; RANGE_SHORT would require price approaching $2,367 upper edge
+- Pending order eligibility: **WATCH** — neither edge is being tested right now; no pending order justified
+- Bullish macro undercurrent (whale accumulation, ETF inflows) is a positive backdrop but does not override the prohibitive conditions or fix alignment
+
+**Watch levels for next hours**:
+- If price pulls back toward $2,260–$2,280 with rejection candle on 15m → RANGE_LONG candidate (watch for 15m rejection, then evaluate range pre-check 3: edge touched 2x minimum in last 24–48h)
+- If price pushes up toward $2,361–$2,367 cluster with rejection → RANGE_SHORT candidate (but note EMA50/200 resistance here; tight SL required)
+- Range width $2,260–$2,367 = 4.7% → satisfies ≥1.5% requirement for range trades
+- Hypothetical range parameters (WATCH only, not a live suggestion):
+  - RANGE_LONG entry $2,260, SL $2,242 (−18 pts, 0.8%), TP1 $2,314 (R:R 3.0), TP2 $2,367 (R:R 5.9), size 0.83 ETH ($15 risk, Tier 1)
+  - RANGE_SHORT entry $2,367, SL $2,386 (+19 pts, 0.8%), TP1 $2,314 (R:R 2.8), TP2 $2,260 (R:R 5.7), size 0.79 ETH ($15 risk, Tier 1)
+
+**Manual verification needed**:
+- Whale ratio (Bybit Trading Trend tab) — critical for confirming long/short dominance before any entry
+- Exact 4h candle structure (last 5 swing points: HH/HL/LH/LL) — not available from search aggregates
+- 1h and 15m live candle close confirmation if price approaches $2,260 or $2,367
+- Range pre-check 3: confirm both $2,260 and $2,367 each touched 2x with rejection in last 24–48h before activating pending order
+
+**GitHub Issue**: skipped (NO_SETUP)
