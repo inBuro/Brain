@@ -276,3 +276,77 @@ This file was initialized with the template. Entries will be appended below as t
 5. Whale ratio (Bybit Trading Trend tab) — unavailable from search aggregates
 
 **GitHub Issue**: skipped (NO_SETUP)
+### 2026-05-12 18:00 ICT — auto check
+
+**Data source**: web search aggregates (Bybit/CoinGecko/Binance REST APIs blocked by sandbox egress allowlist; data synthesised from CoinMarketCap, Zebpay Technical Analysis Report 12 May 2026, Yahoo Finance, MetaMask live price, search result summaries)
+**Price**: $2,320 (Δ −1.0% 24h) | 24h high $2,343 | 24h low $2,305
+**Decision**: NO_SETUP
+
+**Market state**:
+- Price context: ETH holding ~$2,315–$2,325; 53% of $2,260–$2,367 sub-range; unchanged from 17:09 run; symmetrical triangle consolidation apex approaching on 1D; no directional resolution
+- 1D structure: ETH below EMA50 (~$2,361) and EMA200 (~$2,367); both ~$41–47 above price; acting as resistance; bearish macro structure coiling
+- 1D RSI: ~56 (neutral; Zebpay May 12 2026 report)
+- 1D MACD: uncertain — Zebpay reports MACD line +0.21 (potentially positive), prior aggregates estimated hist ~−0.7; **manual chart verification required**
+- 4h structure: BB(20,2) flat; 4h MACD confirmed within −10/+10; ATR(14) declining (volatility contracting); range $2,260–$2,367 intact; no edge breakout; compression ongoing
+- 1h RSI: ~48 (neutral; estimated from price midrange position; conflicting sources from prior runs — manual check required)
+- BTC: ~$81,200 (below 1D EMA200 ~$82,228); bearish macro regime confirmed; $1,028 gap to EMA200 reclaim
+- Funding rate: ~+0.005–0.010% estimated; not at prohibitive >0.025% threshold
+- OI / Whale L/S ratio: not available from search aggregates — **manual verification needed**
+
+**Pre-checks**:
+
+| Check | Result | Notes |
+|---|---|---|
+| Trading window (09:00–22:00 ICT) | **PASS** | 18:00 ICT |
+| ⚠️ CPI April 2026 macro-blocker | **ACTIVE** | CPI at 19:30 ICT = 90 min away; "macro headline within 1-2h" prohibitive fully triggered for ALL trade types |
+| Prohibitive #6 — counter-trend bearish (LONG) | **TRIGGERED** | BTC $81,200 < EMA200 $82,228; LONG prohibited regardless of CPI blocker |
+| Multi-TF alignment LONG | **FAIL** | 4h MACD near zero (no cross from below); 1h RSI ~48 (not exiting <40 zone); price at midrange not at support |
+| Multi-TF alignment SHORT | **FAIL** | 1h RSI ~48 (not exiting >65 zone); no LH forming; price $47 below EMA cluster resistance |
+| Range pre-checks (4h MACD/ATR/BB/edges) | **4/4 PASS** | Range structure confirmed; but CPI prohibitive blocks all entries regardless |
+| Price at tradeable range edge | **FAIL** | $2,320 = 56% of range; $60 above lower edge, $47 below upper edge — midrange, no valid entry |
+| CPI pending-order blocker | **BLOCKED** | CPI 90 min away; pending orders blocked by macro-within-1-2h prohibitive |
+| Prohibitive headlines (hack/SEC/FOMC) | **PASS** | No prohibitive active beyond CPI |
+
+**News Impact Score**:
+
+| Macro event | Time (ICT) | Blocker? |
+|---|---|---|
+| US CPI April 2026 (BLS, 8:30 AM ET) | 19:30 today | **YES — within 2h** |
+| Jerome Powell term end | 15 May 2026 | No (not within 2h) |
+| Senate CLARITY Act hearing | 14 May 2026 | No (not within 2h) |
+| Base "Azul" upgrade | 13 May 2026 (tomorrow) | No (not within 2h) |
+
+Top headlines (all non-prohibitive beyond CPI timing):
+- US CPI April 2026 release at 19:30 ICT today — **hard blocker for all trades** (macro within 1-2h rule); consensus: headline ~3.7% YoY, core ~2.7% YoY; hot print → selling pressure, cool print → rally
+- Jerome Powell term ends May 15 → ongoing monetary-policy uncertainty (systemic backdrop, not a 2h trigger today)
+- Senate Banking Committee CLARITY Act hearing May 14 → regulatory forward catalyst (not imminent)
+- Analyst van de Poppe: 100-300% altcoin gains expected; capital rotation thesis from BTC → altcoins (bullish undercurrent, does not override prohibitives)
+
+Impact Score (for 24h move context, separate from CPI prohibitive):
+- Price Impact: −1.0% 24h → Moderate (4 pts)
+- Breadth: CPI is systemic macro → ×3
+- Forward: trend-confirmation series (ongoing macro pressure week) → ×1.25
+- **Score = 4 × 3 × 1.25 = 15** → would halve position size if a trade were open; moot since CPI prohibitive hard-blocks all entries
+
+**Reasoning**:
+- **LONG**: Double-blocked — (1) CPI macro prohibitive (90 min away); (2) prohibitive #6 (BTC $81,200 < EMA200 $82,228); (3) multi-TF alignment fails (4h no cross, 1h RSI neutral, midrange price)
+- **SHORT**: Blocked by CPI prohibitive and alignment failure — 1h RSI ~48 (neutral), no LH structure confirmed, price $47 below EMA resistance cluster; mixed-market momentum prohibitive also applies (4h MACD near zero)
+- **RANGE**: All 4 structural pre-checks pass (4h MACD ≈ 0, ATR declining, BB flat, $2,260–$2,367 range confirmed with rejections at both edges). However: (a) CPI macro prohibitive hard-blocks any entry — "volatility about to spike, range will break"; (b) price is at midrange ($2,320), not at either tradeable edge; no valid entry even if prohibitive were absent
+- **PENDING**: Hard-blocked by CPI within 2h — any limit order placed now could fill during the spike
+
+**Post-CPI watch levels** (for 20:00 ICT run — after spike settles; need ≥1 full 15m candle close after 19:30):
+- **RANGE_LONG candidate**: hot CPI print (>3.7% headline or >2.7% core) → selling pressure → ETH may test $2,260–$2,280 lower edge; if 15m rejection candle prints with wicks at or below $2,260, RANGE_LONG becomes PENDING_ELIGIBLE for 20:00–22:00 ICT window
+- **RANGE_SHORT candidate**: cool/miss CPI print → rally toward $2,361–$2,367 EMA cluster; rejection candle on 15m → RANGE_SHORT PENDING_ELIGIBLE
+- **BTC regime unlock**: cool CPI → BTC may close above $82,228 on 1h → deactivates prohibitive #6 → unlocks LONG framework for 20:00+ runs; requires simultaneous 1D MACD line confirmation
+- Hypothetical range parameters (WATCH only — pending blocked; for reference at 20:00 ICT):
+  - RANGE_LONG: entry $2,260 | SL $2,240 (−20 pts) | TP1 $2,314 (50%, R:R 1:2.7) | TP2 $2,367 (50%, R:R 1:5.3) | size 0.75 ETH (Tier 1 $15 risk / 20 pt SL) | cancel by 22:00 ICT today
+  - RANGE_SHORT: entry $2,367 | SL $2,388 (+21 pts) | TP1 $2,314 (50%, R:R 1:2.5) | TP2 $2,260 (50%, R:R 1:5.1) | size 0.71 ETH (Tier 1 $15 risk / 21 pt SL) | cancel by 22:00 ICT today
+
+**Manual verification needed** (priority order):
+1. **CPI print at 19:30 ICT** — main catalyst; determines edge-test direction; wait for one full 15m candle close before evaluating any entry or pending order
+2. **1D MACD line sign** — Zebpay reports +0.21 (potentially positive; would weaken prohibitive #6 to BTC-only condition); verify on Bybit/TradingView 1D chart
+3. **BTC vs EMA200 post-CPI** — $81,200 vs $82,228; CPI outcome could resolve this; combined with 1D MACD sign determines whether LONG framework unlocks
+4. **1h RSI exact value** — two conflicting sources (28.7 vs 48.6) from earlier runs; check on chart post-CPI
+5. **Whale ratio** (Bybit Trading Trend tab) — unavailable from search aggregates; needed before any live entry
+
+**GitHub Issue**: skipped (NO_SETUP)
