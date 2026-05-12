@@ -160,3 +160,60 @@ This file was initialized with the template. Entries will be appended below as t
 - 1h and 15m candle close confirmation if price reaches $2,260 or $2,367 after CPI
 
 **GitHub Issue**: skipped (NO_SETUP)
+
+### 2026-05-12 16:00 ICT — auto check
+
+**Data source**: web search aggregates (Bybit/CoinGecko/Binance REST APIs blocked by sandbox egress allowlist; data synthesised from BlockchainReporter, Zebpay Technical Analysis Report 12 May, CoinMarketCap, TradingView aggregated signals, altindex.com, Yahoo Finance search summaries)
+**Price**: $2,311 (Δ −1.0% 24h) | 24h high $2,343 | 24h low $2,305
+**Decision**: NO_SETUP
+
+**Market state**:
+- Price context: ETH pulled back $22 from prior 15:00 run ($2,333 → $2,311); sits at ~48% of the $2,260–$2,367 sub-range from bottom (midrange); symmetrical triangle consolidation pattern on daily TF
+- 1D structure: ETH below EMA50 (~$2,361) and EMA200 (~$2,367) — resistance cluster $50–56 above current price; bearish macro structure but consolidating within triangle, not in sharp downtrend
+- 1D RSI: ~56.7 (Zebpay report: 56.656) — neutral, slight upward drift from prior estimate of 53.46
+- 1D MACD: **⚠️ CONFLICTING DATA** — Zebpay Technical Analysis 12 May 2026 reports MACD line = +0.21 (positive); prior entries cited histogram ≈ −0.7 (slightly negative, contracting). If MACD line crossed above zero, this is a potential regime-change signal (see Reasoning). Manual chart verification required.
+- 4h structure: BB squeeze ongoing; bands flat; 4h MACD within −10/+10 band (range-bound confirmed); ATR(14) declining; range character intact
+- 1h RSI: **CONFLICTING DATA** — one source cites 28.7 (oversold); another reports ~48.58 (neutral, possibly a 1D metric). Manual verification required.
+- BTC: ~$80,860 — below 1D EMA200 (~$82,228); bearish macro regime confirmed; gap to reclaim EMA200: ~$1,368 (−1.7%)
+- Funding rate: ~+0.005–0.01% estimated (not confirmed this run); below prohibitive threshold
+- OI: ~$35.6B elevated; no directional change data from aggregates
+- Whale ratio / L/S ratio: not available via API — **manual verification needed**
+- Whale accumulation: 140,000 ETH (~$322M in 96h, early May); Tokenized US Treasuries on ETH hit $8B record; 8 bullish vs 22 bearish technical indicators (73% bearish overall per aggregators)
+
+**Pre-checks**:
+
+| Check | Result | Notes |
+|---|---|---|
+| Trading window (09:00–22:00 ICT) | **PASS** | 16:00 ICT |
+| Prohibitive #6 — counter-trend bearish (LONG) | **UNCERTAIN** | 1D MACD line may be +0.21 (positive per Zebpay) → if confirmed, prohibitive NOT triggered; BTC still <EMA200 ($80,860 < $82,228) is only one of the two required conditions |
+| Multi-TF alignment LONG | **FAIL** | 4h HL formation unconfirmed; 1h RSI data conflicting (28.7 oversold ≠ exiting <40 zone); 15m reversal candle unverifiable |
+| Multi-TF alignment SHORT | **FAIL** | 1h RSI ~28.7 (oversold, not overbought); price $56 below upper edge; mixed-market momentum prohibitive applies |
+| Range pre-checks (4h MACD/ATR/BB/edges) | **4/4 PASS** | Range $2,260–$2,367 intact, structure confirmed |
+| Price at tradeable range edge | **FAIL** | Price ~48% from bottom; $51 above lower edge, $56 below upper edge — midrange, no valid entry |
+| CPI 12h pending-order blocker | **BLOCKED** | US CPI at 19:30 ICT = 3h28m away; within 12h window per pending-orders.md |
+| News Impact Score (CPI pre-event) | **7.5** | Minor price move (2 pts) × Systemic macro (×3) × Trend confirmation (×1.25) = 7.5; informational |
+| Prohibitive headlines | **PASS** | No FOMC/SEC/hack/ban active |
+
+**Reasoning**:
+- **LONG**: Alignment fails — 4h MACD near zero without clear cross from below, 1h RSI status conflicting, 15m reversal candle unconfirmed; base conditions: at most 2 of 5 confirmed (condition 2: RSI <40 if 1h truly at 28.7; condition 5: borderline — not catastrophically bearish in a consolidation triangle); whale ratio unknown. **⚠️ Key signal**: if 1D MACD line has crossed above zero (+0.21 per Zebpay), prohibitive #6 (counter-trend in bearish market) is deactivated. This would be the most significant regime shift since early May. Even so, alignment still fails — LONG needs 4h MACD to cross 0 from below and 1h RSI to be *exiting* the <40 zone (not entering it). No setup yet, but the regime may be turning.
+- **SHORT**: Alignment decisively fails — 1h RSI at 28.7 (if accurate) is oversold, opposite of overbought required for short trigger; price $56 from resistance; mixed-market momentum prohibitive applies at 4h MACD ≈ 0.
+- **RANGE**: All 4 structural pre-checks pass. But price at midrange — no edge being tested. RANGE_LONG needs $2,260; RANGE_SHORT needs $2,367. Current $2,311 is neither.
+- **PENDING**: Blocked by CPI within 12h (19:30 ICT, 3h28m away). No pending orders eligible regardless of setup quality.
+
+**Watch levels**:
+- **19:30 ICT CPI release** (3h28m): Main catalyst. Consensus: headline 3.7% YoY, +0.6% MoM; core 2.7% YoY. Hot print → selling pressure, ETH may test $2,260–$2,280 → RANGE_LONG candidate post-spike. Cool print → rally toward $2,361–$2,367 → RANGE_SHORT candidate or regime shift if BTC clears $82,228.
+- Wait minimum one 15m candle close after CPI before evaluating any entry.
+- **17:00 ICT run**: if CPI (released at 19:30 ICT) spike is underway, check post-spike candle structure and edge proximity.
+- **BTC regime watch**: $82,228 EMA200 is the key unlock. Cool CPI could push BTC through. Combined with potential 1D MACD flip to positive, this would fully unlock LONG setups.
+- Hypothetical range parameters (WATCH only — pending orders blocked by CPI; price not at edge):
+  - RANGE_LONG: entry $2,260 | SL $2,240 (−20 pts) | TP1 $2,314 (50%, R:R 1:2.7) | TP2 $2,367 (50%, R:R 1:5.3) | size 0.75 ETH (Tier 1 $15 risk / 20 pt SL)
+  - RANGE_SHORT: entry $2,367 | SL $2,388 (+21 pts) | TP1 $2,314 (50%, R:R 1:2.5) | TP2 $2,260 (50%, R:R 1:5.1) | size 0.71 ETH (Tier 1 $15 risk / 21 pt SL)
+
+**Manual verification needed** (in priority order):
+1. **1D MACD line sign** — open ETH/USDT 1D on Bybit/TradingView; confirm whether MACD line (not histogram) is above or below zero; determines whether prohibitive #6 is active or deactivated
+2. **1h RSI exact value** — one source 28.7 (oversold), another ~48.58; determines LONG alignment eligibility for next run
+3. Whale ratio (Bybit Trading Trend tab) — not available from search aggregates
+4. 4h candle swing structure (last 5 HH/HL/LH/LL) — confirm whether HL is forming on 4h or triangle is still symmetric
+5. CPI print at 19:30 ICT and immediate ETH reaction — main catalyst for next setup eligibility
+
+**GitHub Issue**: skipped (NO_SETUP)
