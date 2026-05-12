@@ -411,3 +411,63 @@ Impact Score (for 24h move context, separate from CPI prohibitive):
 5. **Whale ratio** (Bybit Trading Trend tab) — unavailable from search aggregates; required before any live entry
 
 **GitHub Issue**: skipped (NO_SETUP)
+
+---
+
+### 2026-05-12 20:14 ICT — auto check
+
+**Data source**: web search aggregates (Bybit/CoinGecko/Binance REST APIs blocked by sandbox egress; data synthesised from CoinMarketCap, Yahoo Finance, BlockchainReporter, Stockpil, CoinDesk, Trading Economics snippets)
+**Price**: ~$2,285 (Δ ~−2.0% 24h; post-CPI drop below $2,300 support)
+**Decision**: NO_SETUP
+
+**Market state**:
+- CPI event: US April 2026 CPI released at 19:30 ICT (08:30 AM EDT) — 44 min before this run; headline 3.80% YoY (**hot**, est 3.7%, prev 3.3%), core CPI 2.8% YoY (hot, est 2.7%, prev 2.6%), MoM +0.6% (in line, prev 0.9%); primary driver: energy costs (Iran conflict, gasoline +28.4% YoY)
+- ETH price: ~$2,285, broke below $2,300 support on CPI release; 24h high ~$2,339, 24h low ~$2,265 (est); ETH underperforming BTC, ETH/BTC ratio at 10-month lows per market reports
+- 1D structure: LH/LL sequence; below EMA50 (~$2,361) and EMA200 (~$2,367) acting as resistance cluster; bearish macro structure
+- 1D RSI: ~50–52 (neutral; declining from ~53.5 pre-CPI)
+- 1D MACD: histogram ~−0.7 (slightly bearish, contracting slowly); 1D MACD line sign requires manual verification
+- 4h structure: BB(20,2) was flat pre-CPI; hot CPI print likely expanding bands; 4h MACD was within −10/+10 pre-CPI, possibly pushed lower by CPI selloff — manual chart verification required
+- 1h RSI: estimated ~30–38 (oversold post-CPI drop from ~48 pre-CPI); not in overbought zone
+- 15m: reactive selling candles on CPI spike; volatility elevated
+- BTC: ~$81,011 — below 1D EMA200 (~$82,228); bearish macro regime confirmed
+- Funding rate: ~+0.005% (estimated; not at prohibitive level; manual verification needed)
+- OI: ~$35.61B (prior reading); whale L/S ratio: unavailable — manual verification needed
+
+**Pre-checks**:
+
+| Check | Result | Notes |
+|---|---|---|
+| Trading window (09:00–22:00 ICT) | **PASS** | 20:14 ICT — 1h46m remaining |
+| CPI forward macro-blocker (1-2h) | **CLEAR** | CPI released 44 min ago; forward prohibition expired; in post-spike digestion |
+| Prohibitive #6 — counter-trend LONG | **TRIGGERED** | BTC $81,011 < EMA200 1D $82,228; LONG framework blocked |
+| Multi-TF alignment LONG | **FAIL** | 4h MACD not crossing from below, 1h RSI oversold not rising from <40 zone |
+| Multi-TF alignment SHORT | **FAIL** | 1h RSI ~30–38 (oversold); SHORT needs RSI exiting >65; chasing post-CPI drop invalid |
+| Range pre-check — ATR 1h declining 24h | **FAIL** | Hot CPI caused sharp ATR expansion; range volatility filter broken |
+| Range pre-check — 4h MACD near zero | **UNCERTAIN** | Was within −10/+10 pre-CPI; hot print likely pushed further negative; verify on chart |
+| Range pre-check — price at tradeable edge | **FAIL** | ~$2,285 between midrange and lower edge; not at clean $2,260 entry edge |
+| Prohibitive headlines | **PASS** | No hacks/SEC/FOMC-type prohibitive; CPI already released |
+| News Impact Score | **15** | 4 pts × 3.0× systemic × 1.25× trend-confirm → halve size if any setup; no setup, moot |
+
+**Reasoning**:
+- **LONG**: hard-blocked by prohibitive #6 (BTC $81,011 < EMA200 1D $82,228); multi-TF alignment also fails (4h MACD not crossing from below, 1h RSI oversold, no HL forming)
+- **SHORT**: 1h RSI ~30–38 is deep oversold — alignment requires RSI *exiting the >65 overbought zone*, not piling onto an already-sold move; chasing the CPI-driven selloff violates rule intent; mixed-market momentum prohibitive likely also applies (4h MACD near zero)
+- **RANGE**: was structurally valid pre-CPI (all 4 pre-checks passed, per 19:07 ICT entry); hot CPI destroyed the range environment — ATR expanded sharply on 1h (fails pre-check 2); 4h MACD likely moved further from zero (may fail pre-check 1); elevated post-CPI vol carries breakout risk incompatible with range entries
+- **Pending orders**: no valid pending order while ATR expanding and 4h MACD uncertain; BLOCKED
+- **Macro context**: hot CPI (3.8% headline, highest since May 2023) driven by Iran-conflict energy surge confirms "higher for longer" rate environment; risk-off pressure on ETH/BTC intact; no near-term catalyst for regime flip tonight
+- **Window constraint**: 1h46m remaining until 22:00 ICT close — insufficient time for volatility to settle and indicators to recover for a fresh entry tonight
+
+**Watch levels for tomorrow morning scan**:
+- $2,260 lower edge: if price settles above $2,260 overnight with ATR contracting → RANGE_LONG candidate at open; need 15m rejection candle + 2+ touches with rejection within prior 24–48h
+- $2,340–$2,367 resistance cluster: if price recovers with ATR contracting → RANGE_SHORT candidate at upper edge
+- BTC $82,228 EMA200 1D: need 1D close above to deactivate prohibitive #6 and unlock LONG framework
+- 4h MACD: if it returns to within −10/+10 by morning scan → range pre-check 1 recovers
+- Upcoming news: Base Azul mainnet 2026-05-13 (L2, minor impact); Senate Digital Asset Market Clarity Act markup 2026-05-14 (regulatory, watch for leaks); Powell transition 2026-05-15 (systemic uncertainty)
+
+**Manual verification needed**:
+1. ETH exact price post-CPI (check Bybit 1h/15m chart, 19:30–20:00 ICT candles)
+2. 4h MACD current value — was near zero pre-CPI; confirm if now < −10
+3. 1h RSI — estimated ~30–38 post-CPI; confirm from live chart
+4. Whale ratio (Bybit Trading Trend tab) — unavailable from search aggregates; required before any entry
+5. Funding rate (Bybit Funding Rate tab) — estimated +0.005%; confirm no negative spike post-drop
+
+**GitHub Issue**: skipped (NO_SETUP)
