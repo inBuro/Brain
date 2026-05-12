@@ -11,7 +11,7 @@ updated: 2026-05-06
 
 **Sources**: research-2026-05-06, vendor ToS pages cited inline, `wiki/roadmap.md` (Phase 0 progress).
 
-**Last updated**: 2026-05-06
+**Last updated**: 2026-05-12 (Gumroad verification passed — flipped from Blocked to primary rail)
 
 ---
 
@@ -32,7 +32,7 @@ The Bangkok Bank account in own name (opened on Russian passport as foreign resi
 | **Stripe Thailand (direct)** | Blocked | Requires Thai entity + Thai tax ID; sanctions EDD on Russian directors |
 | **Wise personal** | Blocked | EU 19th sanctions package (Jan 2026): Russian-passport cards closed except for EEA/Swiss residents; Thai residence does not qualify |
 | **Lemon Squeezy** | Blocked | Payout rail requires Stripe in supported country; Russia not listed |
-| **Gumroad** | Blocked | Payout-country list excludes Russia; PayPal fallback dead |
+| **Gumroad** | **Works** ✅ (verified 2026-05-12) | Onboarded as Thailand-resident seller; passed verification on Russian passport + Thai address. Payouts через Stripe Connect Thailand → Bangkok Bank THB |
 | **Polar.sh** | Blocked | Stripe Connect Express + explicit Russia exclusion |
 | **Patreon** | Blocked-ish | "Based in Russia" creators blocked; Stripe-payout dependency replicates Polar's wall; gray zone for Russian-citizen Thai residents |
 | **Paddle** | In progress | KYC via Sumsub — first attempt rejected for photo quality; awaiting support reply on session re-unlock |
@@ -61,13 +61,14 @@ The single Thai document with the largest unlock surface is the **Thai company r
 
 ## Realistic onboarding order for Fadercraft
 
-1. **Payoneer** — open now on Russian passport + Thai address proof (Bangkok Bank statement, lease, or motorbike DL once issued). Acts as USD receiving rail for Isotonik revenue share, freelance income, and any direct B2B remittance.
-2. **Isotonik Studios** — write to them as soon as XL_Performance is in production-ready state with demo video. Curated reseller for Max for Live; revenue share ~50–70% (private terms). Zero platform-level KYC; only contract + payout details.
-3. **Crypto checkout on Fadercraft landing** — evaluate Cryptomus vs NOWPayments vs Coinbase Commerce for direct sales. USDT/USDC payout, off-ramp via Bybit P2P → Bangkok Bank. Bypasses every sanctions wall but loses Western customers who refuse crypto.
-4. **Paddle approval** (in flight) — wait for Sumsub re-upload; if it lands, Paddle becomes the main fiat MoR. If it fails after Thai DL upload, treat as permanently blocked and stop chasing.
-5. **Georgian Individual Entrepreneur** — defer until revenue ≥ $500–1000/month. Then $1–1.5k setup + remote registration unlocks Wise Business and potentially Stripe Georgia, opening Lemon Squeezy / Polar / Paddle through the Georgian entity.
+1. **Gumroad** ✅ — **primary fiat MoR**. Verification пройдена 2026-05-12. Запускаемся на нём, не дожидаясь Paddle.
+2. **Payoneer** — open in parallel as USD receiving rail для Isotonik revenue share, freelance income, B2B remittance. Не нужен для Gumroad payouts (Stripe Connect → Bangkok Bank напрямую).
+3. **Isotonik Studios** — write to them as soon as XL_Performance is in production-ready state with demo video. Curated reseller для Max for Live; revenue share ~50–70%. Параллельный канал к Gumroad, не замена.
+4. **Crypto checkout on Fadercraft landing** — secondary rail для покупателей, не желающих идти через Gumroad (RU-аудитория, приватность). Evaluate Cryptomus vs NOWPayments vs Coinbase Commerce.
+5. **Paddle approval** (in flight, deprioritized) — больше не критично; если Sumsub разблокируется и одобрит — добавляем как второй MoR с EU-VAT handling. Если нет — закрываем тред без потерь.
+6. **Georgian Individual Entrepreneur** — defer до выручки ≥ $500–1000/мес. Имеет смысл, только если Gumroad когда-нибудь развернёт политику или захотим Stripe-зависимые рельсы (Lemon/Polar).
 
-PayPal, Stripe Thailand, Wise personal, Polar.sh direct, Lemon Squeezy direct, Gumroad direct — all dead-end for this profile in 2026 without entity-level workaround.
+PayPal Thailand, Stripe Thailand (direct), Wise personal, Polar.sh direct, Lemon Squeezy direct — всё ещё dead-end для профиля без entity-level workaround.
 
 ## Choke-point summary for future me
 

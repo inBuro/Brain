@@ -13,7 +13,7 @@ updated: 2026-05-06
 
 **Sources**: spec + Phase 0 plan + chat-history с Claude.
 
-**Last updated**: 2026-05-06
+**Last updated**: 2026-05-12 (Gumroad verification passed — primary MoR разблокирован)
 
 **Payment rails matrix**: [[payment-rails]] — вердикты по всем рассмотренным платформам (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) под профиль русский паспорт + Таиланд + Bangkok Bank, без тайского national ID.
 
@@ -28,7 +28,8 @@ updated: 2026-05-06
 | T2 Email | 13 | 13 | 100% |
 | T6 Server endpoints | 6 | 6 | 100% |
 | T7 Placeholder pages | 6 | 6 | 100% |
-| Paddle onboarding | 5 | 6 | 83% |
+| **Gumroad (primary MoR)** ✅ | **4** | **15** | **27%** |
+| Paddle onboarding (deprioritized) | 5 | 6 | 83% |
 | Payment rails (Payoneer/Isotonik/crypto/GE) | 0 | 14 | 0% |
 | Тайские мото-права | 9 | 22 | 41% |
 | T3 Brand identity | 0 | 6 | 0% |
@@ -92,9 +93,32 @@ updated: 2026-05-06
 - [x] `web/refund.html` (~310 слов)
 - [x] Footer-навигация на всех страницах
 
-## 🆕 Payment rails (parallel to Paddle)
+## ✅ Gumroad (primary MoR — verification passed 2026-05-12)
 
-После ресёрча 2026-05-06 (см. [[payment-rails]]) зафиксированы рабочие рельсы для профиля «русский паспорт + Таиланд + Bangkok Bank, без тайского ID». Идут параллельно Paddle, не блокируют его.
+Главный блокер запуска снят. Gumroad стал primary fiat-рельсом, Paddle уходит в backlog. Source of truth по всей Gumroad-интеграции — `brand/gumroad-setup.md`.
+
+- [x] **Seller account verified** (Russian passport + Thai address) 2026-05-12
+- [x] Payout method: Bank Account → Bangkok Bank (code 002), THB, Weekly schedule
+- [x] Billing → Business name `Fadercraft`, Invoice PDF включён
+- [x] Seller ID зафиксирован, сохранён в `GUMROAD_SELLER_ID` (CF Pages Secret) 2026-05-12
+- [ ] Tax interview / W-8BEN (проверить, требуется ли Gumroad'ом для non-US individual)
+- [ ] Profile: avatar + bio + social links (depend on T3 brand identity)
+- [ ] Settings → support email = `support@fadercraft.com`
+- [ ] Создать product **«Fadercraft XL Performance»**, slug `xl-performance`, цена $39
+- [ ] Cover image 1280×720 + product description (взять из landing-narrative Beat 1–2)
+- [ ] Включить **«Generate license keys for each sale»** в product settings
+- [ ] Зафиксировать `GUMROAD_PRODUCT_ID` в CF Pages env vars после создания продукта
+- [ ] Залить bundle `fadercraft-xl-performance-v1.0.zip` (Gumroad-hosted на MVP, см. setup-doc)
+- [ ] Зафиксировать `LATEST_BUNDLE_URL` в CF Pages env vars
+- [ ] Кастомизировать receipt-email: download link + license key + Quickstart-ссылка
+- [ ] 100% off discount code для smoke-test покупки (T13)
+- [ ] **NOT:** Ping endpoint — пока не настраиваем, текущий verify-license endpoint не подходит под Gumroad ping контракт (см. setup-doc, Flow A vs Flow B)
+- [ ] **NOT:** PayPal connection — заблокирован NDID, не пытаемся
+- [ ] (опц., Phase 1) Custom domain `buy.fadercraft.com`
+
+## 🆕 Payment rails (secondary, parallel to Gumroad)
+
+После ресёрча 2026-05-06 (см. [[payment-rails]]) зафиксированы рабочие рельсы для профиля «русский паспорт + Таиланд + Bangkok Bank, без тайского ID». Идут параллельно Gumroad как дополнительные каналы.
 
 ### Payoneer (USD-приёмник)
 
@@ -127,7 +151,9 @@ updated: 2026-05-06
 
 ---
 
-## ⏳ Paddle onboarding
+## ⏸ Paddle onboarding (deprioritized after Gumroad verification)
+
+Gumroad покрывает primary fiat MoR. Paddle оставлен как opt-in second rail (EU-VAT handling + B2B), но больше не блокирует запуск. Чейзить Sumsub только если разрешение само придёт.
 
 - [x] Seller account зарегистрирован
 - [x] Trading name: Fadercraft
@@ -251,17 +277,17 @@ updated: 2026-05-06
 - [ ] Embed на лендинг (T7-real)
 - [ ] Embed внутрь M4L-устройства (T8)
 
-### T12 Bundle assembly + Paddle product
+### T12 Bundle assembly + Gumroad product
 
 - [ ] Custom Modes для LCXL MK3 → `dist/custom-modes/lcxl-mk3-modes.json` + README
 - [ ] `XL_Performance_starter.als` Live Set с маппингами + контентом
 - [ ] Собрать `dist/fadercraft-xl-performance-v1.0/`
 - [ ] Zip → `fadercraft-xl-performance-v1.0.zip`
-- [ ] Загрузить в Paddle product Content
+- [ ] Загрузить в Gumroad product Content
 - [ ] Cover image 1280×720 PNG
-- [ ] Описание продукта на странице Paddle
+- [ ] Описание продукта на странице Gumroad
 - [ ] URL slug `xl-performance`
-- [ ] env vars `LATEST_BUNDLE_URL` + `PADDLE_PRODUCT_ID` в CF Pages
+- [ ] env vars `LATEST_BUNDLE_URL` + `GUMROAD_PRODUCT_ID` в CF Pages
 - [ ] Publish продукт (Draft → Live)
 
 ### T13 Final pre-launch verification
