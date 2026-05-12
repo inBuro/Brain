@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(browse)",
+      "Skill(browse:*)"
+    ],
+    "additionalDirectories": [
+      "/Users/Kirill/Projects/Claude/Fadercraft/app/src/pages"
+    ]
+  }
+}
