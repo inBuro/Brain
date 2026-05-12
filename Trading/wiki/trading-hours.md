@@ -53,9 +53,9 @@ Weekends are still tradeable in the 09-22 window, but if a setup forms with marg
 
 ## How the routine handles this
 
-The `eth-paper-journal` routine (cron `0 2-15 * * *` UTC = **every hour from 09:00 to 22:00 ICT inclusive**, 14 runs/day) runs entirely inside the 09:00-22:00 ICT trading window. Email/Telegram alerts fire on detected setups or pending eligibility — no outside-window tagging needed.
+The `eth-paper-journal` routine (cron `0 2-15 * * *` UTC = **every hour from 09:00 to 22:00 ICT inclusive**, 14 runs/day) runs entirely inside the 09:00-22:00 ICT trading window. GitHub Issue alerts fire on detected setups or pending eligibility — which emails the trader automatically. No outside-window tagging needed.
 
-Slot rationale: hourly coverage means no setup-forming window is missed. Early-morning runs (09:00-11:00 ICT) catch overnight structure resolution; mid-day runs (12:00-15:00 ICT) catch Europe-session moves; afternoon runs (16:00-20:00 ICT) cover London/NY overlap; late runs (21:00-22:00 ICT) catch end-of-window setups while the window is still open for action.
+Slot rationale: hourly coverage means no setup-forming window is missed. Early-morning runs (09:00-11:00 ICT) catch overnight structure resolution; mid-day runs (12:00-15:00 ICT) catch Europe-session moves; afternoon runs (16:00-20:00 ICT) cover London/NY overlap; late runs (21:00-22:00 ICT) catch end-of-window setups while the window is still open for action. 14 of the 15 available daily execution slots are used for this routine.
 
 ## Migration history
 

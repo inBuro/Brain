@@ -75,9 +75,9 @@ The strategy unfolds across the concept pages below:
 
 ## Passive monitoring routine
 
-A scheduled remote agent (`eth-paper-journal`) runs **hourly during the 09:00-22:00 ICT trading window** (cron `0 2-15 * * *` UTC, 14 runs/day), all inside the [[trading-hours|trading window]]. Each run appends a structured entry to [[trading-journal-v5]] with market state, pre-checks, and the strategy decision (SETUP_LONG / SETUP_SHORT / SETUP_RANGE / NO_SETUP). On SETUP_* or PENDING_ELIGIBLE, a notification is dispatched (Telegram or email) so the trader can act inside the window. On NO_SETUP the entry is committed to the journal but no notification is sent unless the prompt explicitly requests a heartbeat.
+A scheduled remote agent (`eth-paper-journal`) runs **hourly during the 09:00-22:00 ICT trading window** (cron `0 2-15 * * *` UTC, 14 runs/day), all inside the [[trading-hours|trading window]]. Each run appends a structured entry to [[trading-journal-v5]] with market state, pre-checks, and the strategy decision (SETUP_LONG / SETUP_SHORT / SETUP_RANGE / NO_SETUP). On SETUP_* or PENDING_ELIGIBLE, a GitHub Issue is created (which emails the trader automatically) so the trader can act inside the window. On NO_SETUP the entry is committed to the journal but no Issue is created.
 
-Hourly cadence (instead of fewer, denser slots) means every setup-forming window has at most one missed hour of latency, and the journal serves as a continuous record of the strategy's reaction to every market state inside the window.
+Hourly cadence (14 of the 15 available daily execution slots) means every setup-forming window has at most one missed hour of latency, and the journal serves as a continuous record of the strategy's reaction to every market state inside the window.
 
 ## What we don't trade
 
