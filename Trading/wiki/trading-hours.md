@@ -2,7 +2,7 @@
 
 **Summary**: New entries are only allowed during **09:00-22:00 ICT** (13-hour window, every day including weekends). Outside this window, no new positions are opened — but existing positions continue to run via their pre-set SL/TPs. Replaces the older "after 22:00 local — no new entries" rule with an explicit start time. Added 2026-05-01 as a v5 supplement; window widened from 09-17 to 09-22 on 2026-05-06.
 **Sources**: [[strategy-v5]] + chat 2026-05-01 + chat 2026-05-06 (widening)
-**Last updated**: 2026-05-07 (routine cron shifted to symmetric 09/15/21 ICT — all slots inside window; outside-window logic removed)
+**Last updated**: 2026-05-12 (routine cron reconciled with reality: hourly `0 2-15 * * *` UTC = every hour 09:00–22:00 ICT, 14 runs/day — all inside window)
 
 ---
 
@@ -53,13 +53,9 @@ Weekends are still tradeable in the 09-22 window, but if a setup forms with marg
 
 ## How the routine handles this
 
-The `eth-paper-journal` routine (cron `0 2,8,14 * * *` UTC = **09:00 / 15:00 / 21:00 ICT**) runs three slots, all inside the 09:00-22:00 ICT trading window. Email alerts fire normally on detected setups or pending eligibility — no outside-window tagging needed.
+The `eth-paper-journal` routine (cron `0 2-15 * * *` UTC = **every hour from 09:00 to 22:00 ICT inclusive**, 14 runs/day) runs entirely inside the 09:00-22:00 ICT trading window. Email/Telegram alerts fire on detected setups or pending eligibility — no outside-window tagging needed.
 
-Slot rationale:
-
-- **09:00 ICT** — runs at window open, gives fresh data for the trader's morning scan
-- **15:00 ICT** — midpoint check, catches setups that formed during European session
-- **21:00 ICT** — one hour before window close, covers London/NY-overlap setups
+Slot rationale: hourly coverage means no setup-forming window is missed. Early-morning runs (09:00-11:00 ICT) catch overnight structure resolution; mid-day runs (12:00-15:00 ICT) catch Europe-session moves; afternoon runs (16:00-20:00 ICT) cover London/NY overlap; late runs (21:00-22:00 ICT) catch end-of-window setups while the window is still open for action.
 
 ## Migration history
 

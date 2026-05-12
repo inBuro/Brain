@@ -8,7 +8,7 @@
 
 This file is **append-only**. Never modify previous entries — only add new ones at the bottom.
 
-The scheduled remote agent (`eth-paper-journal`, 3x/day at 09:00 / 15:00 / 21:00 ICT — all inside the trading window) auto-appends entries here. Manual entries from chat-session scans are also appended here in the same format.
+The scheduled remote agent (`eth-paper-journal`, hourly 09:00–22:00 ICT, 14 runs/day — all inside the trading window) auto-appends entries here. Manual entries from chat-session scans are also appended here in the same format.
 
 ## Entry template
 
