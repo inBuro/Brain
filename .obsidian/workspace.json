@@ -10,16 +10,20 @@
           {
             "id": "2218083928b27537",
             "type": "tabs",
-            "dimension": 47.99270072992701,
+            "dimension": 53.102189781021906,
             "children": [
               {
                 "id": "a8ace8d296f7dc75",
                 "type": "leaf",
                 "state": {
-                  "type": "graph",
-                  "state": {},
-                  "icon": "lucide-git-fork",
-                  "title": "Graph view"
+                  "type": "markdown",
+                  "state": {
+                    "file": "Fadercraft/Claude.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "Claude"
                 }
               }
             ]
@@ -27,7 +31,7 @@
           {
             "id": "4f7c5ee4722a5786",
             "type": "tabs",
-            "dimension": 52.00729927007299,
+            "dimension": 46.8978102189781,
             "children": [
               {
                 "id": "09178464eb704c18",
@@ -110,7 +114,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: zsh"
+                  "title": "Terminal: ✳ Claude Code"
                 }
               }
             ],
@@ -289,11 +293,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "a8ace8d296f7dc75",
+  "active": "a541e1bc1a25e6c1",
   "lastOpenFiles": [
+    "Fadercraft/Claude.md",
+    "Fadercraft/log.md",
+    "_Inbox/llm-wiki.md",
     "Bifi/Bifi.md",
     "Bifi/Claude.md",
-    "_Inbox/llm-wiki.md",
     "Bifi/wiki/log.md",
     "Bifi/wiki/index.md",
     "Bifi/log.md",
@@ -325,8 +331,6 @@
     "Novation/log.md",
     "Novation/index.md",
     "Novation/Claude.md",
-    "Novation/wiki/XL_Performance — как это работает.md",
-    "dasdasd.md",
     "Novation/app/src/assets/icons/warranty.svg",
     "Novation/app/src/assets/icons/warning.svg",
     "Novation/app/src/assets/icons/tune.svg",
