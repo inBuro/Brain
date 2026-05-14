@@ -78,7 +78,6 @@
               {
                 "id": "a541e1bc1a25e6c1",
                 "type": "leaf",
-                "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
@@ -112,7 +111,6 @@
                       "serial": null
                     }
                   },
-                  "pinned": true,
                   "icon": "terminal",
                   "title": "Terminal: ✳ Claude Code"
                 }
