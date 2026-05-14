@@ -7,5 +7,8 @@
     "additionalDirectories": [
       "/Users/Kirill/Projects/Claude/Fadercraft/app/src/pages"
     ]
+  },
+  "enabledPlugins": {
+    "code-simplifier@claude-plugins-official": true
   }
 }
