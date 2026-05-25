@@ -28,7 +28,7 @@ updated: 2026-05-25
 | T2 Email | 13 | 13 | 100% |
 | T6 Server endpoints | 6 | 6 | 100% |
 | T7 Placeholder pages | 6 | 6 | 100% |
-| Gumroad onboarding | 2 | 5 | 40% |
+| Gumroad onboarding | 3 | 5 | 60% |
 | T3 Brand identity | 0 | 6 | 0% |
 | T5 Instagram | 1 | 3 | 33% |
 | T7-real Лендинг | 0 | 5 | 0% |
@@ -38,7 +38,7 @@ updated: 2026-05-25
 | T11 Buttondown | 0 | 8 | 0% |
 | T12 Bundle assembly | 0 | 14 | 0% |
 | T13 Final verification | 0 | 6 | 0% |
-| **ИТОГО Phase 0** | **38** | **101** | **~38%** |
+| **ИТОГО Phase 0** | **39** | **101** | **~39%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -104,7 +104,7 @@ Out-of-band (не блокируют Phase 0):
 
 - [x] **KYC пройден** (2026-05-25)
 - [x] **Payout-реквизиты** (2026-05-25): Bank Account → Bangkok Bank (code 002, ****0115), THB, **Weekly** schedule, $100 minimum threshold, Individual. Billing details заполнены (Kirill Bush / Fadercraft / 126 Alley, Huahin 77110, Thailand).
-- [ ] Tax setup (W-8BEN для non-US, выбор tax jurisdiction)
+- [x] **Tax setup** (2026-05-25): Stripe Connect non-US individual onboarding пройден (Account type Individual, name/DoB/address/phone заполнены — это substrate для авто-генерируемого W-8BEN).
 - [ ] Страница продукта: описание, cover image, цена $39, URL slug `xl-performance`
 - [ ] Content upload (bundle zip) — блокируется T12
 
