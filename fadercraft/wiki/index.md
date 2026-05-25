@@ -23,6 +23,7 @@ updated: 2026-05-06
 ## Reference
 
 - [[payment-rails]] — матрица платёжных рельсов (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) с вердиктами под профиль «русский паспорт + Таиланд», расшифровка какие тайские документы что разблокируют.
+- [[external-links]] — единая таблица всех внешних ссылок Fadercraft (соцсети, Gumroad, support, лендинг); single source of truth для футера и outreach.
 
 ## Synthesis
 
