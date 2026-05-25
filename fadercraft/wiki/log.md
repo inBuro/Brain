@@ -8,6 +8,39 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-26 — Beat 4 «hotkeys» — пересборка amber-LED оверлея под Figma
+
+Пользователь обновил иллюстрацию `hotkeys` в Figma `OdPRdjodGO3WiR6tgSP7AA` → page `07 — Illustrations`, COMPONENT_SET `1747:10709` («Component 1»), вариант `1747:10705` (`Property 1=hotkeys`). Сам растровый `keys.png` (image hash `7c74bff664…`) не менялся — поменялся только overlay-фрейм поверх изображения и добавлены exportSettings PNG @1x/@2x на сам компонент.
+
+**Структура варианта (320×320):**
+- `1747:10703` keys.png frame: (-62, 49), 444×222.
+- `1803:5008` Frame 84 (overlay из 4 amber-квадратов 33×33 с гэпом 9px): (0, 184), 159×33, opacity 0.5.
+
+**Что сделано в коде** ([PerformanceFlow.module.css:347-358](../../../Projects/Claude/Fadercraft/app/src/components/organisms/PerformanceFlow/PerformanceFlow.module.css#L347-L358)):
+
+- `.beat4Leds` переехал с `left: 14.5em / top: 8.0625em` (старая позиция под правой парой клавиш) на `left: 3.875em / top: 8.4375em` (новая позиция под левой парой). Координаты получены пересчётом Figma-координат Frame 84 относительно image-local origin: `x = 0 − (−62) = 62 → 3.875em`, `y = 184 − 49 = 135 → 8.4375em`.
+- Добавлен `opacity: 0.5` на `.beat4Leds` (в Figma overlay polу-прозрачный).
+- Размер квадратов и gap не трогал (33×33 / 9px уже совпадали с Figma).
+- Обновил CSS-комментарий: ссылка на Frame 84 и формула пересчёта; убрал устаревшее «sitting beneath the right two keys».
+
+`keys.png` ассет на диске оставлен без изменений (image hash совпадает, замена не требуется). SharedPluginData чанки (34 ключа в namespace `exporttmp`), которые временно стэшил на ноду `1747:10703` для попытки выгрузить экспорт через chunked return, очищены.
+
+## 2026-05-26 — copy fix: «6 controls instead of 2» (не 3)
+
+Пользователь уточнил формулировку про два encoder bank на канал. Прежний вариант «give you 6 controls instead of 3» арифметически некорректен (база — один bank = 2 энкодера на канал у LCXL MK3, не 3). Правильная версия: «**give you 6 controls instead of 2**».
+
+**Что сделано.**
+
+- `~/Projects/Claude/Fadercraft/app/src/components/organisms/PerformanceFlow/PerformanceFlow.tsx:38` — заменена строка в массиве features (Two encoder layers per channel).
+- Figma file `OdPRdjodGO3WiR6tgSP7AA` (Novation-XL) → page `06 — Content`, два TEXT-нода обновлены через `use_figma`:
+  - `1398:143` («Rewritten takes → Encoders»): «6 controls per channel instead of 3» → «… instead of 2».
+  - `1434:6902` (frame «XL Performance — lo-fi prototype v2» → BEAT 2 · ENCODERS): «Two encoder banks per channel — 6 controls instead of 3» → «… instead of 2».
+  - Черновые русские заметки на канвасе (`1385:6775`, `1385:6783`, формулировка «обычные моды дают только 2») уже корректные — не трогал.
+- Gumroad listing: пользователь поправил вручную (out of band). TODO в roadmap T12 закрыт чек-маркой.
+- `wiki/roadmap.md` → T12 (Bundle assembly + Gumroad product), пункт «Описание продукта на странице Gumroad» — child-callout заменён на ✅ запись о применённой правке во всех трёх каналах (код / Figma / Gumroad).
+
+Других вхождений «6 controls instead of 3» в `~/Brain/Fadercraft` и `~/Projects/Claude/Fadercraft` нет (grep clean, исключая build artifacts).
+
 ## 2026-05-25 — content-must-include: явная MIDI-настройка трека
 
 Пользователь зафиксировал requirement: при объяснении установки устройства просто «drop on a MIDI track» — недостаточно. Это самая частая причина «не работает» у первого пользователя, потому что без явной конфигурации **MIDI From** / **MIDI To** / **Channel** на трек устройство не получает входной MIDI с LCXL.
