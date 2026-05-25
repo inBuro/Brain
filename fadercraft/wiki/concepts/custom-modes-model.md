@@ -23,28 +23,28 @@ Launch Control XL MK3 хранит до **14 пользовательских р
 
 ## Как переключается режим
 
-LCXL принимает и отдаёт смену режима как контрол-сообщение **CC30 на канале 7** (source: XL_Performance.README.md). Значение CC30 = `5 + N` для custom-mode N (т.е. mode 1 → value 6, mode 11 → value 16, …) — но фактический маппинг в `XL_Performance` сделан под зарезервированную «дыру» под mixer-modes 11–14, см. [[Mode Encoding]].
+LCXL принимает и отдаёт смену режима как контрол-сообщение **CC30 на канале 7** (source: XL_Performance.README.md). Значение CC30 = `5 + N` для custom-mode N (т.е. mode 1 → value 6, mode 11 → value 16, …) — но фактический маппинг в `XL_Performance` сделан под зарезервированную «дыру» под mixer-modes 11–14, см. [[mode-encoding]].
 
-Подсветка кнопок выбора режима в самом LCXL также реагирует на тот же CC30 — поэтому, если входящий CC30 не отфильтровать, можно случайно поймать петлю «устройство шлёт mode → LCXL подсвечивает → шлёт обратно». В патче эта петля закрывается фильтром `[sel 30 31]` в [[MIDI Passthrough]] (source: XL_Performance.README.md).
+Подсветка кнопок выбора режима в самом LCXL также реагирует на тот же CC30 — поэтому, если входящий CC30 не отфильтровать, можно случайно поймать петлю «устройство шлёт mode → LCXL подсвечивает → шлёт обратно». В патче эта петля закрывается фильтром `[sel 30 31]` в [[midi-passthrough]] (source: XL_Performance.README.md).
 
 ## Как используется в этом патче
 
 | Диапазон | Слой | Где |
 |---|---|---|
-| 1–10 | инструменты | [[Instruments Layer]] |
-| 11–14 | микшер | [[Mixer Layer]] |
+| 1–10 | инструменты | [[instruments-layer]] |
+| 11–14 | микшер | [[mixer-layer]] |
 
 Вся ёмкость LCXL (14 слотов) занята; резерва нет (source: XL_Performance.README.md, скорректировано по факту устройства).
 
-Cross-mode переход между двумя диапазонами реализован отдельно: [[CC47 Cross-Mode Transit]].
+Cross-mode переход между двумя диапазонами реализован отдельно: [[cc47-cross-mode-transit]].
 
 ## Related pages
 
-- [[Novation XL]] — корневой хаб проекта
-- [[XL_Performance — как это работает]]
-- [[Mode Encoding]]
-- [[Mixer Layer]]
-- [[Instruments Layer]]
-- [[CC47 Cross-Mode Transit]]
-- [[MIDI Passthrough]]
-- [[XL_Performance README]]
+- [[novation-xl]] — корневой хаб проекта
+- [[xl-performance-how-it-works]]
+- [[mode-encoding]]
+- [[mixer-layer]]
+- [[instruments-layer]]
+- [[cc47-cross-mode-transit]]
+- [[midi-passthrough]]
+- [[xl-performance-readme]]

@@ -20,13 +20,13 @@ tags: [readme, m4l]
 ## Краткое содержание
 
 - Назначение, распределение custom-modes (1–10 instruments, 11–14 mixer) (source: XL_Performance.README.md).
-- ⚠️ README говорит «до 16 custom-modes», но фактическая ёмкость LCXL MK3 — **14 слотов** (уточнено 2026-04-28). Деталь и сверка: [[Custom Modes Model]].
+- ⚠️ README говорит «до 16 custom-modes», но фактическая ёмкость LCXL MK3 — **14 слотов** (уточнено 2026-04-28). Деталь и сверка: [[custom-modes-model]].
 - Архитектура из 4 секций патча + passthrough + startup default (mode 11) (source: XL_Performance.README.md).
-- [[Mixer Layer]] — value-объекты `mixer_bank/page/hold`, формула, UI.
-- [[Instruments Layer]] — overlay CC (по умолчанию 49), фильтрация мусора, маппинг 1..10.
-- [[CC47 Cross-Mode Transit]] — quick-jump в микшер и обратно.
-- [[Solo Follower]] — JS, LiveAPI observers, `topologyCheck` каждые 3 сек.
-- [[MIDI Passthrough]] — verbatim notes/bend/aftertouch/program; CC режутся `[sel 30 31]`.
+- [[mixer-layer]] — value-объекты `mixer_bank/page/hold`, формула, UI.
+- [[instruments-layer]] — overlay CC (по умолчанию 49), фильтрация мусора, маппинг 1..10.
+- [[cc47-cross-mode-transit]] — quick-jump в микшер и обратно.
+- [[solo-follower]] — JS, LiveAPI observers, `topologyCheck` каждые 3 сек.
+- [[midi-passthrough]] — verbatim notes/bend/aftertouch/program; CC режутся `[sel 30 31]`.
 - Видимые в Live параметры (`sf_active`, `mix_obj-*`).
 - Точки расширения: смена listen CC, mode-select CC/ch, формула mixer, тюнинг JS.
 - Тонкости: исключение собственного трека, retry при холодном старте, `forceOwnSolo` сравнивает перед `set`.
@@ -39,12 +39,12 @@ tags: [readme, m4l]
 
 ## Related pages
 
-- [[Novation XL]] — корневой хаб проекта
-- [[XL_Performance — как это работает]]
-- [[Custom Modes Model]]
-- [[Mode Encoding]]
-- [[Mixer Layer]]
-- [[Instruments Layer]]
-- [[CC47 Cross-Mode Transit]]
-- [[Solo Follower]]
-- [[MIDI Passthrough]]
+- [[novation-xl]] — корневой хаб проекта
+- [[xl-performance-how-it-works]]
+- [[custom-modes-model]]
+- [[mode-encoding]]
+- [[mixer-layer]]
+- [[instruments-layer]]
+- [[cc47-cross-mode-transit]]
+- [[solo-follower]]
+- [[midi-passthrough]]

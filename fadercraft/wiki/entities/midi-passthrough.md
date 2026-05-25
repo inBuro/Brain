@@ -33,7 +33,7 @@ tags: [m4l, midi]
 
 `ctlin → [sel 30 31] → gate → ctlout`. Конструкция режет **CC30 и CC31** (source: XL_Performance.README.md):
 
-- **CC30** — это команда смены режима LCXL (см. [[Custom Modes Model]]). Если её пропустить наружу, то исходящий mode-change сам же вернётся обратно через MIDI From и образует петлю.
+- **CC30** — это команда смены режима LCXL (см. [[custom-modes-model]]). Если её пропустить наружу, то исходящий mode-change сам же вернётся обратно через MIDI From и образует петлю.
 - **CC31** — резерв (подсветка / служебный канал у LCXL); режется по тем же соображениям.
 
 Все остальные CC проходят без изменений — в том числе CC47, CC49, CC28, которыми пользуется патч сам, потому что их обработка делается **до** passthrough.
@@ -44,7 +44,7 @@ tags: [m4l, midi]
 
 ## Related pages
 
-- [[Novation XL]] — корневой хаб проекта
-- [[Custom Modes Model]]
-- [[XL_Performance — как это работает]]
-- [[XL_Performance README]]
+- [[novation-xl]] — корневой хаб проекта
+- [[custom-modes-model]]
+- [[xl-performance-how-it-works]]
+- [[xl-performance-readme]]

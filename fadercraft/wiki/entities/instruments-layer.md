@@ -27,7 +27,7 @@ tags: [m4l, lcxl, instruments]
 
 ## Принцип
 
-В отличие от [[Mixer Layer]], инструмент-режимы выбираются **не CC30**, а одной общей **overlay listen CC** (по умолчанию **CC49**, выставляется `loadmess 49`). Это сделано, чтобы внешний контроллер/секвенсор/Push мог переключать инструмент одним сообщением, не зная внутреннего маппинга в CC30 (source: XL_Performance.README.md).
+В отличие от [[mixer-layer]], инструмент-режимы выбираются **не CC30**, а одной общей **overlay listen CC** (по умолчанию **CC49**, выставляется `loadmess 49`). Это сделано, чтобы внешний контроллер/секвенсор/Push мог переключать инструмент одним сообщением, не зная внутреннего маппинга в CC30 (source: XL_Performance.README.md).
 
 Значения overlay CC интерпретируются так:
 
@@ -39,7 +39,7 @@ tags: [m4l, lcxl, instruments]
 
 (source: XL_Performance.README.md)
 
-Маппинг номера режима в CC30: см. [[Mode Encoding]].
+Маппинг номера режима в CC30: см. [[mode-encoding]].
 
 ## Параметры роутера
 
@@ -55,7 +55,7 @@ tags: [m4l, lcxl, instruments]
 ## Состояние
 
 - `v instruments_active` — оверлей включён/выключен (`live.toggle` на UI).
-- `v instruments_mode` — текущий выбранный режим 1..10. Используется также как save-point при cross-mode transit ([[CC47 Cross-Mode Transit]]) — отдельной save-переменной нет.
+- `v instruments_mode` — текущий выбранный режим 1..10. Используется также как save-point при cross-mode transit ([[cc47-cross-mode-transit]]) — отдельной save-переменной нет.
 
 ## Телеметрия
 
@@ -67,9 +67,9 @@ Router помечен как **«LCXL Overlay Router v18 (single Listen CC + mod
 
 ## Related pages
 
-- [[Novation XL]] — корневой хаб проекта
-- [[XL_Performance — как это работает]]
-- [[Mode Encoding]]
-- [[Mixer Layer]]
-- [[CC47 Cross-Mode Transit]]
-- [[XL_Performance README]]
+- [[novation-xl]] — корневой хаб проекта
+- [[xl-performance-how-it-works]]
+- [[mode-encoding]]
+- [[mixer-layer]]
+- [[cc47-cross-mode-transit]]
+- [[xl-performance-readme]]

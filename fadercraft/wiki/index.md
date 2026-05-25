@@ -1,13 +1,13 @@
 ---
 type: index
-project: Novation
+project: Fadercraft
 created: 2026-04-28
-updated: 2026-05-06
+updated: 2026-05-15
 ---
 
 # Wiki Index
 
-**Summary**: Альтернативный плоский TOC вики проекта **Novation** (knowledge base вокруг `XL_Performance.amxd` для Launch Control XL MK3). Основной хаб с описаниями страниц и связями к raw-источникам — [[Novation XL]].
+**Summary**: Альтернативный плоский TOC вики проекта **Fadercraft** (knowledge base вокруг `Control XL` — M4L-устройства для Novation Launch Control XL MK3). Основной хаб с описаниями страниц и связями к raw-источникам — [[novation-xl]].
 
 **Sources**: —
 
@@ -23,24 +23,25 @@ updated: 2026-05-06
 ## Reference
 
 - [[payment-rails]] — матрица платёжных рельсов (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) с вердиктами под профиль «русский паспорт + Таиланд», расшифровка какие тайские документы что разблокируют.
+- [[design-system]] — полный аудит Fadercraft / Control XL DS: токены (Colors/Spacing/Radius/Typography), инвентарь компонентов, состояние code-parity, TODO для production-ready.
 
 ## Synthesis
 
-- [[XL_Performance — как это работает]] — сквозной обзор: слои, поток событий, точки расширения.
+- [[xl-performance-how-it-works]] — сквозной обзор: слои, поток событий, точки расширения.
 
 ## Sources
 
-- [[XL_Performance README]] — канонический README патча `XL_Performance.amxd` (v1.5).
+- [[xl-performance-readme]] — канонический README патча `XL_Performance.amxd` (v1.5).
 
 ## Concepts
 
-- [[Custom Modes Model]] — как LCXL MK3 хранит и переключает 14 custom-modes; роль CC30/ch7.
-- [[Mode Encoding]] — формула `mode = 23 + bank + 2*((page+hold) % 2)` и таблица маппинга инструментов.
+- [[custom-modes-model]] — как LCXL MK3 хранит и переключает 14 custom-modes; роль CC30/ch7.
+- [[mode-encoding]] — формула `mode = 23 + bank + 2*((page+hold) % 2)` и таблица маппинга инструментов.
 
 ## Entities
 
-- [[Mixer Layer]] — custom-modes 11–14, value-объекты `mixer_bank/page/hold`, UI.
-- [[Instruments Layer]] — custom-modes 1–10, overlay CC (по умолчанию 49), фильтрация.
-- [[CC47 Cross-Mode Transit]] — quick-jump между микшером и инструментами с памятью.
-- [[Solo Follower]] — JS + LiveAPI, держит собственный трек заSOLOенным вместе с внешними; **неотъемлемая часть** XL_Performance.
-- [[MIDI Passthrough]] — verbatim notes/bend/aftertouch/program; CC режутся `[sel 30 31]`.
+- [[mixer-layer]] — custom-modes 11–14, value-объекты `mixer_bank/page/hold`, UI.
+- [[instruments-layer]] — custom-modes 1–10, overlay CC (по умолчанию 49), фильтрация.
+- [[cc47-cross-mode-transit]] — quick-jump между микшером и инструментами с памятью.
+- [[solo-follower]] — JS + LiveAPI, держит собственный трек заSOLOенным вместе с внешними; **неотъемлемая часть** XL_Performance.
+- [[midi-passthrough]] — verbatim notes/bend/aftertouch/program; CC режутся `[sel 30 31]`.

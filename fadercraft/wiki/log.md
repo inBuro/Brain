@@ -8,53 +8,35 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
-## 2026-05-12 (вечер) — Gumroad product draft, Receipt, Share, tags
+## 2026-05-25 — Paddle → Gumroad pivot + мотоправа получены
 
-Продолжение того же дня. Прошли четыре вкладки продукта Gumroad:
+Два связанных события одного дня, оба меняют картину запуска в плюс.
 
-- **Product**: создан draft `Fadercraft XL Performance`, slug `xl-performance`, $39, описание из landing-narrative Beat 1–2, CTA `Buy now`, три Additional Details (Hardware/DAW/License), VAT e-publication ON, refund policy ON с 14-day money back и fine print на support@ + /refund.
-- **Content**: пуст — bundle ещё не собран (T12 не сделан). License keys toggle в новом Gumroad UI живёт здесь, рядом с файлом, появляется только после upload — зафиксировано как gotcha в setup-doc.
-- **Receipt**: Button text `Download XL Performance` (24/26 chars). Custom message прошёл через две итерации — Gumroad **silently truncates на ≈580 символов mid-word**, без ошибки в UI; финальная версия ≈480 chars, проверена в Preview. Этот лимит залит в setup-doc как gotcha.
-- **Share**: Category `Music & Sound Design`, 5 тегов (Gumroad жёстко лимитит 5): `max for live`, `ableton live`, `launch control xl`, `novation`, `live performance`. Отвергнуты `m4l`/`ableton`/`launch control` как substring-дубликаты или amgibuous-match.
+**Payment rail pivot.** Paddle onboarding отменён — Sumsub-цикл затянулся (KYC заблокирован, support не разморозил), Gumroad принимает русский паспорт без блокеров. Gumroad KYC пройден в тот же день. Остаётся 4 пункта onboarding: tax setup (W-8BEN), payout-реквизиты, страница продукта, content upload (последний блокируется T12 — нечего заливать).
 
-**Critical lesson:** в один момент пользователь нажал Publish при пустом Content. Если бы кто-то нашёл URL и купил — получил бы пустоту, что запустило бы Gumroad Risk Review с негативным signal'ом на первой же продаже. Откатили через Unpublish. Правило: Publish только после (а) bundle ZIP в Content, (б) license keys toggle ON, (в) cover image, (г) env vars `GUMROAD_PRODUCT_ID` + `LATEST_BUNDLE_URL` в CF Pages. Записано в setup-doc.
+**Мотоправа (motorbike) получены.** Изначальное обоснование «backup-документ для Paddle Sumsub» отпало с Gumroad-pivot'ом, но права всё равно остались как general-purpose Thai government ID (пригодится для Payoneer/Wise/address proof в Phase 1, если понадобится).
 
-**Текущее состояние Gumroad-онбординга:** product в draft со всеми мета-полями, ждёт T12 (bundle assembly) в коде-репо `~/Projects/Claude/Fadercraft/`. После T12: upload ZIP → license keys ON → cover → publish → копировать product ID в `GUMROAD_PRODUCT_ID` env → smoke-test через 100% off discount.
+**Что обновлено в `wiki/roadmap.md`.**
 
----
-
-## 2026-05-12 — Gumroad payout setup + seller_id залит в CF Pages env
-
-После сессии настройки на стороне Gumroad зафиксированы конкретные значения и архитектурное решение:
-
-- **Payout**: Bank Account, code 002 (Bangkok Bank), THB, Weekly schedule, min $100. Аккаунт привязан как Individual / Thailand resident на имя Kirill Bush.
-- **Billing**: Business name `Fadercraft`, address Huahin TH 77110, invoice PDF на каждый receipt — ON.
-- **Third-party analytics**: toggle включён, ID пока пусто (отложено до GA4 setup и до момента запуска платного трафика).
-- **Seller ID** `KqksizqwmpYMmR0vaDfEjA==` записан как Secret `GUMROAD_SELLER_ID` в CF Pages → fadercraft → Variables and Secrets (Production environment).
-- **Ping endpoint в Gumroad Advanced**: первый attempt поставил туда `https://fadercraft.com/api/verify-license`, но это endpoint Flow A (live license verification, ожидает JSON), а Gumroad шлёт form-urlencoded webhook (Flow B). Решено: Ping endpoint оставить пустым на MVP, Flow B handler будем писать только когда понадобится custom welcome email / Buttondown auto-subscribe.
-
-**Создан `brand/gumroad-setup.md`** — single source of truth по всей Gumroad-интеграции (seller account, payout, identifiers, two-flow architecture, env vars table, что НЕ настраиваем сейчас и почему).
-
-**Pending env vars** (нужны до live-флоу license verification): `GUMROAD_PRODUCT_ID` (после создания продукта), `LATEST_BUNDLE_URL` (после T12 bundle assembly). До их заполнения endpoint вернёт 500 — это намеренно, чтобы не анонсировать license flow раньше готовности.
-
-Roadmap-чеклист Gumroad-секции расширен и переразбит: 4/15 done. Paddle-секция уже была переведена в `⏸` ранее в этой же сессии.
-
-## 2026-05-12 — Gumroad verification passed, primary MoR разблокирован
-
-Пользователь сообщил, что Gumroad seller verification пройдена на профиль «русский паспорт + Таиланд + Bangkok Bank». Это снимает главный блокер запуска и переворачивает payment-стратегию.
-
-**Изменения в вики.**
-
-- `payment-rails.md`: Gumroad перевернут из **Blocked** в **Works ✅ (verified 2026-05-12)**. Onboarding-order переписан: Gumroad стал #1 primary MoR, Paddle сполз на #5 (deprioritized). Шапка last-updated обновлена.
-- `roadmap.md`: добавлена секция **✅ Gumroad** с подробным чеклистом настройки на стороне платформы (W-8BEN, payout → Bangkok Bank, product setup, license keys, ping-webhook, custom domain опц.). Paddle-секция переименована в `⏸ Paddle onboarding (deprioritized)`. Сводка прогресса дополнена строкой Gumroad 1/10. T12 переименован «Bundle assembly + **Gumroad** product» (был Paddle), env var `PADDLE_PRODUCT_ID` → `GUMROAD_PRODUCT_ID`.
+- Шапка `Last updated` → 2026-05-25.
+- Сводка прогресса: убрана строка `Paddle onboarding 5/6`, убрана строка `Payment rails 0/14` из Phase 0, убрана строка `Тайские мото-права 9/22`. Добавлена строка `Gumroad onboarding 1/5`. Итог пересчитан: **35/101 ≈ 35%** (раньше 49/119 ≈ 41% — падение процента из-за того, что Paddle-задачи были на 83%, а Gumroad на 20%). Под таблицей добавлена секция «Out-of-band» с мото-правами ✅, alt payment rails (deferred → Phase 1), car-правами (deferred → Phase 1+).
+- T6: пункт `t6/paddle-license` помечен как ~~abandoned~~ со ссылкой на 2026-05-25.
+- Раздел «🆕 Payment rails (parallel to Paddle)» → перенесён ниже Phase 0 и переименован в «🚀 Phase 1 — Alternative payment rails (post-launch, deferred)». Каждый из 4 рельсов снабжён триггером запуска вместо «делать сейчас».
+- Раздел «⏳ Paddle onboarding» → заменён на «⏳ Gumroad onboarding» с 5 пунктами (KYC ✅, tax, payout, страница, content upload).
+- Раздел «🆕 Тайские мото-права (backup-документ для KYC)» → переписан в «✅ Тайские мото-права (motorbike)»: коллапс 6 подсекций в 6 строк ✅, объяснено почему backup-обоснование отпало, car-трек отдельным блоком на Phase 1+.
+- T12: упоминания `Paddle product Content` / `PADDLE_PRODUCT_ID` → `Gumroad product Content` / `GUMROAD_PRODUCT_ID`. Заголовок секции `T12 Bundle assembly + Paddle product` → `+ Gumroad product`.
 
 **Что НЕ тронуто.**
 
-- `verify-license.js` на `main` уже Gumroad-версия (Paddle-вариант жил на ветке `t6/paddle-license`) — код менять не надо.
-- `landing-narrative.md` уже содержит `Buy on Gumroad — $39` CTA — попадание один-в-один, не правлю.
-- T6 endpoint статус не меняется (уже ✅).
+- `wiki/payment-rails.md` — матрица остаётся актуальной как историческая референс-страница. Внутри неё Paddle и Gumroad по-прежнему перечислены среди рассмотренных, вердикты не меняю — это снапшот research'а 2026-05-06, его правка задним числом исказит логи решений. Если на странице нужно «обновить рекомендации» — это отдельный заход.
+- `wiki/landing-narrative.md` — копия уже корректная: Beat 1 и Beat 8 содержат `Buy on Gumroad — $39`. Совпадает с реальностью теперь буквально.
+- `wiki/index.md` — не трогаю, ссылки на [[payment-rails]] / [[roadmap]] остаются валидными.
 
-**Открытый вопрос.** Стоит ли поднимать витрину параллельно на дополнительных площадках (Isotonik, maxforlive.com, KVR, Reverb, Plugin Boutique, Splice) — отвечено в чате, решение пока не зафиксировано в вики до подтверждения пользователем.
+**Изменение картины запуска (для будущей retro).**
+
+- Внешний календарный блокер (Sumsub/Paddle) **исчез**. Critical path схлопнулся до внутренних задач: T3 brand → T9 video → T11 Buttondown → T8 M4L update → T12 Bundle → Gumroad publish → T13 verify.
+- Phase 0 уменьшился со 119 до 101 пункта (убрали 6 Paddle + 14 payment rails + 22 Thai DL, добавили 5 Gumroad). Реальная нагрузка на ~30% меньше.
+- Worst-case план «launch без Paddle через crypto» теперь неактуален — Gumroad покрывает.
 
 ---
 

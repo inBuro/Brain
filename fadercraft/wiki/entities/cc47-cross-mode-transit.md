@@ -23,23 +23,23 @@ tags: [m4l, lcxl, cross-mode]
 =====  CC47 CROSS-MODE TRANSIT  =====
 ```
 
-Отдельный механизм поверх [[Mixer Layer]] и [[Instruments Layer]]. Позволяет одной кнопкой «отбить» в микшер с любого инструмента и вернуться обратно (source: XL_Performance.README.md).
+Отдельный механизм поверх [[mixer-layer]] и [[instruments-layer]]. Позволяет одной кнопкой «отбить» в микшер с любого инструмента и вернуться обратно (source: XL_Performance.README.md).
 
 ## Поведение
 
 | CC47 value | Действие |
 |---|---|
 | 10, 20, …, 100 (т.е. `10·N`, N=1..10) | использовать текущее значение `v instruments_mode` как save-point, **переключить LCXL на последний используемый mixer-mode** (CC30/ch7 value 24..27 → custom 11..14) |
-| 127 | прочитать `v instruments_mode` и отправить LCXL обратно на инструмент-страницу (CC30/ch7 value 6..23 по таблице из [[Mode Encoding]]) |
+| 127 | прочитать `v instruments_mode` и отправить LCXL обратно на инструмент-страницу (CC30/ch7 value 6..23 по таблице из [[mode-encoding]]) |
 
 (source: XL_Performance.README.md)
 
-> **Деталь:** отдельной save-переменной нет — `v instruments_mode` уже хранит текущий instruments-mode (см. [[Instruments Layer]]) и просто не перезаписывается на время кросс-перехода. Поэтому при возврате восстанавливается ровно тот режим, что был активен в момент «отбивки».
+> **Деталь:** отдельной save-переменной нет — `v instruments_mode` уже хранит текущий instruments-mode (см. [[instruments-layer]]) и просто не перезаписывается на время кросс-перехода. Поэтому при возврате восстанавливается ровно тот режим, что был активен в момент «отбивки».
 
 ## Зачем такая кодировка
 
 CC47 одновременно используется как:
-- **momentary-кнопка bank** в [[Mixer Layer]] (значения 1/2).
+- **momentary-кнопка bank** в [[mixer-layer]] (значения 1/2).
 - **trigger cross-transit** (значения 10·N и 127).
 
 Дискриминация по значению работает потому, что mixer-bank шлёт только 1/2, а cross-transit — только кратные 10 и 127. Никакого пересечения.
@@ -50,9 +50,9 @@ CC47 одновременно используется как:
 
 ## Related pages
 
-- [[Novation XL]] — корневой хаб проекта
-- [[XL_Performance — как это работает]]
-- [[Mixer Layer]]
-- [[Instruments Layer]]
-- [[Mode Encoding]]
-- [[XL_Performance README]]
+- [[novation-xl]] — корневой хаб проекта
+- [[xl-performance-how-it-works]]
+- [[mixer-layer]]
+- [[instruments-layer]]
+- [[mode-encoding]]
+- [[xl-performance-readme]]

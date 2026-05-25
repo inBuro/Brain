@@ -7,7 +7,7 @@ updated: 2026-05-06
 
 # Payment Rails for a Russian-passport Seller in Thailand
 
-**Summary**: Decision matrix for plugin-distribution payment rails, calibrated to the seller profile of [[Novation XL]] / Fadercraft: Russian passport, Thailand long-stay residence, Bangkok Bank account in own name, no Thai national ID. Most Western Merchant-of-Record platforms are blocked by either sanctions screens or the Thai-NDID-only requirement; viable paths in 2026 are Isotonik B2B, Payoneer + crypto checkout, or a foreign legal entity (Georgian Individual Entrepreneur).
+**Summary**: Decision matrix for plugin-distribution payment rails, calibrated to the seller profile of [[novation-xl]] / Fadercraft: Russian passport, Thailand long-stay residence, Bangkok Bank account in own name, no Thai national ID. Most Western Merchant-of-Record platforms are blocked by either sanctions screens or the Thai-NDID-only requirement; viable paths in 2026 are Isotonik B2B, Payoneer + crypto checkout, or a foreign legal entity (Georgian Individual Entrepreneur).
 
 **Sources**: research-2026-05-06, vendor ToS pages cited inline, `wiki/roadmap.md` (Phase 0 progress).
 
@@ -81,6 +81,6 @@ A platform must clear all three to onboard this seller. "Available in Thailand" 
 
 ## Related pages
 
-- [[Novation XL]] — project hub
+- [[novation-xl]] — project hub
 - [[roadmap]] — Phase 0 progress, including Thai DL track and Paddle onboarding
 - [[index]] — flat TOC

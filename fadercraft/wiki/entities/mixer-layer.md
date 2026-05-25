@@ -47,18 +47,18 @@ CC47/CC49 сохраняют предыдущее состояние в `v mixer
 
 ## Расчёт активного режима
 
-См. [[Mode Encoding]] — формула `mode_value = 23 + bank + 2 * ((page + hold) % 2)`. Результат уходит на LCXL как **CC30/ch7 value 24..27** → custom-mode 11..14.
+См. [[mode-encoding]] — формула `mode_value = 23 + bank + 2 * ((page + hold) % 2)`. Результат уходит на LCXL как **CC30/ch7 value 24..27** → custom-mode 11..14.
 
 ## Связи с другими слоями
 
-- Стартовое значение (mode 11 на загрузке) задаётся в [[XL_Performance — как это работает]].
-- При CC47 cross-transit сохраняется не mixer, а instruments: см. [[CC47 Cross-Mode Transit]].
+- Стартовое значение (mode 11 на загрузке) задаётся в [[xl-performance-how-it-works]].
+- При CC47 cross-transit сохраняется не mixer, а instruments: см. [[cc47-cross-mode-transit]].
 
 ## Related pages
 
-- [[Novation XL]] — корневой хаб проекта
-- [[Mode Encoding]]
-- [[CC47 Cross-Mode Transit]]
-- [[Instruments Layer]]
-- [[XL_Performance — как это работает]]
-- [[XL_Performance README]]
+- [[novation-xl]] — корневой хаб проекта
+- [[mode-encoding]]
+- [[cc47-cross-mode-transit]]
+- [[instruments-layer]]
+- [[xl-performance-how-it-works]]
+- [[xl-performance-readme]]
