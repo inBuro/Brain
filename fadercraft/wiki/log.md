@@ -8,6 +8,38 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-25 — Paddle → Gumroad pivot + мотоправа получены
+
+Два связанных события одного дня, оба меняют картину запуска в плюс.
+
+**Payment rail pivot.** Paddle onboarding отменён — Sumsub-цикл затянулся (KYC заблокирован, support не разморозил), Gumroad принимает русский паспорт без блокеров. Gumroad KYC пройден в тот же день. Остаётся 4 пункта onboarding: tax setup (W-8BEN), payout-реквизиты, страница продукта, content upload (последний блокируется T12 — нечего заливать).
+
+**Мотоправа (motorbike) получены.** Изначальное обоснование «backup-документ для Paddle Sumsub» отпало с Gumroad-pivot'ом, но права всё равно остались как general-purpose Thai government ID (пригодится для Payoneer/Wise/address proof в Phase 1, если понадобится).
+
+**Что обновлено в `wiki/roadmap.md`.**
+
+- Шапка `Last updated` → 2026-05-25.
+- Сводка прогресса: убрана строка `Paddle onboarding 5/6`, убрана строка `Payment rails 0/14` из Phase 0, убрана строка `Тайские мото-права 9/22`. Добавлена строка `Gumroad onboarding 1/5`. Итог пересчитан: **35/101 ≈ 35%** (раньше 49/119 ≈ 41% — падение процента из-за того, что Paddle-задачи были на 83%, а Gumroad на 20%). Под таблицей добавлена секция «Out-of-band» с мото-правами ✅, alt payment rails (deferred → Phase 1), car-правами (deferred → Phase 1+).
+- T6: пункт `t6/paddle-license` помечен как ~~abandoned~~ со ссылкой на 2026-05-25.
+- Раздел «🆕 Payment rails (parallel to Paddle)» → перенесён ниже Phase 0 и переименован в «🚀 Phase 1 — Alternative payment rails (post-launch, deferred)». Каждый из 4 рельсов снабжён триггером запуска вместо «делать сейчас».
+- Раздел «⏳ Paddle onboarding» → заменён на «⏳ Gumroad onboarding» с 5 пунктами (KYC ✅, tax, payout, страница, content upload).
+- Раздел «🆕 Тайские мото-права (backup-документ для KYC)» → переписан в «✅ Тайские мото-права (motorbike)»: коллапс 6 подсекций в 6 строк ✅, объяснено почему backup-обоснование отпало, car-трек отдельным блоком на Phase 1+.
+- T12: упоминания `Paddle product Content` / `PADDLE_PRODUCT_ID` → `Gumroad product Content` / `GUMROAD_PRODUCT_ID`. Заголовок секции `T12 Bundle assembly + Paddle product` → `+ Gumroad product`.
+
+**Что НЕ тронуто.**
+
+- `wiki/payment-rails.md` — матрица остаётся актуальной как историческая референс-страница. Внутри неё Paddle и Gumroad по-прежнему перечислены среди рассмотренных, вердикты не меняю — это снапшот research'а 2026-05-06, его правка задним числом исказит логи решений. Если на странице нужно «обновить рекомендации» — это отдельный заход.
+- `wiki/landing-narrative.md` — копия уже корректная: Beat 1 и Beat 8 содержат `Buy on Gumroad — $39`. Совпадает с реальностью теперь буквально.
+- `wiki/index.md` — не трогаю, ссылки на [[payment-rails]] / [[roadmap]] остаются валидными.
+
+**Изменение картины запуска (для будущей retro).**
+
+- Внешний календарный блокер (Sumsub/Paddle) **исчез**. Critical path схлопнулся до внутренних задач: T3 brand → T9 video → T11 Buttondown → T8 M4L update → T12 Bundle → Gumroad publish → T13 verify.
+- Phase 0 уменьшился со 119 до 101 пункта (убрали 6 Paddle + 14 payment rails + 22 Thai DL, добавили 5 Gumroad). Реальная нагрузка на ~30% меньше.
+- Worst-case план «launch без Paddle через crypto» теперь неактуален — Gumroad покрывает.
+
+---
+
 ## 2026-05-07 — landing-narrative v3: Beat 2 rewrite + supporting blocks
 
 Перенесённый из claude.ai-сессии диалог про лендинг XL_Performance: упор сместили с "докудоки" на "пользователь / юзабилити / восприятие". Зафиксировал в `wiki/landing-narrative.md` v3.
