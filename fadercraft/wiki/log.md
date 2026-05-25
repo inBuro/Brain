@@ -8,6 +8,12 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-26 — External links page + IG handle `fadercraft_`
+
+- Создана [[external-links]] — single source of truth для внешних URL (IG/YT/Gumroad/support/лендинг) + список файлов в коде, где эти ссылки используются.
+- В [FooterFull.tsx:43](../../../Projects/Claude/Fadercraft/app/src/components/organisms/FooterFull/FooterFull.tsx#L43) обновлён IG href: `instagram.com/fadercraft` → `instagram.com/fadercraft_` (актуальный хэндл с trailing underscore).
+- [[index]] обновлён: добавлена ссылка на `external-links` в разделе Reference.
+
 ## 2026-05-26 — Beat 4 «hotkeys» — пересборка amber-LED оверлея под Figma
 
 Пользователь обновил иллюстрацию `hotkeys` в Figma `OdPRdjodGO3WiR6tgSP7AA` → page `07 — Illustrations`, COMPONENT_SET `1747:10709` («Component 1»), вариант `1747:10705` (`Property 1=hotkeys`). Сам растровый `keys.png` (image hash `7c74bff664…`) не менялся — поменялся только overlay-фрейм поверх изображения и добавлены exportSettings PNG @1x/@2x на сам компонент.
