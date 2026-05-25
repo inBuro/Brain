@@ -15,6 +15,10 @@ fd0c738fe8b526545eeb420e8c58b798333af696:.obsidian/plugins/terminal/main.js:gene
 fd0c738fe8b526545eeb420e8c58b798333af696:.obsidian/plugins/terminal/main.js:generic-api-key:171
 fd0c738fe8b526545eeb420e8c58b798333af696:.obsidian/plugins/terminal/main.js:generic-api-key:172
 
+# Fadercraft Vite/React production bundles — handled via path allowlist in
+# .gitleaks.toml (filenames are content-hashed; globs travel better than
+# per-build fingerprints).
+
 # NOT suppressed below — they are real, must be rotated, then GC'd:
 # 96ed4e9120b4ecc9edcf97ee3ecd4e6b5fe746cb (vault backup, dangling/unreachable)
 # - Sample Scanner/SampleScanner/.env:anthropic-api-key:6
