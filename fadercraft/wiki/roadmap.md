@@ -2,7 +2,7 @@
 type: roadmap
 project: Novation
 created: 2026-05-05
-updated: 2026-05-06
+updated: 2026-05-25
 ---
 
 # Fadercraft Roadmap
@@ -13,7 +13,7 @@ updated: 2026-05-06
 
 **Sources**: spec + Phase 0 plan + chat-history с Claude.
 
-**Last updated**: 2026-05-06
+**Last updated**: 2026-05-25
 
 **Payment rails matrix**: [[payment-rails]] — вердикты по всем рассмотренным платформам (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) под профиль русский паспорт + Таиланд + Bangkok Bank, без тайского national ID.
 
@@ -28,9 +28,7 @@ updated: 2026-05-06
 | T2 Email | 13 | 13 | 100% |
 | T6 Server endpoints | 6 | 6 | 100% |
 | T7 Placeholder pages | 6 | 6 | 100% |
-| Paddle onboarding | 5 | 6 | 83% |
-| Payment rails (Payoneer/Isotonik/crypto/GE) | 0 | 14 | 0% |
-| Тайские мото-права | 9 | 22 | 41% |
+| Gumroad onboarding | 1 | 5 | 20% |
 | T3 Brand identity | 0 | 6 | 0% |
 | T5 Instagram | 0 | 3 | 0% |
 | T7-real Лендинг | 0 | 5 | 0% |
@@ -40,7 +38,15 @@ updated: 2026-05-06
 | T11 Buttondown | 0 | 8 | 0% |
 | T12 Bundle assembly | 0 | 14 | 0% |
 | T13 Final verification | 0 | 6 | 0% |
-| **ИТОГО Phase 0** | **49** | **119** | **~41%** |
+| **ИТОГО Phase 0** | **35** | **101** | **~35%** |
+
+Out-of-band (не блокируют Phase 0):
+
+| Трек | Статус |
+|---|---|
+| Тайские мото-права (motorbike) | ✅ получены 2026-05-25 |
+| Payment rails alt (Payoneer/Isotonik/crypto/GE) | deferred → Phase 1 |
+| Тайские car-права | deferred → Phase 1+ |
 
 ---
 
@@ -78,8 +84,8 @@ updated: 2026-05-06
 
 - [x] `web/api/version.json` — endpoint update-check
 - [x] `web/update.html` — license-key entry форма
-- [x] `web/functions/api/verify-license.js` — Pages Function (Gumroad version on `main`)
-- [x] **Branch `t6/paddle-license`:** verify-license переписан под Paddle Transactions API
+- [x] `web/functions/api/verify-license.js` — Pages Function (Gumroad — канонический на `main`)
+- [x] ~~Branch `t6/paddle-license`~~ — **abandoned** (Paddle отменён 2026-05-25, см. Gumroad onboarding ниже)
 - [x] Quickstart.md написан (subagent)
 - [x] Buttondown welcome email черновик добавлен в `brand/email-setup.md`
 
@@ -92,95 +98,57 @@ updated: 2026-05-06
 - [x] `web/refund.html` (~310 слов)
 - [x] Footer-навигация на всех страницах
 
-## 🆕 Payment rails (parallel to Paddle)
+## ⏳ Gumroad onboarding
 
-После ресёрча 2026-05-06 (см. [[payment-rails]]) зафиксированы рабочие рельсы для профиля «русский паспорт + Таиланд + Bangkok Bank, без тайского ID». Идут параллельно Paddle, не блокируют его.
+После отказа от Paddle 2026-05-25 (Sumsub-цикл затянулся, Gumroad принимает русский паспорт без блокеров). Gumroad — единственный payment rail для v1.0 launch.
+
+- [x] **KYC пройден** (2026-05-25)
+- [ ] Tax setup (W-8BEN для non-US, выбор tax jurisdiction)
+- [ ] Payout-реквизиты (Wise / Bangkok Bank SWIFT / Payoneer)
+- [ ] Страница продукта: описание, cover image, цена $39, URL slug `xl-performance`
+- [ ] Content upload (bundle zip) — блокируется T12
+
+---
+
+## 🚀 Phase 1 — Alternative payment rails (post-launch, deferred)
+
+После v1.0 launch, если будут конкретные триггеры (см. [[payment-rails]] для матрицы).
 
 ### Payoneer (USD-приёмник)
-
-- [ ] Регистрация на Payoneer: passport + Thai address proof (Bangkok Bank statement / lease / TM.30 / motorbike DL после получения)
-- [ ] Verify identity (1–3 рабочих дня)
-- [ ] Linked Bangkok Bank THB receiving — настроить
-- [ ] Тестовый incoming USD transfer
+- [ ] Триггер: Gumroad payout через банк дороже Payoneer
+- [ ] Регистрация: passport + Thai address proof (motorbike DL ✅ доступен)
+- [ ] Verify identity → Linked Bangkok Bank THB → тестовый transfer
 
 ### Isotonik Studios (B2B reseller)
+- [ ] Триггер: XL_Performance готов + демо-видео опубликовано
+- [ ] Email sales@isotonikstudios.com с pitch
+- [ ] Revenue share, developer agreement, payout setup
 
-- [ ] Дождаться готового XL_Performance + демо-видео
-- [ ] Email на sales@ isotonikstudios.com с pitch + демо
-- [ ] Согласовать revenue share, подписать developer agreement
-- [ ] Указать payout (Payoneer USD или Wise / Bangkok Bank SWIFT)
+### Crypto checkout (Cryptomus / NOWPayments / Coinbase Commerce)
+- [ ] Триггер: запрос от покупателей либо доля Gumroad-fees > 8%
+- [ ] Выбор провайдера, CF Pages Function, тест-покупка, off-ramp USDT → Bangkok Bank
 
-### Crypto checkout (direct sales)
-
-- [ ] Сравнить **Cryptomus** vs **NOWPayments** vs **Coinbase Commerce** — комиссии, поддерживаемые сети, UX чекаута, anti-fraud
-- [ ] Выбрать провайдера, интегрировать на лендинг (Cloudflare Pages Function для verify-payment + license-issue)
-- [ ] Тестовая покупка end-to-end
-- [ ] Off-ramp: USDT → Bybit P2P → Bangkok Bank THB, проверить лимиты и спред
-
-### Georgian Individual Entrepreneur (deferred)
-
+### Georgian Individual Entrepreneur
 - [ ] Триггер: выручка ≥ $500–1000/мес стабильно
-- [ ] Найти регистратора в Тбилиси с remote-PoA-сервисом (~$1–1.5k setup)
-- [ ] Регистрация ИП с режимом 1% (до 500k GEL/год)
-- [ ] Открыть Wise Business на грузинскую сущность
-- [ ] (опц.) Stripe Georgia → unlocks Lemon Squeezy / Polar / Paddle через грузинский entity
+- [ ] Регистратор в Тбилиси (remote-PoA, ~$1–1.5k setup), ИП 1%, Wise Business, опц. Stripe Georgia
 
 ---
 
-## ⏳ Paddle onboarding
+## ✅ Тайские мото-права (motorbike)
 
-- [x] Seller account зарегистрирован
-- [x] Trading name: Fadercraft
-- [x] Web domains, Pricing, Terms, Privacy, Refund URLs поданы
-- [x] Compliance questionnaire (MATCH list, etc.) отправлен
-- [x] Identity documents отправлены в Sumsub (первая попытка — отклонена за качество фото)
-- [ ] **Sumsub session разблокирована (Paddle support contacted, waiting reply)**
-- [ ] Re-upload документов в Sumsub
-- [ ] Paddle final KYC approval
+**Получены 2026-05-25.** Изначально шли как backup-документ для Paddle Sumsub-цикла; после отказа от Paddle и перехода на Gumroad (где русский паспорт принят без вопросов) KYC-обоснование отпало. Права остались как general-purpose Thai government ID — пригодится для Payoneer / address proof / Wise Thailand если когда-нибудь понадобится.
 
----
+- [x] Pre-flight (2026-05-04): landlord, TM.30, Tabien Baan, ID copies, фото, 500 THB
+- [x] Day 1 (2026-05-05): Bluport Immigration → Certificate of Residence, медсправка
+- [x] Booking (2026-05-06): DLT Smart Queue, Pran Buri Branch
+- [x] Подготовка: DLT QR LICENCE app, safety video, практика
+- [x] Экзамен: theory + practical (slalom, баланс, восьмёрка, торможение)
+- [x] Пластик на руках
 
-## 🆕 Тайские мото-права (backup-документ для KYC)
+### Phase 1+ — car license (deferred, no urgency)
 
-Цель — иметь тайские DL как местный government-issued ID, чтобы пройти Stripe-зависимые KYC если Paddle с загранпаспортом откажет (или для будущих платформ). Категория: **motorbike** (car отложен — нет опыта вождения, потребует отдельного блока с уроками).
-
-Полный чеклист и тактика ускорения: [`_Inbox/thai-driver-license.md`](../../_Inbox/thai-driver-license.md).
-
-### Pre-flight ✅ (2026-05-04)
-
-- [x] Связаться с landlord, TM.30 receipt, копии Tabien Baan и ID, фото 4×6, 500 THB
-
-### Day 1 ✅ (2026-05-05)
-
-- [x] Bluport Immigration → Certificate of Residence
-- [x] Медсправка «for driving license»
-
-### Booking ✅ (2026-05-06)
-
-- [x] DLT Smart Queue: слот **2026-07-01** в **Prachuap Khiri Khan Provincial Land Transport Office, Pran Buri Branch**
-- [x] Категория решена: **motorbike**
-
-### До экзамена
-
-- [ ] Двигать слот раньше 1 июля (рефреш приложения, walk-in утром, альтернативные офисы Prachuap/Hua Hin)
-- [ ] Подготовка: DLT QR LICENCE app до стабильных ≥48/50, safety video, практика баланса/восьмёрки
-- [ ] Освежить Residence Cert + Medical Cert ≤30 дней до экзамена
-
-### Экзамен-день
-
-- [ ] Документы → physicals → safety video → theory (50 вопросов) → practical (slalom, баланс, восьмёрка, торможение) → пластик
-
-### После получения прав
-
-- [ ] Загрузить тайские права в Sumsub (если Paddle ещё не одобрил по загранпаспорту)
-- [ ] Получить Paddle approval
-- [ ] (Опц.) Альтернативно — зарегистрироваться на FastSpring как backup-канал
-
-### Отдельный трек (позже): car license
-
-- [ ] Найти автошколу в Hua Hin (Honda/Toyota DLT-certified)
-- [ ] Пройти курс уроков вождения
-- [ ] Сдать на категорию car (теория уже зачтётся? — проверить)
+- [ ] Триггер: реальная потребность водить машину в Таиланде
+- [ ] Автошкола Hua Hin (Honda/Toyota DLT-certified) → курс → экзамен на категорию car
 
 ---
 
@@ -251,17 +219,17 @@ updated: 2026-05-06
 - [ ] Embed на лендинг (T7-real)
 - [ ] Embed внутрь M4L-устройства (T8)
 
-### T12 Bundle assembly + Paddle product
+### T12 Bundle assembly + Gumroad product
 
 - [ ] Custom Modes для LCXL MK3 → `dist/custom-modes/lcxl-mk3-modes.json` + README
 - [ ] `XL_Performance_starter.als` Live Set с маппингами + контентом
 - [ ] Собрать `dist/fadercraft-xl-performance-v1.0/`
 - [ ] Zip → `fadercraft-xl-performance-v1.0.zip`
-- [ ] Загрузить в Paddle product Content
+- [ ] Загрузить в Gumroad product Content
 - [ ] Cover image 1280×720 PNG
-- [ ] Описание продукта на странице Paddle
+- [ ] Описание продукта на странице Gumroad
 - [ ] URL slug `xl-performance`
-- [ ] env vars `LATEST_BUNDLE_URL` + `PADDLE_PRODUCT_ID` в CF Pages
+- [ ] env vars `LATEST_BUNDLE_URL` + `GUMROAD_PRODUCT_ID` в CF Pages
 - [ ] Publish продукт (Draft → Live)
 
 ### T13 Final pre-launch verification
