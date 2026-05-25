@@ -1,0 +1,31 @@
+# Cloudflare Tunnel config — template
+#
+# Final location: ~/.cloudflared/config.yml on the Mac.
+# Do NOT copy this file there with the placeholders still in place.
+#
+# Bootstrap sequence on the Mac:
+#
+#   1. brew install cloudflared
+#   2. cloudflared tunnel login                       # browser auth with Cloudflare
+#   3. cloudflared tunnel create brain-sync           # prints a TUNNEL_UUID
+#                                                     # and writes a JSON creds file to
+#                                                     # ~/.cloudflared/<TUNNEL_UUID>.json
+#   4. cloudflared tunnel route dns brain-sync \
+#        brain-sync.YOUR-DOMAIN.com                   # creates the public DNS record
+#                                                     # on a domain you own at Cloudflare
+#   5. Copy this file to ~/.cloudflared/config.yml and fill in the three placeholders.
+#   6. cloudflared tunnel run brain-sync              # one-shot test in foreground
+#   7. sudo cloudflared service install               # install as a system LaunchDaemon
+#                                                     # (survives reboot, runs as cloudflared user)
+
+tunnel: REPLACE_WITH_TUNNEL_UUID
+credentials-file: /Users/REPLACE_WITH_MAC_USERNAME/.cloudflared/REPLACE_WITH_TUNNEL_UUID.json
+
+ingress:
+  # Public HTTPS hostname → local Python listener (sync-trigger-server.py).
+  # cloudflared terminates TLS, X-Forwarded-* headers are filled in.
+  - hostname: brain-sync.REPLACE_WITH_YOUR_DOMAIN.com
+    service: http://127.0.0.1:8765
+
+  # Catch-all: refuse anything that's not the brain-sync host.
+  - service: http_status:404
