@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.inburo.brain-sync-trigger</string>
+
+    <!-- Python HTTP listener. Replace REPLACE_WITH_REPO_PATH with the absolute
+         path to your Brain clone (sed on the LaunchAgents copy, never on the
+         tracked file in the repo). -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/python3</string>
+        <string>REPLACE_WITH_REPO_PATH/scripts/sync-trigger-server.py</string>
+    </array>
+
+    <!-- Secret + port for the listener. Generate the secret once with:
+           openssl rand -hex 32
+         The same value must be set on the cloud side (scripts/.trigger.env). -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>BRAIN_SYNC_SECRET</key>
+        <string>REPLACE_WITH_SECRET</string>
+        <key>BRAIN_SYNC_PORT</key>
+        <string>8765</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+
+    <!-- Start at user login and keep alive if it crashes. -->
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- Logs. Both in .gitignore. -->
+    <key>StandardOutPath</key>
+    <string>REPLACE_WITH_REPO_PATH/scripts/sync-trigger.log</string>
+    <key>StandardErrorPath</key>
+    <string>REPLACE_WITH_REPO_PATH/scripts/sync-trigger.err.log</string>
+</dict>
+</plist>
