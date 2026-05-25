@@ -30,15 +30,15 @@ updated: 2026-05-25
 | T7 Placeholder pages | 6 | 6 | 100% |
 | Gumroad onboarding | 1 | 5 | 20% |
 | T3 Brand identity | 0 | 6 | 0% |
-| T5 Instagram | 0 | 3 | 0% |
+| T5 Instagram | 1 | 3 | 33% |
 | T7-real Лендинг | 0 | 5 | 0% |
 | T8 M4L update integration | 0 | 9 | 0% |
-| T9 Демо-видео | 0 | 9 | 0% |
+| T9 Демо-видео | 1 | 9 | 11% |
 | T10 Документация | 1 | 3 | 33% |
 | T11 Buttondown | 0 | 8 | 0% |
 | T12 Bundle assembly | 0 | 14 | 0% |
 | T13 Final verification | 0 | 6 | 0% |
-| **ИТОГО Phase 0** | **35** | **101** | **~35%** |
+| **ИТОГО Phase 0** | **37** | **101** | **~37%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -165,7 +165,7 @@ Out-of-band (не блокируют Phase 0):
 
 ### T5 Instagram presence
 
-- [ ] Зарегистрировать handle (`@fadercraft.studio`/`.audio`/`.dev`)
+- [x] Зарегистрировать handle — **`@fadercraft_`** (2026-05-25)
 - [ ] Bio + ссылка на fadercraft.com
 - [ ] Profile photo
 
@@ -198,7 +198,7 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Export master 1080p MP4
 - [ ] Hero loop 8 sec → `web/assets/hero-loop.mp4`
 - [ ] 5 коротких клипов 30 sec для IG/TikTok/Reels
-- [ ] Создать YouTube канал «Fadercraft»
+- [x] Создать YouTube канал — **[@Fadercraft](https://www.youtube.com/@Fadercraft)** (2026-05-25)
 - [ ] Загрузить video, скопировать ID
 - [ ] Update `index.html` с YouTube embed
 
