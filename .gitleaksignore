@@ -15,6 +15,11 @@ fd0c738fe8b526545eeb420e8c58b798333af696:.obsidian/plugins/terminal/main.js:gene
 fd0c738fe8b526545eeb420e8c58b798333af696:.obsidian/plugins/terminal/main.js:generic-api-key:171
 fd0c738fe8b526545eeb420e8c58b798333af696:.obsidian/plugins/terminal/main.js:generic-api-key:172
 
+# Fadercraft Vite/React production bundle — CSS Modules hashed class names
+# (`_keysImg_qh5f5_331`, etc.) match the generic-api-key entropy rule.
+# Verified by inspection 2026-05-25 — minified JS, no secrets.
+fadercraft/web/assets/index-DJT9VOOb.js:generic-api-key:20
+
 # NOT suppressed below — they are real, must be rotated, then GC'd:
 # 96ed4e9120b4ecc9edcf97ee3ecd4e6b5fe746cb (vault backup, dangling/unreachable)
 # - Sample Scanner/SampleScanner/.env:anthropic-api-key:6
