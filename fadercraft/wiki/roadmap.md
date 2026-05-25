@@ -192,6 +192,8 @@ Out-of-band (не блокируют Phase 0):
 
 ### T9 Demo video production
 
+> **Content must-include (user note 2026-05-25):** «Закинул на MIDI-трек» — недостаточно. Скрипт **обязан** показать на экране настройку: **MIDI From → Launch Control XL MK3 (DAW port)**, **MIDI To → Launch Control XL MK3 (DAW port)**, **Channel → All** (или явно тот, на котором сидит overlay listen CC). Без этих трёх настроек устройство не получает входной MIDI и не отвечает на LCXL — самая частая причина «не работает» у первого пользователя.
+
 - [ ] 1-страничный скрипт
 - [ ] Запись screen + voice-over
 - [ ] Монтаж
@@ -203,6 +205,8 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Update `index.html` с YouTube embed
 
 ### T10 Extended documentation
+
+> **Content must-include (user note 2026-05-25):** Quickstart и user-facing README **обязаны** иметь отдельный шаг «Настройка MIDI-роутинга» со скриншотом: **MIDI From / MIDI To / Channel** на трек с устройством. Не объединять с шагом «положить .amxd на трек» — это два разных действия, второе часто пропускают.
 
 - [x] `dist/Quickstart.md` (subagent)
 - [ ] `dist/Quickstart.pdf` (рендер через pandoc/make-pdf)
