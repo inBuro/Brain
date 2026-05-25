@@ -2,7 +2,7 @@
 type: narrative
 project: Fadercraft
 created: 2026-05-06
-updated: 2026-05-07
+updated: 2026-05-25
 version: 3
 ---
 
@@ -14,7 +14,7 @@ version: 3
 
 **Figma prototype**: page **Prototype** in file [`OdPRdjodGO3WiR6tgSP7AA`](https://www.figma.com/design/OdPRdjodGO3WiR6tgSP7AA/Novation-XL?node-id=373-3).
 
-**Last updated**: 2026-05-07
+**Last updated**: 2026-05-25
 
 ---
 
@@ -149,6 +149,7 @@ The 1920 / 1440 / 960 / 640 / 360 ProductPage breakpoints inherited 11 sections 
 5. **CC47 disclosure level**: ~~keep "CC47" in beat 2 body~~ — resolved 2026-05-07. CC47 is dropped from the first read; lives in an expandable / tech-section only. Body uses "the jump button" / "one button" framing.
 6. **Knob doubling — "vs two" or "vs three"?**: ~~user to confirm~~ — resolved 2026-05-07 to **6 vs 3** (one Page = 3 encoder rows × 8 channels; Page A + B = 6 mappings per channel). Headline reads "Six controls per channel, not three."
 7. **Tooltips on grey 15–16 pads**: resolved 2026-05-07 — no tooltip. Grey reads universally as "unused/unavailable" and any label ("service channels," "reserved," "factory preset") would falsely imply a hardware role. The greys exist for visual symmetry with the 4×4 grid, nothing more.
+8. **Device-setup explanation surface (user note 2026-05-25)**: «Drop on a MIDI track» is not enough — users skip MIDI From / MIDI To / Channel configuration and the device looks broken. Decide where the explicit MIDI-routing screenshot lives: Beat 6 (Tech requirements) sub-block? New FAQ item «Why isn't my LCXL responding?» Or only in Quickstart (out of landing scope)? Demo video MUST cover it regardless (see roadmap T9 note).
 
 ## Related pages
 

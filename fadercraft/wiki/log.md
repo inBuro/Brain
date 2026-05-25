@@ -8,6 +8,23 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-25 — content-must-include: явная MIDI-настройка трека
+
+Пользователь зафиксировал requirement: при объяснении установки устройства просто «drop on a MIDI track» — недостаточно. Это самая частая причина «не работает» у первого пользователя, потому что без явной конфигурации **MIDI From** / **MIDI To** / **Channel** на трек устройство не получает входной MIDI с LCXL.
+
+**Что добавлено.**
+
+- `wiki/roadmap.md` → T9 (Demo video): добавлен callout-блок перед списком пунктов с явной формулировкой «MIDI From → LCXL MK3 DAW port, MIDI To → LCXL MK3 DAW port, Channel → All». Скрипт демо-видео обязан показать это на экране.
+- `wiki/roadmap.md` → T10 (Documentation): добавлен callout-блок: Quickstart и user-facing README должны иметь отдельный шаг «Настройка MIDI-роутинга» со скриншотом. Не объединять с шагом «положить .amxd на трек» — это два разных действия.
+- `wiki/landing-narrative.md` → open question #8 добавлен: где на лендинге освещать MIDI-routing настройку — sub-block в Beat 6 (Tech requirements), новый FAQ-пункт «Why isn't my LCXL responding?», или off-load в Quickstart за пределы лендинга. Демо-видео покрывает в любом случае (cross-ref на roadmap T9).
+
+**Не сделано — открытые решения.**
+
+- Куда на лендинге пойдёт это объяснение (см. open question #8 в landing-narrative). Скорее всего — FAQ-пункт, т.к. tech-requirements-секция не про «как настроить», а про «что иметь». Но решение отложено до записи демо.
+- Что именно показывать на скриншоте: только MIDI From/To/Channel в шапке трека, или ещё с раскрытым Monitor-режимом (In/Auto/Off)? Solo Follower требует, чтобы router-трек был **слышен** — это значит Monitor либо `In` (всегда слышно), либо track armed. Уточнить при написании Quickstart-шага.
+
+---
+
 ## 2026-05-25 — Paddle → Gumroad pivot + мотоправа получены
 
 Два связанных события одного дня, оба меняют картину запуска в плюс.
