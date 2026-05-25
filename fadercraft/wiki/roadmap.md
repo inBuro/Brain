@@ -236,6 +236,7 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Загрузить в Gumroad product Content
 - [ ] Cover image 1280×720 PNG
 - [ ] Описание продукта на странице Gumroad
+  - ✅ Copy fix «6 controls instead of 2» применён вручную на Gumroad (2026-05-26); параллельно поправлено в `PerformanceFlow.tsx` и в Figma (nodes `1398:143`, `1434:6902`)
 - [ ] URL slug `xl-performance`
 - [ ] env vars `LATEST_BUNDLE_URL` + `GUMROAD_PRODUCT_ID` в CF Pages
 - [ ] Publish продукт (Draft → Live)
