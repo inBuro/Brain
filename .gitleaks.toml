@@ -1,0 +1,14 @@
+# Extends the default gitleaks ruleset.
+# https://github.com/gitleaks/gitleaks#configuration
+[extend]
+useDefault = true
+
+# Globally exclude minified production bundles whose hashed CSS Modules
+# class names (e.g. `_keysImg_qh5f5_331`) reliably trip the generic-api-key
+# entropy rule. Bundle filenames are content-hashed and change every build,
+# so per-fingerprint .gitleaksignore entries don't survive — path globs do.
+[allowlist]
+description = "Built Vite/React bundles — minified JS, no secrets"
+paths = [
+    '''fadercraft/web/assets/index-[A-Za-z0-9_-]+\.js''',
+]
