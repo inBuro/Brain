@@ -36,9 +36,9 @@ updated: 2026-05-25
 | T9 Демо-видео | 1 | 9 | 11% |
 | T10 Документация | 1 | 3 | 33% |
 | T11 Buttondown | 0 | 8 | 0% |
-| T12 Bundle assembly | 0 | 14 | 0% |
+| T12 Bundle assembly | 1 | 14 | 7% |
 | T13 Final verification | 0 | 6 | 0% |
-| **ИТОГО Phase 0** | **39** | **101** | **~39%** |
+| **ИТОГО Phase 0** | **40** | **101** | **~40%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -105,7 +105,7 @@ Out-of-band (не блокируют Phase 0):
 - [x] **KYC пройден** (2026-05-25)
 - [x] **Payout-реквизиты** (2026-05-25): Bank Account → Bangkok Bank (code 002, ****0115), THB, **Weekly** schedule, $100 minimum threshold, Individual. Billing details заполнены (Kirill Bush / Fadercraft / 126 Alley, Huahin 77110, Thailand).
 - [x] **Tax setup** (2026-05-25): Stripe Connect non-US individual onboarding пройден (Account type Individual, name/DoB/address/phone заполнены — это substrate для авто-генерируемого W-8BEN).
-- [ ] Страница продукта: описание, cover image, цена $39, URL slug `xl-performance`
+- [ ] Страница продукта на [`gumroad.com/l/control-xl`](https://fadercraft.gumroad.com/l/control-xl): title `Fadercraft Control XL` ✅, slug `control-xl` ✅ (legacy `xl-performance` заменён 2026-05-25); ждёт description / cover / price $39 — драфт контента в [[gumroad-product-page]]
 - [ ] Content upload (bundle zip) — блокируется T12
 
 ---
@@ -228,7 +228,7 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Загрузить в Gumroad product Content
 - [ ] Cover image 1280×720 PNG
 - [ ] Описание продукта на странице Gumroad
-- [ ] URL slug `xl-performance`
+- [x] URL slug `control-xl` (заменил legacy `xl-performance` 2026-05-25)
 - [ ] env vars `LATEST_BUNDLE_URL` + `GUMROAD_PRODUCT_ID` в CF Pages
 - [ ] Publish продукт (Draft → Live)
 
