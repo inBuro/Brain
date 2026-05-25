@@ -176,6 +176,7 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Hero loop video (8 sec, autoplay, muted)
 - [ ] `style.css` с brand colors (mobile-first)
 - [ ] Smooth scroll + lazy load в `main.js`
+- [ ] **`/free-custom-modes` страница** (free funnel — см. T12 distribution strategy ниже): `lcxl-mk3-modes.json` + README + CTA-блок к bundle, объясняющий что без `.amxd` modes работают как обычные layout'ы без mode-switching
 
 ### T8 M4L device update integration
 
@@ -225,9 +226,12 @@ Out-of-band (не блокируют Phase 0):
 
 ### T12 Bundle assembly + Gumroad product
 
-- [ ] Custom Modes для LCXL MK3 → `dist/custom-modes/lcxl-mk3-modes.json` + README
+> **Distribution strategy (user note 2026-05-25):** Гибрид — Custom Modes JSON **дублируется** в двух местах: бесплатно на `fadercraft.com/free-custom-modes` (см. T7-real) как SEO/discovery funnel, и в платном bundle (чтобы покупатель не ходил отдельно на сайт). Live Set + `.amxd` + Quickstart + Demo — только в платном bundle. Обоснование: modes без `.amxd` работают как любые обычные custom-mode'ы LCXL — переключаются руками на самой ручке. Mode-switching/cross-mode transit/Solo Follower живут в `.amxd`, поэтому feature-set не утекает. Подробно: см. log 2026-05-25 «distribution strategy».
+
+- [ ] Custom Modes для LCXL MK3 → `dist/custom-modes/lcxl-mk3-modes.json` + README (с CTA на bundle внутри README)
+- [ ] **Опубликовать `lcxl-mk3-modes.json` отдельно** на `web/free-custom-modes/` (free funnel — связано с T7-real)
 - [ ] `XL_Performance_starter.als` Live Set с маппингами + контентом
-- [ ] Собрать `dist/fadercraft-xl-performance-v1.0/`
+- [ ] Собрать `dist/fadercraft-xl-performance-v1.0/` (содержит `.amxd` + `solo_follower.js` + custom-modes/ + `.als` + Quickstart.pdf + опц. demo.mp4)
 - [ ] Zip → `fadercraft-xl-performance-v1.0.zip`
 - [ ] Загрузить в Gumroad product Content
 - [ ] Cover image 1280×720 PNG

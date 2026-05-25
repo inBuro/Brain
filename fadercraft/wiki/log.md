@@ -8,6 +8,37 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-25 — distribution strategy: hybrid free Custom Modes + paid bundle
+
+Пользователь зафиксировал стратегию упаковки/раздачи материалов, идущих с устройством.
+
+**Решение.** Гибрид:
+- **`lcxl-mk3-modes.json` (Custom Modes для Components)** — бесплатно на `fadercraft.com/free-custom-modes` **и** в платном bundle (дублируется, чтобы покупателю не идти на сайт отдельно)
+- **`XL_Performance.amxd` + `solo_follower.js`** — только в платном bundle
+- **`XL_Performance_starter.als`** — только в платном bundle
+- **Quickstart.pdf + опц. demo.mp4** — только в платном bundle
+
+**Обоснование, почему Custom Modes бесплатно безопасно.**
+1. Без `.amxd` это просто 14 layout'ов LCXL, переключаемых руками на самой ручке. Mode-switching (CC30/ch7), cross-mode transit (CC47), Solo Follower, MIDI passthrough фильтрация — всё в `.amxd`. Скачавший только .json не получает обещанное лендингом.
+2. Free Custom Modes = SEO/discovery funnel. Люди гуглят «LCXL MK3 custom modes mixer template» — сейчас попадают на forum.novationmusic.com / Reddit / случайные .json. Если Fadercraft владеет нишей качественными бесплатными шаблонами — главные ворота к платному продукту.
+3. Cross-promotion: README внутри .json zip'а имеет CTA «hook these into Fadercraft XL Performance for one-button mode-switching → $39»; `/free-custom-modes` страница имеет CTA на bundle.
+
+**Почему НЕ давать пост-pay выбор на Gumroad.**
+- Gumroad нативно одного-zip-product; «pick your bits» требует или нескольких SKU (плохой positioning для bundle), или кастомного download portal'а через CF Pages Function — overengineering для 5 файлов.
+- Юзер на этапе post-purchase не знает разницы между «Custom Modes» / «Live Set» / «device» — он купил «штуку которая решит проблему 14 modes». Pick-your-bits UX заставит выбирать без контекста и усложнит support.
+- Один zip = всё что нужно, простой mental model.
+
+**Что обновлено в `wiki/roadmap.md`.**
+- T7-real Real landing page: добавлен пункт «`/free-custom-modes` страница» с пометкой о CTA-блоке и связи с T12.
+- T12 Bundle assembly: добавлен callout-блок «Distribution strategy» с резюме решения. Добавлены пункты «Опубликовать lcxl-mk3-modes.json отдельно на web/free-custom-modes/» и уточнённое содержимое bundle.
+
+**Не сделано — открытые вопросы.**
+- Дизайн `/free-custom-modes` страницы — отдельный landing-mini или секция на главной? Скорее всего отдельная мини-LP, чтобы SEO-таргетинг был чистый (title/meta под «LCXL MK3 custom modes»).
+- README внутри free .zip — что именно говорит CTA, насколько агрессивный («buy now» vs «if you want auto-switching, check out X»). Лучше soft-sell — тон community-good, не маркетинг.
+- Версионирование Custom Modes отдельно от .amxd версии. Если .amxd v1.0 и Custom Modes v1.2 — это норм или ломает совместимость? Скорее всего привязать одной семвер-веткой к .amxd.
+
+---
+
 ## 2026-05-25 — content-must-include: явная MIDI-настройка трека
 
 Пользователь зафиксировал requirement: при объяснении установки устройства просто «drop on a MIDI track» — недостаточно. Это самая частая причина «не работает» у первого пользователя, потому что без явной конфигурации **MIDI From** / **MIDI To** / **Channel** на трек устройство не получает входной MIDI с LCXL.
