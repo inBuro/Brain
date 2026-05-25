@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.inburo.brain-sync</string>
+
+    <!-- Run the sync script. Replace REPLACE_WITH_REPO_PATH with the absolute path to your Brain clone. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>REPLACE_WITH_REPO_PATH/scripts/sync-from-main.sh</string>
+        <string>REPLACE_WITH_REPO_PATH</string>
+    </array>
+
+    <!-- Fire every day at 09:00 local time. -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>9</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <!-- If the Mac was asleep at 09:00, run as soon as it wakes. -->
+    <key>RunAtLoad</key>
+    <false/>
+
+    <!-- PATH so git resolves under launchd. Homebrew + system. -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+
+    <!-- Log stdout and stderr separately for tail-friendly debugging. -->
+    <key>StandardOutPath</key>
+    <string>REPLACE_WITH_REPO_PATH/scripts/sync.log</string>
+    <key>StandardErrorPath</key>
+    <string>REPLACE_WITH_REPO_PATH/scripts/sync.err.log</string>
+</dict>
+</plist>
