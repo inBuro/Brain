@@ -583,3 +583,20 @@ Append-only журнал операций над вики.
 - `wiki/roadmap.md` T14 Direction-блок — добавлена ссылка на спеку.
 - Brand assets reuse: server icon = `app/public/icon-512.png` (готов), banner pending (Figma sub-task).
 - Phase 0 итого без изменений (59/114, ~52%) — все T14-пункты пока open, спека — это infrastructure для их быстрого закрытия.
+
+## 2026-05-26 — T14 Discord: сервер запущен, 9/10
+
+- Discord-сервер **Fadercraft** создан и сконфигурирован под спеку: 2FA на founder, server icon (`icon-512.png`), 4 категории / 10 каналов, 3 роли (Founder mint Administrator, Verified Owner amber manual, @everyone), Community-режим включён (verification Low + explicit content filter, rules→`#rules`, updates+safety→`#server-updates`, default mentions-only, 2FA-mod ON), welcome + rules запинены с живыми меншнами.
+- Permanent invite link: `https://discord.gg/dAt2JGZps7` (Never / No limit / Temporary OFF). Первый временный auto-link `eaWjnPjm` отклонён — истекал через 6 часов.
+- Линк подставлен в `app/src/components/organisms/FooterFull/FooterFull.tsx` (`defaultSocials.DC` href). Quickstart и Gumroad description — в follow-ups (ждут T10 и ручной правки UI соответственно).
+- Phase 0 итого 59/114 → 68/114 (~60%). T14 9/10. Открыт только первый `#announcements`-пост — синхронизирован с T13 v1.0 launch.
+- Banner 960×540 остаётся sub-task в [[discord-server-setup]] (non-blocking, есть text-fallback в Discord).
+
+## 2026-05-26 — T14 Discord: server live, 9/10 закрыто
+
+- Discord-сервер **Fadercraft** создан (founder: Yellowshoess, 2FA активен). Иконка `icon-512.png`, Community-режим включён (verification Low, scan media, rules → `#rules`, updates → `#server-updates`, safety notifications → `#server-updates`, default notif Only @mentions, 2FA-for-mod ON).
+- Структура: 4 категории / 10 каналов по спеке [[discord-server-setup]]. Роли `@Founder` (mint, Administrator), `@Verified Owner` (amber, default), `@everyone` минус send в INFO-каналах. Welcome + rules запинены, меншны живые.
+- **Permanent invite link**: `https://discord.gg/dAt2JGZps7` (Never / No limit / Temporary OFF). Подставлен в [FooterFull.tsx:44](Projects/Claude/Fadercraft/app/src/components/organisms/FooterFull/FooterFull.tsx#L44) `defaultSocials.DC`.
+- T14 9/10 (~90%). Открыто: первый `#announcements`-пост, привязанный к v1.0 launch (T13).
+- **Phase 0 итого: 68/114 (~60%).**
+- Follow-ups (не блокеры): Quickstart Support-блок при T10, Gumroad description ручной правкой, banner 960×540 в Figma.
