@@ -8,6 +8,28 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-26 — Mixer modes 11..14 analysed + SysEx layout documented
+
+Пользователь положил в `dist/custom-modes/` четыре mixer-мода (11.syx..14.syx) из своего LCXL MK3 и попросил проверить на логические расхождения + закрепить знание о формате на будущее.
+
+**Структурные находки в mixer-модах:**
+
+1. **Name field — 2 байта** (mixer имена «11»..«14»), что сдвигает все последующие offset'ы на +1 относительно инструмент-модов (имя 1 байт).
+2. **Размеры варьируются** (664–696 байт) — корреляция с количеством labels: bank 2 (12/14) содержит метки «Melody 1», «Melody 2», «Perc 3», «Shaker»; bank 1 (11/13) — только базовые.
+3. **Mode 11 имеет лейбл «Kick»**, mode 13 — нет. Mode 12 имеет и Kick, и track-names; mode 14 — только track-names. Это асимметрия page/bank, **не баг** — соответствует semantic'е `bank ∈ {1,2}` × `page ∈ {0,1}`.
+
+**Анализ mode-index байта (изначальная гипотеза «всегда = N-1» не подтвердилась — есть систематические исключения):**
+
+1. **`always-13` паттерн.** В каждом mixer-моде три descriptor'а в msg1 (позиции #7, #15, #23 — последние энкодеры каждого ряда) имеют hardcoded `mode-idx = 0x0D`, независимо от N. Тот же паттерн есть в инструмент-моде у descriptor'а CC=0x2F (=47), который хранит static mode value (10×N). Скорее всего `0x0D` здесь — **маркер «metadata/special control»**, не литеральная ссылка на mode 14.
+2. **`+32 flag` band.** 7 button descriptor'ов (ID 0x30–0x36) в каждом mixer-моде имеют `mode-idx = (N-1) | 0x20` (= 0x2A, 0x2B, 0x2C, 0x2D для модов 11–14). Бит 5 = «cross-mode capable», участвует в [[CC47 Cross-Mode Transit]].
+3. **`linked-bank` reference** в модах 13/14 (page=1). Семь descriptor'ов (ID 0x28–0x2E) указывают на парный bank-1 мод: mode 13 → 0x0A (= mode 11), mode 14 → 0x0B (= mode 12). Это byte-уровневая реализация формулы hold-возврата `(page + hold) % 2 = 0`.
+
+**Вердикт:** ни одной байтовой аномалии, выглядящей как copy-paste артефакт. Все «странности» симметричны по всем 4 модам и соответствуют [[Mode Encoding]] semantic'е. Файлы готовы к использованию как есть.
+
+**Подтверждено: Listen CC = 47.** В инструмент-моде есть descriptor с CC=0x2F (=47) и static value=10×N. Wiki [[Instruments Layer]] говорит про default 49 (`loadmess 49`), но в этой конфигурации Fadercraft плагин настроен на 47. README bundle'а должен это отразить.
+
+**Создано:** [[Custom Mode SysEx Layout]] — wiki-страница с reverse-engineered байт-уровневой спекой формата `.syx` для LCXL MK3 (header, 11-байтный control descriptor, semantics mode-index байта с исключениями, label section, алгоритм генерации, что НЕ выводится из формата). Указатель добавлен в [[index]]. Memory pointer `reference_lcxl_syx_format.md` создан, чтобы будущие сессии знали, где искать.
+
 ## 2026-05-26 — Custom Modes 1..10 synthesized via SysEx diff
 
 Пользователь загрузил три референс-моды (`raw/1.syx`, `2.syx`, `3.syx`, экспорт из Components) — мы byte-diff'ом 1↔2↔3 декодировали LCXL MK3 Custom Mode формат и вывели правило экстраполяции.
