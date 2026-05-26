@@ -8,6 +8,17 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-26 — Roadmap sweep: T5 closed, T7-real 3/7, T9 channel, T3 social tiles
+
+Закрыта серия пунктов по уточнению пользователя:
+
+- **T3 Social tiles (6/7)** — OG-картинка `Fadercraft/web/og.png` (1080×1080, 51KB) залита в репо. IG-пост 1:1 и Stories 1080×1920 вынесены в Phase 1 / маркетинг (под этой галочкой не считаются).
+- **T5 Instagram (3/3 = 100%)** — handle `@fadercraft_` зарегистрирован, bio + ссылка на `fadercraft.com` стоят, в avatar — логотип/favicon-mark.
+- **T7-real лендинг (3/7)** — счётчик total бампнут с 5 до 7 (split `Smooth scroll + lazy load` на два пункта; `/free-custom-modes` уже добавлен ранее, но не учитывался в total). Закрыты: 9-секционный `index.html`, `style.css` с brand colors (mobile-first), smooth scroll в `main.js`. Открыты: `pricing.html`, hero loop video, lazy load, `/free-custom-modes` страница.
+- **T9 Demo video (1/9)** — YouTube канал «Fadercraft» создан.
+
+**Phase 0 totals:** 47/102 (~46%) → **55/104 (~53%)**. Дельта: +8 done, +2 total (T7-real split + free-custom-modes наконец-то учтены).
+
 ## 2026-05-26 — External links page + IG handle `fadercraft_`
 
 - Создана [[external-links]] — single source of truth для внешних URL (IG/YT/Gumroad/support/лендинг) + список файлов в коде, где эти ссылки используются.

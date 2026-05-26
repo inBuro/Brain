@@ -29,16 +29,16 @@ updated: 2026-05-26
 | T6 Server endpoints | 6 | 6 | 100% |
 | T7 Placeholder pages | 6 | 6 | 100% |
 | Gumroad onboarding | 4 | 5 | 80% |
-| T3 Brand identity | 5 | 7 | 71% |
-| T5 Instagram | 0 | 3 | 0% |
-| T7-real Лендинг | 0 | 5 | 0% |
+| T3 Brand identity | 6 | 7 | 86% |
+| T5 Instagram | 3 | 3 | 100% |
+| T7-real Лендинг | 3 | 7 | 43% |
 | T8 M4L update integration | 0 | 9 | 0% |
-| T9 Демо-видео | 0 | 9 | 0% |
+| T9 Демо-видео | 1 | 9 | 11% |
 | T10 Документация | 1 | 3 | 33% |
 | T11 Buttondown | 0 | 8 | 0% |
 | T12 Bundle assembly | 4 | 14 | 29% |
 | T13 Final verification | 0 | 6 | 0% |
-| **ИТОГО Phase 0** | **47** | **102** | **~46%** |
+| **ИТОГО Phase 0** | **55** | **104** | **~53%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -161,22 +161,23 @@ Out-of-band (не блокируют Phase 0):
 - [x] Wordmark «Fadercraft» — два варианта в Figma: Header (1117:5219) и Footer alt с fader-cap (1868:7106) — **закрыто к 2026-05-26**
 - [x] Brand identity артборд в Figma — страница `00 — Brand identity` (1903:5006): Primary/Secondary/Tertiary палитра + 2 wordmark + favicon — **2026-05-26**
 - [x] 2 primary colors → `brand/colors.md` — **2026-05-26**, задокументированы все 3 action-цвета (Primary `#63F2CA`, Secondary `#639AF2`, Tertiary `#FFAD56`) + neutrals + правила применения
-- [ ] Social tiles 1080×1080
+- [x] Social tiles 1080×1080 — OG-картинка `Fadercraft/web/og.png` готова **2026-05-26** (IG-пост 1:1 и Stories 1080×1920 — отдельно в Phase 1 / маркетинг)
 - [ ] Commit `brand/`
 
 ### T5 Instagram presence
 
-- [ ] Зарегистрировать handle (`@fadercraft.studio`/`.audio`/`.dev`)
-- [ ] Bio + ссылка на fadercraft.com
-- [ ] Profile photo
+- [x] Handle `@fadercraft_` зарегистрирован — **2026-05-26**
+- [x] Bio + ссылка на fadercraft.com — **2026-05-26**
+- [x] Profile photo (логотип/favicon-mark) — **2026-05-26**
 
 ### T7-real Real landing page
 
-- [ ] Заменить placeholder `index.html` на полноценный 9-секционный лендинг
+- [x] Заменить placeholder `index.html` на полноценный 9-секционный лендинг — **2026-05-26**
 - [ ] Полноценный `pricing.html`
 - [ ] Hero loop video (8 sec, autoplay, muted)
-- [ ] `style.css` с brand colors (mobile-first)
-- [ ] Smooth scroll + lazy load в `main.js`
+- [x] `style.css` с brand colors (mobile-first) — **2026-05-26**
+- [x] Smooth scroll в `main.js` — **2026-05-26**
+- [ ] Lazy load в `main.js`
 - [ ] **`/free-custom-modes` страница** (free funnel — см. T12 distribution strategy ниже): `lcxl-mk3-modes.json` + README + CTA-блок к bundle, объясняющий что без `.amxd` modes работают как обычные layout'ы без mode-switching
 
 ### T8 M4L device update integration
@@ -202,7 +203,7 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Export master 1080p MP4
 - [ ] Hero loop 8 sec → `web/assets/hero-loop.mp4`
 - [ ] 5 коротких клипов 30 sec для IG/TikTok/Reels
-- [ ] Создать YouTube канал «Fadercraft»
+- [x] Создать YouTube канал «Fadercraft» — **2026-05-26**
 - [ ] Загрузить video, скопировать ID
 - [ ] Update `index.html` с YouTube embed
 
