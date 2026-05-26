@@ -8,6 +8,16 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-26 — Custom Modes 1..14 confirmed working on hardware
+
+Пользователь импортнул bundle на железо, все 14 модов открываются и работают корректно (после короткой Finder-cache затыки на отображении модов 11/12 и bundle как «dim/не кликабельные» — оказалось чисто визуальный glitch macOS LaunchServices, OS-уровень файлы абсолютно нормальные; разрешилось через `touch` + рефреш Finder).
+
+**Roadmap T12 first bullet** — описание обновлено: 10 → 14 модов в `Fadercraft/dist/custom-modes/`, bundle 9276 B. Сам пункт уже был отмечен `[x]` ранее сегодня, дельта счётчиков нулевая, но описание теперь отражает финальный объём поставки.
+
+**Phase 0:** **58/104 (~56%)** — без изменений (закрытие mixer-модов произошло в рамках уже-закрытого bullet'а).
+
+**Новое правило сохранено в memory** (`feedback_progress_percentage_on_close.md`): при любой отметке закрытой задачи в chat указывать текущий процент Phase 0. Применяется со следующего сообщения.
+
 ## 2026-05-26 — Mixer mode labels stripped + Instruments Layer noted CC47
 
 Пользователь попросил удалить все extra labels (Kick / Melody 1, 2 / Perc 3 / Shaker) из всех 4 mixer-модов и зафиксировать в wiki [[Instruments Layer]], что в Fadercraft config overlay listen CC = 47 (не дефолтный 49).
