@@ -8,6 +8,27 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-26 — Bundle .syx removed: Components is one-mode-per-file
+
+Пользователь усомнился, что Novation Components сможет переварить multi-mode bundle SysEx (28 сообщений в одном файле). Я нагуглил подтверждение: официальные docs Novation описывают **только single-file импорт через "Upload Custom Mode" button** ([support guide](https://support.novationmusic.com/hc/en-gb/articles/27203903097362-Launch-Control-XL-3-Components-guide), [user guide](https://userguides.novationmusic.com/hc/en-gb/articles/26190535820562-Using-Custom-Modes-on-the-Launch-Control-XL-3) — оба заблочили WebFetch на 403, но WebSearch снимок видим). Никаких batch/bundle/multiple modes в видимой документации.
+
+**Решение:** убрать `lcxl-mk3-modes-bundle.syx` из distribution полностью. Bundle структурно валиден как SysEx (проверил: 28 сообщений с правильными headers, opcode, section bytes, name fields), но «байт-валидный» != «Components импортит». Без живого подтверждения работы — лучше не давать пользователю файл, который не работает.
+
+**Что удалено:**
+- `Fadercraft/dist/custom-modes/lcxl-mk3-modes-bundle.syx`
+- `Fadercraft/web/free-custom-modes/lcxl-mk3-modes-bundle.syx`
+- `Fadercraft/app/public/free-custom-modes/lcxl-mk3-modes-bundle.syx` (dev server)
+
+**Что обновлено** (везде заменена инструкция «drag bundle» → «select target slot + Upload Custom Mode для каждого»):
+- `dist/custom-modes/README.md`
+- `web/free-custom-modes/README.md`
+- `web/free-custom-modes/index.html` (статическая страница)
+- `app/src/pages/FreeCustomModesPage.tsx` (React-страница, превью на localhost)
+
+**Phase 0:** **59/114 (~52%)** — без изменений (это исправление существующего deliverable, не закрытие нового пункта).
+
+**Открытый вопрос:** теоретически Components может поддерживать multi-mode импорт недокументированно (тот же drag&drop файла Components сам распарсит N сообщений и предложит выбрать слоты). Это можно проверить за 30 сек экспериментом, но без живого теста — bundle deprecated. Если когда-нибудь подтвердится, что bundle работает, — вернуть из git history (`f84b482`).
+
 ## 2026-05-26 — `/free-custom-modes/` free funnel published + README
 
 Закрыт T12 bullet про free funnel (`web/free-custom-modes/`).
@@ -548,3 +569,17 @@ Append-only журнал операций над вики.
 - `web/og.png` exported (1200×630, 51 KB).
 - Open Graph + Twitter Card meta tags added to all public pages: `index.html` (Vite source `app/index.html` + built `web/index.html`), `pricing.html`, `privacy.html`, `refund.html`, `terms.html`, `update.html`. og:image points to `https://fadercraft.com/og.png`; per-page og:url; og:image:width/height = 1200/630.
 - Verified composition by screenshot: text block centered vertically, schematic LCXL fits 630 without losing key controls.
+
+## 2026-05-26 — Footer socials trimmed + T14 Discord community added
+
+- FooterFull `defaultSocials` сокращён до `YT / IG / DC` (Facebook + Telegram убраны — точно не будет). Файл: `app/src/components/organisms/FooterFull/FooterFull.tsx`.
+- Roadmap: добавлен раздел **T14 Discord community** (10 задач Phase 0 + 4 deferred Phase 1). Direction-блок зафиксировал ключевые решения: DC — единственный коммьюнити-канал; `DC`-линк в футер вешаем только после welcome+rules+первого announcements-поста; vanity URL и auto-role при покупке отложены (vanity = Boost Level 3 ~$70/мес, auto-role оправдан после ≥10–20 продаж).
+- Phase 0 итого 59/104 → 59/114 (~52%). T14 0/10.
+
+## 2026-05-26 — T14 Discord: финальная спека для исполнения
+
+- Новый concept-page `wiki/concepts/discord-server-setup.md` — единый артефакт под копипасту: server settings, Community wizard targets, channel structure (4 категории / 10 каналов с topics), 3 роли (`@Founder` mint, `@Verified Owner` amber, `@everyone`), welcome-сообщение, rules (6 пунктов), first-announcements post (для T13 launch), permanent invite link procedure, execution order 14 шагов в Discord UI, banner sub-task (non-blocking).
+- `wiki/index.md` — добавлен в раздел Concepts.
+- `wiki/roadmap.md` T14 Direction-блок — добавлена ссылка на спеку.
+- Brand assets reuse: server icon = `app/public/icon-512.png` (готов), banner pending (Figma sub-task).
+- Phase 0 итого без изменений (59/114, ~52%) — все T14-пункты пока open, спека — это infrastructure для их быстрого закрытия.

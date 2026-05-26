@@ -8,17 +8,17 @@
 |---|---|
 | `1.syx`–`10.syx` | **Instruments Layer** — 10 instrument pages. Each mode emits a unique value on overlay CC 47 (10, 20, 30 … 100) so an external host can identify which page is active. |
 | `11.syx`–`14.syx` | **Mixer Layer** — 4 mixer pages (`mode = 23 + bank + 2 · ((page + hold) % 2)`). Bank 1 / Bank 2 × Page 0 / Page 1. |
-| `lcxl-mk3-modes-bundle.syx` | All 14 modes concatenated. Drag-and-drop once to import every slot in one shot. |
 
 Every mode keeps **UNDO** on button 8 (`Cmd-Z`) and **REDO** on button 9 (`Cmd-Y`).
 
 ## How to import
 
+Novation Components imports **one Custom Mode per `.syx` file** via the **Upload Custom Mode** button. There's no documented batch import — so we ship 14 individual files, not a bundle.
+
 1. Open [Novation Components](https://components.novationmusic.com/) and connect your Launch Control XL MK3 (USB).
-2. Pick the device, switch to the **Custom Modes** view.
-3. Drag `lcxl-mk3-modes-bundle.syx` onto the Components window — all 14 slots are written at once. Or drag individual `N.syx` files into specific slots.
-4. **Send** the slots to the controller from Components (button at the top right of each slot).
-5. On the controller, press one of the side buttons to switch modes.
+2. Pick the device, switch to **Custom Modes**.
+3. For each mode you want to install: select the target slot, click **Upload Custom Mode** (or drag the corresponding `N.syx` onto that slot), then **Send to Device**.
+4. On the controller, press one of the side buttons to switch modes.
 
 Modes 1–10 (Instruments) and 11–14 (Mixer) are addressable directly from the controller's side buttons; no extra software needed for basic playback.
 
