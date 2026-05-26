@@ -114,16 +114,13 @@ Per [[Mixer Layer]]: переключение по CC30 ch7 (native LCXL mode-se
    - mode 14 → mode-idx = `0x0B` (= mode 12 - 1)
    - Это byte-уровневая реализация формулы hold-возврата `(page + hold) % 2 = 0` из [[Mode Encoding]] — page-1 наследует fader/state от page-0 партнёра.
 
-### Label asymmetry между mixer-модами (designed)
+### Label policy (2026-05-26 onwards)
 
-| Mode | Labels (помимо `0`–`?` индексов и `UNDO`/`REDO` на 8/9) |
-|---|---|
-| 11 (bank 1, page 0) | "Kick" |
-| 12 (bank 2, page 0) | "Kick" + "Melody 1", "Melody 2", "Perc 3", "Shaker" (на top-row buttons) |
-| 13 (bank 1, page 1) | (нет дополнительных) |
-| 14 (bank 2, page 1) | "Melody 1", "Melody 2", "Perc 3", "Shaker" |
+Все 14 модов имеют **минимальную label-схему**: только button index (`0`–`?` для buttons 0-15) + `UNDO`/`REDO` на buttons #8/#9. Никаких track-name меток (Kick/Melody/Perc/Shaker и т.п.).
 
-Pattern: "Kick" — только в page-0 (mode 11, 12); track-name labels — только в bank-2 (mode 12, 14). Consistent с архитектурой bank × page.
+Раньше mixer-моды имели asymmetric labels (mode 11 — "Kick", mode 12 — "Kick" + Melody 1/2 + Perc 3 + Shaker, mode 14 — Melody/Perc/Shaker), но их сняли как привязку к конкретной user-конфигурации Live Set'а. Bundle для рассылки должен быть нейтрален — покупатель назовёт треки сам.
+
+После очистки все 4 mixer-мода стали byte-uniform по размеру (664 B каждый, как и инструмент-моды).
 
 ### `UNDO`/`REDO` хоткеи
 
