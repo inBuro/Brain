@@ -416,3 +416,11 @@ Append-only журнал операций над вики.
 - Added pointer in `wiki/index.md` Roadmap section.
 - Implementation workspace at `~/Projects/Claude/Fadercraft/`: `ModeButton` + `ModeGrid` built on both Figma and React side, parity confirmed via browser smoke test.
 - Token parity report: `~/Projects/Claude/Fadercraft/artifacts/parity-report-2026-05-06.md` (3 Figma fixes applied: action/secondary→coral, focus shadow→lavender, coral primitive value).
+
+## 2026-05-26 — Beat 8 newsletter copy finalized (Figma parity)
+
+- Updated `wiki/landing-narrative.md` Beat 8 to match Figma node 233:1189 (mobile/compact).
+- Body split into two short lines: "Buy once and start immediately." / "Or get one email when a new workflow, update or device ships."
+- Placeholder: `your@email.com` (was `you@studio.com`). Submit: `Join updates` (was `Subscribe`).
+- CTA bullet normalized: `Buy on Gumroad • $39` (was em-dash variant).
+- Code synced in `~/Projects/Claude/Fadercraft/app/src/components/organisms/NewsletterSection/`; CTA is `white-space: nowrap` + full-width on ≤719px so `$39` no longer wraps off the button on mobile.
