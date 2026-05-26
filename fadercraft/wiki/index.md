@@ -38,6 +38,7 @@ updated: 2026-05-06
 - [[Custom Modes Model]] — как LCXL MK3 хранит и переключает 14 custom-modes; роль CC30/ch7.
 - [[Mode Encoding]] — формула `mode = 23 + bank + 2*((page+hold) % 2)` и таблица маппинга инструментов.
 - [[Custom Mode SysEx Layout]] — байт-уровневая структура `.syx`-файла мода, reverse-engineered: header, control descriptor (11 байт), mode-index байт и его исключения (`always-13`, `+32 flag`, `linked-bank`), алгоритм генерации модов из template.
+- [[discord-server-setup]] — финальная спека Discord-сервера Fadercraft (settings, channels, roles, готовая копия welcome/rules/первого announcements). Для T14 в [[roadmap]].
 
 ## Entities
 

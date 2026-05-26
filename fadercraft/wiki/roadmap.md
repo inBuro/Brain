@@ -38,7 +38,8 @@ updated: 2026-05-26
 | T11 Buttondown | 0 | 8 | 0% |
 | T12 Bundle assembly | 6 | 14 | 43% |
 | T13 Final verification | 0 | 6 | 0% |
-| **ИТОГО Phase 0** | **59** | **104** | **~57%** |
+| T14 Discord community | 0 | 10 | 0% |
+| **ИТОГО Phase 0** | **59** | **114** | **~52%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -251,6 +252,30 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Test purchase: 100% off coupon → checkout → license → download → install по Quickstart
 - [ ] Tag `v1.0` в git
 - [ ] PR review всех веток в main
+
+### T14 Discord community
+
+> **Direction (user note 2026-05-26):** Discord — единственный коммьюнити-канал для Fadercraft (футер: только YT/IG/DC, FB/TT убраны). Создаём заранее, но `DC`-линк в футер вешаем только после **welcome + rules + первого `#announcements`-поста** — пустой сервер хуже отсутствия. Vanity URL и auto-role при покупке отложены до Phase 1 (см. ниже): vanity требует Boost Level 3 ($70/мес), auto-role оправдан после ≥10–20 продаж.
+>
+> **Финальная спека для исполнения** (settings / channels / roles / готовая копия welcome+rules+первого announcements / пошаговый порядок кликов в Discord): [[discord-server-setup]].
+
+- [ ] Founder-аккаунт Discord с 2FA (требование для Community-режима)
+- [ ] Создать сервер `Fadercraft` (region: auto)
+- [ ] Иконка (favicon.svg) + баннер 960×540 (wordmark)
+- [ ] Enable Community: rules channel, community updates channel, explicit content filter ≥ medium, verification level ≥ low
+- [ ] Канальная структура: `#welcome`, `#announcements`, `#rules`, `#general`, `#support`, `#show-and-tell`, `#custom-modes`, `#bug-reports`, `#feature-requests`
+- [ ] Роли: `@founder`, `@member` (default), `@verified-owner` (manual на старте)
+- [ ] Welcome-сообщение в `#welcome` + содержимое `#rules` (короткое, 5-6 пунктов)
+- [ ] Permanent invite link (never expire, unlimited uses)
+- [ ] Линк подставить: footer `DC` (FooterFull `defaultSocials`), Quickstart.pdf раздел Support, Gumroad product description
+- [ ] Первый пост в `#announcements`: «v1.0 launched» (синхронно с T13 finish)
+
+**Deferred → Phase 1** (когда появятся триггеры):
+
+- Vanity URL `discord.gg/fadercraft` — триггер: 14 активных бустеров или готовность платить ~$70/мес самому
+- Auto-role `@verified-owner` через Gumroad webhook + Discord bot — триггер: ≥10–20 продаж, ручное присвоение начинает занимать время
+- Moderation бот (Carl-bot / MEE6) — триггер: ≥50 участников или первый рейд/спам
+- Changelog auto-post из GitHub Releases в `#announcements` через webhook — nice-to-have
 
 ---
 
