@@ -600,3 +600,10 @@ Append-only журнал операций над вики.
 - T14 9/10 (~90%). Открыто: первый `#announcements`-пост, привязанный к v1.0 launch (T13).
 - **Phase 0 итого: 68/114 (~60%).**
 - Follow-ups (не блокеры): Quickstart Support-блок при T10, Gumroad description ручной правкой, banner 960×540 в Figma.
+
+## 2026-05-26 — Roadmap sweep: T7-real free funnel закрыт, bundle .syx дропнут
+
+- `/free-custom-modes/` страница задеплоена (commit ffc8cac): `web/free-custom-modes/index.html` + 14 individual `.syx` + README с инструкцией по импорту через Components и CTA-блоком к платному bundle. Закрывает T7-real free funnel bullet.
+- Bundle `.syx` дропнут (commit b051255): Novation Components парсит ровно один mode на файл, склейка 14 модов в один `.syx` не даёт one-shot import. Распространение остаётся per-file. T12 description обновлена.
+- Параллельные правки футера (cosmetic, не roadmap-line): Discord-линк `discord.gg/dAt2JGZps7`, FB/TT убраны (86b50d3); footer nav остаётся 2-кол на 1023px и ниже 420px breakpoints (c6132f9, 990501f).
+- T7-real 4/7 → 5/7 (71%). **Phase 0 итого: 68/114 → 69/114 (~61%).**
