@@ -2,7 +2,7 @@
 type: roadmap
 project: Novation
 created: 2026-05-05
-updated: 2026-05-25
+updated: 2026-05-26
 ---
 
 # Fadercraft Roadmap
@@ -13,7 +13,7 @@ updated: 2026-05-25
 
 **Sources**: spec + Phase 0 plan + chat-history с Claude.
 
-**Last updated**: 2026-05-25
+**Last updated**: 2026-05-26
 
 **Payment rails matrix**: [[payment-rails]] — вердикты по всем рассмотренным платформам (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) под профиль русский паспорт + Таиланд + Bangkok Bank, без тайского national ID.
 
@@ -28,17 +28,17 @@ updated: 2026-05-25
 | T2 Email | 13 | 13 | 100% |
 | T6 Server endpoints | 6 | 6 | 100% |
 | T7 Placeholder pages | 6 | 6 | 100% |
-| Gumroad onboarding | 1 | 5 | 20% |
-| T3 Brand identity | 0 | 6 | 0% |
+| Gumroad onboarding | 4 | 5 | 80% |
+| T3 Brand identity | 5 | 7 | 71% |
 | T5 Instagram | 0 | 3 | 0% |
 | T7-real Лендинг | 0 | 5 | 0% |
 | T8 M4L update integration | 0 | 9 | 0% |
 | T9 Демо-видео | 0 | 9 | 0% |
 | T10 Документация | 1 | 3 | 33% |
 | T11 Buttondown | 0 | 8 | 0% |
-| T12 Bundle assembly | 0 | 14 | 0% |
+| T12 Bundle assembly | 3 | 14 | 21% |
 | T13 Final verification | 0 | 6 | 0% |
-| **ИТОГО Phase 0** | **35** | **101** | **~35%** |
+| **ИТОГО Phase 0** | **46** | **102** | **~45%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -103,10 +103,10 @@ Out-of-band (не блокируют Phase 0):
 После отказа от Paddle 2026-05-25 (Sumsub-цикл затянулся, Gumroad принимает русский паспорт без блокеров). Gumroad — единственный payment rail для v1.0 launch.
 
 - [x] **KYC пройден** (2026-05-25)
-- [ ] Tax setup (W-8BEN для non-US, выбор tax jurisdiction)
-- [ ] Payout-реквизиты (Wise / Bangkok Bank SWIFT / Payoneer)
-- [ ] Страница продукта: описание, cover image, цена $39, URL slug `xl-performance`
-- [ ] Content upload (bundle zip) — блокируется T12
+- [x] Tax setup (W-8BEN для non-US, выбор tax jurisdiction) — **2026-05-26**
+- [x] Payout-реквизиты — **2026-05-26**
+- [x] Страница продукта: описание, цена $39, URL slug `xl-performance` — **2026-05-26** (cover image всё ещё дефолтная Gumroad-плашка, см. T12)
+- [ ] Content upload (bundle zip) — блокируется T12; welcome+quickstart-текст в Content tab уже вставлен **2026-05-26**
 
 ---
 
@@ -156,10 +156,11 @@ Out-of-band (не блокируют Phase 0):
 
 ### T3 Brand identity
 
-- [ ] Бриф: tone, аудитория, что избегать
-- [ ] Логотип-mark (SVG, ≤2KB)
-- [ ] Wordmark «Fadercraft»
-- [ ] 2 primary colors → `brand/colors.md`
+- [x] Бриф: tone, аудитория, что избегать — `brand/brief.md`, **2026-05-26**
+- [x] Логотип-mark (SVG, ≤2KB) — `app/public/favicon.svg` + Figma-компонент `Logo` (1863:55) — **закрыто к 2026-05-26**
+- [x] Wordmark «Fadercraft» — два варианта в Figma: Header (1117:5219) и Footer alt с fader-cap (1868:7106) — **закрыто к 2026-05-26**
+- [x] Brand identity артборд в Figma — страница `00 — Brand identity` (1903:5006): Primary/Secondary/Tertiary палитра + 2 wordmark + favicon — **2026-05-26**
+- [x] 2 primary colors → `brand/colors.md` — **2026-05-26**, задокументированы все 3 action-цвета (Primary `#63F2CA`, Secondary `#639AF2`, Tertiary `#FFAD56`) + neutrals + правила применения
 - [ ] Social tiles 1080×1080
 - [ ] Commit `brand/`
 
@@ -233,13 +234,13 @@ Out-of-band (не блокируют Phase 0):
 - [ ] `XL_Performance_starter.als` Live Set с маппингами + контентом
 - [ ] Собрать `dist/fadercraft-xl-performance-v1.0/` (содержит `.amxd` + `solo_follower.js` + custom-modes/ + `.als` + Quickstart.pdf + опц. demo.mp4)
 - [ ] Zip → `fadercraft-xl-performance-v1.0.zip`
-- [ ] Загрузить в Gumroad product Content
-- [ ] Cover image 1280×720 PNG
-- [ ] Описание продукта на странице Gumroad
+- [ ] Загрузить в Gumroad product Content (welcome+quickstart-текст уже вставлен **2026-05-26**; файлы — после сборки bundle)
+- [ ] Cover image 1280×720 PNG — сейчас Gumroad показывает дефолтный розовый folder placeholder, надо заменить
+- [x] Описание продукта на странице Gumroad — **2026-05-26**
   - ✅ Copy fix «6 controls instead of 2» применён вручную на Gumroad (2026-05-26); параллельно поправлено в `PerformanceFlow.tsx` и в Figma (nodes `1398:143`, `1434:6902`)
-- [ ] URL slug `xl-performance`
+- [x] URL slug `xl-performance` — **2026-05-26**
 - [ ] env vars `LATEST_BUNDLE_URL` + `GUMROAD_PRODUCT_ID` в CF Pages
-- [ ] Publish продукт (Draft → Live)
+- [x] Publish продукт (Draft → Live) — **2026-05-26**, продукт виден на `fadercraft.gumroad.com`
 
 ### T13 Final pre-launch verification
 
