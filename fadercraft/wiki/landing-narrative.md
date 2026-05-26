@@ -68,7 +68,7 @@ Each beat = one thought we want in the reader's head at that moment.
 - Eyebrow: `FADERCRAFT · XL PERFORMANCE`
 - Headline: `Your LCXL has 16 modes.`
 - Body: `Most people figure out 3. Fadercraft XL Performance is the kit that lets you play all 16 — out of the box, in 5 minutes.`
-- Primary CTA: `Buy on Gumroad — $39`
+- Primary CTA: `Buy on Gumroad • $39`
 - Secondary CTA: `Watch the demo`
 
 ### Beat 2 — How it works
@@ -127,11 +127,14 @@ Each beat = one thought we want in the reader's head at that moment.
 - Headline: `Last questions before you buy.`
 - 6 items: MK1/MK2 compat, Live Suite requirement, free updates, customisation, refund (14-day), Live versions tested.
 
-### Beat 8 — Action — REWRITE PENDING
+### Beat 8 — Action
+- Primary CTA (above form, full-width on mobile): `Buy on Gumroad • $39`
 - Headline: `Ready to play all 16?`
-- Sub: `Start in the next 5 minutes. Or join the list and we'll ping you when v1.1 lands.`
-- Primary CTA: `Buy on Gumroad — $39` (above newsletter form)
-- Secondary: email field + `Subscribe`
+- Sub (two lines):
+  - `Buy once and start immediately.`
+  - `Or get one email when a new workflow, update or device ships.`
+- Email field placeholder: `your@email.com`
+- Submit: `Join updates`
 
 ## Sections to remove from existing 1920 ProductPage (legacy Novation content)
 
