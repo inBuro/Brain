@@ -8,6 +8,35 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-26 — Custom Modes 1..10 synthesized via SysEx diff
+
+Пользователь загрузил три референс-моды (`raw/1.syx`, `2.syx`, `3.syx`, экспорт из Components) — мы byte-diff'ом 1↔2↔3 декодировали LCXL MK3 Custom Mode формат и вывели правило экстраполяции.
+
+**Что меняется между модами N и N+1** (всё остальное — байт-в-байт):
+
+| Поле | Где | Значение для mode N |
+|---|---|---|
+| Имя мода (msg1 + msg2) | offsets `13`, `340` | ASCII digit `'1'..'9'`, `'A'` для mode 10 |
+| Mode-index в control descriptor | 45 байт, по одному в каждом control record (шаг +11) | `N − 1` |
+| Static value на overlay listen CC | offset `564` | `N × 10` (10, 20, …, 100) |
+
+**Принцип эмиссии:** при активации мода LCXL шлёт static value на overlay listen CC (CC47 либо CC49 — расхождение между чатом и [[wiki/entities/Instruments Layer]], открытый вопрос). Плагин `XL_Performance.amxd` ловит это значение и понимает, в какой mode переключился контроллер — это то, как реализуется [[CC47 Cross-Mode Transit]] и back-restore состояния.
+
+**Pipeline:**
+- Скрипт читает `raw/1.syx` (662 байта), для каждого N ∈ 1..10 правит 48 байт по таблице выше, пишет `dist/custom-modes/{N}.syx`.
+- Sanity-check: сгенерированные mode-01/02/03 — byte-identical к референсам raw/1.syx, raw/2.syx, raw/3.syx → формула верна.
+- Бандл `lcxl-mk3-modes-bundle.syx` (6620 байт = 10 × 662) для one-shot import в Components.
+
+**Тест на железе пройден:** пользователь импортнул mode-04, mode-07, mode-10 — работают, шлют 40/70/100, UNDO/REDO на кнопках 8/9 сохранены.
+
+**Caveat про mode 10:** имя — 1 байт в SysEx, "10" двумя символами не влезает без сдвига payload. Использован `'A'` как single-char label. Переименовывается в Components руками после импорта без потери функциональности.
+
+**Файлы переименованы** в `1.syx..10.syx` по запросу пользователя. Раз модули проверены и работают, `raw/1.syx`, `raw/2.syx`, `raw/3.syx` удалены — больше не нужны, dist/ канонический.
+
+**Roadmap T12 first bullet закрыт.** Формат скорректирован: в исходном тексте было `.json`, а по факту LCXL MK3 Components использует `.syx` (SysEx). Это касается также пункта про публикацию на `web/free-custom-modes/` — там тоже будут `.syx`, не JSON.
+
+**Phase 0:** 57/104 → 58/104 (~56%). T12: 4/14 → 5/14.
+
 ## 2026-05-26 — Lazy load + T3 brand commit closed
 
 - **Lazy load** добавлен на все below-the-fold `<img>` лендинга через нативный `loading="lazy" decoding="async"`. Затронуты: `CatalogSection.tsx` (картинки в карточках kit, среди них `lcxl-mk3.png` 1.1MB), `VideoSection.tsx` (poster), `ProductGallery.tsx` (main + thumbnails), `ProductCard.tsx`. Выше-the-fold `PerformanceFlow` `keys.png` (35KB) оставлен eager — он участвует в LCP. Vite-rebuild → новый bundle `index-B4gL0Se3.js` скопирован в `Fadercraft/web/`, старый `index-n9SfgvuN.js` удалён.
