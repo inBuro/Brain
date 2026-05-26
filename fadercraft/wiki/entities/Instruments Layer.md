@@ -29,6 +29,8 @@ tags: [m4l, lcxl, instruments]
 
 В отличие от [[Mixer Layer]], инструмент-режимы выбираются **не CC30**, а одной общей **overlay listen CC** (по умолчанию **CC49**, выставляется `loadmess 49`). Это сделано, чтобы внешний контроллер/секвенсор/Push мог переключать инструмент одним сообщением, не зная внутреннего маппинга в CC30 (source: XL_Performance.README.md).
 
+> ⚠️ **Fadercraft config override (2026-05-26):** в текущей конфигурации проекта Fadercraft `Listen CC = **47**` (не дефолтный 49 из README v1.5). Подтверждено по факту в `.syx`-экспортах модов 1..10 — descriptor с CC=`0x2F` (=47) хранит static mode value `10 × N`. См. [[Custom Mode SysEx Layout]].
+
 Значения overlay CC интерпретируются так:
 
 | Значение | Смысл |

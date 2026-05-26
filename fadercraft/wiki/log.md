@@ -8,6 +8,15 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-26 — Mixer mode labels stripped + Instruments Layer noted CC47
+
+Пользователь попросил удалить все extra labels (Kick / Melody 1, 2 / Perc 3 / Shaker) из всех 4 mixer-модов и зафиксировать в wiki [[Instruments Layer]], что в Fadercraft config overlay listen CC = 47 (не дефолтный 49).
+
+**Что сделано:**
+
+- Хирургически удалены label-entries из msg2 mixer-модов: `64/66/68 ID "text"` → `60 ID` (no-label маркер). Размеры всех 4 модов теперь = 664 байта (= baseline mode 13). Bundle обновлён: 9340 → 9276 байт. ASCII-grep подтверждает чистоту (no Kick / Melody / Perc / Shaker во всех модах).
+- В [[Instruments Layer]] добавлен callout-блок «Fadercraft config override» с подтверждением CC47 (CC=`0x2F` descriptor хранит static value `10×N`, видно прямо в `.syx`). README v1.5 default CC49 оставлен как историческая правда, но переопределение Fadercraft теперь зафиксировано.
+
 ## 2026-05-26 — Mixer modes 11..14 analysed + SysEx layout documented
 
 Пользователь положил в `dist/custom-modes/` четыре mixer-мода (11.syx..14.syx) из своего LCXL MK3 и попросил проверить на логические расхождения + закрепить знание о формате на будущее.
