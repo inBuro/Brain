@@ -36,9 +36,9 @@ updated: 2026-05-26
 | T9 Демо-видео | 1 | 9 | 11% |
 | T10 Документация | 1 | 3 | 33% |
 | T11 Buttondown | 0 | 8 | 0% |
-| T12 Bundle assembly | 5 | 14 | 36% |
+| T12 Bundle assembly | 6 | 14 | 43% |
 | T13 Final verification | 0 | 6 | 0% |
-| **ИТОГО Phase 0** | **58** | **104** | **~56%** |
+| **ИТОГО Phase 0** | **59** | **104** | **~57%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -231,7 +231,7 @@ Out-of-band (не блокируют Phase 0):
 > **Distribution strategy (user note 2026-05-25):** Гибрид — Custom Modes JSON **дублируется** в двух местах: бесплатно на `fadercraft.com/free-custom-modes` (см. T7-real) как SEO/discovery funnel, и в платном bundle (чтобы покупатель не ходил отдельно на сайт). Live Set + `.amxd` + Quickstart + Demo — только в платном bundle. Обоснование: modes без `.amxd` работают как любые обычные custom-mode'ы LCXL — переключаются руками на самой ручке. Mode-switching/cross-mode transit/Solo Follower живут в `.amxd`, поэтому feature-set не утекает. Подробно: см. log 2026-05-25 «distribution strategy».
 
 - [x] Custom Modes для LCXL MK3 → `Fadercraft/dist/custom-modes/{1..14}.syx` + `lcxl-mk3-modes-bundle.syx` (9276 B, one-shot import) — **2026-05-26**. Включает 10 instrument-модов (1-10, byte-uniform 662 B) + 4 mixer-моды (11-14, byte-uniform 664 B после strip extra labels). Все hardware-tested на LCXL MK3 пользователя. Формат — `.syx` (Components-native SysEx), не JSON. README с CTA — отдельным шагом перед загрузкой в Gumroad bundle. Спека формата задокументирована в [[Custom Mode SysEx Layout]].
-- [ ] **Опубликовать `lcxl-mk3-modes.json` отдельно** на `web/free-custom-modes/` (free funnel — связано с T7-real)
+- [x] **Опубликовать модули отдельно** на `web/free-custom-modes/` (free funnel — связано с T7-real) — **2026-05-26**: `index.html` (статическая страница в стиле pricing/terms/etc.) + 14 индивидуальных `.syx` + bundle + README.md. CTA-блок ведёт на Gumroad `xl-performance`. Формат — `.syx`, не `.json` (см. [[Custom Mode SysEx Layout]]).
 - [ ] `XL_Performance_starter.als` Live Set с маппингами + контентом
 - [ ] Собрать `dist/fadercraft-xl-performance-v1.0/` (содержит `.amxd` + `solo_follower.js` + custom-modes/ + `.als` + Quickstart.pdf + опц. demo.mp4)
 - [ ] Zip → `fadercraft-xl-performance-v1.0.zip`

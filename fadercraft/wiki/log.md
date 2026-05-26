@@ -8,6 +8,22 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-26 — `/free-custom-modes/` free funnel published + README
+
+Закрыт T12 bullet про free funnel (`web/free-custom-modes/`).
+
+**Что в папке `Fadercraft/web/free-custom-modes/`:**
+- `index.html` — статическая страница (стиль pricing.html/terms.html), hero «Free Custom Modes for Launch Control XL MK3», ссылки на bundle + per-mode `.syx`, инструкция импорта в Components, секция «What the paid bundle adds» с CTA на `fadercraft.gumroad.com/l/xl-performance`.
+- 14 индивидуальных `.syx` файлов (`1.syx`..`14.syx`)
+- `lcxl-mk3-modes-bundle.syx` (9276 B) для one-shot import
+- `README.md` — markdown-версия инструкций (зеркало `dist/custom-modes/README.md`)
+
+**Также создан** `Fadercraft/dist/custom-modes/README.md` — пойдёт внутрь Gumroad bundle как user-facing инструкция, идентичен версии на free funnel page.
+
+**Phase 0:** 58/104 (~56%) → **59/104 (~57%)**. T12: 5/14 → 6/14.
+
+**Что осталось из quick-actionable в T12:** только env vars `LATEST_BUNDLE_URL` + `GUMROAD_PRODUCT_ID` в CF Pages (нужен пользователь). Остальное (Live Set `.als`, сборка `dist/fadercraft-xl-performance-v1.0/`, zip, upload в Gumroad Content) требует Ableton-сессии или Gumroad-аккаунта.
+
 ## 2026-05-26 — Custom Modes 1..14 confirmed working on hardware
 
 Пользователь импортнул bundle на железо, все 14 модов открываются и работают корректно (после короткой Finder-cache затыки на отображении модов 11/12 и bundle как «dim/не кликабельные» — оказалось чисто визуальный glitch macOS LaunchServices, OS-уровень файлы абсолютно нормальные; разрешилось через `touch` + рефреш Finder).
