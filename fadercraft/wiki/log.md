@@ -432,3 +432,9 @@ Append-only журнал операций над вики.
 - `brand/colors.md` — three action colors (mint `#63F2CA`, lavender `#639AF2`, amber `#FFAD56`) + neutrals + usage rules + distribution table.
 - `brand/brief.md` — audience (live performer on Ableton), voice (technical/precise + pragmatic/no-bullshit), schematic visual lean, anti-patterns. Voice section refined against Steinkamp (plugins.steinkamp.us) — added rules: state the origin problem plainly, enthusiasm allowed if about the mechanism, changelogs are copy too.
 - Roadmap T3 4/7 → 5/7; Phase 0 totals 45/102 → 46/102 (~45%).
+
+## 2026-05-26 — Gumroad product page finalized (cover + thumbnail + copy)
+
+- Cover image 1280×720 + thumbnail uploaded on Gumroad — default pink folder placeholder removed, brand artwork live on `fadercraft.gumroad.com/l/xl-performance`.
+- Product copy confirmed end-to-end (description, "6 controls instead of 2" wording, $39 price, slug `xl-performance`, Welcome+Quickstart text in Content tab). Only the bundle zip itself remains pending (blocked by T12 bundle assembly).
+- Roadmap T12 3/14 → 4/14; Phase 0 totals 46/102 → 47/102 (~46%). T12 cover-image bullet checked off; Gumroad onboarding parenthetical about "default cover" removed.

@@ -36,9 +36,9 @@ updated: 2026-05-26
 | T9 Демо-видео | 0 | 9 | 0% |
 | T10 Документация | 1 | 3 | 33% |
 | T11 Buttondown | 0 | 8 | 0% |
-| T12 Bundle assembly | 3 | 14 | 21% |
+| T12 Bundle assembly | 4 | 14 | 29% |
 | T13 Final verification | 0 | 6 | 0% |
-| **ИТОГО Phase 0** | **46** | **102** | **~45%** |
+| **ИТОГО Phase 0** | **47** | **102** | **~46%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -105,7 +105,7 @@ Out-of-band (не блокируют Phase 0):
 - [x] **KYC пройден** (2026-05-25)
 - [x] Tax setup (W-8BEN для non-US, выбор tax jurisdiction) — **2026-05-26**
 - [x] Payout-реквизиты — **2026-05-26**
-- [x] Страница продукта: описание, цена $39, URL slug `xl-performance` — **2026-05-26** (cover image всё ещё дефолтная Gumroad-плашка, см. T12)
+- [x] Страница продукта: описание, цена $39, URL slug `xl-performance` — **2026-05-26** (cover image + thumbnail заменены на брендовые **2026-05-26**, дефолтная розовая плашка снята)
 - [ ] Content upload (bundle zip) — блокируется T12; welcome+quickstart-текст в Content tab уже вставлен **2026-05-26**
 
 ---
@@ -235,7 +235,7 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Собрать `dist/fadercraft-xl-performance-v1.0/` (содержит `.amxd` + `solo_follower.js` + custom-modes/ + `.als` + Quickstart.pdf + опц. demo.mp4)
 - [ ] Zip → `fadercraft-xl-performance-v1.0.zip`
 - [ ] Загрузить в Gumroad product Content (welcome+quickstart-текст уже вставлен **2026-05-26**; файлы — после сборки bundle)
-- [ ] Cover image 1280×720 PNG — сейчас Gumroad показывает дефолтный розовый folder placeholder, надо заменить
+- [x] Cover image 1280×720 PNG + thumbnail — брендовые ассеты залиты в Gumroad **2026-05-26**, дефолтная плашка снята
 - [x] Описание продукта на странице Gumroad — **2026-05-26**
   - ✅ Copy fix «6 controls instead of 2» применён вручную на Gumroad (2026-05-26); параллельно поправлено в `PerformanceFlow.tsx` и в Figma (nodes `1398:143`, `1434:6902`)
 - [x] URL slug `xl-performance` — **2026-05-26**
