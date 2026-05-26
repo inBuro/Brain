@@ -424,3 +424,11 @@ Append-only журнал операций над вики.
 - Placeholder: `your@email.com` (was `you@studio.com`). Submit: `Join updates` (was `Subscribe`).
 - CTA bullet normalized: `Buy on Gumroad • $39` (was em-dash variant).
 - Code synced in `~/Projects/Claude/Fadercraft/app/src/components/organisms/NewsletterSection/`; CTA is `white-space: nowrap` + full-width on ≤719px so `$39` no longer wraps off the button on mobile.
+
+## 2026-05-26 — T3 Brand identity closed (5/7)
+
+- Figma reshuffle: `05 — Product` moved to top as `00 — Product`. New page `00 — Brand identity` (1903:5006) at end, with palette swatches (Primary/Secondary/Tertiary) + Header + Footer-alt wordmarks + Logo (favicon) instance, all bound to live variables.
+- Gumroad product published (`fadercraft.gumroad.com/l/xl-performance`): tax/payout setup, Welcome+Quickstart copy in Content tab, category `Music & Sound Design > Sound Design > Plugins`. Cover image still default — open for next pass.
+- `brand/colors.md` — three action colors (mint `#63F2CA`, lavender `#639AF2`, amber `#FFAD56`) + neutrals + usage rules + distribution table.
+- `brand/brief.md` — audience (live performer on Ableton), voice (technical/precise + pragmatic/no-bullshit), schematic visual lean, anti-patterns. Voice section refined against Steinkamp (plugins.steinkamp.us) — added rules: state the origin problem plainly, enthusiasm allowed if about the mechanism, changelogs are copy too.
+- Roadmap T3 4/7 → 5/7; Phase 0 totals 45/102 → 46/102 (~45%).
