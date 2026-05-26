@@ -4,157 +4,157 @@ project: Novation
 created: 2026-05-26
 updated: 2026-05-26
 status: stable
-tags: [lcxl, midi, sysex, format]
+tags: [lcxl, sysex, midi, format]
 ---
 
 # Custom Mode SysEx Layout
 
-**Summary**: Байт-уровневая структура `.syx`-файлов кастом-модов LCXL MK3, reverse-engineered методом diff пользовательских экспортов из Components. Описывает, какие байты что значат, как mode-index пробрасывается по контролам, и какие «аномалии» (always-13, +32 flag, linked-bank) на самом деле являются design-паттернами для cross-mode transit.
+**Summary**: Reverse-engineered формат `.syx`-файлов Components-export для Novation Launch Control XL MK3. Достаточно для программной генерации/правки custom-modes без открытия Components.
 
-**Sources**: эмпирический диф `1.syx`/`2.syx`/`3.syx` (инструмент-моды) и `11.syx`–`14.syx` (mixer-моды), верифицировано экспортами из Novation Components. Спека Novation **не публична** — это reverse-engineering.
+**Sources**: byte-diff экспериментов 2026-05-26 над инструмент-модами 1/2/3 и mixer-модами 11/12/13/14 (экспорт из Components, исходники удалены после извлечения знаний; канонические файлы — в `Fadercraft/dist/custom-modes/`).
 
 **Last updated**: 2026-05-26
 
 ---
 
-## Файл = две SysEx-сообщения
+## Структура файла
 
-Каждый `.syx`-файл одного мода содержит **два последовательных `F0…F7`-сообщения**:
-
-- **msg1**: ~327–332 байта — header + 24 encoder descriptor (3 ряда × 8 энкодеров).
-- **msg2**: ~335–364 байта — ~24 button/fader descriptor + label-секция в конце.
-
-Размеры варьируются на ±30 байт из-за переменной длины labels (длинные текстовые метки = больше байт).
-
-## Header (12–13 байт)
+Один Custom Mode = **2 последовательных SysEx-сообщения** `F0…F7` в одном `.syx` файле.
 
 ```
-F0 00 20 29 02 15 05 00 45 00 7F 20 <NAME_LEN> <NAME_CHAR(S)> 49 …
-^                              ^         ^             ^
-сысекс    Novation/LCXL         ?         length        первый control descriptor (0x49 = маркер)
+[F0 00 20 29 02 15 05 00 45 00 7F 20 LEN NAME[LEN] DESC×N LABELS F7] [F0 … F7]
+                                     ^^^ name length+chars      ^^^^ msg1 ends
 ```
 
-| Offset | Байт | Назначение |
+### Header (одинаковый для msg1 и msg2)
+
+| Offset | Bytes | Смысл |
 |---|---|---|
-| 0–2 | `F0 00 20 29` | SysEx start + Novation manufacturer ID |
-| 4–5 | `02 15` | LCXL MK3 device family |
-| 6 | `05` | Протокол/версия |
-| 7 | `00` | ? (всегда 0 в наблюдаемых файлах) |
-| 8 | `45` | Opcode «write custom mode» |
-| 9 | `00` | ? (всегда 0 в msg1) |
-| 10 | `7F` | ? (всегда 0x7F) |
-| 11 | `20` | ? (всегда 0x20) |
-| 12 | `<NAME_LEN>` | Длина имени мода в байтах (1 для «1»–«9»+«A», 2 для «11»–«14») |
-| 13… | `<NAME_CHAR(S)>` | ASCII-имя мода |
+| 0 | `F0` | SysEx start |
+| 1–3 | `00 20 29` | Novation manufacturer ID |
+| 4–5 | `02 15` | LCXL MK3 device ID |
+| 6 | `05` | Protocol version (?) |
+| 7 | `00` | Reserved |
+| 8 | `45` | Opcode: write custom mode |
+| 9 | `00` (msg1) / `03` (msg2) | Section index внутри мода |
+| 10 | `7F` | Reserved |
+| 11 | `20` | Name field marker |
+| 12 | LEN | **Длина имени мода в байтах** (`0x01` для "1"-"9"/"A", `0x02` для "10"-"14") |
+| 13… | NAME | ASCII-имя мода, LEN байт |
 
-**Важно:** длина имени напрямую сдвигает все последующие offset'ы. Для инструмент-модов (имя 1 байт) первый control descriptor на offset 14; для mixer-модов (имя 2 байта) — на offset 15.
+> ⚠️ **Length-byte at offset 12 сдвигает весь хвост файла**. Mode "10" двумя символами длиннее, чем "9" — поэтому имя в нашем `10.syx` пока `'A'` (single-byte), payload не сдвинут. Если нужно "10" двумя байтами — пересчитывать все offset'ы.
 
-## Control descriptor (11 байт каждый)
-
-Описывает один физический контрол (энкодер, фейдер, кнопка):
+### Control descriptor (11 байт, повторяется N раз)
 
 ```
-49 <ID> 02 <T1> <T2> <MODE-IDX> <FLAGS> 00 <CC> <MAX> <TERM>
+49 ID 02 X1 X2 [MODE-IDX] X3 X4 CC 7F 00
 ```
 
-| Поле | Размер | Что |
+| Поле | Описание |
+|---|---|
+| `49` | Marker начала descriptor'а ('I' в ASCII) |
+| `ID` | Внутренний control ID (encoder/fader/button) |
+| `02` | Type marker |
+| `X1, X2, X3, X4` | Контрол-специфичные флаги (channel encoding, behavior, color) |
+| **MODE-IDX** | Mode-index байт. Для "нормального" контрола = `N − 1` |
+| `CC` | MIDI CC# |
+| `7F` | Max value |
+| `00` | Terminator |
+
+**Mode-index byte** — главный варьирующийся байт для генерации. Для большинства контролов он равен `N - 1` (= 0 для mode 1, 13 для mode 14). Аномалии — см. ниже.
+
+### Labels section (хвост msg2)
+
+После всех descriptor'ов идёт label table:
+
+```
+60 ID            — control ID без текстовой метки
+64 ID "text"     — control ID с текстовой меткой
+66 ID "text"     — label с другим цветом/стилем
+68 ID "text"     — label с третьим цветом/стилем
+```
+
+В наших файлах: `60` (\`) = no label, `64` (d) = стандартная текстовая метка (UNDO, REDO, Kick), `66` (f) и `68` (h) = разные цвета подписей для track-names типа "Melody 1", "Perc 3".
+
+## Instrument modes (1–10) — overlay listen CC
+
+Per [[Instruments Layer]]: instrument-modes переключаются не CC30, а одной overlay listen CC. **Подтверждено CC47** (не 49 как в default `loadmess 49` из README v1.5 — конфигурация плагина у нашего пользователя переопределяет default). Это видно прямо в файле: descriptor c CC=`0x2F` (=47) хранит static value `10×N`.
+
+**Static value at offset 564** в msg2 = `N × 10` — это значение, которое мод эмитит на CC47 при активации. Плагин ловит это значение и узнаёт, в каком моде сейчас контроллер.
+
+| Mode N | static value | hex |
 |---|---|---|
-| `0x49` | 1 | Маркер начала descriptor'а (литерал `'I'`) |
-| `ID` | 1 | ID контрола (0x10+ для энкодеров row 1, 0x18+ для row 2, 0x20+ для row 3, и т.д.) |
-| `0x02` | 1 | Тип descriptor'а (= 2 для большинства) |
-| `T1`, `T2` | 2 | Подтип/behavior (absolute/relative encoder, momentary/toggle для кнопок). Семантика байта не до конца понятна; зависит от семейства контрола. |
-| `MODE-IDX` | 1 | Mode-index (см. ниже — у большинства = `N-1`, у некоторых hardcoded) |
-| `FLAGS` | 1 | Color/LED flags (например, `0x08` — стандартный цвет) |
-| `0x00` | 1 | Разделитель/channel high-nibble |
-| `CC` | 1 | Номер CC (или note), который контрол отправляет |
-| `MAX` | 1 | Максимальное значение (обычно `0x7F` = 127) или `0x02 0x01` для специальных типов |
-| `TERM` | 1 | `0x00` или `0x01` — конец descriptor'а |
+| 1 | 10 | `0x0A` |
+| 2 | 20 | `0x14` |
+| 5 | 50 | `0x32` |
+| 10 | 100 | `0x64` |
 
-В мoде ~45 таких descriptor'ов: 24 в msg1 + 21 в msg2.
+Имя инструмент-мода — 1 символ ASCII (`'1'`–`'9'`, `'A'` для mode 10 чтобы не сдвигать payload).
 
-## MODE-INDEX байт: правило и исключения
+**45 control descriptor'ов на мод** (24 в msg1 = 3 × 8 энкодеров; 21 в msg2 = 8 фейдеров + 13 кнопок). Все имеют одинаковый mode-idx = `N − 1`.
 
-**Правило:** у большинства descriptor'ов `MODE-IDX = N − 1`, где N — номер мода (1..14). Так LCXL/плагин знает, какому моду принадлежит контрол.
+## Mixer modes (11–14) — CC30 ch7
 
-**Исключения (систематические паттерны, НЕ баги):**
+Per [[Mixer Layer]]: переключение по CC30 ch7 (native LCXL mode-select), значение CC30 = `5 + N`. Bank/page/hold кодируются формулой `mode = 23 + bank + 2 · ((page + hold) % 2)`.
 
-### Hardcoded 0x0D (= 13) — «метаданные»
-- **Один descriptor в инструмент-моде** (ID 0x3A, CC=0x2F=47, holds static mode value) — содержит **value байт = N×10**, который LCXL шлёт на overlay listen CC при активации мода. См. [[Mode Encoding]].
-- **Три descriptor'а в mixer-моде** (msg1 позиции #7, #15, #23 = последние энкодеры каждого ряда) — `MODE-IDX = 0x0D` во всех 4 mixer-модах.
+Архитектура богаче, чем у instrument-mode'ов. Имя — 2 символа ("11"–"14"). Размер варьируется (664–696 байт) из-за разного объёма label-секции.
 
-Скорее всего `0x0D` здесь работает не как «принадлежит моду 14», а как **маркер «metadata/special control»** в этом байтовом поле.
+### Три класса исключений в mode-index байте (все — designed, НЕ баги)
 
-### +32 flag (`MODE-IDX = (N-1) | 0x20`) — cross-mode transit
-Группа из 7 button descriptor'ов (ID 0x30–0x36) в каждом mixer-моде имеет `MODE-IDX = (N-1) + 0x20`:
-- mode 11: 0x2A
-- mode 12: 0x2B
-- mode 13: 0x2C
-- mode 14: 0x2D
+Изначальная гипотеза «mode-idx = `N − 1` для всех контролов» подтвердилась только для инструмент-модов. У mixer-модов есть три систематических класса исключений — все они симметричны по модам 11–14 и соответствуют [[Mode Encoding]] semantic'е:
 
-Это контролы, участвующие в [[CC47 Cross-Mode Transit]]. Бит 5 (0x20) — флаг «cross-mode capable».
+1. **`0x0D` metadata marker** (3 байта на мод): descriptors с ID `0x17`, `0x1F`, `0x27` (последний контрол каждого ряда) во ВСЕХ четырёх mixer-mode'ах имеют hardcoded mode-idx = `0x0D`, независимо от N. Этот же `0x0D` встречается в инструмент-моде у descriptor'а с CC=`0x2F` (=47), где сидит static mode value. Интерпретация: `0x0D` — это **маркер "metadata/special control"**, не литеральная ссылка на mode 14. Контролы с этим маркером — те, чьё значение участвует в mode-routing самого LCXL и плагина.
 
-### Linked-bank reference в mixer-модах 13/14
-В модах 13 и 14 (page=1) есть band из 7 descriptor'ов (ID 0x28–0x2E), у которых `MODE-IDX` указывает на **парный bank-1 мод**:
-- mode 13 → `0x0A` (= 11-1, ссылка на mode 11)
-- mode 14 → `0x0B` (= 12-1, ссылка на mode 12)
+2. **`+32` cross-mode capable bit** (7 байт на мод): button descriptors с ID `0x30`–`0x36` во всех 4 mixer-модах имеют mode-idx = `(N − 1) | 0x20`:
+   - mode 11 → `0x2A`, mode 12 → `0x2B`, mode 13 → `0x2C`, mode 14 → `0x2D`
+   - Бит 5 (`0x20`) = «cross-mode capable» — эти кнопки участвуют в [[CC47 Cross-Mode Transit]] (могут запускать переход в другой mixer-mode с памятью предыдущего состояния).
 
-Реализует логику hold: при удержании page-кнопки мод 13/14 «возвращается» на соответствующий мод 11/12 ([[Mode Encoding]] formula `(page+hold)%2`).
+3. **`linked-bank` references** (7 байт): descriptors с ID `0x28`–`0x2E` в page-1 модах (13 и 14) имеют mode-idx, указывающий на парный bank-1 мод того же bank'а:
+   - mode 13 → mode-idx = `0x0A` (= mode 11 - 1)
+   - mode 14 → mode-idx = `0x0B` (= mode 12 - 1)
+   - Это byte-уровневая реализация формулы hold-возврата `(page + hold) % 2 = 0` из [[Mode Encoding]] — page-1 наследует fader/state от page-0 партнёра.
 
-## Label section (конец msg2)
+### Label asymmetry между mixer-модами (designed)
 
-После всех control descriptor'ов идёт таблица меток. Каждая запись:
+| Mode | Labels (помимо `0`–`?` индексов и `UNDO`/`REDO` на 8/9) |
+|---|---|
+| 11 (bank 1, page 0) | "Kick" |
+| 12 (bank 2, page 0) | "Kick" + "Melody 1", "Melody 2", "Perc 3", "Shaker" (на top-row buttons) |
+| 13 (bank 1, page 1) | (нет дополнительных) |
+| 14 (bank 2, page 1) | "Melody 1", "Melody 2", "Perc 3", "Shaker" |
 
-```
-<TYPE> <BUTTON_ID_CHAR> <LABEL_TEXT>
-```
+Pattern: "Kick" — только в page-0 (mode 11, 12); track-name labels — только в bank-2 (mode 12, 14). Consistent с архитектурой bank × page.
 
-| Type | Hex | Назначение |
-|---|---|---|
-| `` ` `` | `0x60` | No label (только индекс кнопки) |
-| `d` | `0x64` | Standard text label (используется для UNDO/REDO) |
-| `f` | `0x66` | Alt label type 1 (наблюдается на track-name метках) |
-| `h` | `0x68` | Alt label type 2 (наблюдается на track-name метках) |
+### `UNDO`/`REDO` хоткеи
 
-`BUTTON_ID_CHAR` — ASCII-символ ID кнопки. Например, кнопка #8 представлена как `8` (= 0x38), #9 как `9` (= 0x39), #15 как `?` (= 0x3F), и т.д. До #16 ASCII-диапазон совпадает с printable.
+Сохраняются во ВСЕХ 14 модах (instrument 1-10 + mixer 11-14) на buttons #8 и #9 как `64 38 "UNDO"` и `64 39 "REDO"`. Это Cmd-Z / Cmd-Y хоткеи универсально для перформанса.
 
-Стандартные хоткеи в наблюдаемых модах: `d8UNDO d9REDO` — UNDO на кнопке 8, REDO на кнопке 9 (Cmd+Z / Cmd+Y в Live).
+## Pipeline генерации (instrument modes)
 
-## CRC / checksum
+Скрипт читает один reference-mode (например `raw/1.syx`, 662 байта), для каждого N ∈ 1..10:
 
-**Нет.** Диф `1.syx ↔ 2.syx ↔ 3.syx` показал ровно 47 различающихся байт; если бы был CRC, изменился бы ещё минимум один (контрольный) байт. Это упрощает программную модификацию.
+1. Копирует payload целиком
+2. Меняет 2 байта имени (offsets 13 и 340 — в обеих секциях) на ASCII digit
+3. Меняет 45 mode-index байт (24 в msg1 + 21 в msg2 на фиксированных смещениях step=11) на `N - 1`
+4. Меняет 1 байт на offset 564 на `N × 10`
 
-## Алгоритм генерации мода N из mode-1-template (инструмент-моды)
+**Validation pipeline**: пользователь экспортирует mode 1, 2, 3 из Components → `cmp -l` находит ровно 48 различающихся байт между ними → формула выводится → mode 4–10 синтезируются → byte-identical check vs reference подтверждает корректность для известных модов (1, 2, 3).
 
-1. Прочитать `template.syx` (1 мод 1).
-2. Для каждого N ∈ 1..10:
-   - Установить байт `12` (name length) — `0x01` для имён 1–9 + 'A'.
-   - Установить байт `13` (name char) — ASCII цифра или `'A'` для N=10.
-   - Установить байт `340` (name char в msg2) — копия `13`.
-   - Установить байт `564` (static mode value) — `N × 10`.
-   - Установить 45 байт mode-index = `N − 1` на offsets:
-     - msg1: `19, 30, 41, … +11` (24 значения)
-     - msg2: `346, 357, …` (21 значение, в трёх band'ах с гэпами)
-3. Записать как `N.syx`.
+## Pipeline для mixer modes (НЕ автоматизирован)
 
-Sanity-check: сгенерированные `mode-01/02/03` совпали byte-в-byte с пользовательскими референс-экспортами из Components.
+Mixer-mode'ы НЕЛЬЗЯ синтезировать тем же простым substitution-pipeline'ом из одного reference'а, потому что:
 
-Для mixer-модов (имя=2 байта) все offset'ы сдвинуты на +1.
+- Размер варьируется (664–696 байт) из-за label-секции
+- Mode-idx байт имеет три разных "режима" (self, anchor, cross-page) на разных descriptor'ах
+- Bank/page структура требует понимания, какие контролы наследуются, какие "+32 flag", какие anchor
 
-## Что НЕЛЬЗЯ из формата вывести
-
-- Точная семантика байтов `T1`, `T2`, `FLAGS` — требует пары экспортов с одним и тем же контролом в разных конфигурациях для diff.
-- Поведение absolute vs relative encoder в байт-кодировке.
-- Channel encoding — не локализовано однозначно.
-- Размер max-value поля (1 или 2 байта в зависимости от типа контрола).
-
-Для полной декодировки нужно либо публичная спека Novation (нет на 2026-05-26), либо ещё пара десятков diff'ов между парами модов с известным отличием в одном параметре.
+Для генерации новых mixer-модов: экспортить из Components вручную **либо** написать отдельный pipeline с учётом всех трёх классов исключений (нужны минимум 4 reference-файла на все комбинации bank × page).
 
 ## Related pages
 
 - [[Custom Modes Model]] — высокоуровневая модель 14 модов
-- [[Mode Encoding]] — формула `23 + bank + 2*((page+hold)%2)` и таблица CC30
-- [[Instruments Layer]] — overlay listen CC (default 49, в нашей конфигурации 47)
-- [[Mixer Layer]] — bank/page/hold
-- [[CC47 Cross-Mode Transit]] — поведение transit между bank/page
-- [[XL_Performance — как это работает]] — корневое описание устройства
-- [[Novation XL]] — хаб проекта
+- [[Mode Encoding]] — как CC30 ch7 кодирует переключение мода
+- [[Instruments Layer]] — секция патча для модов 1–10
+- [[Mixer Layer]] — секция патча для модов 11–14
+- [[CC47 Cross-Mode Transit]] — кросс-режимный переход с памятью
+- [[Novation XL]] — корневой хаб проекта
