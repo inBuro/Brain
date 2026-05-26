@@ -438,3 +438,10 @@ Append-only журнал операций над вики.
 - Cover image 1280×720 + thumbnail uploaded on Gumroad — default pink folder placeholder removed, brand artwork live on `fadercraft.gumroad.com/l/xl-performance`.
 - Product copy confirmed end-to-end (description, "6 controls instead of 2" wording, $39 price, slug `xl-performance`, Welcome+Quickstart text in Content tab). Only the bundle zip itself remains pending (blocked by T12 bundle assembly).
 - Roadmap T12 3/14 → 4/14; Phase 0 totals 46/102 → 47/102 (~46%). T12 cover-image bullet checked off; Gumroad onboarding parenthetical about "default cover" removed.
+
+## 2026-05-26 — OG image + social meta tags shipped
+
+- New Figma artboard `OG image — 1200×630 (from Product gallery – 1)` (2020:6989) on page `10 — Gumroad covers`, adapted from `Product gallery – 1` (1868:19285): schematic LCXL on the left, wordmark + tagline column on the right, recentered for 1.91:1 ratio.
+- `web/og.png` exported (1200×630, 51 KB).
+- Open Graph + Twitter Card meta tags added to all public pages: `index.html` (Vite source `app/index.html` + built `web/index.html`), `pricing.html`, `privacy.html`, `refund.html`, `terms.html`, `update.html`. og:image points to `https://fadercraft.com/og.png`; per-page og:url; og:image:width/height = 1200/630.
+- Verified composition by screenshot: text block centered vertically, schematic LCXL fits 630 without losing key controls.
