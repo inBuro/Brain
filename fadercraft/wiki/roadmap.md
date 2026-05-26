@@ -31,7 +31,7 @@ updated: 2026-05-26
 | Gumroad onboarding | 4 | 5 | 80% |
 | T3 Brand identity | 7 | 7 | 100% |
 | T5 Instagram | 3 | 3 | 100% |
-| T7-real Лендинг | 4 | 7 | 57% |
+| T7-real Лендинг | 5 | 7 | 71% |
 | T8 M4L update integration | 0 | 9 | 0% |
 | T9 Демо-видео | 1 | 9 | 11% |
 | T10 Документация | 1 | 3 | 33% |
@@ -39,7 +39,7 @@ updated: 2026-05-26
 | T12 Bundle assembly | 6 | 14 | 43% |
 | T13 Final verification | 0 | 6 | 0% |
 | T14 Discord community | 9 | 10 | 90% |
-| **ИТОГО Phase 0** | **68** | **114** | **~60%** |
+| **ИТОГО Phase 0** | **69** | **114** | **~61%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -179,7 +179,7 @@ Out-of-band (не блокируют Phase 0):
 - [x] `style.css` с brand colors (mobile-first) — **2026-05-26**
 - [x] Smooth scroll в `main.js` — **2026-05-26**
 - [x] Lazy load — `loading="lazy" decoding="async"` на всех below-the-fold `<img>` (CatalogSection, VideoSection, ProductGallery, ProductCard); above-the-fold (PerformanceFlow `keys.png`) оставлен eager под LCP — **2026-05-26**
-- [ ] **`/free-custom-modes` страница** (free funnel — см. T12 distribution strategy ниже): `lcxl-mk3-modes.json` + README + CTA-блок к bundle, объясняющий что без `.amxd` modes работают как обычные layout'ы без mode-switching
+- [x] **`/free-custom-modes` страница** (free funnel — см. T12 distribution strategy ниже): `web/free-custom-modes/index.html` + 14 individual `.syx` + README с инструкцией по импорту и CTA-блоком к платному bundle — **2026-05-26**
 
 ### T8 M4L device update integration
 
@@ -231,8 +231,8 @@ Out-of-band (не блокируют Phase 0):
 
 > **Distribution strategy (user note 2026-05-25):** Гибрид — Custom Modes JSON **дублируется** в двух местах: бесплатно на `fadercraft.com/free-custom-modes` (см. T7-real) как SEO/discovery funnel, и в платном bundle (чтобы покупатель не ходил отдельно на сайт). Live Set + `.amxd` + Quickstart + Demo — только в платном bundle. Обоснование: modes без `.amxd` работают как любые обычные custom-mode'ы LCXL — переключаются руками на самой ручке. Mode-switching/cross-mode transit/Solo Follower живут в `.amxd`, поэтому feature-set не утекает. Подробно: см. log 2026-05-25 «distribution strategy».
 
-- [x] Custom Modes для LCXL MK3 → `Fadercraft/dist/custom-modes/{1..14}.syx` + `lcxl-mk3-modes-bundle.syx` (9276 B, one-shot import) — **2026-05-26**. Включает 10 instrument-модов (1-10, byte-uniform 662 B) + 4 mixer-моды (11-14, byte-uniform 664 B после strip extra labels). Все hardware-tested на LCXL MK3 пользователя. Формат — `.syx` (Components-native SysEx), не JSON. README с CTA — отдельным шагом перед загрузкой в Gumroad bundle. Спека формата задокументирована в [[Custom Mode SysEx Layout]].
-- [x] **Опубликовать модули отдельно** на `web/free-custom-modes/` (free funnel — связано с T7-real) — **2026-05-26**: `index.html` (статическая страница в стиле pricing/terms/etc.) + 14 индивидуальных `.syx` + bundle + README.md. CTA-блок ведёт на Gumroad `xl-performance`. Формат — `.syx`, не `.json` (см. [[Custom Mode SysEx Layout]]).
+- [x] Custom Modes для LCXL MK3 → `Fadercraft/dist/custom-modes/{1..14}.syx` (one mode per file) — **2026-05-26**. Включает 10 instrument-модов (1-10, byte-uniform 662 B) + 4 mixer-моды (11-14, byte-uniform 664 B после strip extra labels). Все hardware-tested на LCXL MK3 пользователя. Формат — `.syx` (Components-native SysEx), не JSON. **Bundle .syx дропнут (commit b051255)** — Novation Components импортирует ровно один mode на файл, склейка не даёт one-shot import. README с CTA — отдельным шагом перед загрузкой в Gumroad bundle. Спека формата задокументирована в [[Custom Mode SysEx Layout]].
+- [x] **Опубликовать модули отдельно** на `web/free-custom-modes/` (free funnel — связано с T7-real) — **2026-05-26**: `index.html` (статическая страница в стиле pricing/terms/etc.) + 14 индивидуальных `.syx` + README.md. CTA-блок ведёт на Gumroad `xl-performance`. Формат — `.syx`, не `.json` (см. [[Custom Mode SysEx Layout]]).
 - [ ] `XL_Performance_starter.als` Live Set с маппингами + контентом
 - [ ] Собрать `dist/fadercraft-xl-performance-v1.0/` (содержит `.amxd` + `solo_follower.js` + custom-modes/ + `.als` + Quickstart.pdf + опц. demo.mp4)
 - [ ] Zip → `fadercraft-xl-performance-v1.0.zip`
