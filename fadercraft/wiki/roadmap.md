@@ -38,8 +38,8 @@ updated: 2026-05-26
 | T11 Buttondown | 0 | 8 | 0% |
 | T12 Bundle assembly | 6 | 14 | 43% |
 | T13 Final verification | 0 | 6 | 0% |
-| T14 Discord community | 0 | 10 | 0% |
-| **ИТОГО Phase 0** | **59** | **114** | **~52%** |
+| T14 Discord community | 9 | 10 | 90% |
+| **ИТОГО Phase 0** | **68** | **114** | **~60%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -259,21 +259,27 @@ Out-of-band (не блокируют Phase 0):
 >
 > **Финальная спека для исполнения** (settings / channels / roles / готовая копия welcome+rules+первого announcements / пошаговый порядок кликов в Discord): [[discord-server-setup]].
 
-- [ ] Founder-аккаунт Discord с 2FA (требование для Community-режима)
-- [ ] Создать сервер `Fadercraft` (region: auto)
-- [ ] Иконка (favicon.svg) + баннер 960×540 (wordmark)
-- [ ] Enable Community: rules channel, community updates channel, explicit content filter ≥ medium, verification level ≥ low
-- [ ] Канальная структура: `#welcome`, `#announcements`, `#rules`, `#general`, `#support`, `#show-and-tell`, `#custom-modes`, `#bug-reports`, `#feature-requests`
-- [ ] Роли: `@founder`, `@member` (default), `@verified-owner` (manual на старте)
-- [ ] Welcome-сообщение в `#welcome` + содержимое `#rules` (короткое, 5-6 пунктов)
-- [ ] Permanent invite link (never expire, unlimited uses)
-- [ ] Линк подставить: footer `DC` (FooterFull `defaultSocials`), Quickstart.pdf раздел Support, Gumroad product description
-- [ ] Первый пост в `#announcements`: «v1.0 launched» (синхронно с T13 finish)
+- [x] Founder-аккаунт Discord с 2FA — **2026-05-26**
+- [x] Создать сервер `Fadercraft` — **2026-05-26**
+- [x] Иконка сервера (`icon-512.png`) — **2026-05-26**. Баннер 960×540 отложен (non-blocking, отдельный sub-task в [[discord-server-setup]], Discord показывает text-fallback)
+- [x] Enable Community: verification Low + explicit content filter (scan от non-role), rules channel `#rules`, community updates `#server-updates`, safety notifications `#server-updates`, default notifications "Only @mentions", 2FA-for-moderation ON — **2026-05-26**
+- [x] Канальная структура (4 категории, 10 каналов): INFO/`#welcome`/`#rules`/`#announcements`, COMMUNITY/`#general`/`#show-and-tell`/`#custom-modes`, SUPPORT/`#support`/`#bug-reports`/`#feature-requests`, ADMIN/`#server-updates` (private) — **2026-05-26**
+- [x] Роли: `@Founder` (mint `#63F2CA`, hoist, Administrator, @mention OFF), `@Verified Owner` (amber `#FFAD56`, hoist, default perms, manual assign), `@everyone` (default minus send в INFO-каналах) — **2026-05-26**
+- [x] Welcome в `#welcome` + rules в `#rules` (6 пунктов), оба запинены, меншны живые — **2026-05-26**
+- [x] Permanent invite link: `https://discord.gg/dAt2JGZps7` (Never / No limit / Temporary OFF) — **2026-05-26**
+- [x] Линк в footer (`FooterFull.defaultSocials.DC`) — **2026-05-26**. Quickstart-блок ждёт T10 (`dist/Quickstart.md` → PDF); Gumroad description ждёт ручной правки на logged-in surface (см. follow-ups ниже).
+- [ ] Первый пост в `#announcements`: «v1.0 launched» — синхронно с T13 finish
+
+**Follow-ups (не блокеры Phase 0, всплывают по мере готовности соседних треков):**
+
+- Quickstart Support-секцию с линком на Discord — встроить при сборке `dist/Quickstart.md`/PDF (T10)
+- Gumroad product description: добавить блок «Community: discord.gg/dAt2JGZps7» на странице `fadercraft.gumroad.com/l/xl-performance` (ручная правка через Gumroad UI)
+- Banner 960×540 для Discord-сервера (`app/public/discord-banner.png`) — спека в [[discord-server-setup]]
 
 **Deferred → Phase 1** (когда появятся триггеры):
 
 - Vanity URL `discord.gg/fadercraft` — триггер: 14 активных бустеров или готовность платить ~$70/мес самому
-- Auto-role `@verified-owner` через Gumroad webhook + Discord bot — триггер: ≥10–20 продаж, ручное присвоение начинает занимать время
+- Auto-role `@Verified Owner` через Gumroad webhook + Discord bot — триггер: ≥10–20 продаж, ручное присвоение начинает занимать время
 - Moderation бот (Carl-bot / MEE6) — триггер: ≥50 участников или первый рейд/спам
 - Changelog auto-post из GitHub Releases в `#announcements` через webhook — nice-to-have
 
