@@ -8,6 +8,12 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-05-26 — Lazy load + T3 brand commit closed
+
+- **Lazy load** добавлен на все below-the-fold `<img>` лендинга через нативный `loading="lazy" decoding="async"`. Затронуты: `CatalogSection.tsx` (картинки в карточках kit, среди них `lcxl-mk3.png` 1.1MB), `VideoSection.tsx` (poster), `ProductGallery.tsx` (main + thumbnails), `ProductCard.tsx`. Выше-the-fold `PerformanceFlow` `keys.png` (35KB) оставлен eager — он участвует в LCP. Vite-rebuild → новый bundle `index-B4gL0Se3.js` скопирован в `Fadercraft/web/`, старый `index-n9SfgvuN.js` удалён.
+- **T3 Commit `brand/`** — отмечено закрытым: коммит `3b0de4d` ранее сегодня уже содержит `brand/brief.md` + `brand/colors.md` (+ `email-setup.md` ещё раньше). Пункт оставался открытым в роадмэпе по инерции.
+- **Phase 0 totals:** 55/104 (~53%) → **57/104 (~55%)**. T3 6/7 → 7/7 (закрыт целиком), T7-real 3/7 → 4/7.
+
 ## 2026-05-26 — Roadmap sweep: T5 closed, T7-real 3/7, T9 channel, T3 social tiles
 
 Закрыта серия пунктов по уточнению пользователя:
