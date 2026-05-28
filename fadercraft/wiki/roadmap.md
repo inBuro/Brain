@@ -2,7 +2,7 @@
 type: roadmap
 project: Novation
 created: 2026-05-05
-updated: 2026-05-26
+updated: 2026-05-28
 ---
 
 # Fadercraft Roadmap
@@ -13,7 +13,7 @@ updated: 2026-05-26
 
 **Sources**: spec + Phase 0 plan + chat-history с Claude.
 
-**Last updated**: 2026-05-26
+**Last updated**: 2026-05-28
 
 **Payment rails matrix**: [[payment-rails]] — вердикты по всем рассмотренным платформам (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) под профиль русский паспорт + Таиланд + Bangkok Bank, без тайского national ID.
 
@@ -31,15 +31,15 @@ updated: 2026-05-26
 | Gumroad onboarding | 4 | 5 | 80% |
 | T3 Brand identity | 7 | 7 | 100% |
 | T5 Instagram | 3 | 3 | 100% |
-| T7-real Лендинг | 5 | 7 | 71% |
+| T7-real Лендинг | 10 | 12 | 83% |
 | T8 M4L update integration | 0 | 9 | 0% |
 | T9 Демо-видео | 1 | 9 | 11% |
 | T10 Документация | 1 | 3 | 33% |
-| T11 Buttondown | 0 | 8 | 0% |
-| T12 Bundle assembly | 6 | 14 | 43% |
+| T11 Newsletter (Gumroad follow) | 1 | 1 | 100% |
+| T12 Bundle assembly | 7 | 15 | 47% |
 | T13 Final verification | 0 | 6 | 0% |
 | T14 Discord community | 9 | 10 | 90% |
-| **ИТОГО Phase 0** | **69** | **114** | **~61%** |
+| **ИТОГО Phase 0** | **75** | **108** | **~69%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -180,6 +180,11 @@ Out-of-band (не блокируют Phase 0):
 - [x] Smooth scroll в `main.js` — **2026-05-26**
 - [x] Lazy load — `loading="lazy" decoding="async"` на всех below-the-fold `<img>` (CatalogSection, VideoSection, ProductGallery, ProductCard); above-the-fold (PerformanceFlow `keys.png`) оставлен eager под LCP — **2026-05-26**
 - [x] **`/free-custom-modes` страница** (free funnel — см. T12 distribution strategy ниже): `web/free-custom-modes/index.html` + 14 individual `.syx` + README с инструкцией по импорту и CTA-блоком к платному bundle — **2026-05-26**
+- [x] **React-version Custom Modes funnel** (`?p=free-modes`) под Figma `ProductPage · 1440 / Custom Modes` (node 2169-11012): Header (model+modelHref+modelSuffix) → HeroProduct → OneActionBetweenThem (controlled, cold = Custom Mode 1, лейбл «Custom Mode 1-10») → descripton (Import / Included / Included in XL Performance / License / CTA) → FooterFull. Заменила предыдущую статическую HTML-версию — **2026-05-28**
+- [x] **Header API расширен**: `modelHref` (model word → home, hover-underline 40% / 1px), `modelSuffix` (буллет «•» + subtitle). Nav-якоря: Products/Features → `#kit`, Support/Contact → `#support` с авто-раскрытием FAQ-пункта slug='support'. Smooth-scroll глобально в `index.css` (+ reduced-motion override). — **2026-05-28**
+- [x] **Global Tab-scope** (`lib/tab-scope.ts`): Tab/Shift+Tab оперирует только в `[data-focus-zone]` (`OneActionBetweenThem` + `PluginMockup`). На страницах без зон Tab работает по умолчанию. — **2026-05-28**
+- [x] **Cleanup**: 13 неиспользуемых компонентов удалены — `Avatar`, `Badge`, `Input`, `AccordionItem`, `ProductCard`, `CatalogSection`, `ExplainerSection`, `FAQAccordion`, `Hero`, `MechanismDiagram`, `ModeGrid`, `ProductGallery`, `RequirementsList`. Билд: 171 → 133 модулей, CSS 73.8 → 71.6 KB. — **2026-05-28**
+- [x] **VideoSection временно скрыта** (закомментирована в `ProductPage`) — re-enable после T9 demo video — **2026-05-28**
 
 ### T8 M4L device update integration
 
@@ -216,16 +221,12 @@ Out-of-band (не блокируют Phase 0):
 - [ ] `dist/Quickstart.pdf` (рендер через pandoc/make-pdf)
 - [ ] User-facing `dist/README.md` (адаптировать `raw/XL_Performance.README.md`)
 
-### T11 Newsletter pipeline (Buttondown)
+### T11 Newsletter pipeline (Gumroad follow)
 
-- [ ] Регистрация на https://buttondown.email
-- [ ] Username `fadercraft`
-- [ ] Custom domain (опц.) `news.fadercraft.com`
-- [ ] Welcome email вставить (текст уже на ветке `t6/paddle-license`)
-- [ ] Double opt-in
-- [ ] Получить embed snippet формы
-- [ ] Embed на лендинг (T7-real)
-- [ ] Embed внутрь M4L-устройства (T8)
+> **Strategy revised 2026-05-28**: список подписчиков ведём в **Gumroad** через бесплатный механизм followers. Двойная экономия (рассылка идёт оттуда же, где сидят покупатели) и ноль доп. инфраструктуры. **Buttondown отложен в Phase 1** — пригодится только если понадобится отдельный канал рассылки вне Gumroad-ecosystem (напр., narrowcast «только владельцам v1»).
+
+- [x] Embed-форма на лендинге: `<form action="https://app.gumroad.com/follow_from_embed_form">` с hidden `seller_id=6976309857072`, `target="_blank"`, `pattern=[^@\s]+@[^@\s]+\.[A-Za-z]{2,}` на email-input. POST уходит в Gumroad, confirmation открывается в новой вкладке, double opt-in их штатный. — **2026-05-28**
+- ~~Buttondown registration / custom domain / embed snippet / M4L in-device signup~~ → deferred Phase 1
 
 ### T12 Bundle assembly + Gumroad product
 
@@ -233,6 +234,7 @@ Out-of-band (не блокируют Phase 0):
 
 - [x] Custom Modes для LCXL MK3 → `Fadercraft/dist/custom-modes/{1..14}.syx` (one mode per file) — **2026-05-26**. Включает 10 instrument-модов (1-10, byte-uniform 662 B) + 4 mixer-моды (11-14, byte-uniform 664 B после strip extra labels). Все hardware-tested на LCXL MK3 пользователя. Формат — `.syx` (Components-native SysEx), не JSON. **Bundle .syx дропнут (commit b051255)** — Novation Components импортирует ровно один mode на файл, склейка не даёт one-shot import. README с CTA — отдельным шагом перед загрузкой в Gumroad bundle. Спека формата задокументирована в [[Custom Mode SysEx Layout]].
 - [x] **Опубликовать модули отдельно** на `web/free-custom-modes/` (free funnel — связано с T7-real) — **2026-05-26**: `index.html` (статическая страница в стиле pricing/terms/etc.) + 14 индивидуальных `.syx` + README.md. CTA-блок ведёт на Gumroad `xl-performance`. Формат — `.syx`, не `.json` (см. [[Custom Mode SysEx Layout]]).
+- [x] **`free-custom-modes.zip` single-download** (`app/public/free-custom-modes.zip`, 6.6 KB) — 14 индивидуальных `.syx` без бандла (бандл Components импортировать не умеет). Зелёная CTA «Download Free LC Custom modes» на странице Custom Modes ведёт на этот zip. — **2026-05-28**
 - [ ] `XL_Performance_starter.als` Live Set с маппингами + контентом
 - [ ] Собрать `dist/fadercraft-xl-performance-v1.0/` (содержит `.amxd` + `solo_follower.js` + custom-modes/ + `.als` + Quickstart.pdf + опц. demo.mp4)
 - [ ] Zip → `fadercraft-xl-performance-v1.0.zip`
