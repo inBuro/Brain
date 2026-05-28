@@ -296,6 +296,7 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Discord posts (3-5 серверов)
 - [ ] Facebook groups posts: «LCXL Users», «Ableton Live Users Worldwide»
 - [ ] Newsletter live (через Buttondown)
+- [ ] **VideoAsk feedback widget** (Typeform) — круглый bubble с видео-аватаркой основателя на `/quickstart`, post-purchase странице и `/free-custom-modes`. Free tier 20 min/мес ответов, один `<script>` embed без cookie-consent. **Триггер**: первые ≥5 продаж или ≥50 уникальных посетителей `/free-custom-modes`. До запуска не вешать — first impression держим чистым. Записать 2-3 вопроса под разные точки воронки за один сеанс с микро/камерой (тот же setup, что и T9 demo).
 
 ---
 
