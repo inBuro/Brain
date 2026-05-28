@@ -2,7 +2,7 @@
 type: roadmap
 project: Novation
 created: 2026-05-05
-updated: 2026-05-28
+updated: 2026-05-28 (hero loop dropped)
 ---
 
 # Fadercraft Roadmap
@@ -31,15 +31,15 @@ updated: 2026-05-28
 | Gumroad onboarding | 4 | 5 | 80% |
 | T3 Brand identity | 7 | 7 | 100% |
 | T5 Instagram | 3 | 3 | 100% |
-| T7-real Лендинг | 10 | 12 | 83% |
+| T7-real Лендинг | 10 | 11 | 91% |
 | T8 M4L update integration | 0 | 9 | 0% |
-| T9 Демо-видео | 1 | 9 | 11% |
+| T9 Демо-видео | 1 | 8 | 13% |
 | T10 Документация | 1 | 3 | 33% |
 | T11 Newsletter (Gumroad follow) | 1 | 1 | 100% |
 | T12 Bundle assembly | 7 | 15 | 47% |
 | T13 Final verification | 0 | 6 | 0% |
 | T14 Discord community | 9 | 10 | 90% |
-| **ИТОГО Phase 0** | **75** | **108** | **~69%** |
+| **ИТОГО Phase 0** | **75** | **106** | **~71%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -175,7 +175,7 @@ Out-of-band (не блокируют Phase 0):
 
 - [x] Заменить placeholder `index.html` на полноценный 9-секционный лендинг — **2026-05-26**
 - [ ] Полноценный `pricing.html`
-- [ ] Hero loop video (8 sec, autoplay, muted)
+- ~~Hero loop video (8 sec, autoplay, muted)~~ — **отменено 2026-05-28**: `PerformanceFlow` сам играет роль hero (анимированные клавиши, eager-load под LCP). Полное демо-видео живёт в `VideoSection` ниже (см. T9).
 - [x] `style.css` с brand colors (mobile-first) — **2026-05-26**
 - [x] Smooth scroll в `main.js` — **2026-05-26**
 - [x] Lazy load — `loading="lazy" decoding="async"` на всех below-the-fold `<img>` (CatalogSection, VideoSection, ProductGallery, ProductCard); above-the-fold (PerformanceFlow `keys.png`) оставлен eager под LCP — **2026-05-26**
@@ -207,11 +207,11 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Запись screen + voice-over
 - [ ] Монтаж
 - [ ] Export master 1080p MP4
-- [ ] Hero loop 8 sec → `web/assets/hero-loop.mp4`
+- ~~Hero loop 8 sec → `web/assets/hero-loop.mp4`~~ — **отменено 2026-05-28**: hero-роль закрывает `PerformanceFlow`; полное демо идёт в `VideoSection` через YouTube embed
 - [ ] 5 коротких клипов 30 sec для IG/TikTok/Reels
 - [x] Создать YouTube канал «Fadercraft» — **2026-05-26**
 - [ ] Загрузить video, скопировать ID
-- [ ] Update `index.html` с YouTube embed
+- [ ] Раскомментировать `VideoSection` в `ProductPage.tsx` + прокинуть YouTube ID
 
 ### T10 Extended documentation
 
