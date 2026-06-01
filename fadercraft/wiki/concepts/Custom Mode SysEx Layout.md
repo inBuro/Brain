@@ -11,7 +11,7 @@ tags: [lcxl, sysex, midi, format]
 
 **Summary**: Reverse-engineered формат `.syx`-файлов Components-export для Novation Launch Control XL MK3. Достаточно для программной генерации/правки custom-modes без открытия Components.
 
-**Sources**: byte-diff экспериментов 2026-05-26 над инструмент-модами 1/2/3 и mixer-модами 11/12/13/14 (экспорт из Components, исходники удалены после извлечения знаний; канонические файлы — в `Fadercraft/dist/custom-modes/`).
+**Sources**: byte-diff экспериментов 2026-05-26 над инструмент-модами 1/2/3 и mixer-модами 11/12/13/14 (экспорт из Components, исходники удалены после извлечения знаний; канонические файлы — в `~/Projects/Claude/Fadercraft/custom-modes/`, перенесены из Brain `dist/custom-modes/` 2026-06-01).
 
 **Last updated**: 2026-06-01
 
@@ -137,11 +137,11 @@ Per [[Mixer Layer]]: переключение по CC30 ch7 (native LCXL mode-se
 | Спец-метка | `6a` (j) `"QUE Volume"` — единственная функциональная подпись |
 | UNDO/REDO | на месте, как у всех модов |
 
-**Distribution**: mode 15 кладётся **и в free funnel, и в bundle, и в архив** — наравне с 1–14. Канонический файл: `dist/custom-modes/15.syx`; копии (byte-identical) в `web/free-custom-modes/15.syx`, `Projects/Claude/Fadercraft/app/public/free-custom-modes/15.syx` и в обоих `free-custom-modes.zip`.
+**Distribution**: mode 15 кладётся **и в free funnel, и в bundle, и в архив** — наравне с 1–14. Канонический файл: `~/Projects/Claude/Fadercraft/custom-modes/15.syx`; published-копия (byte-identical) в `app/public/free-custom-modes/15.syx` + `free-custom-modes.zip` (раздаётся лендингом `fadercraft.com`).
 
 ## Pipeline генерации (instrument modes)
 
-Скрипт читает один reference-mode (например `raw/1.syx`, 662 байта), для каждого N ∈ 1..10:
+Скрипт читает один reference-mode (например `custom-modes/1.syx`, 662 байта), для каждого N ∈ 1..10:
 
 1. Копирует payload целиком
 2. Меняет 2 байта имени (offsets 13 и 340 — в обеих секциях) на ASCII digit
