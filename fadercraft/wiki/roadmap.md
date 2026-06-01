@@ -2,7 +2,7 @@
 type: roadmap
 project: Novation
 created: 2026-05-05
-updated: 2026-06-01 (T12: demo Live set / XL_Performance_starter.als готов)
+updated: 2026-06-02 (T10: Quickstart.md пересоздан + Quickstart.pdf отрендерен)
 ---
 
 # Fadercraft Roadmap
@@ -13,7 +13,7 @@ updated: 2026-06-01 (T12: demo Live set / XL_Performance_starter.als готов)
 
 **Sources**: spec + Phase 0 plan + chat-history с Claude.
 
-**Last updated**: 2026-06-01
+**Last updated**: 2026-06-02
 
 **Payment rails matrix**: [[payment-rails]] — вердикты по всем рассмотренным платформам (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) под профиль русский паспорт + Таиланд + Bangkok Bank, без тайского national ID.
 
@@ -34,12 +34,12 @@ updated: 2026-06-01 (T12: demo Live set / XL_Performance_starter.als готов)
 | T7-real Лендинг | 10 | 11 | 91% |
 | T8 M4L update integration | 7 | 9 | 78% |
 | T9 Демо-видео | 1 | 8 | 13% |
-| T10 Документация | 1 | 3 | 33% |
+| T10 Документация | 2 | 3 | 67% |
 | T11 Newsletter (Gumroad follow) | 1 | 1 | 100% |
 | T12 Bundle assembly | 8 | 15 | 53% |
 | T13 Final verification | 0 | 6 | 0% |
 | T14 Discord community | 9 | 10 | 90% |
-| **ИТОГО Phase 0** | **83** | **106** | **~78%** |
+| **ИТОГО Phase 0** | **84** | **106** | **~79%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -62,8 +62,8 @@ Out-of-band (не блокируют Phase 0):
 - [x] Домен `fadercraft.com` куплен на Cloudflare Registrar
 - [x] DNS namervers активны (anita / rohin)
 - [x] CNAME `www`
-- [x] CF Pages подключён к GitHub `inBuro/Brain`, root `fadercraft/web`
-- [x] Custom domain `fadercraft.com` замаплен на CF Pages, SSL активен
+- [x] ~~CF Pages подключён к GitHub `inBuro/Brain`, root `fadercraft/web`~~ → **МИГРИРОВАНО 2026-06-01**: деплой уехал из Brain в проектный репо `inBuro/fadercraft-landing` (CF Pages проект `fadercraft-landing`, direct-upload через wrangler). Brain больше не публикует. Детали: [[reference-fadercraft-deploy]]
+- [x] Custom domain `fadercraft.com` замаплен на CF Pages (проект `fadercraft-landing`), SSL active
 
 ## ✅ T2 Email infrastructure
 
@@ -221,8 +221,8 @@ Out-of-band (не блокируют Phase 0):
 
 > **Content must-include (user note 2026-05-25):** Quickstart и user-facing README **обязаны** иметь отдельный шаг «Настройка MIDI-роутинга» со скриншотом: **MIDI From / MIDI To / Channel** на трек с устройством. Не объединять с шагом «положить .amxd на трек» — это два разных действия, второе часто пропускают.
 
-- [x] `dist/Quickstart.md` (subagent)
-- [ ] `dist/Quickstart.pdf` (рендер через pandoc/make-pdf)
+- [x] `dist/Quickstart.md` — **пересоздан 2026-06-02** (потерялся при миграции деплоя из Brain; user-facing, English: requirements / 4-step setup с выделенным MIDI-routing / using / updates «New Version» / troubleshooting; отражает frozen-реальность — bundle = один `.amxd`, без отдельного `solo_follower.js`)
+- [x] `dist/Quickstart.pdf` — **2026-06-02** (make-pdf, 389 слов, 112 КБ, 1in поля, без CONFIDENTIAL-футера)
 - [ ] User-facing `dist/README.md` (адаптировать `raw/XL_Performance.README.md`)
 
 ### T11 Newsletter pipeline (Gumroad follow)
