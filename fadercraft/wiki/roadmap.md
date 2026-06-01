@@ -2,7 +2,7 @@
 type: roadmap
 project: Novation
 created: 2026-05-05
-updated: 2026-05-28 (hero loop dropped)
+updated: 2026-06-01 (T8 update-integration: New Version indicator + Node-for-Max ping)
 ---
 
 # Fadercraft Roadmap
@@ -13,7 +13,7 @@ updated: 2026-05-28 (hero loop dropped)
 
 **Sources**: spec + Phase 0 plan + chat-history с Claude.
 
-**Last updated**: 2026-05-28
+**Last updated**: 2026-06-01
 
 **Payment rails matrix**: [[payment-rails]] — вердикты по всем рассмотренным платформам (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) под профиль русский паспорт + Таиланд + Bangkok Bank, без тайского national ID.
 
@@ -32,14 +32,14 @@ updated: 2026-05-28 (hero loop dropped)
 | T3 Brand identity | 7 | 7 | 100% |
 | T5 Instagram | 3 | 3 | 100% |
 | T7-real Лендинг | 10 | 11 | 91% |
-| T8 M4L update integration | 0 | 9 | 0% |
+| T8 M4L update integration | 7 | 9 | 78% |
 | T9 Демо-видео | 1 | 8 | 13% |
 | T10 Документация | 1 | 3 | 33% |
 | T11 Newsletter (Gumroad follow) | 1 | 1 | 100% |
 | T12 Bundle assembly | 7 | 15 | 47% |
 | T13 Final verification | 0 | 6 | 0% |
 | T14 Discord community | 9 | 10 | 90% |
-| **ИТОГО Phase 0** | **75** | **106** | **~71%** |
+| **ИТОГО Phase 0** | **82** | **106** | **~77%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -188,16 +188,20 @@ Out-of-band (не блокируют Phase 0):
 
 ### T8 M4L device update integration
 
-- [ ] Скопировать `update_check.js` в `~/Music/Ableton/User Library/Max Devices/`
-- [ ] Открыть `XL_Performance.amxd` в Max
-- [ ] UI секция: version display + «Check for update» + indicator dot
-- [ ] Подключить `[js update_check.js]`
-- [ ] Routing статусов (up_to_date / update_available / errors)
-- [ ] In-device newsletter signup (Buttondown embed-API)
-- [ ] (опционально) Anonymous heartbeat
-- [ ] Re-version patch с v1.5 → v1.0
-- [ ] Smoke test в Live: «Check for update» работает
-- [ ] Test «v1.1 available» сценарий
+> **Реализация изменилась (2026-06-01):** plain `[js]` не умеет HTTPS → перешли на **Node for Max** (`node.script`, встроенный `https`, без npm/external — портативно, фризом впекается внутрь `.amxd`). UI вместо «version display + Check button + dot» — кликабельный **«New Version»**, появляется только при доступном обновлении.
+
+- [x] `version_check.js` (наш update-check) в `~/Music/Ableton/User Library/Max Devices/` — **2026-06-01**
+- [x] `XL_Performance.amxd` открыт/правится в Max — **2026-06-01**
+- [x] UI: индикатор **«New Version»** (мятный, только при апдейте; прячет правую MIXER-линию, выровнен к правому краю кнопки 14; клик → Gumroad продукт `l/control-xl`) — **2026-06-01**
+- [x] Подключён `node.script version_check.js @autostart 1` (пинг `/api/version.json` → поле `latest`, semver-сравнение, ре-чек по таймеру 30 мин) — **2026-06-01**
+- [x] Routing статусов: up_to_date → скрыт; update_available → «New Version» + клик; ошибка/не-JSON → без ложного индикатора — **2026-06-01**
+- [ ] ~~In-device newsletter signup (Buttondown)~~ → deferred Phase 1 (рассылка через Gumroad, см. T11)
+- [ ] (опц.) Anonymous heartbeat
+- [x] Re-version patch v1.5 → v1.0 (метка убрана, `DEVICE_VERSION=1.0`) — **2026-06-01**
+- [x] Тест «обновление доступно»: форс `DEVICE_VERSION=0.9` vs прод `latest 1.0` → «New Version» показался — **2026-06-01**
+- [ ] Финальный smoke-test в Live (клик/показ/скрытие подтвердить) + **Freeze** (впечь `version_check.js`) + удалить dev-копию → один файл для рассылки
+
+> **Сопутствующее (вне T8, сделано 2026-06-01):** версия убрана из мокапа лендинга (PluginMockup + vite-define + version.json); Prelisten перенаправлен **CM3 → CM15** и сделан **тумблером** (CM15 ↔ предыдущий мод, save/restore через `[change]`-трекинг); сжат зазор MIXER→табы (~40%). Инструмент-чекбокс **не возвращён** (откат): нет живого фидбэка от LCXL при смене мода — зафиксировано в памяти. Бэкап оригинала девайса в `Max Devices/Archive/`.
 
 ### T9 Demo video production
 
