@@ -2,7 +2,7 @@
 type: concept
 project: Novation
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-06-01 (добавлен mode 15 — QUE/prelisten volume)
 status: stable
 tags: [lcxl, sysex, midi, format]
 ---
@@ -13,7 +13,7 @@ tags: [lcxl, sysex, midi, format]
 
 **Sources**: byte-diff экспериментов 2026-05-26 над инструмент-модами 1/2/3 и mixer-модами 11/12/13/14 (экспорт из Components, исходники удалены после извлечения знаний; канонические файлы — в `Fadercraft/dist/custom-modes/`).
 
-**Last updated**: 2026-05-26
+**Last updated**: 2026-06-01
 
 ---
 
@@ -74,7 +74,7 @@ tags: [lcxl, sysex, midi, format]
 68 ID "text"     — label с третьим цветом/стилем
 ```
 
-В наших файлах: `60` (\`) = no label, `64` (d) = стандартная текстовая метка (UNDO, REDO, Kick), `66` (f) и `68` (h) = разные цвета подписей для track-names типа "Melody 1", "Perc 3".
+В наших файлах: `60` (\`) = no label, `64` (d) = стандартная текстовая метка (UNDO, REDO, Kick), `66` (f) и `68` (h) = разные цвета подписей для track-names типа "Melody 1", "Perc 3". В mode 15 встречается ещё `6a` (j) — четвёртый цвет/стиль подписи, использован для метки `"QUE Volume"`.
 
 ## Instrument modes (1–10) — overlay listen CC
 
@@ -116,7 +116,7 @@ Per [[Mixer Layer]]: переключение по CC30 ch7 (native LCXL mode-se
 
 ### Label policy (2026-05-26 onwards)
 
-Все 14 модов имеют **минимальную label-схему**: только button index (`0`–`?` для buttons 0-15) + `UNDO`/`REDO` на buttons #8/#9. Никаких track-name меток (Kick/Melody/Perc/Shaker и т.п.).
+Моды 1–14 имеют **минимальную label-схему**: только button index (`0`–`?` для buttons 0-15) + `UNDO`/`REDO` на buttons #8/#9. Никаких track-name меток (Kick/Melody/Perc/Shaker и т.п.). **Исключение — mode 15**: он намеренно несёт одну функциональную метку `"QUE Volume"` (это название параметра, не имя трека, поэтому остаётся нейтральным для рассылки). Изначально в mode 15 был ещё track-name `"Perc C"` — снят 2026-06-01 как привязка к конкретному Live Set'у.
 
 Раньше mixer-моды имели asymmetric labels (mode 11 — "Kick", mode 12 — "Kick" + Melody 1/2 + Perc 3 + Shaker, mode 14 — Melody/Perc/Shaker), но их сняли как привязку к конкретной user-конфигурации Live Set'а. Bundle для рассылки должен быть нейтрален — покупатель назовёт треки сам.
 
@@ -124,7 +124,20 @@ Per [[Mixer Layer]]: переключение по CC30 ch7 (native LCXL mode-se
 
 ### `UNDO`/`REDO` хоткеи
 
-Сохраняются во ВСЕХ 14 модах (instrument 1-10 + mixer 11-14) на buttons #8 и #9 как `64 38 "UNDO"` и `64 39 "REDO"`. Это Cmd-Z / Cmd-Y хоткеи универсально для перформанса.
+Сохраняются во ВСЕХ модах (instrument 1-10 + mixer 11-14 + mode 15) на buttons #8 и #9 как `64 38 "UNDO"` и `64 39 "REDO"`. Это Cmd-Z / Cmd-Y хоткеи универсально для перформанса.
+
+## Mode 15 — QUE / prelisten volume
+
+15-й мод (добавлен 2026-06-01). Здесь под «listen» настраивается **громкость предпрослушки (cue/prelisten) сэмплов** в Live. В Demo-set'е соответствующий маппинг уже есть (см. залётный `Preview Volume` / cue в палитре маппинга — это и есть целевой параметр mode 15).
+
+| Параметр | Значение |
+|---|---|
+| Имя мода | `"15"` (2 ASCII-символа, как у mixer-модов) |
+| Размер | **670 B** (не byte-uniform с 11–14 из-за метки `"QUE Volume"`) |
+| Спец-метка | `6a` (j) `"QUE Volume"` — единственная функциональная подпись |
+| UNDO/REDO | на месте, как у всех модов |
+
+**Distribution**: mode 15 кладётся **и в free funnel, и в bundle, и в архив** — наравне с 1–14. Канонический файл: `dist/custom-modes/15.syx`; копии (byte-identical) в `web/free-custom-modes/15.syx`, `Projects/Claude/Fadercraft/app/public/free-custom-modes/15.syx` и в обоих `free-custom-modes.zip`.
 
 ## Pipeline генерации (instrument modes)
 
