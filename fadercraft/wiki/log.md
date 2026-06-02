@@ -8,6 +8,10 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-06-02 — Discord-инвайт заменён
+
+Старый `discord.gg/dAt2JGZps7` → новый **`https://discord.com/invite/EBsdgst3jU`** (`discord.gg/EBsdgst3jU`). Обновлено: память `reference_fadercraft_discord` + индекс, roadmap (current invite + Gumroad-follow-up), landing-код `FooterFull.tsx:16` (НЕ задеплоено — ждёт явного «деплой»). Историю выше не переписывал. Gumroad-копия (Description/Content/Receipt) использует новый линк.
+
 ## 2026-06-02 — Файл девайса переименован: `XL_Performance.amxd` → `Control XL.amxd`
 
 По решению пользователя девайс-**файл** переименован под брендинг продукта «Fadercraft Control XL». Охват — везде:
@@ -696,3 +700,10 @@ Append-only журнал операций над вики.
 - `mix_obj-mode11-btn`..`mix_obj-mode14-btn` (live.text, varname `mode_11`..`mode_14`): добавлен `parameter_invisible: 2` (Hidden) прямо в `.amxd`. Теперь не появляются в MIDI-mapping/automation/Live param list. Кабельная логика (outlet→sel, inlet от m24..m27/all_off) не тронута, `parameter_enable=1` оставлен.
 - Причина бага «Visible for mapping = off не работает»: атрибут `parameter_invisible` у объектов отсутствовал (дефолт 0 = виден); инспектор frozen-девайса правку в файл не писал. Детали — в [[Mixer Layer]].
 - Архив до правки: `Max Devices/Archive/XL_Performance.2026-06-02.amxd`. Пересборка length-preserving (Путь A), валидация чистая.
+
+## 2026-06-03 — Лейбл «Bank fx» → «Bank» во всех трёх деливераблах
+- Укорочён видимый лейбл MIXER-секции «Bank fx» → «Bank». Затронуты 3 файла: `raw/XL_Performance.amxd` (plain `ptch`, не frozen) и оба шиппинг-девайса `dist/Control XL {Demo,Starter} Project/Max Devices/Control XL.amxd` (frozen, `mx@c`-обёртка с эмбедами).
+- В каждом файле ровно 5 ASCII-вхождений «Bank fx» — все на один объект `mix_obj-ui-page` (`live.toggle`, varname `ui_page_toggle`): `comment.text` (id `mix_obj-page-label`), `parameter_longname` + `parameter_shortname` в `saved_attribute_attributes.valueof`, и пара `[longname, shortname]` в реестре `patcher.parameters["mix_obj-ui-page"]`. **Ни одно не является scripting name / varname / целью связи** — биндинги целы (`boxes`/`lines` counts и все `lines` байт-в-байт идентичны).
+- Бинарная пересборка (строка короче на 3 байта × 5 = −15): для frozen-девайсов пересчитаны `ptch`-chunk size, `mx@c`-header trailer-offset (f3) и `dlst`-поля `sz32` (JSON) + `of32` эмбедов. Встроенные `version_check.js` (2525 б) и `solo_follower.js` (6856 б) — байт-в-байт идентичны, новые офсеты валидированы (находят `//`/`autowatch` на месте).
+- Архивы до правки: `raw/archive/XL_Performance.2026-06-02.amxd`, `raw/archive/Control XL (Demo).2026-06-02.amxd`, `raw/archive/Control XL (Starter).2026-06-02.amxd`.
+- Roadmap-пункт «Next device build: Bank fx → Bank» закрыт. Детали — [[Mixer Layer]].
