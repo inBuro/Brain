@@ -273,14 +273,14 @@ Out-of-band (не блокируют Phase 0):
 - [x] Канальная структура (4 категории, 10 каналов): INFO/`#welcome`/`#rules`/`#announcements`, COMMUNITY/`#general`/`#show-and-tell`/`#custom-modes`, SUPPORT/`#support`/`#bug-reports`/`#feature-requests`, ADMIN/`#server-updates` (private) — **2026-05-26**
 - [x] Роли: `@Founder` (mint `#63F2CA`, hoist, Administrator, @mention OFF), `@Verified Owner` (amber `#FFAD56`, hoist, default perms, manual assign), `@everyone` (default minus send в INFO-каналах) — **2026-05-26**
 - [x] Welcome в `#welcome` + rules в `#rules` (6 пунктов), оба запинены, меншны живые — **2026-05-26**
-- [x] Permanent invite link: `https://discord.gg/dAt2JGZps7` (Never / No limit / Temporary OFF) — **2026-05-26**
+- [x] Permanent invite link: `https://discord.gg/EBsdgst3jU` (Never / No limit / Temporary OFF) — **2026-05-26**
 - [x] Линк в footer (`FooterFull.defaultSocials.DC`) — **2026-05-26**. Quickstart-блок ждёт T10 (`dist/Quickstart.md` → PDF); Gumroad description ждёт ручной правки на logged-in surface (см. follow-ups ниже).
 - [ ] Первый пост в `#announcements`: «v1.0 launched» — синхронно с T13 finish
 
 **Follow-ups (не блокеры Phase 0, всплывают по мере готовности соседних треков):**
 
 - Quickstart Support-секцию с линком на Discord — встроить при сборке `dist/Quickstart.md`/PDF (T10)
-- Gumroad product description: добавить блок «Community: discord.gg/dAt2JGZps7» на странице `fadercraft.gumroad.com/l/xl-performance` (ручная правка через Gumroad UI)
+- Gumroad product description: добавить блок «Community: discord.gg/EBsdgst3jU» на странице `fadercraft.gumroad.com/l/xl-performance` (ручная правка через Gumroad UI)
 - Banner 960×540 для Discord-сервера (`app/public/discord-banner.png`) — спека в [[discord-server-setup]]
 
 **Deferred → Phase 1** (когда появятся триггеры):
@@ -311,6 +311,7 @@ Out-of-band (не блокируют Phase 0):
 
 **Device fix:**
 - [x] Кнопки 11–14 (служебные mode-индикаторы) закрыты для MIDI-маппинга в `Control XL.amxd` — `parameter_invisible=2 (Hidden)`, кабельная функция сохранена, архив прошлой версии в `Max Devices/Archive/`
+- [x] Лейбл «Bank fx» → «Bank» (UI MIXER-секции; сайт-мокап уже «Bank») — выполнено 2026-06-03 во всех трёх деливераблах (raw + Demo/Starter), бинарная пересборка с пересчётом chunk/offset-полей, scripting names не тронуты. Подробности — [[Mixer Layer]].
 
 **Protocol/wiki reconciliation — 10 несостыковок разобраны (8 закрыто пруфами, #8 ложная тревога):**
 - [x] listen-CC = **47** подтверждён байтами (`2F 0A`/`2F 14`); CC49 в инстр-модах — обычная кнопка

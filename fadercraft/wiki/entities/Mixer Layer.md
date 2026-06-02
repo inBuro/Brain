@@ -32,7 +32,7 @@ tags: [m4l, lcxl, mixer]
 | Value | Тип | Управляется по | UI на front panel |
 |---|---|---|---|
 | `v mixer_bank` | 1/2 | **CC47** (momentary: 1 → toggle, 2 → restore) | `live.toggle` — `mix_obj-ui-bank` («Page») |
-| `v mixer_page` | 0/1 | **CC49** (momentary) | `live.toggle` — `mix_obj-ui-page` («Bank fx») |
+| `v mixer_page` | 0/1 | **CC49** (momentary) | `live.toggle` — `mix_obj-ui-page` («Bank», ранее «Bank fx») |
 | `v mixer_hold` | 0/1 | **CC28** | `live.toggle` — `mix_obj-ui-hold` («Hold») |
 
 Дополнительные UI-объекты (source: XL_Performance.README.md):
@@ -41,7 +41,9 @@ tags: [m4l, lcxl, mixer]
 
 > **Почему «Visible for mapping = off» в инспекторе не закрывало маппинг.** Эта галка пишет атрибут `parameter_invisible`. У этих 4 объектов атрибут вообще отсутствовал в `saved_attribute_attributes.valueof` (дефолт = 0 = Automated & Stored = виден для маппинга). Снятие галки в инспекторе на frozen-девайсе в файл не сохранялось, поэтому при перезагрузке значение возвращалось к дефолту и кнопки снова были мапабельны. Правка вшита прямо в `.amxd`: `parameter_invisible: 2`.
 
-> Названия параметров `mix_obj-ui-bank`/`-page` визуально перепутаны с надписями «Page»/«Bank fx» в UI — это следствие истории правок, не баг.
+> Названия параметров `mix_obj-ui-bank`/`-page` визуально перепутаны с надписями «Page»/«Bank» в UI — это следствие истории правок, не баг.
+>
+> **2026-06-03:** видимый лейбл укорочён «Bank fx» → «Bank» во всех трёх деливераблах (raw `XL_Performance.amxd` + Demo/Starter `Control XL.amxd`). Затронуты 5 строк на объект `mix_obj-ui-page`: `comment.text` (id `mix_obj-page-label`), `parameter_longname`, `parameter_shortname` в `saved_attribute_attributes.valueof`, и пара `[longname, shortname]` в реестре `patcher.parameters["mix_obj-ui-page"]`. Scripting `id`/`varname` (`ui_page_toggle`) и связи не тронуты. Бинарная пересборка: для frozen-девайсов пересчитаны `ptch`-size, `mx@c` header trailer-offset и `dlst` sz32/of32 эмбедов — встроенные `version_check.js`/`solo_follower.js` байт-в-байт идентичны.
 
 ## Восстановление (momentary)
 
