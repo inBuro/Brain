@@ -2,7 +2,7 @@
 type: roadmap
 project: Novation
 created: 2026-05-05
-updated: 2026-06-02 (device fix кнопки 11–14 + 10 протокольных несостыковок разобраны + m4l-master memory)
+updated: 2026-06-03 (test-purchase smoke-test пройден + «Bank fx»→«Bank» в деливераблах + bundle-состав обновлён, zip пересобраны)
 ---
 
 # Fadercraft Roadmap
@@ -13,7 +13,7 @@ updated: 2026-06-02 (device fix кнопки 11–14 + 10 протокольны
 
 **Sources**: spec + Phase 0 plan + chat-history с Claude.
 
-**Last updated**: 2026-06-02
+**Last updated**: 2026-06-03
 
 **Payment rails matrix**: [[payment-rails]] — вердикты по всем рассмотренным платформам (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) под профиль русский паспорт + Таиланд + Bangkok Bank, без тайского national ID.
 
@@ -37,9 +37,9 @@ updated: 2026-06-02 (device fix кнопки 11–14 + 10 протокольны
 | T10 Документация | 2 | 3 | 67% |
 | T11 Newsletter (Gumroad follow) | 1 | 1 | 100% |
 | T12 Bundle assembly | 8 | 15 | 53% |
-| T13 Final verification | 0 | 6 | 0% |
+| T13 Final verification | 1 | 6 | 17% |
 | T14 Discord community | 9 | 10 | 90% |
-| **ИТОГО Phase 0** | **84** | **106** | **~79%** |
+| **ИТОГО Phase 0** | **85** | **106** | **~80%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -256,7 +256,7 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Лендинг checklist (9 секций, video, FAQ, mobile)
 - [ ] Email infra end-to-end
 - [ ] Update-check end-to-end (bump 1.0 → 1.1, license-key flow)
-- [ ] Test purchase: 100% off coupon → checkout → license → download → install по Quickstart
+- [x] **Test purchase smoke-test — пройден 2026-06-03** (creator test-mode purchase, не списано): sale-notification (seller) + receipt-письмо (buyer) + invoice PDF + Content/Library страница + download обоих zip + файлы открываются ✅. **Баг (закрыт 2026-06-03):** в receipt-письме Gumroad был старый Discord-инвайт `discord.gg/dAt2JGZps7` → исправлен на `EBsdgst3jU` пользователем на Gumroad; Quickstart чист (инвайт там не встречается). **Ещё не пройдено:** полноценный install по Quickstart в Live. Прим.: license-активация в **сам девайс не встроена** — проверка ключа живёт на web-стороне (`verify-license.js`) / в Gumroad library. In-device license — отдельная таска, проектируется (см. блок «In-device license activation» ниже)
 - [ ] Tag `v1.0` в git
 - [ ] PR review всех веток в main
 
@@ -312,6 +312,7 @@ Out-of-band (не блокируют Phase 0):
 **Device fix:**
 - [x] Кнопки 11–14 (служебные mode-индикаторы) закрыты для MIDI-маппинга в `Control XL.amxd` — `parameter_invisible=2 (Hidden)`, кабельная функция сохранена, архив прошлой версии в `Max Devices/Archive/`
 - [x] Лейбл «Bank fx» → «Bank» (UI MIXER-секции; сайт-мокап уже «Bank») — выполнено 2026-06-03 во всех трёх деливераблах (raw + Demo/Starter), бинарная пересборка с пересчётом chunk/offset-полей, scripting names не тронуты. Подробности — [[Mixer Layer]].
+- [x] Bundle-состав обновлён 2026-06-03: в корень обоих сет-проектов (Demo/Starter) добавлены `XL_Performance.amxd` (исправленный) + `Router.als`; оба `.zip`-деливерабла пересобраны in-place (бэкапы `*.bak-prebankfix` в `dist/`). Загрузка в Gumroad — T12.
 
 **Protocol/wiki reconciliation — 10 несостыковок разобраны (8 закрыто пруфами, #8 ложная тревога):**
 - [x] listen-CC = **47** подтверждён байтами (`2F 0A`/`2F 14`); CC49 в инстр-модах — обычная кнопка
@@ -328,6 +329,14 @@ Out-of-band (не блокируют Phase 0):
 - [x] m4l-master теперь помнит decompiled LCXL3 remote-script URL + DAW-mode протокол (`.claude/agent-memory/m4l-master/lcxl3-daw-protocol.md`)
 
 ---
+
+## 🔧 In-device license activation — проектируется (scope TBD)
+
+> Заведено 2026-06-03. Сейчас лицензии **в девайсе нет**: `version_check.js` только пингует версию и показывает «New Version» (клик → наружу). Проверка ключа существует только на web-стороне — `verify-license.js` (Gumroad API → `download_url`). «License встроен в девайс» — незаписанная фича. Решение v1.0-блокер / Phase 1 отложено до завершения дизайна. Дизайн обсуждается в чате 2026-06-03.
+
+- [ ] **Дизайн**: цель (anti-piracy lock vs update-download unlock), модель (soft-unlock / hard-gate / grace), flow активации, оффлайн-устойчивость, хранение состояния, seat-caps — спроектировать до оценки
+- [ ] (после дизайна) Решить: v1.0-блокер или Phase 1
+- [ ] (после дизайна) Реализация в `.amxd` + при необходимости слим-endpoint `/api/activate`
 
 ## Связанные страницы
 
