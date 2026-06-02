@@ -2,7 +2,7 @@
 type: roadmap
 project: Novation
 created: 2026-05-05
-updated: 2026-06-02 (T10: Quickstart.md пересоздан + Quickstart.pdf отрендерен)
+updated: 2026-06-02 (device fix кнопки 11–14 + 10 протокольных несостыковок разобраны + m4l-master memory)
 ---
 
 # Fadercraft Roadmap
@@ -302,6 +302,29 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Facebook groups posts: «LCXL Users», «Ableton Live Users Worldwide»
 - [ ] Newsletter live (через Buttondown)
 - [ ] **VideoAsk feedback widget** (Typeform) — круглый bubble с видео-аватаркой основателя на `/quickstart`, post-purchase странице и `/free-custom-modes`. Free tier 20 min/мес ответов, один `<script>` embed без cookie-consent. **Триггер**: первые ≥5 продаж или ≥50 уникальных посетителей `/free-custom-modes`. До запуска не вешать — first impression держим чистым. Записать 2-3 вопроса под разные точки воронки за один сеанс с микро/камерой (тот же setup, что и T9 demo).
+
+---
+
+## 🔧 2026-06-02 — Device fix + protocol/wiki hardening
+
+> **Вне launch-счётчика Phase 0** (это не deliverable-треки, а корректность девайса и доков). Укрепляет то, на что опираются Quickstart/README (T10) и будущие правки m4l-master. Полный разбор — в [[log]].
+
+**Device fix:**
+- [x] Кнопки 11–14 (служебные mode-индикаторы) закрыты для MIDI-маппинга в `XL_Performance.amxd` — `parameter_invisible=2 (Hidden)`, кабельная функция сохранена, архив прошлой версии в `Max Devices/Archive/`
+
+**Protocol/wiki reconciliation — 10 несостыковок разобраны (8 закрыто пруфами, #8 ложная тревога):**
+- [x] listen-CC = **47** подтверждён байтами (`2F 0A`/`2F 14`); CC49 в инстр-модах — обычная кнопка
+- [x] CC47 — **один CC, два слоя** (instrument mode-report+cross-transit / mixer_bank momentary)
+- [x] CC49 (`page`) ≠ CC28 (`hold`) — независимые оси формулы
+- [x] CC30-value микшера = **24..27** (правило `5+N` — только инструменты); поправлена ошибка «mode 11 → 16»
+- [x] **CC30 ch7 = SELECT** (плагин шлёт) vs **CC31 ch7 = REPORT** (девайс шлёт, M4L не видит); passthrough режет оба
+- [x] `0x0D` mode-idx = намеренный маркер **«возврат в предыдущий мод»** (value 127), не артефакт
+- [x] Слоты: **15** (1–10 инстр / 11–14 mixer / 15 Cue), не 14
+- [x] Relative энкодеры: только DAW mode (per-row, pivot 64), в custom mode недоступны (Novation feature-request) — задокументировано
+- Правки в `wiki/concepts/` ([[Custom Modes Model]], [[Mode Encoding]], [[Custom Mode SysEx Layout]]) и `wiki/entities/` ([[Instruments Layer]], [[CC47 Cross-Mode Transit]], [[MIDI Passthrough]])
+
+**Agent memory:**
+- [x] m4l-master теперь помнит decompiled LCXL3 remote-script URL + DAW-mode протокол (`.claude/agent-memory/m4l-master/lcxl3-daw-protocol.md`)
 
 ---
 

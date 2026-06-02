@@ -5,6 +5,7 @@
 ## Карта памяти
 - [amxd-format.md](amxd-format.md) — проверенный рецепт распаковки/пересборки `.amxd`, раскладка байт, модель Max patcher JSON, Live API практики, веб-источники.
 - [xl-performance.md](xl-performance.md) — факты по флагману: пути, объекты секции CC47, карта режимов CC30/CC47, журнал правок.
+- [lcxl3-daw-protocol.md](lcxl3-daw-protocol.md) — DAW-mode протокол LCXL3 + decompiled Live12 remote-script (URL structure-void); CC30 select / CC31 report, DAW-порт, relative-энкодеры. Источник истины по нативному протоколу контроллера.
 
 ## Конвенции (железно)
 - **Архив до правки.** Текущий девайс → `Archive/<Name>.YYYY-MM-DD.amxd` (если занято — `-HHMMSS`). Никогда не перезаписывать архив.
