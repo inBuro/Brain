@@ -139,6 +139,26 @@ Per [[Mixer Layer]]: переключение по CC30 ch7 (native LCXL mode-se
 
 **Distribution**: mode 15 кладётся **и в free funnel, и в bundle, и в архив** — наравне с 1–14. Канонический файл: `~/Projects/Claude/Fadercraft/custom-modes/15.syx`; published-копия (byte-identical) в `app/public/free-custom-modes/15.syx` + `free-custom-modes.zip` (раздаётся лендингом `fadercraft.com`).
 
+## Relative (endless) энкодеры — недоступны в custom mode
+
+**Вопрос:** можно ли в custom-mode'е перевести ряд энкодеров в relative/endless-режим (шлёт «+1/−1» вместо абсолютной позиции)?
+
+**Ответ: нет.** Relative-режим энкодеров на LCXL MK3 существует **только в DAW mode**, не в custom-mode'ах. Подтверждено двумя независимыми источниками:
+
+1. Официальные user-guides Novation ([programmer's DAW mode](https://userguides.novationmusic.com/hc/en-gb/articles/27840466544402-Launch-Control-XL-3-programmer-s-DAW-mode)): «By default encoders are in absolute mode… each row can be independently switched into relative mode» — это раздел именно про DAW mode.
+2. Прямой ответ техподдержки Novation на [KVR Controller Scripting Forum](https://www.kvraudio.com/forum/viewtopic.php?t=622318&start=15): relative для энкодеров в custom mode — **зарегистрированный feature-request, ещё НЕ реализован** (по состоянию на 2026-06).
+
+Поэтому в дескрипторе custom-mode'а флага absolute/relative **нет** — байт-diff его не находил не из-за неполноты реверса, а потому что формат custom-mode его не кодирует. Флаги `X1…X4` в дескрипторе (offset см. выше) кодируют channel/behavior/color, но не endless-режим.
+
+### Как relative работает в DAW mode (справочно, не применимо к `.syx`)
+
+- Переключается **per row** (по ряду), не по отдельному энкодеру и не по моду.
+- Кодировка: **pivot = `0x40` (64)** = нет движения; `> 64` = по часовой, `< 64` = против. `0x41` (65) = +1 шаг CW, `0x3F` (63) = −1 CCW. CC-номера ряда сдвигаются на +`0x40`.
+- Смена режима репортится/задаётся MIDI-событием **Channel 7, CC `0x1E` (30)** — тот же CC30/ch7, что и native mode-select (см. [[Mode Encoding]]).
+- Точный SysEx-байт команды переключения ряда **не извлечён** — страницы programmer's reference Novation отдают 403 на машинное чтение, PDF под XL3 — 404. Достоверны: факт per-row relative, кодировка pivot-64, канал CC30/ch7.
+
+**Следствие для Fadercraft:** `XL_Performance` построен на custom-mode'ах → endless-ряд внутри него **недостижим**, пока Novation не добавит фичу. Единственный путь к relative — уводить поверхность в DAW mode (другая модель интеграции, не custom-mode `.syx`). См. также [[Custom Modes Model]].
+
 ## Pipeline генерации (instrument modes)
 
 Скрипт читает один reference-mode (например `custom-modes/1.syx`, 662 байта), для каждого N ∈ 1..10:

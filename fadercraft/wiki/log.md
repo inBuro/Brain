@@ -8,6 +8,22 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-06-02 — Slot count исправлен: 15, не 14
+
+Пользователь уточнил фактический layout: **15 занятых слотов** — 1–10 инструменты, 11–14 микшер, **15 Cue**. Это перекрывает прежнее утверждение `Custom Modes Model` «14 слотов, 15-го не существует» (цифра 14 была от 2026-04-28, до добавления mode 15 Cue 2026-06-01 — устарела).
+
+**Что изменено в [[Custom Modes Model]]:** убран категоричный «14 max / нет 15», вписана таблица из 15 слотов, callout переписан из «ошибка README» в «история правок». Хардварный максимум (15 или 16) оставлен открытым вопросом — README говорит «до 16», пользователь использует 15.
+
+## 2026-06-02 — Relative энкодеры: подтверждено, что в custom mode недоступны
+
+Пользователь спросил, можно ли перевести ряд энкодеров LCXL MK3 в relative/endless-режим в custom mode (вспомнил про «особую команду»). Исследовал официальные docs Novation + KVR Controller Scripting Forum.
+
+**Вывод:** relative существует **только в DAW mode** (per-row, pivot `0x40`, смена через Ch7 CC30). В custom-mode'е недоступен — это **прямо подтвердила техподдержка Novation** на [KVR](https://www.kvraudio.com/forum/viewtopic.php?t=622318&start=15): feature-request зарегистрирован, не реализован (2026-06). Значит, флага absolute/relative в дескрипторе custom-mode нет — реверс его не находил не из-за неполноты, а потому что формат его не кодирует.
+
+**Что записано:** новый раздел «Relative (endless) энкодеры — недоступны в custom mode» в [[Custom Mode SysEx Layout]] — с DAW-mode кодировкой (справочно) и следствием для `XL_Performance` (endless-ряд недостижим в его custom-mode архитектуре).
+
+**Точный SysEx-байт** команды relative-переключения НЕ извлечён: страницы programmer's reference Novation отдают 403 на машинное чтение, PDF под XL3 — 404. Если понадобится hex — нужен живой доступ к странице `programmer's DAW mode`.
+
 ## 2026-05-26 — Bundle .syx removed: Components is one-mode-per-file
 
 Пользователь усомнился, что Novation Components сможет переварить multi-mode bundle SysEx (28 сообщений в одном файле). Я нагуглил подтверждение: официальные docs Novation описывают **только single-file импорт через "Upload Custom Mode" button** ([support guide](https://support.novationmusic.com/hc/en-gb/articles/27203903097362-Launch-Control-XL-3-Components-guide), [user guide](https://userguides.novationmusic.com/hc/en-gb/articles/26190535820562-Using-Custom-Modes-on-the-Launch-Control-XL-3) — оба заблочили WebFetch на 403, но WebSearch снимок видим). Никаких batch/bundle/multiple modes в видимой документации.
