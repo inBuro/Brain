@@ -4,10 +4,9 @@ Thanks for getting Control XL — a Max for Live device that turns your Novation
 
 ## What's in this bundle
 
-- `XL_Performance.amxd` — the Max for Live device. Everything it needs is self-contained, with no additional files required.
+- `Control XL.amxd` — the Max for Live device. Everything it needs is self-contained, with no additional files required.
 - `custom-modes/` — 15 Custom Modes for your controller (1–10 Instrument, 11–14 Mixer, 15 Cue).
-- `Router/` — a preconfigured Ableton project (the device on a track with MIDI routing already set up). Open it, then drag the track into your own project.
-- `Control XL Starter Set/` — a ready-to-use Ableton project for exploring the full workflow.
+- An Ableton project — either **Demo** (a ready-to-explore set with sample content) or **Starter** (an empty set with the device and MIDI routing already set up), depending on which download you chose.
 - This Quickstart guide.
 
 ## Requirements
@@ -32,9 +31,9 @@ Open Novation Components, connect your controller, and upload the modes from `cu
 
 ### 2. Add the routed track
 
-Open `Router/Router.als`. It already contains the device and all required MIDI routing.
+Open the included Ableton project (`Control XL Demo` or `Control XL Starter`). It already contains the device and all required MIDI routing.
 
-Drag the track into your own set, or open the `Control XL Starter Set` project to explore the complete workflow.
+Drag the track into your own set, or build directly from the project.
 
 ### 3. Routing reference (if configuring manually)
 
@@ -98,7 +97,7 @@ Click it to open the download page and install the latest release. Gumroad also 
 
 In most cases, the MIDI routing is incorrect.
 
-If you're using the included `Router` project, everything is already configured. Otherwise, verify that:
+If you're using the included project, everything is already configured. Otherwise, verify that:
 
 - MIDI From → All Ins · All Channels
 - MIDI To → Launch Control XL MK3 (DAW) · Ch. 7

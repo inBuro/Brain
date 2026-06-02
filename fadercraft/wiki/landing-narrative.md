@@ -105,7 +105,7 @@ Each beat = one thought we want in the reader's head at that moment.
 - Eyebrow: `WHAT'S IN THE KIT`
 - Headline: `Everything you need. Nothing else to buy.`
 - Cards (5):
-  1. `XL_Performance.amxd` — The Max for Live device that does the heavy lifting. Drop into a track, done.
+  1. `Control XL.amxd` — The Max for Live device that does the heavy lifting. Drop into a track, done.
   2. `Custom Modes (×16)` — Pre-mapped configurations for Components — you import once.
   3. `XL_Performance_starter.als` — Live Set with all routings, racks, and Solo Follower wired up.
   4. `Quickstart guide` — One-page install + first-track walkthrough.

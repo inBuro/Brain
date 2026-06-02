@@ -7,7 +7,7 @@ updated: 2026-05-06
 
 # Wiki Index
 
-**Summary**: Альтернативный плоский TOC вики проекта **Novation** (knowledge base вокруг `XL_Performance.amxd` для Launch Control XL MK3). Основной хаб с описаниями страниц и связями к raw-источникам — [[Novation XL]].
+**Summary**: Альтернативный плоский TOC вики проекта **Novation** (knowledge base вокруг `Control XL.amxd` для Launch Control XL MK3). Основной хаб с описаниями страниц и связями к raw-источникам — [[Novation XL]].
 
 **Sources**: —
 
@@ -31,7 +31,7 @@ updated: 2026-05-06
 
 ## Sources
 
-- [[XL_Performance README]] — канонический README патча `XL_Performance.amxd` (v1.5).
+- [[XL_Performance README]] — канонический README патча `Control XL.amxd` (v1.5).
 
 ## Concepts
 

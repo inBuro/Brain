@@ -9,7 +9,7 @@ tags: [m4l, lcxl, mixer]
 
 # Mixer Layer
 
-**Summary**: Секция патча `XL_Performance.amxd`, отвечающая за 4 микшерных страницы LCXL (custom-modes 11–14): хранение состояния `mixer_bank/page/hold`, формула выбора режима, UI на front panel.
+**Summary**: Секция патча `Control XL.amxd`, отвечающая за 4 микшерных страницы LCXL (custom-modes 11–14): хранение состояния `mixer_bank/page/hold`, формула выбора режима, UI на front panel.
 
 **Sources**: `raw/XL_Performance.README.md`
 
