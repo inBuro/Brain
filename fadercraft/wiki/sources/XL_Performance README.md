@@ -19,8 +19,8 @@ tags: [readme, m4l]
 
 ## Краткое содержание
 
-- Назначение, распределение custom-modes (1–10 instruments, 11–14 mixer) (source: XL_Performance.README.md).
-- ⚠️ README говорит «до 16 custom-modes», но фактическая ёмкость LCXL MK3 — **14 слотов** (уточнено 2026-04-28). Деталь и сверка: [[Custom Modes Model]].
+- Назначение, распределение custom-modes (1–10 instruments, 11–14 mixer, 15 Cue) (source: XL_Performance.README.md).
+- ⚠️ README говорит «до 16 custom-modes»; патч фактически занимает **15 слотов** (уточнено 2026-06-02). Хардварный максимум 15/16 не подтверждён. Деталь и сверка: [[Custom Modes Model]].
 - Архитектура из 4 секций патча + passthrough + startup default (mode 11) (source: XL_Performance.README.md).
 - [[Mixer Layer]] — value-объекты `mixer_bank/page/hold`, формула, UI.
 - [[Instruments Layer]] — overlay CC (по умолчанию 49), фильтрация мусора, маппинг 1..10.
