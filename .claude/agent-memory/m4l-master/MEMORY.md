@@ -8,14 +8,14 @@
 - [lcxl3-daw-protocol.md](lcxl3-daw-protocol.md) — DAW-mode протокол LCXL3 + decompiled Live12 remote-script (URL structure-void); CC30 select / CC31 report, DAW-порт, relative-энкодеры. Источник истины по нативному протоколу контроллера.
 
 ## Конвенции (железно)
-- **Архив до правки.** Текущий девайс → `Archive/<Name>.YYYY-MM-DD.amxd` (если занято — `-HHMMSS`). Никогда не перезаписывать архив.
+- **Архив до правки.** Текущий девайс → `raw/archive/<Name>.YYYY-MM-DD.amxd` (если занято — `-HHMMSS`). Для XL_Performance это `~/Brain/Fadercraft/raw/archive/`. Никогда не перезаписывать архив.
 - **Правка на месте.** Меняем сам `.amxd`, не шлём куски кода, не просим руками патчить в Max.
 - **Валидация перед подменой.** Re-parse JSON, счётчики boxes/lines, хвост байт-в-байт, инварианты размеров. Не сошлось — откат к архиву.
 - **Перезагрузка в Live.** Live кеширует — убрать/добавить девайс заново; Max-редактор закрывать без сохранения.
 
 ## Где что лежит
-- Девайсы: `/Users/Kirill/Music/Ableton/User Library/Max Devices/` (`XL_Performance.amxd`, `SendsFollower.amxd`).
-- Архив: та же папка, подпапка `Archive/`.
+- Девайсы: `/Users/Kirill/Music/Ableton/User Library/Max Devices/` (`Control XL.amxd`, `SendsFollower.amxd`).
+- Архив: `~/Brain/Fadercraft/raw/archive/` (не рядом с девайсом).
 - `.syx` кастом-моды (канон): `~/Projects/Claude/Fadercraft/custom-modes/` (`1.syx`…`15.syx`).
 - Wiki проекта (логика, форматы): `~/Brain/Fadercraft/wiki/concepts/` и `…/entities/`.
 
@@ -26,3 +26,5 @@
 
 ## Текущее состояние домена
 XL_Performance: 2026-06-02 добавлен round-trip для кастом-мода 15 (QUE/prelisten). Подробности и карта объектов — в [xl-performance.md](xl-performance.md).
+
+⚠️ **Файл девайса переименован 2026-06-02:** `XL_Performance.amxd` → **`Control XL.amxd`** (везде: канон в User Library, бандлы в `dist/`, ссылки в `.als`). **Внутреннее имя Max-патча всё ещё «XL_Performance»** — переименован только файл. Если нужно переименовать и внутренний патч (чтобы на дорожке Live отображалось «Control XL») — отдельная правка. При работе с девайсом теперь это `Control XL.amxd`.
