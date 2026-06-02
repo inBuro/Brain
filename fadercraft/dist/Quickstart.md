@@ -1,63 +1,111 @@
 # Fadercraft Control XL — Quickstart
 
-Thanks for getting **Control XL** — a Max for Live device that turns your Novation Launch Control XL MK3 into a performance instrument: switchable Mixer and Instrument layers, two encoder banks per channel, and one-touch cross-mode jumps.
+Thanks for getting Control XL — a Max for Live device that turns your Novation Launch Control XL MK3 into a performance instrument, with switchable Mixer and Instrument layers, dual encoder banks per channel, and instant cross-mode switching.
 
 ## What's in this bundle
 
-- `XL_Performance.amxd` — the Max for Live device. Everything it needs is bundled inside, so there are no extra files to keep next to it.
-- `custom-modes/` — 15 Custom Modes for your controller (1–10 instruments, 11–14 mixer, 15 cue).
-- `Router.als` — a track with the device and MIDI routing already set up; drop it into your own project.
-- `XL_Performance_starter.als` — a ready Live Set to explore the full workflow.
-- This Quickstart.
+- `XL_Performance.amxd` — the Max for Live device. Everything it needs is self-contained, with no additional files required.
+- `custom-modes/` — 15 Custom Modes for your controller (1–10 Instrument, 11–14 Mixer, 15 Cue).
+- `Router.als` — a preconfigured track with the device and MIDI routing already set up. Drag it into your own project.
+- `XL_Performance_starter.als` — a ready-to-use Live Set for exploring the full workflow.
+- This Quickstart guide.
 
 ## Requirements
 
-- Ableton **Live 11 or later** — Suite, or Standard with the Max for Live add-on.
-- **Max for Live 8.5** or newer.
-- Novation Launch Control XL **MK3**.
-- **macOS or Windows** — wherever Live 11 or 12 runs.
+- Ableton Live 11 or later — Suite, or Standard with the Max for Live add-on.
+- Max for Live 8.5 or newer.
+- Novation Launch Control XL MK3.
+- macOS or Windows.
 
 ## Setup (about 5 minutes)
 
-**1. Load the Custom Modes onto your LCXL MK3.**
-Open Novation **Components**, connect the controller, and send the modes from `custom-modes/`:
+### 1. Load the Custom Modes onto your LCXL MK3
 
-- **Modes 11–14** (mixer) — load these as-is. The device relies on them.
-- **Modes 1–10** (instruments) — optional. Load ours as a starting point, or keep your own layouts: the device only needs the cross-mode jump on **CC47** and Undo/Redo on **CC45–CC46** present in each instrument mode.
-- **Mode 15** (cue) — optional. Load it if you want the Prelisten jump to land on the bundled cue layout.
+Open Novation Components, connect your controller, and load the modes from `custom-modes/`.
 
-**2. Add the routed track.**
-Open `Router.als` — it already has the device on a track with MIDI routing configured. Drag that track into your own set, or open `XL_Performance_starter.als` for the full demo.
+- Modes 11–14 (Mixer) — required. The device uses these layouts for mixer operation.
+- Modes 1–10 (Instrument) — optional. You can use the included layouts or your own. The only requirements are:
+  - Cross-mode jump on `CC47`
+  - Undo on `CC45`
+  - Redo on `CC46`
+- Mode 15 (Cue) — optional. Load it if you'd like the Prelisten shortcut to open the included cue layout.
 
-**3. Routing reference (only if you wire it up yourself).**
-On the track that holds the device, set:
+### 2. Add the routed track
 
-- **MIDI From** → *All Ins · All Channels*
-- **MIDI To** → *Launch Control XL MK3 (DAW)* · **Ch. 7**
-- **Monitor** → *In*
+Open `Router.als`. It already contains the device and all required MIDI routing.
 
-Without this routing the device receives no MIDI and the controller will not respond.
+Drag the track into your own set, or open `XL_Performance_starter.als` to explore the complete workflow.
 
-**4. Play.**
-Switch a mode on the controller — the on-screen display follows the active mode, and the cross-mode jump takes you between the instrument and mixer layers.
+### 3. Routing reference (if configuring manually)
+
+On the track that contains the device:
+
+- MIDI From → All Ins · All Channels
+- MIDI To → Launch Control XL MK3 (DAW) · Ch. 7
+- Monitor → In
+
+If these settings are incorrect, the device will not receive MIDI from the controller.
+
+### 4. Play
+
+Switch modes on the controller and the device display will automatically follow the active mode. Cross-mode switching lets you move between Instrument and Mixer layers instantly.
 
 ## Using it
 
-- **Cross-mode jump.** One hotkey (**CC47**) jumps between the instrument layer (modes 1–10) and the mixer layer (modes 11–14), returning you to the exact page you left.
-- **Momentary or toggle.** **Hold** a switch for temporary access to the other layer, then release to snap back; **press** it to stay there. The same hold-or-press logic drives the page and bank switches.
-- **Two encoder banks per channel.** Each channel exposes two encoder banks — Encoders 1–3 and 4–6 — so you get 6 controls instead of 2 without breaking muscle memory. `Bank` flips between the banks; `Page` moves between mixer pages.
-- **Prelisten.** Toggles to the cue layout (mode 15) and back to your previous mode.
-- **Undo / Redo.** Mapped to **CC45** and **CC46**.
-- The on-screen controls (`Daw`, `Prelisten`, `Page`, `Bank`, and the `11–14` Mixer tabs) mirror the hardware, so you can drive modes from the screen as well.
+### Cross-mode jump
+
+Press `CC47` to jump between Instrument modes (1–10) and Mixer modes (11–14). The device remembers exactly where you left off and returns you there.
+
+### Momentary or toggle
+
+Hold a switch for temporary access to another layer, then release to return. Press and release normally to stay on the new layer.
+
+The same hold-or-toggle behavior is used for Page and Bank switching.
+
+### Two encoder banks per channel
+
+Each channel provides two encoder banks:
+
+- Bank A → Encoders 1–3
+- Bank B → Encoders 4–6
+
+This effectively gives each channel six encoder assignments while keeping the layout easy to remember.
+
+### Prelisten
+
+Jump to the Cue layout (Mode 15) and back to your previous mode. For now the cue layout maps one fader to the prelisten track volume, plus scroll up and down — this mode will gain more features over time.
+
+### Undo / Redo
+
+Mapped to:
+
+- `CC45` → Undo
+- `CC46` → Redo
+
+### On-screen controls
+
+The on-screen controls (Daw, Prelisten, Page, Bank, and Mixer tabs 11–14) mirror the hardware controls, allowing you to switch modes directly from the device interface.
 
 ## Updates
 
-When a newer version is available, a mint **"New Version"** label appears at the top of the device. Click it to open the download page and grab the update. Gumroad also emails you a fresh download link with every release.
+When a newer version is available, a New Version label appears at the top of the device.
+
+Click it to open the download page and install the latest release. Gumroad also sends an updated download link by email whenever a new version is published.
 
 ## Troubleshooting
 
-**The controller doesn't respond, or modes don't switch.** Almost always this is the MIDI routing. The included `Router.als` already has it set; if you wired it up yourself, re-check that **MIDI From** is *All Ins · All Channels*, **MIDI To** is *Launch Control XL MK3 (DAW) · Ch. 7*, and the track **Monitor** is *In*.
+### The controller doesn't respond, or modes don't switch
 
----
+In most cases, the MIDI routing is incorrect.
 
-Questions or trouble? Email **support@fadercraft.com** — we reply within 48 hours on working days.
+If you're using the included `Router.als`, everything is already configured. Otherwise, verify that:
+
+- MIDI From → All Ins · All Channels
+- MIDI To → Launch Control XL MK3 (DAW) · Ch. 7
+- Monitor → In
+
+## Need help?
+
+Questions or issues?
+
+Email support@fadercraft.com and we'll reply within 48 hours on working days.
