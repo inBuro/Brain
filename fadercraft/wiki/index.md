@@ -47,3 +47,4 @@ updated: 2026-05-06
 - [[CC47 Cross-Mode Transit]] — quick-jump между микшером и инструментами с памятью.
 - [[Solo Follower]] — JS + LiveAPI, держит собственный трек заSOLOенным вместе с внешними; **неотъемлемая часть** XL_Performance.
 - [[MIDI Passthrough]] — verbatim notes/bend/aftertouch/program; CC режутся `[sel 30 31]`.
+- [[Version Check (Update Notifier)]] — Node for Max пингует `/api/version.json`, зажигает кнопку «Update ready» при выходе новой версии. Статус: works-locally, нужен freeze для рассылки.

@@ -621,3 +621,9 @@ Append-only журнал операций над вики.
 - **Code cleanup**: удалены 13 неиспользуемых компонентов — `Avatar`, `Badge`, `Input`, `AccordionItem` (atoms); `ProductCard` (molecules); `CatalogSection`, `ExplainerSection`, `FAQAccordion`, `Hero`, `MechanismDiagram`, `ModeGrid`, `ProductGallery`, `RequirementsList` (organisms). `components/index.ts` перетряхнут. Билд: **171 → 133 модулей**, **CSS 73.83 → 71.61 KB**, ts-check чисто.
 - **Прогресс**: T7-real 5/7 → 10/12 (83%). T11 переведена с Buttondown на Gumroad-follow → 1/1 (100%, остальное → Phase 1). T12 6/14 → 7/15 (47%). **Phase 0 итого: 69/114 → 75/108 (~69%).** Общее total опустилось до 108, потому что 6 Buttondown-пунктов уехали из Phase 0 в Phase 1.
 - Деплоя не делал — изменения сидят локально на `deploy/fadercraft-landing-2026-05-25`. Жду явное «деплой».
+
+## 2026-06-02 — Version Check feature documented + script recovered
+- Создана [[Version Check (Update Notifier)]] (entities/) — фоновая проверка апдейтов: `node.script version_check.js` → `/api/version.json` → кнопка «Update ready». Со статус-таблицей (что работает / что нужно для рассылки).
+- Восстановлен потерянный `version_check.js` из `raw/` (фича собрана 2026-06-01, скрипт не лежал рядом с девайсом → `node.script can't find file`). Рантайм-копия положена в `Max Devices/` рядом с `XL_Performance.amxd`. Для дистрибуции — заморозить.
+- Связана с обзорной [[XL_Performance — как это работает]] (строка в таблице слоёв) и index.md.
+- Релизная связка: бампать `DEVICE_VERSION` (скрипт) и `latest` (`app/public/api/version.json`) синхронно.

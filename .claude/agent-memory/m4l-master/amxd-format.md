@@ -1,0 +1,107 @@
+# .amxd — формат и рецепт правки
+
+Подтверждено реверсом реального девайса (XL_Performance) + документацией Ableton/Cycling74. `.amxd` = гибрид: бинарный заголовок, большой JSON-патчер (обычный maxpat) в середине, бинарный хвост со встроенными файлами и контрольной суммой.
+
+## Контейнер `ampf` (chunked)
+`ampf` → `meta` → `ptch` (payload = субчанк `mx@c` с JSON-патчером + встроенные файлы через `dlst` + хвостовые метачанки `of32/gvers/flag/mdat`).
+
+Раскладка байт (смещения общие для всех `.amxd`):
+- `0x00`: `ampf` + u32(4)
+- `0x18`: `ptch` + **u32 LE @0x1C** = размер payload = `filesize − 0x20`
+- `0x20`: `mx@c` + u32 BE(16)@0x24 + u32(0)@0x28 + **u32 BE @0x2C** = размер данных mx@c (JSON + `\0` + встроенные скрипты)
+- `0x30` (=48): начало JSON-патчера. Заканчивается первым байтом `\x00` (null-terminator). Дальше — встроенные JS-файлы и метачанки.
+
+`mdat` в самом конце (`mdat` + size + 4 байта) — контрольная сумма. **Live игнорит её при загрузке** / пересчитывает на своём save. Оставляй как есть; ручной пересчёт не нужен.
+
+## ⚠️ КРИТИЧНО: `dlst` и встроенные файлы (freeze)
+**Замороженный (frozen) `.amxd` хранит все зависимости (JS-скрипты и т.п.) ВНУТРИ файла, после JSON, а в хвосте есть директория `dlst` с АБСОЛЮТНЫМИ смещениями и размерами каждого ресурса.** Если поменять длину JSON и не поправить `dlst`, встроенные скрипты «уезжают» относительно записанных смещений → Max читает мусор (`js: malformed UTF-8 at offset 0`, `no function … [name.js]`), а после раз-/заморозки теряет их совсем.
+
+`dlst` (в самом конце файла) — список записей `dire`, по одной на ресурс:
+`type`(JSON/TEXT) · `fnam`(имя) · `sz32`(размер) · `of32`(смещение, относительно базы `mx@c` = `0x20`) · `vers` · `flag` · `mdat`(checksum ресурса).
+Первый ресурс = сам патчер-JSON (`sz32 = длина JSON + 1` за счёт `\0`, `of32 = 16`). Дальше — встроенные скрипты с `of32`, указывающим прямо в пост-JSON область.
+
+**Поэтому НЕ меняй длину JSON вслепую.** Два безопасных пути:
+
+### Путь A (предпочтительный) — пересборка БЕЗ изменения длины JSON
+Добиваешь новый JSON пробелами до ТОЧНО исходной длины. Тогда ничего в контейнере не сдвигается: `dlst`, встроенные файлы, поля размера — всё валидно, меняется только содержимое JSON (той же длины). Это проверенный способ для frozen-девайсов.
+
+```python
+core=json.dumps(obj,ensure_ascii=False,indent=1).encode('utf-8')
+pad=L0-len(core)                       # L0 = END-JS (исходная длина JSON)
+assert pad>=0 and core[-1:]==b'}'      # компактный JSON короче исходного — место под паддинг есть
+new_json=core[:-1]+b' '*pad+core[-1:]  # пробелы перед финальной '}' — валидный JSON
+# суффикс (от \0), поля размера — НЕ трогаем; длина файла не меняется
+```
+Валидация: `suffix` байт-в-байт идентичен; встроенный скрипт по своему `of32` байт-в-байт совпадает с исходным; `dlst` идентичен.
+
+### Путь B — менять длину JSON, но патчить `dlst`
+Если длину сохранить нельзя (правка больше исходного JSON): тогда `+= ΔL` нужно применить к `ptch`(LE@0x1C), `mx@c`(BE@0x2C), к `sz32` JSON-ресурса в `dlst`, И к `of32` КАЖДОГО ресурса, лежащего после JSON (т.е. встроенных скриптов). Per-file `mdat`-checksum'ы устаревают — Live их при загрузке игнорит. Сложнее и опаснее пути A; без крайней нужды не использовать.
+
+> История: 2026-06-02 первая правка XL_Performance шла «наивной» пересборкой (ΔL=−49520) без патча `dlst` → встроенный `solo_follower.js` уехал, Max выдал malformed-UTF-8 и потерял скрипт после раз-заморозки. Исправлено пересборкой Путём A из чистого архива. Длина JSON — священна для frozen-девайсов.
+
+## Рецепт пересборки (Python, Путь A — дефолт, проверен)
+Собирай из ЧИСТОГО источника (архив/незатронутый девайс), не из уже сломанного файла.
+```python
+import json, struct
+SRC = '/path/to/clean/Device.amxd'   # чистый источник (напр. свежий архив)
+DST = '/path/to/Device.amxd'
+data = bytearray(open(SRC, 'rb').read())
+JS = 48
+END = data.find(b'\x00', JS)                          # конец JSON
+L0 = END - JS                                         # ИСХОДНАЯ длина JSON — держим её
+prefix = bytes(data[:JS])
+suffix = bytes(data[END:])                            # СОХРАНЯЕМ БАЙТ-В-БАЙТ (с \0 + встроенные файлы + dlst)
+obj = json.loads(data[JS:END].decode('utf-8'))
+p = obj['patcher']
+
+# ---- правки ----
+# p['boxes'].append({"box": {...}})
+# p['lines'].append({"patchline": {"source": [srcid, outlet], "destination": [dstid, inlet]}})
+# существующий объект: найти по box['id'], поправить text/numinlets/numoutlets/outlettype
+
+core = json.dumps(obj, ensure_ascii=False, indent=1).encode('utf-8')   # ensure_ascii=False — не плодить \uXXXX
+pad = L0 - len(core)
+assert pad >= 0 and core[-1:] == b'}', "правка больше исходного JSON — см. Путь B"
+new_json = core[:-1] + b' ' * pad + core[-1:]         # добиваем пробелами до L0
+assert len(new_json) == L0
+json.loads(new_json.decode('utf-8'))                  # всё ещё валиден
+
+out = bytearray(prefix) + new_json + suffix
+assert len(out) == len(data)                          # длина файла не изменилась → dlst/смещения целы
+assert struct.unpack('<I', out[0x1c:0x20])[0] == len(out) - 0x20   # инвариант ptch
+open(DST + '.new', 'wb').write(out)                   # сначала .new, валидировать, потом mv
+```
+Длина файла остаётся прежней → поля размера и `dlst` трогать не нужно. Путь B (с изменением длины + патчем `dlst`) — только когда правка физически не влезает в L0.
+
+## Валидация после пересборки (до подмены файла)
+- повторно распарсить JSON из нового файла (`json.loads(d[48:d.find(b'\x00',48)])`);
+- `len(boxes)` / `len(lines)` = ожидаемые `+N`;
+- новые `box['id']` присутствуют; правленые объекты имеют новый `text`/`numoutlets`;
+- `suffix` нового == `suffix` оригинала (байт-в-байт) — это покрывает целостность встроенных скриптов и `dlst`;
+- встроенный скрипт по своему `dlst.of32` (`d[0x20+of32 : +sz32]`) байт-в-байт совпадает с источником и начинается осмысленно (напр. `b'autowatch'`); `b'function <name>'` на месте;
+- `dlst` идентичен источнику;
+- `ptch == filesize − 0x20`; конец mx@c-data (`0x30 + mxc`) меньше позиции первого `of32` в хвосте.
+
+Сначала писать в `<Name>.amxd.new`, проверить, и только потом `mv` на место (архив уже сделан до этого).
+
+## Модель Max patcher JSON
+- **box**: `{"box": {"id","maxclass","numinlets","numoutlets","outlettype":[...],"patching_rect":[x,y,w,h],"text"}}`.
+  - `maxclass`: `newobj` (объекты типа `sel`,`int`,`v`,`ctlin`…), `message` (message-бокс), `comment`, `live.*`.
+- **line**: `{"patchline": {"source":[boxid, outlet_idx], "destination":[boxid, inlet_idx]}}`. Индексы с нуля, выходы/входы слева направо. (Опц. поле `order` для порядка срабатывания при веере.)
+- **`sel a b c …`**: `N+1` выходов — `N` match (bang при совпадении значения) + 1 крайний-правый passthrough (несовпавшее). Добавляя аргумент **в конец**, НЕ сдвигаешь существующие шнуры: новый match встаёт перед passthrough. `numinlets`/`numoutlets` = `len(args)+1`; `outlettype = ["bang"]*N + [""]`. Править вместе с `text`.
+- **`int` / `int N`**: bang в ЛЕВЫЙ вход → выдаёт хранимое; число в левый → сохраняет И выдаёт; число в правый → сохраняет молча.
+- **`v <name>`** (value): общий регистр по имени между всеми одноимёнными `v`. Число в вход — пишет (и выдаёт), bang — читает.
+- **message-бокс**: bang → выдаёт свой контент (так конвертируют bang → конкретное число).
+- **`ctlin N`**: вых0 = value, вых1 = channel. **`ctlout N ch`**: шлёт CC N на канал ch.
+- **`live.thisdevice`**: bang слева, когда девайс полностью загружен (включая Live API) — сюда вешать инициализацию.
+
+## Live / M4L практики (web)
+- LiveAPI нельзя в high-priority thread и в global-коде JS → переочередь через `defer`/`deferlow`.
+- Освобождение ресурсов LiveAPI = присвоить ссылку `null`.
+- В патчере: `live.path` / `live.object` / `live.observer`; в JS — объект `LiveAPI` с callback на путь/свойство.
+
+## Веб-источники
+- Cycling74 forum «Max For Live Device File Format» — https://cycling74.com/forums/max-for-live-device-file-format
+- js2max (компиляция JS в `.amxd`, разбор контейнера) — https://github.com/ktamas77/js2max
+- LiveAPI / JS — https://docs.cycling74.com/max8/vignettes/jsliveapi
+- Live API via JavaScript (Max Cookbook) — https://music.arts.uci.edu/dobrian/maxcookbook/live-api-javascript
