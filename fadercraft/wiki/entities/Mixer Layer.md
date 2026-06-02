@@ -37,7 +37,9 @@ tags: [m4l, lcxl, mixer]
 
 Дополнительные UI-объекты (source: XL_Performance.README.md):
 - `Daw` / `Prelisten` — `live.toggle` (`mix_obj-hotkey-daw`, `mix_obj-hotkey-pre`).
-- `mix_obj-mode11-btn` … `mix_obj-mode14-btn` — `live.text`-индикаторы текущего mixer-mode (Mode 11..14 в Live).
+- `mix_obj-mode11-btn` … `mix_obj-mode14-btn` (varname `mode_11`..`mode_14`) — `live.text`-индикаторы текущего mixer-mode. Внутренняя «кабельная» логика: outlet 0 → `mix_obj-modeN-sel`; зажигаются/гасятся через inlet 0 от `mix_obj-m24..m27-on/off` и `mode_all_off_msg`. **Закрыты для маппинга:** `parameter_invisible = 2` (Hidden) — не показываются в MIDI-mapping / automation / Live param list (с 2026-06-02). `parameter_enable` оставлен `1`, чтобы выходы/значение работали; Hidden убирает только пользовательский маппинг, не функцию.
+
+> **Почему «Visible for mapping = off» в инспекторе не закрывало маппинг.** Эта галка пишет атрибут `parameter_invisible`. У этих 4 объектов атрибут вообще отсутствовал в `saved_attribute_attributes.valueof` (дефолт = 0 = Automated & Stored = виден для маппинга). Снятие галки в инспекторе на frozen-девайсе в файл не сохранялось, поэтому при перезагрузке значение возвращалось к дефолту и кнопки снова были мапабельны. Правка вшита прямо в `.amxd`: `parameter_invisible: 2`.
 
 > Названия параметров `mix_obj-ui-bank`/`-page` визуально перепутаны с надписями «Page»/«Bank fx» в UI — это следствие истории правок, не баг.
 
