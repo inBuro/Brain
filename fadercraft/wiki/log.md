@@ -627,3 +627,8 @@ Append-only журнал операций над вики.
 - Восстановлен потерянный `version_check.js` из `raw/` (фича собрана 2026-06-01, скрипт не лежал рядом с девайсом → `node.script can't find file`). Рантайм-копия положена в `Max Devices/` рядом с `XL_Performance.amxd`. Для дистрибуции — заморозить.
 - Связана с обзорной [[XL_Performance — как это работает]] (строка в таблице слоёв) и index.md.
 - Релизная связка: бампать `DEVICE_VERSION` (скрипт) и `latest` (`app/public/api/version.json`) синхронно.
+
+## 2026-06-02 — Mode-кнопки 11–14 закрыты для MIDI-маппинга
+- `mix_obj-mode11-btn`..`mix_obj-mode14-btn` (live.text, varname `mode_11`..`mode_14`): добавлен `parameter_invisible: 2` (Hidden) прямо в `.amxd`. Теперь не появляются в MIDI-mapping/automation/Live param list. Кабельная логика (outlet→sel, inlet от m24..m27/all_off) не тронута, `parameter_enable=1` оставлен.
+- Причина бага «Visible for mapping = off не работает»: атрибут `parameter_invisible` у объектов отсутствовал (дефолт 0 = виден); инспектор frozen-девайса правку в файл не писал. Детали — в [[Mixer Layer]].
+- Архив до правки: `Max Devices/Archive/XL_Performance.2026-06-02.amxd`. Пересборка length-preserving (Путь A), валидация чистая.

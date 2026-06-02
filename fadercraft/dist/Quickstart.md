@@ -6,8 +6,8 @@ Thanks for getting Control XL — a Max for Live device that turns your Novation
 
 - `XL_Performance.amxd` — the Max for Live device. Everything it needs is self-contained, with no additional files required.
 - `custom-modes/` — 15 Custom Modes for your controller (1–10 Instrument, 11–14 Mixer, 15 Cue).
-- `Router.als` — a preconfigured track with the device and MIDI routing already set up. Drag it into your own project.
-- `XL_Performance_starter.als` — a ready-to-use Live Set for exploring the full workflow.
+- `Router/` — a preconfigured Ableton project (the device on a track with MIDI routing already set up). Open it, then drag the track into your own project.
+- `Control XL Starter Set/` — a ready-to-use Ableton project for exploring the full workflow.
 - This Quickstart guide.
 
 ## Requirements
@@ -19,9 +19,9 @@ Thanks for getting Control XL — a Max for Live device that turns your Novation
 
 ## Setup (about 5 minutes)
 
-### 1. Load the Custom Modes onto your LCXL MK3
+### 1. Upload the Custom Modes to your LCXL MK3
 
-Open Novation Components, connect your controller, and load the modes from `custom-modes/`.
+Open Novation Components, connect your controller, and upload the modes from `custom-modes/`.
 
 - Modes 11–14 (Mixer) — required. The device uses these layouts for mixer operation.
 - Modes 1–10 (Instrument) — optional. You can use the included layouts or your own. The only requirements are:
@@ -32,9 +32,9 @@ Open Novation Components, connect your controller, and load the modes from `cust
 
 ### 2. Add the routed track
 
-Open `Router.als`. It already contains the device and all required MIDI routing.
+Open `Router/Router.als`. It already contains the device and all required MIDI routing.
 
-Drag the track into your own set, or open `XL_Performance_starter.als` to explore the complete workflow.
+Drag the track into your own set, or open the `Control XL Starter Set` project to explore the complete workflow.
 
 ### 3. Routing reference (if configuring manually)
 
@@ -90,7 +90,7 @@ The on-screen controls (Daw, Prelisten, Page, Bank, and Mixer tabs 11–14) mirr
 
 When a newer version is available, a New Version label appears at the top of the device.
 
-Click it to open the download page and install the latest release. Gumroad also sends an updated download link by email whenever a new version is published.
+Click it to open the download page and install the latest release. Gumroad also sends an updated download link by email whenever a new version is published. Updates are free for life — no subscription.
 
 ## Troubleshooting
 
@@ -98,11 +98,15 @@ Click it to open the download page and install the latest release. Gumroad also 
 
 In most cases, the MIDI routing is incorrect.
 
-If you're using the included `Router.als`, everything is already configured. Otherwise, verify that:
+If you're using the included `Router` project, everything is already configured. Otherwise, verify that:
 
 - MIDI From → All Ins · All Channels
 - MIDI To → Launch Control XL MK3 (DAW) · Ch. 7
 - Monitor → In
+
+## License
+
+One license key, good for up to 3 activations across your machines. Your download is watermarked with your email.
 
 ## Need help?
 
