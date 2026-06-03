@@ -28,7 +28,7 @@ updated: 2026-06-03 (test-purchase smoke-test пройден + «Bank fx»→«B
 | T2 Email | 13 | 13 | 100% |
 | T6 Server endpoints | 6 | 6 | 100% |
 | T7 Placeholder pages | 6 | 6 | 100% |
-| Gumroad onboarding | 4 | 5 | 80% |
+| Gumroad onboarding | 5 | 5 | 100% |
 | T3 Brand identity | 7 | 7 | 100% |
 | T5 Instagram | 3 | 3 | 100% |
 | T7-real Лендинг | 10 | 11 | 91% |
@@ -36,10 +36,10 @@ updated: 2026-06-03 (test-purchase smoke-test пройден + «Bank fx»→«B
 | T9 Демо-видео | 1 | 8 | 13% |
 | T10 Документация | 2 | 3 | 67% |
 | T11 Newsletter (Gumroad follow) | 1 | 1 | 100% |
-| T12 Bundle assembly | 8 | 15 | 53% |
+| T12 Bundle assembly | 11 | 16 | 69% |
 | T13 Final verification | 1 | 6 | 17% |
-| T14 Discord community | 9 | 10 | 90% |
-| **ИТОГО Phase 0** | **85** | **106** | **~80%** |
+| T14 Discord community | 10 | 11 | 91% |
+| **ИТОГО Phase 0** | **90** | **108** | **~83%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -107,7 +107,7 @@ Out-of-band (не блокируют Phase 0):
 - [x] Tax setup (W-8BEN для non-US, выбор tax jurisdiction) — **2026-05-26**
 - [x] Payout-реквизиты — **2026-05-26**
 - [x] Страница продукта: описание, цена $39, URL slug `xl-performance` — **2026-05-26** (cover image + thumbnail заменены на брендовые **2026-05-26**, дефолтная розовая плашка снята)
-- [ ] Content upload (bundle zip) — блокируется T12; welcome+quickstart-текст в Content tab уже вставлен **2026-05-26**
+- [x] Content upload (bundle zip) — **2026-06-03**: оба zip (Demo/Starter) залиты в Content tab, качаются со страницы покупки; welcome+quickstart-текст вставлен **2026-05-26**
 
 ---
 
@@ -241,9 +241,10 @@ Out-of-band (не блокируют Phase 0):
 - [x] **`free-custom-modes.zip` single-download** (`app/public/free-custom-modes.zip`, 6.6 KB) — 14 индивидуальных `.syx` без бандла (бандл Components импортировать не умеет). Зелёная CTA «Download Free LC Custom modes» на странице Custom Modes ведёт на этот zip. — **2026-05-28**
 - [x] **Mode 15 — QUE / prelisten volume** добавлен **2026-06-01**. Mixer-style мод для громкости предпрослушки сэмплов; метка `"QUE Volume"` (track-name `"Perc C"` снят как привязка к Live Set'у). Канонический `dist/custom-modes/15.syx` (670 B) разложен во free funnel + оба `free-custom-modes.zip` (web + app/public, теперь по 15 файлов). Маппинг в Demo-set уже есть. Спека обновлена: [[Custom Mode SysEx Layout]]. Теперь модов **15** (10 instrument + 4 mixer + 1 QUE).
 - [x] `XL_Performance_starter.als` Live Set с маппингами + контентом — **демо-ливсет готов 2026-06-01** (28 треков: instrument-группа + audio-print-группа, returns A-Reverb/B-Delay/C-Echo/D-Phaser + E-Saturator, MIDI-маппинг палитра на ch11/ch13)
-- [ ] Собрать `dist/fadercraft-xl-performance-v1.0/` (содержит `.amxd` + `solo_follower.js` + custom-modes/ + `.als` + Quickstart.pdf + опц. demo.mp4)
-- [ ] Zip → `fadercraft-xl-performance-v1.0.zip`
-- [ ] Загрузить в Gumroad product Content (welcome+quickstart-текст уже вставлен **2026-05-26**; файлы — после сборки bundle)
+- [x] Bundle собран как **два** деливерабла (не один общий): `Control XL Demo Project/` + `Control XL Starter Project/`, каждый + `custom-modes/` + `Quickstart.pdf`. Demo с семплами (~138 МБ), Starter lightweight (~160 КБ). `.amxd` фриз + custom-modes внутри; `solo_follower.js` впечён в девайс. — **2026-06-03**
+- [x] Zip → `Fadercraft Control XL v1.0 - Demo.zip` / `Fadercraft Control XL v1.0 - Starter.zip` (два архива, пересобраны 2026-06-03 с XL_Performance + Router в корне проекта) — **2026-06-03**
+- [ ] ⚠️ **Pre-upload check Live Sets**: перед любой пересборкой/загрузкой Demo/Starter открыть каждый `.als` и сохранить с фокусом в **Session/Clip view**, НЕ в Arrangement (Ableton пишет активный вид в файл → иначе у покупателя сет открывается в аранжировке). Память: [[liveset-clip-view-on-save]]
+- [x] **Загружено в Gumroad product Content** — **2026-06-03**: оба zip залиты, качаются со страницы покупки (Starter/Demo, описания Demo-vs-Starter вынесены в Description файлов, над сгибом; install-гайд ниже). Подтверждено test-purchase'ом.
 - [x] Cover image 1280×720 PNG + thumbnail — брендовые ассеты залиты в Gumroad **2026-05-26**, дефолтная плашка снята
 - [x] Описание продукта на странице Gumroad — **2026-05-26**
   - ✅ Copy fix «6 controls instead of 2» применён вручную на Gumroad (2026-05-26); параллельно поправлено в `PerformanceFlow.tsx` и в Figma (nodes `1398:143`, `1434:6902`)
@@ -275,6 +276,7 @@ Out-of-band (не блокируют Phase 0):
 - [x] Welcome в `#welcome` + rules в `#rules` (6 пунктов), оба запинены, меншны живые — **2026-05-26**
 - [x] Permanent invite link: `https://discord.gg/EBsdgst3jU` (Never / No limit / Temporary OFF) — **2026-05-26**
 - [x] Линк в footer (`FooterFull.defaultSocials.DC`) — **2026-05-26**. Quickstart-блок ждёт T10 (`dist/Quickstart.md` → PDF); Gumroad description ждёт ручной правки на logged-in surface (см. follow-ups ниже).
+- [x] **Gumroad↔Discord интеграция подключена** — 2026-06-03: штатная интеграция продукта (Gumroad → Fadercraft Control XL → Integrations → "Invite your customers to a Discord server" → сервер Fadercraft). Авто-инвайт покупателя на сервер + авто-кик на refund; бот-роль `Gumroad` поднята выше `@Verified Owner`. **Роль `@Verified Owner` штатно НЕ мапится** (Gumroad только зовёт на сервер) → присвоение остаётся ручным до Phase-1 auto-role. Welcome-копия поправлена `XL_Performance`→`Control XL`. **Gumroad Communities (встроенный чат, розовая кнопка «Community») намеренно ВЫКЛЮЧЕН** — Discord единственный канал, два места дробят соло-комьюнити; не включать обратно. Детали — [[discord-server-setup]].
 - [ ] Первый пост в `#announcements`: «v1.0 launched» — синхронно с T13 finish
 
 **Follow-ups (не блокеры Phase 0, всплывают по мере готовности соседних треков):**
