@@ -4,7 +4,7 @@
 
 **Sources**: T14 direction block in [[roadmap]]; brand assets in `app/public/` and `app/src/assets/brand/`; brand voice from `brand/brief.md` and `brand/colors.md`.
 
-**Last updated**: 2026-05-26
+**Last updated**: 2026-06-03
 
 ---
 
@@ -81,12 +81,12 @@ Create in this order:
 Welcome to Fadercraft.
 
 This is the community for performers using Fadercraft tools — starting with
-XL_Performance for the Novation Launch Control XL MK3.
+Control XL for the Novation Launch Control XL MK3.
 
 Start here:
 • Read #rules
 • Say hi in #general
-• Own XL_Performance? DM your Gumroad license key to get the @Verified Owner role.
+• Own Control XL? DM your Gumroad license key to get the @Verified Owner role.
 • Share what you build in #show-and-tell
 • Stuck? #support
 • Bug? #bug-reports
@@ -153,6 +153,20 @@ Result format: `https://discord.gg/XXXXXXX`. Hand the link back so it can be wir
 - `app/src/components/organisms/FooterFull/FooterFull.tsx` (DC href)
 - `dist/Quickstart.md` Support section (after T10 lands)
 - Gumroad product description (you paste — Gumroad is a logged-in surface)
+
+## Gumroad ↔ Discord integration (connected 2026-06-03)
+
+Native Gumroad product integration — enabled in the product editor (Gumroad → product **Fadercraft Control XL** → Integrations → "Invite your customers to a Discord server" → connected to server **Fadercraft**).
+
+**What it does:**
+- **Auto-invites** every buyer to the server on purchase (buyer clicks "Join Discord" on the receipt / download page → Discord OAuth → added to the server).
+- **Auto-kicks** on refund/chargeback (bot has Kick Members; the bot's `Gumroad` role was dragged **above** `@Verified Owner`, so it can remove even an Owner).
+
+**What it does NOT do:**
+- **No native role mapping.** Gumroad only adds the buyer to the server — it does *not* assign `@Verified Owner`. Owner-role assignment stays **manual** (DM license key → `@Founder` grants the role), per the role table above. Full zero-touch `purchase → @Verified Owner` needs the Phase-1 Gumroad-webhook + bot path (see [[roadmap]] T14 deferred).
+- A **public invite** (`discord.gg/EBsdgst3jU`) also exists in the site footer, so server membership alone ≠ proof of purchase — the `@Verified Owner` role is what actually marks buyers.
+
+**Gumroad Communities — intentionally OFF (2026-06-03).** Gumroad's built-in community chat (the pink "Community" button on the product page) was disabled on purpose. Discord is the single community channel (roadmap T14 direction) — two destinations split a solo-run community and leave a dead, empty Gumroad chat as a CTA. Do **not** re-enable it. Only "Join Discord" should appear on the product/receipt page.
 
 ## Execution order (for the Discord client)
 
