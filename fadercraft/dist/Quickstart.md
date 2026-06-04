@@ -53,13 +53,13 @@ Switch modes on the controller and the device display will automatically follow 
 
 ### Cross-mode jump
 
-Press `CC47` to jump between Instrument modes (1–10) and Mixer modes (11–14). The device remembers exactly where you left off and returns you there.
+Press `CC47` to move between your Instrument layout (modes 1–10) and the Mixer (modes 11–14). It works as a toggle: press once to cross over, press again to return. The device remembers the instrument you were playing and the mixer page you were on, and sends you back to exactly that spot.
 
-### Momentary or toggle
+### Page and Bank: momentary or toggle
 
-Hold a switch for temporary access to another layer, then release to return. Press and release normally to stay on the new layer.
+When you switch Page or Bank, you have two options: press and release to switch and stay, or hold to glance at the other page or bank, then release to snap straight back.
 
-The same hold-or-toggle behavior is used for Page and Bank switching.
+The cross-mode jump above is toggle-only — there is no hold-to-peek between Instrument and Mixer.
 
 ### Two encoder banks per channel
 
