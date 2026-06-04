@@ -19,6 +19,7 @@ updated: 2026-05-06
 
 - [[roadmap]] — живой checklist прогресса Phase 0 + Phase 1, статус каждой задачи, тайские мото-права как backup-документ для KYC. Обновляется при каждом крупном шаге.
 - [[landing-narrative]] — 10-битная психологическая дуга лендинга `fadercraft.com`, маппинг бит → секция → компонент, обоснование отклонений от исходной спеки.
+- [[demo-video-script]] — one-page shooting script главного демо-видео (~3 мин): hook → MIDI-routing setup → три сигнатурные фичи → close. Точки нарезки совпадают с 3 feature-шортами. Для T9 в [[roadmap]].
 
 ## Reference
 
