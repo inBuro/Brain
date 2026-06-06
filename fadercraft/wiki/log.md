@@ -736,3 +736,16 @@ Append-only журнал операций над вики.
 - **Футер-логотип обновлён под Figma 2232-5251**: убран ghost-«FADER» wordmark, остался голый трек + cap (rest на x=15.5 ≈31%) + «CRAFT │ Control XL». Атом `WordmarkFader` используется только в футере.
 - Performance Flow: порядок битов + копи бита «Run the whole rig from the keyboard» обновлены.
 - **Roadmap sync**: T9.1 (demo-script) отмечен закрытым → T9 2/8 (25%); Phase 0 итог 90→**91/108 (~84%)**. Под T7-real добавлена дата-заметка о responsive-полировке (без нового счётного чекбокса — это итерация уже-засчитанного лендинга).
+
+## 2026-06-06 — добавлена фича Browser Load (CC51 ch15)
+- В `Control XL.amxd` (проектный эталон) добавлена ветка Browser Load: `bl_ctlin` (`ctlin 51 15`) → `bl_sel` (`sel 127`) → `bl_js` (`js browser_load.js`), +4 box / +2 line (267→271 / 408→410). Пересборка Путём A из чистого архива (длина JSON сохранена паддингом, suffix/dlst/встроенные solo_follower.js+version_check.js байт-в-байт). Новый md5 канона `63d95bbe623f9238f48bccdcd7e96c92`.
+- `browser_load.js`: bang → обход дерева `live_app browser` по `is_selected` (прунинг, лимит глубины 12) → `load_item` выделенного → следующая сцена (`selected_scene_index +1`) → `focus_view Browser`. Источник сэмпла = вариант A (грузим текущий выбор в левой библиотеке). Скрипт на диске: `raw/browser_load.js` (канон) + `device/browser_load.js`.
+- **НЕ вшито во freeze** (по заданию: сначала логика на диске для локального теста). Без freeze у покупателя `js: can't find file browser_load.js` — незакрытый ship-шаг, как version-check. Бандл-слоты + User Library НЕ пропагированы.
+- Новая страница [[Browser Load]]; линки из [[index]], [[XL_Performance — как это работает]].
+
+## 2026-06-06 — Browser Load: фикс MIDI-канала (фича заработала)
+- Симптом: Browser Load (CC51) молчал. Причина: `bl_ctlin` стоял `ctlin 51 15` — единственная ветка девайса с фильтром канала (все соседние `ctlin 20/28/47/48/49` + «голые» `ctlin` слушают любой канал). Разбор кастом-модов `.syx` (control ID `0x3e` = CC51, побайтово): канал 15 ни в одном из 15 модов CC51 не назначен → LCXL слал не на ch15 → фильтр глушил нажатие.
+- Фикс (правка прямо в User Library `Control XL.amxd`, Путь A): `ctlin 51 15` → `ctlin 51` (numoutlets 1→2, outlettype `['int','int']` — конвенция одно-аргументного `ctlin`); цепочка `bl_ctlin[0]→bl_sel[0]→bl_js[0]` сохранена; лейбл `bl_lbl` → «BROWSER LOAD (CC51, any ch)». Ровно 2 changed box, lines/presentation/suffix(dlst+solo_follower.js+version_check.js) байт-в-байт, 271/410 без изменений.
+- Значение кнопки 127 на нажатие подтверждено (descriptor max `0x7f`); `sel 127` + `msg_int(v){if(v)…}` в JS — значение НЕ было причиной.
+- Бэкап до правки: `raw/archive/Control XL.2026-06-06-124224.amxd` (`63d95bbe`). Новый md5 User Library: `572deaa600b9effbf7712e8590c5fdd4`. Бандлы 3–6 + слот 1 НЕ тронуты (пропагация по отдельной команде). `browser_load.js` всё ещё НЕ во freeze.
+- Обновлена [[Browser Load]] (раздел «Канал»).
