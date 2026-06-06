@@ -2,7 +2,7 @@
 type: roadmap
 project: Novation
 created: 2026-05-05
-updated: 2026-06-04 (T9 demo-video скрипт написан; responsive-polish pass лендинга задокументирован; футер-логотип обновлён под Figma 2232-5251)
+updated: 2026-06-06 (T15 Analytics заведён — Microsoft Clarity выбран, guarded-сниппет в index.html, ждёт Project ID)
 ---
 
 # Fadercraft Roadmap
@@ -13,7 +13,7 @@ updated: 2026-06-04 (T9 demo-video скрипт написан; responsive-polis
 
 **Sources**: spec + Phase 0 plan + chat-history с Claude.
 
-**Last updated**: 2026-06-04
+**Last updated**: 2026-06-06
 
 **Payment rails matrix**: [[payment-rails]] — вердикты по всем рассмотренным платформам (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) под профиль русский паспорт + Таиланд + Bangkok Bank, без тайского national ID.
 
@@ -39,7 +39,8 @@ updated: 2026-06-04 (T9 demo-video скрипт написан; responsive-polis
 | T12 Bundle assembly | 11 | 16 | 69% |
 | T13 Final verification | 1 | 6 | 17% |
 | T14 Discord community | 10 | 11 | 91% |
-| **ИТОГО Phase 0** | **91** | **108** | **~84%** |
+| T15 Analytics (Clarity) | 2 | 2 | 100% |
+| **ИТОГО Phase 0** | **93** | **110** | **~85%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -292,6 +293,14 @@ Out-of-band (не блокируют Phase 0):
 - Auto-role `@Verified Owner` через Gumroad webhook + Discord bot — триггер: ≥10–20 продаж, ручное присвоение начинает занимать время
 - Moderation бот (Carl-bot / MEE6) — триггер: ≥50 участников или первый рейд/спам
 - Changelog auto-post из GitHub Releases в `#announcements` через webhook — nice-to-have
+
+### T15 Analytics (Microsoft Clarity)
+
+> **Выбор (2026-06-06):** Microsoft Clarity — бесплатно без лимитов, scroll/click heatmaps + viewport area maps + session replay + rage/dead-clicks. Полный аналог вебвизора Метрики, без платных тарифов. Альтернативы (PostHog / Hotjar free-35-сессий/день) отброшены для низкотрафного лендинга.
+
+- [x] Guarded Clarity-сниппет в `app/index.html` — **2026-06-06**: no-op пока `CLARITY_ID` пустой; грузится только на `fadercraft.com`/`www.` (localhost/preview не засоряют). Локальный билд зелёный.
+- [x] Проект создан на clarity.microsoft.com, **Project ID `x2l5ownj3q`** вписан в `CLARITY_ID`, локальный билд зелёный (ID впечён в `dist/index.html`) — **2026-06-06**
+- [x] **Деплой** — **2026-06-06**: `wrangler pages deploy` из `inBuro/fadercraft-landing`, коммит `93ecb8a`. Проверено: сниппет + ID `x2l5ownj3q` живые на `fadercraft.com`. Heatmaps/recordings в Clarity Dashboard появятся через пару часов после первого живого визита.
 
 ---
 
