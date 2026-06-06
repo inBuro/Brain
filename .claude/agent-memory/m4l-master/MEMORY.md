@@ -6,6 +6,7 @@
 - [amxd-format.md](amxd-format.md) — проверенный рецепт распаковки/пересборки `.amxd`, раскладка байт, модель Max patcher JSON, Live API практики, веб-источники.
 - [xl-performance.md](xl-performance.md) — факты по флагману: пути, объекты секции CC47, карта режимов CC30/CC47, журнал правок.
 - [lcxl3-daw-protocol.md](lcxl3-daw-protocol.md) — DAW-mode протокол LCXL3 + decompiled Live12 remote-script (URL structure-void); CC30 select / CC31 report, DAW-порт, relative-энкодеры. Источник истины по нативному протоколу контроллера.
+- [controlxl-project-map.md](controlxl-project-map.md) — 6 device-слотов Control XL + инвариант байт-в-байт, эталон md5, zip-деливераблы, процедура «обновить девайс». Читать при любой пропагации девайса.
 
 ## Конвенции (железно)
 - **Архив до правки.** Текущий девайс → `raw/archive/<Name>.YYYY-MM-DD.amxd` (если занято — `-HHMMSS`). Для XL_Performance это `~/Brain/Fadercraft/raw/archive/`. Никогда не перезаписывать архив.

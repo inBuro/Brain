@@ -8,6 +8,10 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-06-06 — Control XL: переразложен patcher-вид (читаемость)
+
+Косметическая переразметка `Control XL.amxd` (Max patcher view) — **логика не тронута**, только геометрия `patching_rect` + тексты заголовков секций. Patcher разложен на 10 вертикальных полос по функциям (сверху вниз по потоку сигнала): MIXER LAYER → MIXER MOMENTARY → SOLO FOLLOWER → MODE STATE TAPS → INSTRUMENTS LAYER → CC47 CROSS-MODE TRANSIT → STARTUP DEFAULT → MIDI PASSTHROUGH → VERSION CHECK → PRELISTEN. Внутри каждой секции объекты разложены по слоям источник→приёмник, сетка с учётом ширины боксов (нет наложений). Добавлены 3 comment-заголовка для секций без них (MIXER MOMENTARY, VERSION, PRELISTEN); существующие заголовки приведены к единому стилю. Боксы 267→270, связей 408 (без изменений). **Presentation-вид (Live UI) не тронут** — `presentation_rect`/`presentation` всех 16 UI-объектов байт-в-байт. Архив: `raw/archive/Control XL.2026-06-06.amxd`. Пересборка Путём A (длина JSON сохранена, suffix/`dlst`/встроенные `solo_follower.js`+`version_check.js` байт-в-байт).
+
 ## 2026-06-02 — Discord-инвайт заменён
 
 Старый `discord.gg/dAt2JGZps7` → новый **`https://discord.com/invite/EBsdgst3jU`** (`discord.gg/EBsdgst3jU`). Обновлено: память `reference_fadercraft_discord` + индекс, roadmap (current invite + Gumroad-follow-up), landing-код `FooterFull.tsx:16` (НЕ задеплоено — ждёт явного «деплой»). Историю выше не переписывал. Gumroad-копия (Description/Content/Receipt) использует новый линк.
