@@ -48,5 +48,5 @@ updated: 2026-05-06
 - [[CC47 Cross-Mode Transit]] — quick-jump между микшером и инструментами с памятью.
 - [[Solo Follower]] — JS + LiveAPI, держит собственный трек заSOLOенным вместе с внешними; **неотъемлемая часть** XL_Performance.
 - [[MIDI Passthrough]] — verbatim notes/bend/aftertouch/program; CC режутся `[sel 30 31]`.
-- [[Browser Load]] — CC51/ch15 грузит выделенный в браузере item на текущую дорожку → следующая сцена → focus браузера. Статус: works-locally, нужен freeze для рассылки.
+- [[Browser Load]] — ⛔ ОТЛОЖЕНО (свёрнуто 2026-06-06): Live Browser НЕ выставлен в M4L LiveAPI, загрузить выделенный item из `.amxd` невозможно; если вернётся — делать в Python remote-script. Все артефакты Control XL откачены на чистый md5 `44aa142b`.
 - [[Version Check (Update Notifier)]] — Node for Max пингует `/api/version.json`, зажигает кнопку «Update ready» при выходе новой версии. Статус: works-locally, нужен freeze для рассылки.

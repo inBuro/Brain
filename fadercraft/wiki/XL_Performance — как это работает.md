@@ -30,7 +30,7 @@ Launch Control XL MK3 хранит пользовательские custom-modes
 | **Cross-mode transit** | — | CC47 | [[CC47 Cross-Mode Transit]] |
 | **Solo Follower** *(integral)* | — | JS, LiveAPI | [[Solo Follower]] |
 | **MIDI passthrough** | — | всё кроме CC30/CC31 | [[MIDI Passthrough]] |
-| **Browser Load** *(aux)* | — | CC51/ch15 | [[Browser Load]] |
+| **Browser Load** *(⛔ отложено)* | — | — | [[Browser Load]] (нет browser в M4L LiveAPI) |
 | **Version Check** *(aux)* | — | Node for Max, HTTPS | [[Version Check (Update Notifier)]] |
 
 Solo Follower помечен *integral* — это не опциональный сабмодуль, а условие работоспособности устройства целиком: router-трек XL_Performance держит общий MIDI-роутинг и должен быть слышен всегда, когда исполнитель уходит в solo по другому треку. Управляется параметром `sf_active` (по умолчанию on), но в продакшен-сценарии не выключается.

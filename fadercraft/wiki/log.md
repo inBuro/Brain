@@ -749,3 +749,18 @@ Append-only журнал операций над вики.
 - Значение кнопки 127 на нажатие подтверждено (descriptor max `0x7f`); `sel 127` + `msg_int(v){if(v)…}` в JS — значение НЕ было причиной.
 - Бэкап до правки: `raw/archive/Control XL.2026-06-06-124224.amxd` (`63d95bbe`). Новый md5 User Library: `572deaa600b9effbf7712e8590c5fdd4`. Бандлы 3–6 + слот 1 НЕ тронуты (пропагация по отдельной команде). `browser_load.js` всё ещё НЕ во freeze.
 - Обновлена [[Browser Load]] (раздел «Канал»).
+
+## 2026-06-06 — Browser Load: UI-кнопка для теста без железа (правка User Library)
+- Запрос: дать триггер Browser Load кликом в интерфейсе девайса в Live, чтобы тестировать без подключённого LCXL. Правка прямо в User Library `Control XL.amxd` (новое правило). Бандлы/проектный эталон/freeze НЕ тронуты.
+- Добавлен 1 объект `bl_ui_btn` = `live.text` в button-режиме (`mode: 1`, momentary), в presentation отдельным рядом под «Prelisten» (`presentation_rect [12,162,192,20]`, на всю ширину панели), подпись «Load Sample (Browser Load)». `parameter_invisible: 2` (Hidden — вне Live-маппинга/automation), `parameter_enable: 1`, `varname: bl_ui_btn`. В patcher-вид у кластера `bl_*` (`patching_rect [400,2990,100,24]`).
+- Проводка: добавлена линия `bl_ui_btn[0] → bl_js[0]` — тот же inlet, что MIDI-ветка `bl_ctlin[0]→bl_js[0]`. Клик → int 1 в js (release 0 игнорируется `if(v)`), полностью эквивалентно нажатию CC51 с теми же логами `[browser_load] …` в Max Console.
+- Пересборка Путём A (длина JSON сохранена, pad 47692): filesize 211548==, JSON span 201786==L0, prefix/suffix байт-в-байт (dlst + solo_follower.js + version_check.js целы), ptch инвариант, 270→271 box, 409→410 line, ровно +1 box (`bl_ui_btn`) + 1 line, 0 changed existing boxes, 0 removed, 0 dangling.
+- Бэкап до правки: `raw/archive/UserLib-Control XL.2026-06-06-165011.amxd` (`be525d3a…`). Новый md5 User Library: `64f1d29e14b80e0b07f2665fcba60ea8`. `browser_load.js` (диагностический билд, DBG=1) НЕ тронут, всё ещё рядом на диске, НЕ во freeze.
+- Обновлена [[Browser Load]] (статус-таблица + раздел «UI-кнопка» + проводка) и index.
+
+## 2026-06-06 — Browser Load (CC51) ОТЛОЖЕНА + полный откат
+
+- **Решение пользователя: фича Browser Load свёрнута/отложена.** Причина: Live Browser (`browser`/`load_item`/`hotswap_target`/`BrowserItem`) НЕ выставлен в Max for Live LiveAPI — подтверждено на Live 12.4.1 через `new LiveAPI("live_app").info` (Application: только children `control_surfaces`+`view`; properties `average_process_usage`/`current_dialog_*`/`open_dialog_count`/`peak_process_usage`; functions `get_*version*`/`get_document`/`press_current_dialog_button`; ни `browser`, ни `get_browser`; в `live_set` тоже нет). Загрузить выделенный браузер-item из `.amxd` НЕВОЗМОЖНО — только через Python MIDI Remote Script. Возврат к фиче — в remote-script, не в M4L.
+- **Откат (выполнил пользователь, не агент):** все 6 слотов Control XL `.amxd` восстановлены на чистый до-фичный md5 `44aa142b198b6001613db3b29c36cc38`. User Library и проектный канон (был `63d95bbe`) → `44aa142b`; бандлы 3–6 не менялись. Все слоты консистентны.
+- Удалены scratch-js `browser_load.js`/`fc_browserload.js`/`fc_bload2.js` (+ `.backup-*`) из User Library Max Devices и project device; `version_check.js` и `SendsFollower.amxd` не тронуты. История попыток заархивирована в `raw/archive/` (`Canon-`/`UserLib-`/`Control XL.*` 2026-06-06).
+- Память обновлена: m4l-master `controlxl-project-map.md` + `xl-performance.md`, MEMORY.md + `reference_m4l_no_browser_api.md`. Wiki: [[Browser Load]] помечена ОТЛОЖЕНО, index.md, XL_Performance — как это работает.md.
