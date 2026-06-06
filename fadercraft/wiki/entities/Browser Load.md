@@ -1,20 +1,23 @@
 # Browser Load
 
-**Summary**: Одной кнопкой LCXL (CC51, любой канал) грузит элемент, выделенный пользователем в левой библиотеке браузера Live, на текущую дорожку, затем шагает на следующую сцену и возвращает фокус в браузер. Реализована JS-объектом `browser_load.js` через Live API.
+> ⛔ **ОТЛОЖЕНО / свёрнуто 2026-06-06.** Фича удалена из всех слотов Control XL; откат выполнен. **Причина: Live Browser (`browser`/`load_item`/`hotswap_target`/`BrowserItem`) НЕ выставлен в Max for Live LiveAPI** — подтверждено на Live 12.4.1 через `new LiveAPI("live_app").info` (Application отдаёт только `control_surfaces`+`view`, без `browser`/`get_browser`; в `live_set` тоже нет). Загрузка выделенного браузер-item из `.amxd`-девайса НЕВОЗМОЖНА — только через Python MIDI Remote Script (полный Live API). Если фича вернётся — делать в remote-script (у пользователя декомпилированный LCXL remote-script, см. [[CC47 Cross-Mode Transit]]/память `reference_lcxl3_remote_script`), НЕ в M4L. Все артефакты Control XL вернулись на чистый md5 `44aa142b`; scratch-js (`browser_load.js`/`fc_browserload.js`/`fc_bload2.js`) удалены; история попыток в `raw/archive/`. Текст ниже — историческое описание задумки и попыток в M4L, НЕ актуальное состояние.
 
-**Sources**: device `Control XL.amxd` (граф 271/410), `browser_load.js`.
+**Summary**: *(задумка, отложена)* Одной кнопкой LCXL (CC51) ИЛИ кликом по UI-кнопке в интерфейсе девайса грузить элемент, выделенный пользователем в левой библиотеке браузера Live, на текущую дорожку, затем шагать на следующую сцену и возвращать фокус в браузер.
 
-**Last updated**: 2026-06-06 (channel-filter fix).
+**Sources**: история попыток (архив `raw/archive/` 2026-06-06).
+
+**Last updated**: 2026-06-06 (ОТЛОЖЕНО — нет browser в M4L LiveAPI; полный откат).
 
 ---
 
-## Статус
+## Статус (история — фича отложена)
 
 | Что | Статус | Примечание |
 |---|---|---|
-| Ловля CC51 (`ctlin 51`, любой канал) | ✅ работает | **Было `ctlin 51 15` — фича молчала.** Канал 15 в кастом-модах не назначен; LCXL шлёт CC51 не на ch15, а фильтр отбрасывал нажатие. Снят фильтр канала → ловим CC51 на ВСЕХ каналах, как все соседние `ctlin` в девайсе. См. ниже «Канал». |
-| Реакция только на нажатие (`sel 127`) | ✅ работает | release=0 игнорируется |
-| Обход браузера → выделенный item → `load_item` | ✅ логика готова | требует, чтобы `browser_load.js` лежал на диске рядом с девайсом |
+| Ловля CC51 (`ctlin 51`, любой канал) | ✅ MIDI-сторона работает | **Было `ctlin 51 15` — фича молчала.** Канал 15 в кастом-модах не назначен; LCXL шлёт CC51 не на ch15, а фильтр отбрасывал нажатие. Снят фильтр канала → ловим CC51 на ВСЕХ каналах, как все соседние `ctlin` в девайсе. См. ниже «Канал». |
+| Реакция только на нажатие | ✅ работает | `sel 127` УДАЛЁН (build 11); теперь прямая `bl_ctlin[0]→bl_js[0]`, js получает int (127 нажатие / 0 release), `msg_int(v){ if(v) … }` реагирует только на ненулевое. |
+| **UI-кнопка теста (без железа)** | ✅ MIDI-эквивалент в UI | `live.text` в button-режиме `bl_ui_btn`, в presentation. Клик = int 1 в `bl_js[0]` = то же, что нажатие CC51. См. ниже «UI-кнопка». |
+| Обход браузера → выделенный item → `load_item` | ⚠️ диагностируется | Логика готова и `browser_load.js` лежит на диске, но item пока НЕ грузится — ловим по логам Max Console (билд js = `DBG=1`, логирует каждый этап). |
 | Сдвиг на следующую сцену (`selected_scene +1`) | ✅ работает | `selected_scene_index`, clamp на последней сцене; key-down НЕ эмулируется |
 | Возврат фокуса в браузер (`focus_view Browser`) | ✅ работает | `live_app view` |
 | **Вшито во freeze (рассылка)** | ❌ НЕ вшито | `browser_load.js` только на диске; у покупателя без freeze будет `js: can't find file browser_load.js`. Незакрытый ship-шаг (как [[Version Check (Update Notifier)]]). |
@@ -40,10 +43,20 @@
 
 - `bl_lbl` — `comment` «BROWSER LOAD (CC51, any ch)» (баннер раскладки).
 - `bl_ctlin` — `ctlin 51` (один аргумент → CC51 на любом канале, 2 outlet: value, channel; используется outlet 0 = value).
-- `bl_sel` — `sel 127`. outlet0 (match 127 = нажатие) → bang; outlet1 (passthrough, в т.ч. release 0) не подключён.
-- `bl_js` — `js browser_load.js`. `saved_object_attributes.filename = browser_load.js`, `parameter_enable = 0`.
+- `bl_js` — `js browser_load.js`. Принимает int (127 нажатие / 0 release); `msg_int(v){ if(v) … }`.
+- `bl_ui_btn` — **UI-кнопка теста** `live.text` в button-режиме (`mode: 1`), в presentation. См. ниже.
 
-Связи: `bl_ctlin[0] → bl_sel[0]`, `bl_sel[0] → bl_js[0]`.
+Связи: `bl_ctlin[0] → bl_js[0]` (MIDI), `bl_ui_btn[0] → bl_js[0]` (UI-клик). Обе ветки бьют в один и тот же inlet0 `bl_js`. `bl_sel (sel 127)` удалён в build 11 — js сам отсеивает release по `if(v)`.
+
+## UI-кнопка (тест без железа)
+
+Чтобы тестировать Browser Load без подключённого LCXL, в presentation-вид девайса добавлена кнопка, видимая на дорожке в Live.
+
+- **Объект:** `bl_ui_btn`, `maxclass = live.text`, `mode: 1` (button-режим → momentary: int 1 на нажатие, 0 на отпускание; не toggle с хранимым состоянием).
+- **Подпись:** «Load Sample (Browser Load)».
+- **Раскладка:** в presentation отдельным рядом под «Prelisten» (`presentation_rect [12, 162, 192, 20]`, на всю ширину панели). В patcher-вид — рядом с кластером `bl_*` (`patching_rect [400, 2990, 100, 24]`).
+- **Маппинг/automation:** `parameter_invisible: 2` (Hidden), `parameter_enable: 1` — кнопка работает (шлёт значение), но скрыта из Live MIDI-маппинга/automation/param-листа; Live не пытается хранить/автоматизировать лишнее состояние. `varname: bl_ui_btn`, `parameter_longname: "Browser Load Test"`, `parameter_shortname: "Load"`.
+- **Поведение:** клик → outlet0 шлёт int 1 в `bl_js[0]` (тот же inlet, что MIDI-ветка) → `browser_load.js` запускает загрузку. Отпускание шлёт 0 → js игнорирует. Полностью эквивалентно нажатию CC51, с теми же логами `[browser_load] …` в Max Console.
 
 ## Логика `browser_load.js`
 
