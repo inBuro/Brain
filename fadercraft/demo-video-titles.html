@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo Video — VO & On-screen Titles · Fadercraft Control XL</title>
+<style>
+  :root{
+    --bg:#0f1115; --card:#171a21; --line:#262b36; --ink:#e8eaf0;
+    --muted:#9aa3b2; --accent:#7c9cff; --hero:#ffd479; --vo:#7fe0c4;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 20px 80px}
+  header{margin-bottom:32px}
+  h1{font-size:22px;margin:0 0 6px;letter-spacing:.2px}
+  .sub{color:var(--muted);font-size:13px}
+  .totals{margin-top:14px;font-size:13px;color:var(--muted)}
+  .totals b{color:var(--ink)}
+  .scene{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px 22px;margin:16px 0}
+  .head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .tc{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent);
+    background:rgba(124,156,255,.12);border:1px solid rgba(124,156,255,.25);
+    padding:6px 9px;border-radius:7px;letter-spacing:.4px}
+  .name{font-weight:600;font-size:15px}
+  .dur{margin-left:auto;font:600 12px/1 ui-monospace,monospace;color:var(--muted)}
+  .label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);
+    margin:0 0 6px}
+  .vo{color:var(--vo);font-size:15px;margin:0 0 18px;padding-left:12px;
+    border-left:2px solid rgba(127,224,196,.35)}
+  .hero{color:var(--hero);font-weight:600;font-size:17px;margin:0 0 8px}
+  ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+  li{background:#1f2430;border:1px solid var(--line);border-radius:999px;
+    padding:6px 12px;font-size:13px;color:var(--ink)}
+  .sting{margin-top:8px;color:var(--muted);font-size:13px}
+  .sting b{color:var(--hero)}
+  footer{margin-top:30px;color:var(--muted);font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Demo Video — VO &amp; On-screen Titles</h1>
+    <div class="sub">Fadercraft Control XL · ~2:30 · voice: Gemini “Puck” (male) · take4</div>
+    <div class="totals">Total VO <b>~63s</b> over a 2:30 video — voice is sparse, music carries the gaps.
+      Terms on screen: <b>pages · banks · jump</b> only. Price shown at the end only.</div>
+  </header>
+
+  <!-- 1 -->
+  <section class="scene">
+    <div class="head"><span class="tc">0:00–0:15</span><span class="name">Cold open</span><span class="dur">VO 5.2s</span></div>
+    <p class="label">Voiceover</p>
+    <p class="vo">This is a full Live set — every track, right here under two hands.</p>
+    <p class="label">On-screen titles</p>
+    <p class="hero">The whole set. Under your hands.</p>
+  </section>
+
+  <!-- 2 -->
+  <section class="scene">
+    <div class="head"><span class="tc">0:15–0:55</span><span class="name">Pages</span><span class="dur">VO 20.3s</span></div>
+    <p class="label">Voiceover</p>
+    <p class="vo">Your whole set sits on two pages. Page one — your foundation: kick, bass, the hats. Tap to flip to page two — melodies, percussion, accents. Or hold to glance at page two and let go — you snap straight back to one. Every track on the faders. No scrolling, no mouse.</p>
+    <p class="label">On-screen titles</p>
+    <p class="hero">Two pages. Every track.</p>
+    <ul>
+      <li>Page 1 — your foundation</li>
+      <li>Page 2 — melodies &amp; percussion</li>
+      <li>Tap to switch · Hold to glance</li>
+      <li>No scrolling. No mouse.</li>
+    </ul>
+  </section>
+
+  <!-- 3 -->
+  <section class="scene">
+    <div class="head"><span class="tc">0:55–1:35</span><span class="name">Banks</span><span class="dur">VO 13.6s</span></div>
+    <p class="label">Voiceover</p>
+    <p class="vo">And every channel’s encoders carry two banks. Bank A, Bank B — three knobs become six. Map them to whatever you reach for most. One button switches between the two, and your hands never move.</p>
+    <p class="label">On-screen titles</p>
+    <p class="hero">6 per channel, not 3.</p>
+    <ul>
+      <li>Bank A · Bank B</li>
+      <li>Map anything you reach for</li>
+      <li>Hands never move</li>
+    </ul>
+  </section>
+
+  <!-- 4 -->
+  <section class="scene">
+    <div class="head"><span class="tc">1:35–2:15</span><span class="name">Jump</span><span class="dur">VO 15.2s</span></div>
+    <p class="label">Voiceover</p>
+    <p class="vo">You’ve been mixing. Now play. One button drops you into the last instrument you touched — right where you left it. Press it again — back to the mixer, on the exact page you were working. It remembers both, so your hands always land where they expect.</p>
+    <p class="label">On-screen titles</p>
+    <p class="hero">Jump: mixer ↔ instrument</p>
+    <ul>
+      <li>One button, both ways</li>
+      <li>Lands right where you left it</li>
+      <li>Remembers your instrument and your page</li>
+    </ul>
+  </section>
+
+  <!-- 5 -->
+  <section class="scene">
+    <div class="head"><span class="tc">2:15–2:30</span><span class="name">Close</span><span class="dur">VO 9.3s</span></div>
+    <p class="label">Voiceover</p>
+    <p class="vo">Two pages, six controls a channel, one button into every instrument. One Live set — all on the faders. That’s Fadercraft Control XL.</p>
+    <p class="label">On-screen titles</p>
+    <p class="hero">Two pages · Six per channel · One button</p>
+    <p class="sting">Logo sting — <b>Fadercraft Control XL</b> → fadercraft.com · $39</p>
+  </section>
+
+  <footer>Derived from demo-video-script.md (v4). Edit titles here for production; keep the .md as the source of truth.</footer>
+</div>
+</body>
+</html>

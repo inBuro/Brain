@@ -2,8 +2,8 @@
 type: script
 project: Fadercraft
 created: 2026-06-04
-updated: 2026-06-04
-version: 3
+updated: 2026-06-08
+version: 4
 ---
 
 # Demo Video Script — Fadercraft Control XL
@@ -12,7 +12,7 @@ version: 3
 
 **Sources**: `wiki/landing-narrative.md`, `dist/Quickstart.md`, wiki entities ([[CC47 Cross-Mode Transit]], [[Mixer Layer]], [[Instruments Layer]]), demo-set track layout (user screenshot 2026-06-04).
 
-**Last updated**: 2026-06-04
+**Last updated**: 2026-06-08
 
 ---
 
@@ -39,6 +39,9 @@ version: 3
 
 **Caption:** *The whole set. Under your hands.*
 
+**On-screen titles:**
+- **Hero** — *The whole set. Under your hands.*
+
 > No title-card intro, no logo-on-black. Open on motion and sound; the brand is named at the end.
 
 ### 0:15–0:55 — Feature 1: Pages
@@ -48,6 +51,13 @@ version: 3
 **VO:** *"Your whole set sits on two pages. Page one — your foundation: kick, bass, the hats. Tap to flip to page two — melodies, percussion, accents. Or hold to glance at page two and let go — you snap straight back to one. Every track on the faders. No scrolling, no mouse."*
 
 **Caption:** *Two pages. Every track.*
+
+**On-screen titles:**
+- **Hero** — *Two pages. Every track.*
+- *Page 1 — your foundation*
+- *Page 2 — melodies & percussion*
+- *Tap to switch · Hold to glance*
+- *No scrolling. No mouse.*
 
 > Demonstrates both behaviors where they actually exist: **tap = switch and stay**, **hold = glance and snap back**.
 
@@ -59,6 +69,12 @@ version: 3
 
 **Caption:** *6 per channel, not 3.*
 
+**On-screen titles:**
+- **Hero** — *6 per channel, not 3.*
+- *Bank A · Bank B*
+- *Map anything you reach for*
+- *Hands never move*
+
 > Kept abstract on purpose — no fixed "volume / send / EQ" assignments, because the user maps them to anything.
 
 ### 1:35–2:15 — Feature 3: Cross-mode jump (mixer → instrument)
@@ -69,6 +85,12 @@ version: 3
 
 **Caption:** *Remembers your instrument and your page.*
 
+**On-screen titles:**
+- **Hero** — *Jump: mixer ↔ instrument*
+- *One button, both ways*
+- *Lands right where you left it*
+- *Remembers your instrument and your page*
+
 > This jump is **toggle-only** (press to go, press to return) — no hold-to-peek, unlike pages/banks. State memory works both ways: returns to the last-used instrument, and to the exact mixer page.
 
 ### 2:15–2:30 — Close
@@ -78,6 +100,10 @@ version: 3
 **VO:** *"Two pages, six controls a channel, one button into every instrument. One Live set — all on the faders. That's Fadercraft Control XL."*
 
 **End sting:** Fadercraft logo — `fadercraft.com · $39`
+
+**On-screen titles:**
+- **Recap** — *Two pages · Six per channel · One button*
+- **Logo sting** — *Fadercraft Control XL* → *fadercraft.com · $39*
 
 ---
 
