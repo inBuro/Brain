@@ -35,6 +35,8 @@ Open the included Ableton project (`Control XL Demo` or `Control XL Starter`). I
 
 Drag the track into your own set, or build directly from the project.
 
+**Keep the device last in the chain.** Place Control XL as the only device on its track, with nothing after it — in particular, no audio effect directly following it. Another device after it can block the device's feedback to the controller, so the hardware stops reflecting the active mode.
+
 ### 3. Routing reference (if configuring manually)
 
 On the track that contains the device:
@@ -102,6 +104,12 @@ If you're using the included project, everything is already configured. Otherwis
 - MIDI From → All Ins · All Channels
 - MIDI To → Launch Control XL MK3 (DAW) · Ch. 7
 - Monitor → In
+
+### The on-screen controls work, but the hardware doesn't update
+
+The screen reflects the active mode, but the controller's lights and mode don't follow.
+
+Make sure Control XL is the last device on its track, with nothing after it — an audio effect placed directly after it can block the device's feedback to the controller. Move it to the end of the chain, or give it its own track.
 
 ## License
 
