@@ -3,7 +3,7 @@ type: script
 project: Fadercraft
 created: 2026-06-04
 updated: 2026-06-08
-version: 4
+version: 5
 ---
 
 # Demo Video Script — Fadercraft Control XL
@@ -46,9 +46,9 @@ version: 4
 
 ### 0:15–0:55 — Feature 1: Pages
 
-**On screen:** The mixer. Faders drive **page one** — *Kick · Clap · C Hhat · Shaker · Bass A · Bass B · O Hhat* (the rhythm foundation). A tap flips the faders to **page two** — *Accent 1 · Accent 2 · Perc 1 · Perc 2 · Melody 1 · Melody 2 · Perc 3* (melody + percussion). Then: hold the button to glance at page two, release → snaps back to page one.
+**On screen:** The mixer. Faders drive **page one** — *Kick · Clap · C Hhat · Shaker · Bass A · Bass B · O Hhat* (the rhythm foundation). A knob turn flips the faders to **page two** — *Accent 1 · Accent 2 · Perc 1 · Perc 2 · Melody 1 · Melody 2 · Perc 3* (melody + percussion) — turn it back to return. Then: hold the button to peek at page two, release → snaps back to page one.
 
-**VO:** *"Your whole set sits on two pages. Page one — your foundation: kick, bass, the hats. Tap to flip to page two — melodies, percussion, accents. Or hold to glance at page two and let go — you snap straight back to one. Every track on the faders. No scrolling, no mouse."*
+**VO:** *"Your whole set sits on two pages. Page one — your foundation: kick, bass, the hats. Turn a knob to flip to page two — melodies, percussion, accents — turn it back to return. Or hold to peek, and let go — you snap straight back to one. Every track, right at your fingertips. No scrolling, no mouse."*
 
 **Caption:** *Two pages. Every track.*
 
@@ -56,24 +56,24 @@ version: 4
 - **Hero** — *Two pages. Every track.*
 - *Page 1 — your foundation*
 - *Page 2 — melodies & percussion*
-- *Tap to switch · Hold to glance*
+- *Turn to switch · Hold to peek*
 - *No scrolling. No mouse.*
 
-> Demonstrates both behaviors where they actually exist: **tap = switch and stay**, **hold = glance and snap back**.
+> Demonstrates both behaviors where they actually exist: **turn the knob = switch and stay** (turn back to return), **hold the button = peek and snap back on release**.
 
 ### 0:55–1:35 — Feature 2: Encoder banks
 
-**On screen:** Close-up of one channel — three encoders turning. A button switches the bank; the same three encoders now drive a different set of parameters.
+**On screen:** Close-up of one channel — three encoders turning. Hold the button to peek at Bank B, release → snaps back to A. Then turn the bank knob to switch and stay — the same three encoders now drive a different set of parameters — turn it back to return.
 
-**VO:** *"And every channel's encoders carry two banks. Bank A, Bank B — three knobs become six. Map them to whatever you reach for most. One button switches between the two, and your hands never move."*
+**VO:** *"And every channel's encoders carry two banks — two standard knobs become six. Bank A, Bank B: hold to peek at the other, let go and you're back. Or turn the encoder to switch and stay — turn back to return. Map them to whatever you reach for most."*
 
 **Caption:** *6 per channel, not 3.*
 
 **On-screen titles:**
 - **Hero** — *6 per channel, not 3.*
 - *Bank A · Bank B*
+- *Turn to switch · Hold to peek*
 - *Map anything you reach for*
-- *Hands never move*
 
 > Kept abstract on purpose — no fixed "volume / send / EQ" assignments, because the user maps them to anything.
 
@@ -97,7 +97,7 @@ version: 4
 
 **On screen:** Final sweep across the lit LCXL, music still playing → fade out → logo.
 
-**VO:** *"Two pages, six controls a channel, one button into every instrument. One Live set — all on the faders. That's Fadercraft Control XL."*
+**VO:** *"Two pages, six controls a channel, one button into every instrument — all under the same hands. Your whole set, played live — muscle memory does the rest. That's Fadercraft Control XL."*
 
 **End sting:** Fadercraft logo — `fadercraft.com · $39`
 
