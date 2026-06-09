@@ -2,7 +2,7 @@
 type: roadmap
 project: Novation
 created: 2026-05-05
-updated: 2026-06-06 (T15 Analytics заведён — Microsoft Clarity выбран, guarded-сниппет в index.html, ждёт Project ID)
+updated: 2026-06-10 (T9 демо-видео ЗАКРЫТ к launch — видео финал на YouTube ID UsJxPBdf568, вшито в лендинг, канал+описание готовы; 5 клипов→Phase 1. Продакт-решения: pricing.html отменён (цена в CTA); «last in chain» гринлайт→кластер A; mode 15 ЗАКРЫТ (байт 574=110, 5 копий синхронизированы). Bundle-фиксы: custom-modes/ в Demo+Starter, девайс переименован Control XL.amxd + Router.als refs. Зипы пересобраны (custom-modes верхним уровнем, Control XL.amxd, README, Session view). Demo 191.7МБ принят как есть (продакт-решение, чистку не делаем). Зипы перезалиты на Gumroad (пользователь). Кластер A (финализация бандла) ЗАКРЫТ. Дальше — T13 верификация. Phase 0 105/114 ~92%)
 ---
 
 # Fadercraft Roadmap
@@ -13,7 +13,7 @@ updated: 2026-06-06 (T15 Analytics заведён — Microsoft Clarity выбр
 
 **Sources**: spec + Phase 0 plan + chat-history с Claude.
 
-**Last updated**: 2026-06-06
+**Last updated**: 2026-06-10
 
 **Payment rails matrix**: [[payment-rails]] — вердикты по всем рассмотренным платформам (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) под профиль русский паспорт + Таиланд + Bangkok Bank, без тайского national ID.
 
@@ -31,16 +31,16 @@ updated: 2026-06-06 (T15 Analytics заведён — Microsoft Clarity выбр
 | Gumroad onboarding | 5 | 5 | 100% |
 | T3 Brand identity | 7 | 7 | 100% |
 | T5 Instagram | 3 | 3 | 100% |
-| T7-real Лендинг | 10 | 11 | 91% |
+| T7-real Лендинг | 10 | 10 | 100% |
 | T8 M4L update integration | 7 | 9 | 78% |
-| T9 Демо-видео | 2 | 8 | 25% |
-| T10 Документация | 2 | 3 | 67% |
+| T9 Демо-видео (закрыт к launch) | 9 | 10 | 90% |
+| T10 Документация | 3 | 3 | 100% |
 | T11 Newsletter (Gumroad follow) | 1 | 1 | 100% |
-| T12 Bundle assembly | 11 | 16 | 69% |
+| T12 Bundle assembly | 15 | 19 | 79% |
 | T13 Final verification | 1 | 6 | 17% |
 | T14 Discord community | 10 | 11 | 91% |
 | T15 Analytics (Clarity) | 2 | 2 | 100% |
-| **ИТОГО Phase 0** | **93** | **110** | **~85%** |
+| **ИТОГО Phase 0** | **105** | **114** | **~92%** |
 
 Out-of-band (не блокируют Phase 0):
 
@@ -122,7 +122,7 @@ Out-of-band (не блокируют Phase 0):
 - [ ] Verify identity → Linked Bangkok Bank THB → тестовый transfer
 
 ### Isotonik Studios (B2B reseller)
-- [ ] Триггер: XL_Performance готов + демо-видео опубликовано
+- [x] Триггер сработал: XL_Performance готов + демо-видео опубликовано (пилот, 2026-06-10) → можно питчить
 - [ ] Email sales@isotonikstudios.com с pitch
 - [ ] Revenue share, developer agreement, payout setup
 
@@ -175,7 +175,7 @@ Out-of-band (не блокируют Phase 0):
 ### T7-real Real landing page
 
 - [x] Заменить placeholder `index.html` на полноценный 9-секционный лендинг — **2026-05-26**
-- [ ] Полноценный `pricing.html`
+- ~~Полноценный `pricing.html`~~ — **отменено 2026-06-10**: цена ($39) указана прямо в CTA-кнопке, тарифов/планов не предполагается → отдельная pricing-страница не нужна
 - ~~Hero loop video (8 sec, autoplay, muted)~~ — **отменено 2026-05-28**: `PerformanceFlow` сам играет роль hero (анимированные клавиши, eager-load под LCP). Полное демо-видео живёт в `VideoSection` ниже (см. T9).
 - [x] `style.css` с brand colors (mobile-first) — **2026-05-26**
 - [x] Smooth scroll в `main.js` — **2026-05-26**
@@ -210,14 +210,19 @@ Out-of-band (не блокируют Phase 0):
 > **Content must-include (user note 2026-05-25):** «Закинул на MIDI-трек» — недостаточно. Скрипт **обязан** показать на экране настройку: **MIDI From → Launch Control XL MK3 (DAW port)**, **MIDI To → Launch Control XL MK3 (DAW port)**, **Channel → All** (или явно тот, на котором сидит overlay listen CC). Без этих трёх настроек устройство не получает входной MIDI и не отвечает на LCXL — самая частая причина «не работает» у первого пользователя.
 
 - [x] **1-страничный скрипт** — `wiki/demo-video-script.md` (v3), **2026-06-04**: ~2:30, один непрерывный Live-set перформанс, English VO + burned-in captions, без install/setup (живёт в Quickstart). Три фичи по порядку: pages → encoder banks → cross-mode jump (mixer→instrument). Solo Follower намеренно не упоминается ([[feedback_no_solo_follower_marketing]]).
-- [ ] Запись screen + voice-over
-- [ ] Монтаж
-- [ ] Export master 1080p MP4
+- [x] **Запись screen + voice-over** — **2026-06-10** (пилот)
+- [x] **Монтаж** — **2026-06-10** (пилотный кат)
+- [x] **Export master 1080p MP4** — **2026-06-10**: видео финальное (на уровне самого видео T9 закрыт), залито на YouTube
 - ~~Hero loop 8 sec → `web/assets/hero-loop.mp4`~~ — **отменено 2026-05-28**: hero-роль закрывает `PerformanceFlow`; полное демо идёт в `VideoSection` через YouTube embed
-- [ ] 5 коротких клипов 30 sec для IG/TikTok/Reels
 - [x] Создать YouTube канал «Fadercraft» — **2026-05-26**
-- [ ] Загрузить video, скопировать ID
-- [ ] Раскомментировать `VideoSection` в `ProductPage.tsx` + прокинуть YouTube ID
+- [x] **Загрузить video, скопировать ID** — **2026-06-10**: ID `UsJxPBdf568` (`https://youtu.be/UsJxPBdf568`)
+- [x] **Раскомментировать `VideoSection` + прокинуть YouTube ID** — **2026-06-10**: `ProductPage.tsx` секция `#video` живая, `youtubeId="UsJxPBdf568"` (lite-facade → `youtube-nocookie` embed)
+- [x] **Оформление YouTube-канала** — **2026-06-10**: аватар, баннер, about, линки на канале есть
+- [x] **Описание видео опубликовано на YouTube** — **2026-06-10** (live-заголовок «Fadercraft Control XL presentation»; базовое описание стоит)
+- [ ] *(опц.)* Реальные тайм-коды глав + синк `wiki/youtube-video-description.md` с live-текстом — wiki-черновик пока с `00:00` и расходится с опубликованным заголовком; добивать только если решим, что главы нужны
+- → 5 коротких клипов 30 sec для IG/TikTok/Reels — **вынесено в Phase 1** (2026-06-10), см. блок Phase 1 ниже
+
+> **Статус (2026-06-10):** **видео финальное**, играет на лендинге; канал оформлен, описание опубликовано → launch-критерий «демо-видео опубликовано» и B2B-триггер Isotonik закрыты. T9 закрыт к launch; единственный остаток — опциональные тайм-коды глав. Короткие клипы переехали в Phase 1.
 
 ### T10 Extended documentation
 
@@ -225,7 +230,7 @@ Out-of-band (не блокируют Phase 0):
 
 - [x] `dist/Quickstart.md` — **пересоздан 2026-06-02** (потерялся при миграции деплоя из Brain; user-facing, English: requirements / 4-step setup с выделенным MIDI-routing / using / updates «New Version» / troubleshooting; отражает frozen-реальность — bundle = один `.amxd`, без отдельного `solo_follower.js`)
 - [x] `dist/Quickstart.pdf` — **2026-06-02** (make-pdf, 389 слов, 112 КБ, 1in поля, без CONFIDENTIAL-футера)
-- [ ] User-facing `dist/README.md` (адаптировать `raw/XL_Performance.README.md`)
+- [x] User-facing `dist/README.md` — **2026-06-10**. Не второй walkthrough (Quickstart уже подробный), а первый файл бандла: ориентация + 3-шаговый short setup (→ Quickstart.pdf за деталями) + reference-карточка (контролы CC47/45/46, encoder banks A/B, Cue mode 15, custom-modes map, MIDI-routing DAW Ch.7, device-last-in-chain) + updates/license/support. English, тон Quickstart, без Solo Follower. LanguageTool чист (флаги = бренд-термины). Источник `raw/XL_Performance.README.md` — внутренний тех-дип, в user-facing не тащил.
 
 ### T11 Newsletter pipeline (Gumroad follow)
 
@@ -245,7 +250,11 @@ Out-of-band (не блокируют Phase 0):
 - [x] `XL_Performance_starter.als` Live Set с маппингами + контентом — **демо-ливсет готов 2026-06-01** (28 треков: instrument-группа + audio-print-группа, returns A-Reverb/B-Delay/C-Echo/D-Phaser + E-Saturator, MIDI-маппинг палитра на ch11/ch13)
 - [x] Bundle собран как **два** деливерабла (не один общий): `Control XL Demo Project/` + `Control XL Starter Project/`, каждый + `custom-modes/` + `Quickstart.pdf`. Demo с семплами (~138 МБ), Starter lightweight (~160 КБ). `.amxd` фриз + custom-modes внутри; `solo_follower.js` впечён в девайс. — **2026-06-03**
 - [x] Zip → `Fadercraft Control XL v1.0 - Demo.zip` / `Fadercraft Control XL v1.0 - Starter.zip` (два архива, пересобраны 2026-06-03 с XL_Performance + Router в корне проекта) — **2026-06-03**
-- [ ] ⚠️ **Pre-upload check Live Sets**: перед любой пересборкой/загрузкой Demo/Starter открыть каждый `.als` и сохранить с фокусом в **Session/Clip view**, НЕ в Arrangement (Ableton пишет активный вид в файл → иначе у покупателя сет открывается в аранжировке). Память: [[liveset-clip-view-on-save]]
+- [x] **Bundle-фиксы 2026-06-10 (m4l-master):** (a) `custom-modes/` с 15 синхронизированными `.syx` положена в корень обоих бандлов (Demo+Starter) — раньше отсутствовала, хотя Quickstart её обещает; (b) девайс в бандлах переименован `XL_Performance.amxd → Control XL.amxd` (отставал от уже принятого ренейма) + поправлены ссылки в `Router.als` обоих бандлов; `.amxd` бинарно не тронут (md5 `44aa142b…`). Бэкапы в `raw/archive/` (метки `…023338`, `…024424`). Заметка: в каждом бандле исторически 2 копии `Control XL.amxd` (корень + `Max Devices/`); главный сет грузит из `Max Devices/`, корневая — для `Router.als`. Чистка дубля — опционально, потребует правки `Router.als`.
+- [x] **Pre-upload check Live Sets — 2026-06-10**: оба главных `.als` в Session/Clip view. Demo — сохранён пользователем в Ableton (Clip View, 03:01). Starter — Cmd+S не писался (view-toggle не делает документ «грязным»), починено хирургически в XML: `SelectedDocumentViewInMainWindow` `1`→`0` (эталон = Demo). Ключевой элемент вида найден: `SelectedDocumentViewInMainWindow` (0=Session, 1=Arrangement). Бэкап `raw/archive/Starter-set.…030730.als`. Память: [[liveset-clip-view-on-save]]
+- [x] **Зипы пересобраны (m4l-master, 2026-06-10):** оба `Fadercraft Control XL v1.0 - Demo/Starter.zip`. Структура: `<Проект>/` + `custom-modes/` (15, на верхнем уровне бандла — канон, дубль из-внутри-проекта убран) + `Quickstart.pdf` + `README.md`. Проверено: девайс `Control XL.amxd` (0 вхождений старого имени), `15.syx`=0x6e, оба `.als` Session/Clip, без macOS-мусора. Demo **191.7 МБ** (вырос из-за свежих recorded-стемов 32-bit float ×4мин в Demo-сете от 08.06), Starter 0.2 МБ. **Продакт-решение 2026-06-10: вес 191 МБ принят как есть, чистку сэмплов НЕ делаем, двигаемся дальше.** Бэкапы старых зипов в `raw/archive/` (метка `…031209`).
+- [x] **Перезалиты новые зипы на Gumroad — 2026-06-10** (пользователь): старые Demo/Starter в product Content заменены на пересобранные (custom-modes/, Control XL.amxd, README, Session view). Дальше — re-smoke скачивания в рамках T13 (старый test-purchase 03.06 проверял прежние зипы).
+- [ ] *(опц., non-blocker)* `Router.als` в обоих бандлах сохранён в Arrangement view — для единообразия можно пересохранить в Session (вспомогательный rack-сет, покупатель его обычно не открывает).
 - [x] **Загружено в Gumroad product Content** — **2026-06-03**: оба zip залиты, качаются со страницы покупки (Starter/Demo, описания Demo-vs-Starter вынесены в Description файлов, над сгибом; install-гайд ниже). Подтверждено test-purchase'ом.
 - [x] Cover image 1280×720 PNG + thumbnail — брендовые ассеты залиты в Gumroad **2026-05-26**, дефолтная плашка снята
 - [x] Описание продукта на странице Gumroad — **2026-05-26**
@@ -306,7 +315,8 @@ Out-of-band (не блокируют Phase 0):
 
 ## 🚀 Phase 1 (post-launch, отдельный план потом)
 
-- [ ] YouTube канал создан, демо-видео опубликовано
+- [x] YouTube канал создан, демо-видео опубликовано (**пилот**, ID `UsJxPBdf568`, играет на лендинге — 2026-06-10)
+- [ ] **5 коротких клипов 30 sec для IG/TikTok/Reels** — нарезка из основного демо (НЕ новая съёмка), вертикаль 9:16, captions читаемы без звука, нижняя треть чистая от транспорта Live; точки реза = feature-секции в [[demo-video-script]] (pages / banks / jump / native modes + общий тизер); класть в `dist/social-clips/`. Перенесено из T9 2026-06-10.
 - [ ] Listing на **maxforlive.com** (бесплатно, обязательно)
 - [ ] Listing на **KVR Audio**
 - [ ] Reddit posts: r/ableton, r/abletonlive
@@ -350,7 +360,9 @@ Out-of-band (не блокируют Phase 0):
 - [ ] (после дизайна) Решить: v1.0-блокер или Phase 1
 - [ ] (после дизайна) Реализация в `.amxd` + при необходимости слим-endpoint `/api/activate`
 
-## 🐞 Mode 15 — CC47 report-value расхождение канон↔published (заведено 2026-06-03)
+## ✅ Mode 15 — CC47 report-value расхождение канон↔published (заведено 2026-06-03, ЗАКРЫТО 2026-06-10)
+
+> **РЕШЕНО 2026-06-10:** канонический байт 574 = `0x6e` (110); все 5 шипящихся копий `15.syx` синхронизированы под канон, архивы пересобраны, wiki поправлена (диагноз + синха через `m4l-master`). Free-funnel файл теперь = канон, mode 15 self-report'ится корректно (110). Осталось только при следующем ручном деплое перезалить обновлённый `free-custom-modes.zip` на сайт (выкатывается со штатным `wrangler pages deploy`).
 
 > Всплыло при ревизии нейминга «Cue Volume». Баг **не связан с меткой** — это рассинхрон функционального байта между каноном и тем, что реально раздаётся.
 
@@ -362,9 +374,9 @@ Out-of-band (не блокируют Phase 0):
 
 **Impact:** раздаваемый во free-funnel файл ≠ канон; и self-report mode 15, похоже, сломан при любом из двух значений.
 
-- [ ] Выяснить, что плагин реально ждёт от mode 15 на transit/report (или mode 15 вообще не должен self-report'иться — тогда какой байт нейтрален)
-- [ ] Синхронизировать две копии `15.syx` (выбрать истинный канон) + пересобрать оба `free-custom-modes.zip` + demo-бандл
-- [ ] Поправить в [[Custom Mode SysEx Layout]] ложное «byte-identical» и задокументировать корректное значение байта 574
+- [x] **Решено (m4l-master, 2026-06-10):** mode 15 ОБЯЗАН self-report'иться значением **110** (`0x6e`) — под него в патче выделенная CC47-ветка `m15_*`. `N×10=150>127` невозможно → 110 = свободный ×10-слот; `30` коллизирует с overlay inst-mode 3 (это и был баг).
+- [x] **Синхронизировано (2026-06-10):** все **5** копий `15.syx` приведены к канону `0x6e` (на диске: `app/public/`, `app/dist/` + внутри обеих `free-custom-modes.zip`). Demo/Starter бандлы `.syx` не несут → bundle-zip не трогали. Бэкапы в `raw/archive/` (штамп `2026-06-10-023338`).
+- [x] **Wiki поправлена (2026-06-10):** убрано ложное «byte-identical», задокументирован байт 574 = 110 + причина; запись в `log.md`.
 
 ## 🐞 Hardware feedback рвётся при downstream аудио-девайсе — DEFERRED → next version (заведено 2026-06-08)
 
@@ -381,7 +393,7 @@ Out-of-band (не блокируют Phase 0):
 **Текущий workaround (документируем пользователю):** девайс должен быть единственным / последним релевантным на своём треке — после него в цепочке ничего лишнего (особенно аудио-девайса), иначе ломается hardware feedback.
 
 - [ ] Next version: довести UI port-selector и проверить выход на железо (CC30 ch7 → физическая смена мода)
-- [ ] Добавить «device must be last in chain, nothing after it» в Quickstart / README / Gumroad install-гайд (внесено в `dist/Quickstart.md` 2026-06-08; PDF + bundle-zip + Gumroad — пересобрать при следующем ship)
+- [x] **Greenlit 2026-06-10** — «device must be last in chain, nothing after it». Уже в `dist/Quickstart.md` (2026-06-08). Пропагация PDF + bundle-zip + README + Gumroad install-гайд → выполняется вместе с финальной пересборкой бандла (кластер A, T12), отдельно PDF не гоняем. Также внести в новый `dist/README.md` (T10).
 
 ## 🏷️ Нейминг mode 15 — решение «Cue», не «Preview» (зафиксировано 2026-06-03)
 

@@ -768,3 +768,17 @@ Append-only журнал операций над вики.
 - **Откат (выполнил пользователь, не агент):** все 6 слотов Control XL `.amxd` восстановлены на чистый до-фичный md5 `44aa142b198b6001613db3b29c36cc38`. User Library и проектный канон (был `63d95bbe`) → `44aa142b`; бандлы 3–6 не менялись. Все слоты консистентны.
 - Удалены scratch-js `browser_load.js`/`fc_browserload.js`/`fc_bload2.js` (+ `.backup-*`) из User Library Max Devices и project device; `version_check.js` и `SendsFollower.amxd` не тронуты. История попыток заархивирована в `raw/archive/` (`Canon-`/`UserLib-`/`Control XL.*` 2026-06-06).
 - Память обновлена: m4l-master `controlxl-project-map.md` + `xl-performance.md`, MEMORY.md + `reference_m4l_no_browser_api.md`. Wiki: [[Browser Load]] помечена ОТЛОЖЕНО, index.md, XL_Performance — как это работает.md.
+
+## 2026-06-10 — Copy surfaces consolidated
+- Created `youtube-video-description.md` (YouTube demo description draft; chapter timestamps are placeholders).
+- Created `copy-inventory.md` — single analysis hub: snapshot of live landing copy pulled from `app/src` (code remains source of truth) + links to VO takes / demo-video-script / landing-narrative / youtube-video-description.
+- Ran copywriter audit across all surfaces — flagged: product-name drift ("Fadercraft Control" vs "Control XL"), YouTube copy leaning into sends/FX (contradicts abstract mapping), Solo Follower leaking into landing-narrative (rule break), "16 modes" vs "15", YouTube chapters at 00:00.
+- Updated index.md with both new pages.
+- Added `gumroad-description.md` (product page + post-purchase receipt note + bundle copy). Flagged: Solo Follower named in the bundle/receipt — confirm vs the no-SF-in-marketing rule. Linked into copy-inventory + index.
+
+## 2026-06-10 — Mode 15 `.syx` synced across all distributed copies
+- Diagnosis (closed earlier): canonical `custom-modes/15.syx` byte 574 (0-based) = `0x6e` (110); all published copies stuck on bug byte `0x1e` (30) → overlay router reads it as instrument mode 3 (round-trip collision).
+- Synced 4 published copies to canon (`e1e00f165e1a4ce330201dd0bae578b0`): `app/public/free-custom-modes/15.syx`, `app/dist/free-custom-modes/15.syx`, and the `15.syx` entry inside both `free-custom-modes.zip` (app/public + app/dist). All now byte-identical canon; other 14 modes in each zip untouched.
+- Demo/Starter bundles contain NO `.syx` — modes ship only via free funnel, so no bundle-zip rebuild needed.
+- Dated backups (4) in `raw/archive/` stamp `2026-06-10-023338`. Gumroad + User Library NOT touched (manual deploy step later).
+- Updated [[Custom Mode SysEx Layout]]: removed false "byte-identical" claim, documented mode-15 self-report byte 574 = 110 (why: N×10=150>127 impossible → 110 is the free ×10 slot; 30 collides with overlay inst-mode 3).

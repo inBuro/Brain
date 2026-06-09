@@ -6,7 +6,7 @@ updated: 2026-05-25
 version: 3
 ---
 
-# Landing Narrative — Fadercraft XL Performance
+# Landing Narrative — Fadercraft Control XL
 
 **Summary**: The 8-beat psychological arc for the `fadercraft.com` landing page. Each beat = one section, one component instance, one source of truth. Living document — re-open any beat as the launch evolves.
 
@@ -84,9 +84,9 @@ Each beat = one thought we want in the reader's head at that moment.
 - Body: `Press the jump button from instrument page 7 — you're in the mixer. Press it again — you're back on page 7. Not page 1, not the mixer's idea of "home." Page 7. Your hands keep their muscle memory across the whole set.`
 
 #### Beat 2.2 — Knob doubling (supporting block, after state memory)
-- Eyebrow: `PAGE A / PAGE B`
+- Eyebrow: `BANK A / BANK B`
 - Headline: `Six controls per channel, not three.`
-- Body: `Page A and Page B layer two mappings onto the same encoders. Volume + send on Page A, EQ on Page B — no menu-diving, no remapping mid-set. Hands stay put; the controls multiply.`
+- Body: `Bank A and Bank B layer two mappings onto the same encoders. Volume + send on Bank A, EQ on Bank B — no menu-diving, no remapping mid-set. Hands stay put; the controls multiply.`
 
 ### Beat 3 — Proof (Watch it work)
 - Eyebrow: `IN ACTION`
@@ -99,14 +99,14 @@ Each beat = one thought we want in the reader's head at that moment.
 - Headline: `Three players. One kit.`
 - Column 1 — Just unboxed: `Brand new to LCXL? You'll have all 16 modes mapped and ready before your first track is laid down.`
 - Column 2 — Studio producer: `Stop tap-tap-tapping back to your mixer. One button gets you there with state memory of where you were.`
-- Column 3 — Live performer: `Mixer ↔ Instruments transit in one stroke. Solo Follower keeps your faders synced to whichever track you solo.`
+- Column 3 — Live performer: `Mixer ↔ Instruments transit in one stroke — your place is saved on both sides, instruments and mixer.`
 
 ### Beat 5 — Value stack (What's in the kit) — REWRITE PENDING
 - Eyebrow: `WHAT'S IN THE KIT`
 - Headline: `Everything you need. Nothing else to buy.`
 - Cards (5):
   1. `Control XL.amxd` — The Max for Live device that does the heavy lifting. Drop into a track, done.
-  2. `Custom Modes (×16)` — Pre-mapped configurations for Components — you import once.
+  2. `Custom Modes (×15)` — Pre-mapped configurations for Components — you import once.
   3. `XL_Performance_starter.als` — Live Set with all routings, racks, and Solo Follower wired up.
   4. `Quickstart guide` — One-page install + first-track walkthrough.
   5. `Demo video` — The same one you just watched, included offline.
