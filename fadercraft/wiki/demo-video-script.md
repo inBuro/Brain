@@ -3,7 +3,7 @@ type: script
 project: Fadercraft
 created: 2026-06-04
 updated: 2026-06-08
-version: 6
+version: 7
 ---
 
 # Demo Video Script — Fadercraft Control XL
@@ -35,7 +35,7 @@ version: 6
 
 **On screen:** The demo set is already playing — music, hands on the LCXL, fast close-ups of moving encoders and lit pads. First ~4 seconds carry no VO (the music hooks). Cut to the mixer showing all 14 tracks.
 
-**VO:** *"Fourteen channels. Six controls per channel. Instant access across your entire project."*
+**VO:** *"This is a Live set powered by Fadercraft Control. Fourteen channels. Six controls each. Instant access throughout your project."*
 
 **Caption:** *The whole set. Under your hands.*
 
@@ -48,7 +48,7 @@ version: 6
 
 **On screen:** The mixer. Faders drive **page one** — *Kick · Clap · C Hhat · Shaker · Bass A · Bass B · O Hhat* (the rhythm foundation). A knob turn flips the faders to **page two** — *Accent 1 · Accent 2 · Perc 1 · Perc 2 · Melody 1 · Melody 2 · Perc 3* (melody + percussion) — turn it back to return. Then: hold the button to peek at page two, release → snaps back to page one.
 
-**VO:** *"Your whole set sits on two pages. Switch between them with a turn, or hold to peek and release to return. Every track stays within reach."*
+**VO:** *"The whole set sits on two pages. Hold to peek at the other page and release to return. Turn the encoder to switch and stay."*
 
 **Caption:** *Two pages. Every track.*
 
@@ -65,7 +65,7 @@ version: 6
 
 **On screen:** Close-up of one channel — three encoders turning. Hold the button to peek at Bank B, release → snaps back to A. Then turn the bank knob to switch and stay — the same three encoders now drive a different set of parameters — turn it back to return.
 
-**VO:** *"Every channel's encoders carry two banks — six controls, right under the same fingers. Hold to peek at the other bank. Turn the encoder to switch and stay."*
+**VO:** *"The same interaction works across every channel. Each channel gives you six controls across two encoder banks. Hold to peek at the other bank and release to return. Turn the encoder to switch and stay. Every track and control stays within reach."*
 
 **Caption:** *6 per channel, not 3.*
 
@@ -81,7 +81,7 @@ version: 6
 
 **On screen:** You're in the mixer → press jump → the screen dives into an instrument (synth rack), encoders now shape the sound → press again → back to the mixer, on the exact page you left.
 
-**VO:** *"You've been mixing. Now play. One button drops you into the last instrument you touched — right where you left it. Press the button again and you're back to the mixer, on the exact page you were working. Your workflow stays uninterrupted."*
+**VO:** *"You've been mixing. Now play. One button drops you into the last instrument you touched — right where you left it. Press the button again, and you're back to the mixer on the exact page you were working on. Your workflow stays uninterrupted."*
 
 **Caption:** *Remembers your instrument and your page.*
 
@@ -97,7 +97,7 @@ version: 6
 
 **On screen:** Final sweep across the lit LCXL, music still playing → fade out → logo.
 
-**VO:** *"Two pages. Six controls per channel. Every instrument one button away. One workflow for production, mixing, and live performance — Fadercraft Control XL."*
+**VO:** *"14 channels. Six controls per channel. Designed for muscle memory. One workflow for production, mixing, and live performance. This is Fadercraft Control XL. Stay in the music."*
 
 **End sting:** Fadercraft logo — `fadercraft.com · $39`
 
