@@ -3,12 +3,12 @@ type: script
 project: Fadercraft
 created: 2026-06-04
 updated: 2026-06-08
-version: 7
+version: 8
 ---
 
 # Demo Video Script — Fadercraft Control XL
 
-**Summary**: Shooting script for the main demo video (YouTube embed, Beat 3 of the landing). ~2:30, one continuous Live-set performance, English VO + burned-in captions. No install/setup (lives in Quickstart). Three features, in order: **(1) pages**, **(2) encoder banks**, **(3) cross-mode jump mixer → instrument**. Solo Follower deliberately not mentioned (see [[feedback_no_solo_follower_marketing]]).
+**Summary**: Shooting script for the main demo video (YouTube embed, Beat 3 of the landing). ~2:55, one continuous Live-set performance, English VO + burned-in captions. No install/setup (lives in Quickstart). Four features, in order: **(1) pages**, **(2) encoder banks**, **(3) cross-mode jump mixer → instrument**, **(4) native modes (DAW Mixer / DAW Control via one hotkey)**. Solo Follower deliberately not mentioned (see [[feedback_no_solo_follower_marketing]]).
 
 **Sources**: `wiki/landing-narrative.md`, `dist/Quickstart.md`, wiki entities ([[CC47 Cross-Mode Transit]], [[Mixer Layer]], [[Instruments Layer]]), demo-set track layout (user screenshot 2026-06-04).
 
@@ -18,12 +18,12 @@ version: 7
 
 ## Format & ground rules
 
-- **Length**: ~2:30. One continuous Live set — feels like one performance, not a feature checklist.
+- **Length**: ~2:55 (provisional, reflowed for the 4th feature). One continuous Live set — feels like one performance, not a feature checklist.
 - **Aspect**: 16:9, 1080p master. Vertical 9:16 cut-downs for social later.
 - **No setup/install in this video.** MIDI routing, opening the project, ports — all live in the Quickstart and a separate setup short. This video sells what the device *does*.
 - **Music plays throughout** — the demo set is already running when the video opens. Not a screencast; a performance.
 - **Voice**: founder VO, conversational, tight. Captions burned in (most watch muted).
-- **No jargon on screen**: no "CC47", no mode numbers in captions. Three clean terms only — **pages** (the mixer's track pages), **banks** (the per-channel encoder banks A/B), **jump** (mixer ↔ instrument).
+- **No jargon on screen**: no "CC47", no mode numbers in captions. A few clean terms only — **pages** (the mixer's track pages), **banks** (the per-channel encoder banks A/B), **jump** (mixer ↔ instrument), **native modes** (DAW Mixer / DAW Control, flipped with one hotkey).
 - **Two surfaces**: (A) Ableton Live screen-recording, (B) close-up of hands on the LCXL. Cut between them on every reveal.
 - **End sting**: Fadercraft logo + `fadercraft.com · $39`. Reused across all social cut-downs.
 
@@ -44,7 +44,7 @@ version: 7
 
 > No title-card intro, no logo-on-black. Open on motion and sound; the brand is named at the end.
 
-### 0:15–0:55 — Feature 1: Pages
+### 0:15–0:50 — Feature 1: Pages
 
 **On screen:** The mixer. Faders drive **page one** — *Kick · Clap · C Hhat · Shaker · Bass A · Bass B · O Hhat* (the rhythm foundation). A knob turn flips the faders to **page two** — *Accent 1 · Accent 2 · Perc 1 · Perc 2 · Melody 1 · Melody 2 · Perc 3* (melody + percussion) — turn it back to return. Then: hold the button to peek at page two, release → snaps back to page one.
 
@@ -61,7 +61,7 @@ version: 7
 
 > Demonstrates both behaviors where they actually exist: **turn the knob = switch and stay** (turn back to return), **hold the button = peek and snap back on release**.
 
-### 0:55–1:35 — Feature 2: Encoder banks
+### 0:50–1:25 — Feature 2: Encoder banks
 
 **On screen:** Close-up of one channel — three encoders turning. Hold the button to peek at Bank B, release → snaps back to A. Then turn the bank knob to switch and stay — the same three encoders now drive a different set of parameters — turn it back to return.
 
@@ -77,7 +77,7 @@ version: 7
 
 > Kept abstract on purpose — no fixed "volume / send / EQ" assignments, because the user maps them to anything.
 
-### 1:35–2:15 — Feature 3: Cross-mode jump (mixer → instrument)
+### 1:25–2:00 — Feature 3: Cross-mode jump (mixer → instrument)
 
 **On screen:** You're in the mixer → press jump → the screen dives into an instrument (synth rack), encoders now shape the sound → press again → back to the mixer, on the exact page you left.
 
@@ -93,7 +93,23 @@ version: 7
 
 > This jump is **toggle-only** (press to go, press to return) — no hold-to-peek, unlike pages/banks. State memory works both ways: returns to the last-used instrument, and to the exact mixer page.
 
-### 2:15–2:30 — Close
+### 2:00–2:35 — Feature 4: Native Modes
+
+**On screen:** Quick cuts of the LCXL's native modes — **DAW Mixer** and **DAW Control** — with one hotkey flipping between them, then straight back into a page / bank / instrument jump without losing place.
+
+**VO:** *"DAW Mixer and DAW Control are always within reach. Switch between native modes with a single hotkey. The same hotkey system works across pages, banks, and instrument jumps. Everything stays under the same fingers."*
+
+**Caption:** *One hotkey. Every mode.*
+
+**On-screen titles:**
+- **Hero** — *Native modes, one hotkey*
+- *DAW Mixer · DAW Control*
+- *One hotkey across everything*
+- *Always within reach*
+
+> The hotkey is the connective tissue — the same gesture moves between native modes and the page / bank / jump features, nothing buried in menus.
+
+### 2:35–2:55 — Close
 
 **On screen:** Final sweep across the lit LCXL, music still playing → fade out → logo.
 
@@ -112,8 +128,8 @@ version: 7
 - **Demo set starts before the camera.** Don't film "opening the project" — cut in mid-performance. First frame is already motion.
 - **Music under the whole video** — not just the open. Kills the screencast feel.
 - **No setup scene at all.** MIDI routing / opening the project lives in the Quickstart and a separate setup short.
-- **Cut order = feature order.** Each feature section (pages / banks / jump) is self-contained and starts on a fresh line → clean in/out points for three feature shorts; cold open + sting wrap each one.
-- **One continuous set, not three demos.** The performance flows: mix across pages → multiply controls with banks → jump into the instrument to play. Same project, same groove throughout.
+- **Cut order = feature order.** Each feature section (pages / banks / jump / native modes) is self-contained and starts on a fresh line → clean in/out points for four feature shorts; cold open + sting wrap each one.
+- **One continuous set, not four demos.** The performance flows: mix across pages → multiply controls with banks → jump into the instrument to play → flip native modes with one hotkey. Same project, same groove throughout.
 - **Captions readable muted**; bottom third clear of the Live transport bar.
 - **No price until the end.**
 - **Solo Follower:** not mentioned anywhere — see [[feedback_no_solo_follower_marketing]].
