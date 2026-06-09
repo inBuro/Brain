@@ -2,7 +2,7 @@
 type: concept
 project: Novation
 created: 2026-05-26
-updated: 2026-06-01 (добавлен mode 15 — Cue/prelisten volume)
+updated: 2026-06-10 (mode 15 self-report byte 574 = 110; published-копии синхронизированы с каноном)
 status: stable
 tags: [lcxl, sysex, midi, format]
 ---
@@ -139,7 +139,15 @@ Per [[Mixer Layer]]: переключение по CC30 ch7 (native LCXL mode-se
 | Спец-метка | `6a` (j) `"Cue Volume"` — единственная функциональная подпись |
 | UNDO/REDO | на месте, как у всех модов |
 
-**Distribution**: mode 15 кладётся **и в free funnel, и в bundle, и в архив** — наравне с 1–14. Канонический файл: `~/Projects/Claude/Fadercraft/custom-modes/15.syx`; published-копия (byte-identical) в `app/public/free-custom-modes/15.syx` + `free-custom-modes.zip` (раздаётся лендингом `fadercraft.com`).
+**Distribution**: mode 15 кладётся **и в free funnel, и в архив** — наравне с 1–14 (в Demo/Starter bundle'ах `.syx` НЕ лежат — раздаются только через free funnel). Канонический файл: `~/Projects/Claude/Fadercraft/custom-modes/15.syx` (md5 `e1e00f165e1a4ce330201dd0bae578b0`). Published-копии: `app/public/free-custom-modes/15.syx`, `app/dist/free-custom-modes/15.syx` + обе `free-custom-modes.zip` (раздаётся лендингом `fadercraft.com`). Все копии **должны быть byte-identical канону** — синхронизированы 2026-06-10.
+
+### Mode-self-report byte (offset 574, listen-CC=47) — критично, НЕ 30
+
+В дескрипторе listen-контрола (id `0x3a`, паттерн `49 3a 02 11 00 0d 10 00 2f XX 00`, маркер mode-routing `0x0d`, CC `0x2f`=47) байт значения `XX` по **offset 574 (0-based) / 575 (1-based)** обязан быть **`0x6e` = 110** для mode 15.
+
+- Mode 15 self-report'ится на CC47 значением 110; в девайсе под него выделена ветка `m15_ctlin`(`ctlin 47`)→`m15_sel`(`sel 110`)→`m15_save`(msg `15`)→`m15_v`(`v instruments_mode`), плюс прыжок в микшер и возврат `cc47_return_sel` outlet10 → `m15_ret`(msg `28`)→`ctlout 30 7` (CC30=28 = слот 15). Без 110 round-trip «отбой в микшер с памятью origin=15 / возврат» не работает.
+- **Почему не N×10:** `15×10 = 150 > 127` (вне MIDI-диапазона), поэтому для mode 15 выбран свободный кратный-10 слот **110** (не ловится overlay-роутером 10..100 и route 1..16 — чистая уникальная метка).
+- **Почему `0x1e` (30) — БАГ, а не нейтраль:** значение 30 ловит overlay-роутер инструментов (`inst_sel_enter` = `sel 10 20 30 40 50 60 70 80 90 100`) и читает его как «enter instrument mode 3» — то есть mode 15 коллизирует с инструмент-модом 3 (ровно исходный round-trip-баг). 30 наследовался от шаблона мода 3. Унаследованный `0x1e` сидел во всех published-копиях до 2026-06-10 (исправлено).
 
 ## Relative (endless) энкодеры — недоступны в custom mode
 
