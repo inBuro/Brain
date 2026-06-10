@@ -782,3 +782,12 @@ Append-only журнал операций над вики.
 - Demo/Starter bundles contain NO `.syx` — modes ship only via free funnel, so no bundle-zip rebuild needed.
 - Dated backups (4) in `raw/archive/` stamp `2026-06-10-023338`. Gumroad + User Library NOT touched (manual deploy step later).
 - Updated [[Custom Mode SysEx Layout]]: removed false "byte-identical" claim, documented mode-15 self-report byte 574 = 110 (why: N×10=150>127 impossible → 110 is the free ×10 slot; 30 collides with overlay inst-mode 3).
+
+## 2026-06-10 — SEO Phase B + purchase pipeline + review fixes (deployed)
+
+- Code review (full app) + SEO audit done; findings tracked in chat, approved subset shipped.
+- Review fixes deployed: Privacy Policy rewritten for PostHog (was claiming Cloudflare WA/no-cookies), Terms §3 = three activations (was unlimited), plugin float survives breakpoint crossings, reduced-motion → stacked mobile layout, verify-license.js hardened (try/catch + env validation), "XL Performance" → "Control XL" everywhere.
+- Gumroad Ping → PostHog server-side `purchase` event (functions/api/gumroad-ping.js, secret-token auth, pseudonymous). Gotcha: Gumroad sends base64 seller_id — numeric-id check rejected real pings, removed. Verified end-to-end.
+- SEO Phase B deployed: path routes /free-custom-modes + /legal (legacy ?p= redirects), robots.txt + sitemap.xml, postbuild seo-meta.mjs (per-route title/description/canonical/OG + JSON-LD SoftwareApplication/FAQPage), www CNAME + 301 middleware, free-modes h1 "15 Layouts for Ableton Live" + keyword eyebrow. Flat .html files (not dirs) to avoid trailing-slash 308 vs canonical mismatch.
+- Search Console: domain verified by owner (DNS). Pending: sitemap submit + indexing requests.
+- Roadmap updated (Phase 1 section).
