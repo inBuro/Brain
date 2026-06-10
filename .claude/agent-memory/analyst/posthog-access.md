@@ -62,7 +62,9 @@ Saved insights (favorited):
 Pre-existing = PostHog templates only: Web Analytics starter dashboard **1680409** (WAU/DAU/retention/referring domain), LLM-analytics dashboard **1680554** (ignore — not the landing).
 
 ## State of traffic (as of 2026-06-10)
-Tiny. ~9 pageviews / ~6 uniques over the prior 7 days (data starts 2026-06-07, the PostHog switch-on). Custom CTA events haven't fired yet (nobody reached the buttons). Funnels / A/B experiments are premature until real traffic; Session Replay is the more useful lens at this volume.
+Tiny but moving. Data starts 2026-06-07. Evening of 2026-06-10 brought a burst of **mobile** sessions (~17 mobile sessions / 18 mobile pageviews, 12 with replays), all `$direct` referrer — looks like the link was posted somewhere. Real mobile viewport widths seen: 320, 338, 384, 390 (most common), 402, 412 (most common Android). Funnels / A/B experiments still premature; Session Replay is the useful lens.
+
+**Bot/in-app marker discovered:** sessions where `$viewport_height == $screen_height` (no browser chrome) are likely WebView/in-app browsers or headless — e.g. the cluster of 6 Chrome-Android 412×823 sessions and 2 Chrome-iOS 390×844 sessions on 2026-06-10. Real mobile browsers show vh < sh (address bar). Check this before trusting mobile session counts.
 
 ## Related project memory
 Brand & workspaces: [[../../../memory pointers handled in main MEMORY.md]]. Analytics reference memory: `reference_fadercraft_analytics`. Deploy: `reference_fadercraft_deploy`.
