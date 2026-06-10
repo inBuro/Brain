@@ -31,6 +31,12 @@ Funnels need ≥2 series. Already saved as insight A24NPDaz.
 ## Session replay (most useful at low traffic)
 - `search session-recording` / `query-session-recordings-list` — list real sessions to watch by hand.
 
+## Mobile audit (device × viewport × browser) — verified 2026-06-10
+- Replay list for mobile: `call query-session-recordings-list {"kind":"RecordingsQuery","date_from":"-21d","filter_test_accounts":true,"properties":[{"key":"$device_type","operator":"exact","type":"event","value":["Mobile"]}],"limit":50}`. Deep link = `https://us.posthog.com/project/458316/replay/<id>` (never `/replay/home?...`). The list does NOT include browser/viewport per recording.
+- Browser × viewport table: `query-trends` on `$pageview` with `"breakdownFilter":{"breakdowns":[{"property":"$browser","type":"event"},{"property":"$viewport_width","type":"event"}]}` (max 3 breakdowns) + series-level filter `$device_type = Mobile`.
+- Per-session detail rows (browser, os, viewport, url per `$session_id`) can't be expressed via query-* → legit `execute-sql` case. Run `info execute-sql` + `read-data-warehouse-schema` first, then group events by `$session_id`, `any(properties.$browser)` etc. Owner exclusion in raw SQL: `(person.properties.email IS NULL OR person.properties.email != 'hellokbbureau@gmail.com')` (filterTestAccounts doesn't apply to raw SQL).
+- Useful props on `$pageview`: `$viewport_width/height` (browser window), `$screen_width/height` (physical), `$device`, `$browser_version`, `$os_version`. `vh == sh` ⇒ no browser chrome ⇒ likely in-app/WebView/headless.
+
 ## Gotchas
 - Person-on-events mode is ON: `person.properties.*` on the events table reflects the value at ingest time, not the current value.
 - Canonical-looking events (`$pageview`) still need `read-data-schema` confirmation per project.
