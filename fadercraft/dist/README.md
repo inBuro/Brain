@@ -7,7 +7,7 @@ A Max for Live device that turns your Novation Launch Control XL MK3 into a perf
 ## What's in this bundle
 
 - `Control XL.amxd` — the Max for Live device. Self-contained; no extra files required.
-- `custom-modes/` — 15 Custom Modes for your controller (1–10 Instrument, 11–14 Mixer, 15 Cue).
+- `15 Custom Modes/` — the Custom Modes for your LCXL MK3 (1–10 Instrument, 11–14 Mixer, 15 Cue).
 - An Ableton project — **Demo** (a ready-to-explore set with sample content) or **Starter** (an empty set with the device and routing already wired), depending on which download you chose.
 - `Quickstart.pdf` — the setup and usage guide.
 
@@ -15,7 +15,7 @@ A Max for Live device that turns your Novation Launch Control XL MK3 into a perf
 
 Full details with screenshots are in `Quickstart.pdf`. In short:
 
-1. **Upload the Custom Modes** — open Novation Components, connect your LCXL MK3, and upload the modes from `custom-modes/`.
+1. **Upload the Custom Modes** — open Novation Components, connect your LCXL MK3, and upload the modes from `15 Custom Modes/`.
 2. **Open the included Ableton project** — the device and all MIDI routing are already set up. Drag the track into your own set, or build from the project.
 3. **Play** — switch modes on the controller and the on-screen display follows the active mode.
 
