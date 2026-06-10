@@ -321,11 +321,14 @@ Out-of-band (не блокируют Phase 0):
 ## 🚀 Phase 1 (post-launch, отдельный план потом)
 
 - [x] YouTube канал создан, демо-видео опубликовано (**пилот**, ID `UsJxPBdf568`, играет на лендинге — 2026-06-10)
+- [x] **SEO core (Phase B)** — задеплоено 2026-06-10: path-роутинг (`/free-custom-modes`, `/legal`; legacy `?p=` → redirect), `robots.txt` + `sitemap.xml`, постбилд `scripts/seo-meta.mjs` (title/description/canonical/OG на маршрут + JSON-LD SoftwareApplication/FAQPage), `www` CNAME + 301 на apex (middleware), свой h1 на free-modes. Search Console: домен верифицирован (DNS). Осталось: сабмит sitemap + запрос индексации (см. ниже)
+- [ ] **Search Console: сабмит `sitemap.xml` + запрос индексации 3 URL** (после деплоя SEO — можно сразу)
+- [x] **Gumroad Ping → PostHog `purchase`** — серверное событие продажи (2026-06-10): `functions/api/gumroad-ping.js`, токен-аутентификация, без email/license key; воронка `$pageview → buy_click → purchase` сквозная
 - [ ] **5 коротких клипов 30 sec для IG/TikTok/Reels** — нарезка из основного демо (НЕ новая съёмка), вертикаль 9:16, captions читаемы без звука, нижняя треть чистая от транспорта Live; точки реза = feature-секции в [[demo-video-script]] (pages / banks / jump / native modes + общий тизер); класть в `dist/social-clips/`. Перенесено из T9 2026-06-10.
 - [ ] **`fadercraft.com/update` страница (контент)** — **триггер: перед выпуском первого апдейта (1.1)** (решено 2026-06-10). Лёгкая страница в стиле лендинга: changelog + «Open your Gumroad Library» + «Gumroad emailed you a download link». URL уже зарезервирован в `version.json` (`url`). До неё `url` может временно указывать на `library.gumroad.com`.
 - [ ] Listing на **maxforlive.com** (бесплатно, обязательно)
 - [ ] Listing на **KVR Audio**
-- [ ] Reddit posts: r/ableton, r/abletonlive
+- [ ] Reddit posts: r/ableton, r/abletonlive — **first post published 2026-06-10** (niche sub; subreddit/URL to be recorded in PM launch journal). Snapshot ~1.5 h: 518 views / 3 upvotes / 10+ click-throughs / genuine comments, zero pushback. **Checkpoint 2026-06-11** (24 h re-snapshot + analytics via analyst). Key learning → all future posts/video hooks lead with the *idea* («stop rebuilding your controller every project»), not the feature list — commenters engaged with fixed-layout concept, ignored features. Details: PM agent `launch-journal.md` + `insights.md`
 - [ ] Discord posts (3-5 серверов)
 - [ ] Facebook groups posts: «LCXL Users», «Ableton Live Users Worldwide»
 - [ ] Newsletter live (через Buttondown)
