@@ -47,7 +47,6 @@ async function check() {
   if (m.ok && cmp(m.latest, DEVICE_VERSION) > 0) dot = 1;
   if (m.ok && m.url) maxApi.outlet('url', m.url);             // server-controlled click-through (overrides patch fallback)
   maxApi.outlet('dot', dot);                                  // 1 = update available, 0 = up to date / unknown
-  maxApi.post(`version check: device=${DEVICE_VERSION} latest=${m.ok ? m.latest : '?'} (${m.ok ? 'ok' : m.reason}) url=${m.ok && m.url ? m.url : '-'} -> dot ${dot}`);
 }
 
 maxApi.addHandler('check', check);

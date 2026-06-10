@@ -1,0 +1,3 @@
+- [Control XL bundle zips](controlxl-bundle-zips.md) — структура/рецепт пересборки Demo+Starter зипов в dist/, ключевые инварианты проверки
+- [amxd container format](amxd-format.md) — проверенный байт-рецепт распаковки/пересборки .amxd (mx@c + dlst/dire), какие size-поля править, 5 слотов
+- [Control XL device](xl-performance.md) — структура патчера (271 box, нет print), встроенные js (version_check/solo_follower), update-link цепочка
