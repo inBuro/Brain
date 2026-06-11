@@ -2,6 +2,17 @@
 
 Newest entries at the top. Format: What / Numbers / Qualitative / Read / Decision.
 
+## 2026-06-11 — Hero A/B experiment LAUNCHED: `hero-permanent-interface` (PostHog 376381)
+**What:** First live application of insight #1 (permanent interface). PostHog experiment **id 376381** (https://us.posthog.com/project/458316/experiments/376381), **running since 12:46 ICT 2026-06-11** on the home page. Control = current feature-led hero. Test = eyebrow "M4L INTERFACE FOR LCXL MK3" / H1 "One controller. Your permanent interface." / sub "Map once — the same layout from studio to stage, in every Live Set." Primary metric: **buy_click**.
+
+**Numbers:** none — just launched; exposure events expected with the first real visitor.
+
+**Read:** At current traffic, significance will take **months** (recorded in the experiment description itself). This is a "set and accumulate" experiment, not a fast read — the anti-impulse rule applies to experiment peeking too: no reads in the first weeks, no early stopping on noise. This closes the open item from the bridge entry below ("verify `hero-permanent-interface` flag status with analyst") — the experiment is confirmed live.
+
+**Tech note (QA hygiene):** PostHog serves empty feature flags to headless browsers (bot UA) — so our own headless QA visits do NOT pollute the experiment arms. Exposure events will start flowing with the first live visitor; analyst to confirm at the next cut.
+
+**Decision:** (a) leave it running untouched — no peeking, no variant edits mid-flight (an edit invalidates accumulated exposures); (b) every home-page metric read in this window MUST segment by experiment variant — the bridge CTA also routes to home, so bridge and hero reads share traffic; (c) at the next analyst cut: confirm exposure events are flowing and arms are balanced; (d) the real lever for experiment velocity is traffic volume — next r/ableton post feeds this experiment too.
+
 ## 2026-06-11 — Fix #1 SHIPPED: "free modes → Control XL" bridge on /free-custom-modes (quiet variant)
 **What:** The top-priority fix from the 2026-06-11 checkpoint — the bridge from the free-modes page to the paid product — implemented and deployed to prod (fadercraft.com), daytime ICT 2026-06-11. Smoke passed: pages 200, console clean, `/r-modes` and `/yt-*` redirects live.
 
@@ -18,6 +29,12 @@ The checkpoint recommendation was "product + price visible on the page + return 
 **Numbers:** none yet — deployed today; pre-fix baseline = 10/13 Reddit entries stuck at 1 pageview, 0 buy_click (see checkpoint entry below).
 **Read:** Fix #1 is closed as shipped, not as validated. Success metric for the bridge: share of `/free-custom-modes` entries that reach a second pageview (home/product), vs the 3/13 baseline. The hero A/B overlapping the same window means home-page metric reads must segment by experiment variant — coordinate with analyst.
 **Decision:** (a) journal + roadmap closed for fix #1; (b) measure bridge click-through at the parked-tab re-check ~2026-06-17 and at the next post wave — compare second-pageview rate against the 3/13 baseline; (c) ask analyst to confirm `hero-permanent-interface` flag status and that bridge clicks are distinguishable (event or URL) — if the orange CTA click isn't captured as an event, request one before the next traffic wave; (d) no further changes to /free-custom-modes until bridge data arrives (anti-impulse rule).
+
+**Day-close update (2026-06-11 evening):**
+- Prod deploy landed **~14:00–15:00 ICT**. Copy went through ~10 iterations with the copywriter agent; the final wording is the user's own.
+- **Cycle hypothesis pinned:** "quiet bridge without price" vs the recommended "product + price on page". Verification metrics: (1) clicks on the bridge CTA — captured via PostHog **autocapture** on the orange CTA (closes decision item (c), no custom event needed); (2) the `/free-custom-modes` → `/` path in sessions (second-pageview rate vs the 3/13 baseline).
+- Removals confirmed on prod: License block gone entirely, "Explore" button gone from the download group, newsletter section gone from the page — the bridge card is the page's single next step.
+- Decision item (c) other half also closed: `hero-permanent-interface` is confirmed RUNNING (PostHog experiment 376381, see the entry above).
 
 ## 2026-06-11 — Checkpoint: first Reddit post — site-analytics window
 **What:** Planned 24 h checkpoint on the first Reddit post (r/Novation, 2026-06-10). Analyst agent processed site traffic for the post window 2026-06-10 00:00 → 2026-06-11 ~10:15 ICT (PostHog + 27 session recordings). Fresh Reddit snapshot added same morning (~10:00–11:00 ICT, post showing "15 hr. ago"). YT re-snapshot landed in the evening (23 h 22 min after publish) — **checkpoint fully closed 2026-06-11**.
@@ -70,8 +87,8 @@ The checkpoint recommendation was "product + price visible on the page + return 
 
 **Checkpoint updates (2026-06-11, midday ICT):**
 - **UTM discipline SHIPPED** — decision item (a) closed for YT + the current Reddit post. Vanity redirects deployed on Cloudflare Pages: `/yt`, `/yt-modes`, `/yt-buy` (utm_source=youtube, utm_campaign=control_xl_presentation) and `/r`, `/r-modes`, `/r-buy` (utm_source=reddit, utm_campaign=introduction_post). Gumroad-bound paths 302 to gumroad.com/l/control-xl with UTMs for Gumroad-side analytics. Smoke test passed (all 302 to correct targets). User updated the YouTube video description to the short links and is swapping the Reddit post link to `fadercraft.com/r-modes`.
-- **ph_owner partially closed** — Brave iPhone and Brave Mac flagged and now filtered. Stock Safari iPhone (the noisy profile from this window) is NOT flagged yet — the flag link was likely opened in a private tab / in-app browser. Outstanding user action (~2 min): open `fadercraft.com/?ph_owner=1` in a regular stock-Safari tab, then make one repeat visit; analyst confirms the filter. Decision item (b) stays pending on that one device.
-- ~~YT re-snapshot~~ — **closed** (evening cut, 23 h 22 min after publish; numbers in the YT block above). With this, **the 2026-06-11 checkpoint is fully closed**: Reddit 15 h cut, site-analytics window, and YT ~24 h cut all captured. Only follow-ups remaining are the future-dated ones (parked-tab re-check ~06-17, offer review at 100+ sessions) plus the stock-Safari `ph_owner` flag.
+- **ph_owner CLOSED (all owner devices)** — Brave iPhone, Brave Mac, and stock Safari iPhone all flagged and filtered (user confirmed the stock-Safari visit 2026-06-11; analyst's cut had already shown that profile flagged since 06-10, landing as `fadercraft-owner`). Decision item (b) done — no further user action. The orphan in-app-browser profile (`374b2aa6…`) stays unmerged; its historical events remain in filtered sets forever (person-on-events), analyst discounts by hand.
+- ~~YT re-snapshot~~ — **closed** (evening cut, 23 h 22 min after publish; numbers in the YT block above). With this, **the 2026-06-11 checkpoint is fully closed**: Reddit 15 h cut, site-analytics window, and YT ~24 h cut all captured. Only follow-ups remaining are the future-dated ones (parked-tab re-check ~06-17, offer review at 100+ sessions).
 
 **Read addendum (PM, YT ~24 h cut):** YT stayed exactly in its lane (insight #5): 0% impressions CTR, zero algorithmic reach, all 35 views referral — hosting asset, as expected. The interesting bit is avg duration rising 0:46 → 0:57 (≈47% → ≈59% retention) on cold traffic: the ~10 tail views averaged ~87% of the video, i.e. late arrivals (post readers who clicked deliberately after the launch-hour rush, possibly warmer/more intentional) watched almost everything. At n=10 this is a hypothesis, not a finding — but it reinforces that the video is NOT the funnel's weak link, and front-loaded short format works. The 44-vs-35 discrepancy (48 h top-content panel vs video page) is recorded as-is; do not reconcile or build on either number beyond "views are in the dozens". Nothing here changes priorities: bridge on `/free-custom-modes` remains fix #1.
 

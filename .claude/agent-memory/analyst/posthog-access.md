@@ -62,7 +62,7 @@ Actions (the CTA goals):
 - Feature flag **`hero-permanent-interface`** (id 711811, auto-created by experiment) — **active:true** (experiment-launch activates it itself). Variants `control` (current feature-led hero) / `test` (permanent-interface copy: eyebrow "M4L INTERFACE FOR LCXL MK3", H1 "One controller. Your permanent interface.", body "Map once — the same layout from studio to stage, in every Live Set."), 50/50, rollout 100%.
 - Primary metric: funnel → Action 277920 (CTA — Buy click). Secondary: funnel `$pageview` → Action 277920. `exposure_criteria.filterTestAccounts: true`. Stats: Bayesian.
 - Time-to-significance honesty in description: at ~10–20 sessions/day, 1–3% baseline, even 2x lift ≈ 2.5–8 months; +50% ≈ a year+. Owner deliberately set it up early to accumulate.
-- Exposure at launch: 0 — `$feature_flag_called` not yet in event schema (no visitor evaluated the flag while active as of 12:50 Thai 06-11). Check later: once it fires, it appears in `read-data-schema`; break exposures down by `$feature_flag_response`. **Don't peek at significance in the first weeks.**
+- Exposure: still 0 as of re-check **2026-06-11 (post-deploy verification run)** — `$feature_flag_called` not yet in event schema AND flag `last_called_at: null` (two independent confirmations the flag has never been evaluated by a live visitor). Normal right after launch, not a bug: exposures land with the first real visitor; headless/QA/bot-UA hits don't enter the experiment. Check later: once it fires it appears in `read-data-schema`; break exposures down by `$feature_flag_response`. **Don't peek at significance in the first weeks.**
 
 Saved insights (favorited):
 - **A24NPDaz** — Landing conversion — Pageview → Buy click (funnel)
