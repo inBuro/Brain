@@ -2,6 +2,59 @@
 
 Newest entries at the top. Format: What / Numbers / Qualitative / Read / Decision.
 
+## 2026-06-12 — Reddit-monitoring tooling + F5Bot keyword set + Isotonik Studios as a distribution candidate (3 founder decisions)
+**What:** Not an experiment — three operational/strategic decisions made by the founder 2026-06-12, logged so the plan reflects them. (1) A Reddit mention-monitoring setup, (2) the concrete F5Bot keyword list, (3) Isotonik Studios re-framed as a serious distribution-channel candidate. All three serve the same diagnosed bottleneck from the 2026-06-12 strategy review: **volume/discovery, not value** — the value hypothesis is validated, we just have ~zero inbound traffic.
+
+**Numbers:** none — no metric read here. These are setup/direction decisions, not results.
+
+**Qualitative / external calibration fed by founder:**
+- Strategic principle pulled from an r/SaaS thread (confirms our own conclusions, not a new source of truth): monitor **problem keywords**, not only the product name; **speed + being useful beats the tool itself** — arrive early and genuinely help, no links (the rule-5 "be a redditor with a brand" posture, same as our insight #10 ask-about-their-setup tactic).
+- Isotonik framing: they run **Isotonik Collective**, a curated group of third-party devs whose devices Isotonik distributes under their umbrella — so taking on outside devices is their normal, addressable motion. Their existing **LaunchControl XXL does NOT support MK3** → we fill the gap in their Novation line = complementary, not competing = attractive to them.
+
+**Read (PM):**
+- **(1) Reddit monitoring — F5Bot is the right floor.** F5Bot (free) set up 2026-06-12 as the baseline mention monitor; keywords added. The DIY Reddit-JSON monitor (search.json + cron + Discord webhook) is **deferred** — build only if F5Bot proves noisy or starts missing hits; don't pre-build infrastructure for a problem we don't have yet (anti-impulse applied to tooling). **AI auto-reply tools are excluded on principle** (IndiePilot, Listnr-AI, Gemini bots, etc.) — that's the exact rule-12 "No AI" landmine that zeroed our post #2 in r/ableton (insight #11). Monitoring is for *us* to arrive and help in our own voice, never for a bot to reply.
+- **(2) Keyword set is correctly weighted toward intent, not vanity.** It pairs core ICP-hardware terms (the product/device names) with **pain/intent phrases** ("remap every project", "mappings don't save", etc.) — the latter are where warm, early-stage prospects actually surface before they know any product exists. This is the monitoring analogue of insight #1 (people have the *problem* language, not the product language). Plan to prune noisy terms and add pain-phrase variants after ~1 week of real hits.
+- **(3) Isotonik is the single highest-leverage *new* channel candidate since maxforlive** — and for the same reason: it's a **pre-assembled profile audience** of Ableton/M4L power-users, the direct antidote to problem #1 (zero traffic). Three structural advantages: (a) audience we can't cheaply build ourselves; (b) the MK3 gap in their line makes us complementary, so the pitch is "you're missing MK3, we close it" not "compete with your XXL"; (c) borrowed credibility kills the "new brand, 0 reviews" objection. Crucially it does **not require proven sales** — the Collective evaluates device *quality*, not our numbers — so it's actionable now even pre-revenue. This is a meaningfully different bet from Reddit/maxforlive: a *relationship/B2B* channel (someone else's audience + endorsement), not a self-serve listing or a post. Note: this updates the long-dormant "Isotonik" Phase-1 line, which was framed narrowly as a payment-rail / reseller item — the real value is **distribution + credibility**, reclassify it as such.
+
+**Decision (direction, re-openable per the founder's "decisions are direction" rule; synced to roadmap):**
+- **Reddit monitoring:** F5Bot live as baseline (keywords below). DIY JSON monitor = deferred trigger ("F5Bot noisy or missing"). AI auto-reply tools = hard-excluded, do not revisit. When a real hit lands, reply in own voice, lead with help, no link (insight #10) — the monitor's job is *speed to a useful human reply*, not automation.
+- **F5Bot keywords (documented so they don't get lost):**
+  - *Core (ICP hardware):* `Launch Control XL`, `LCXL`, `Launch Control XL MK3`, `LCXL MK3`, `Novation Launch Control`.
+  - *Pain / intent:* `remap every project`, `remap my controller`, `remapping every project`, `mappings between projects`, `mappings don't save`, `controller mapping resets`, `remap every time`, `set up my controller every time`.
+  - *Tuning (after ~1 week):* drop noisy terms, add more pain-phrase variants.
+- **Isotonik Studios — pursue as a distribution + credibility channel, with timing and terms set BEFORE contact:**
+  - **Timing:** approach **after** the maxforlive listing + demo are fully dressed (this/next week) — so Isotonik's first impression of the device is the strongest version. Don't pitch on a half-finished listing.
+  - **Terms to negotiate at contact (set now so we don't concede under pressure):** **non-exclusive is mandatory** (keep Gumroad / maxforlive / landing alive); revenue split (a real cut — weigh against direct-sale margin); **whose customer data** (load-bearing for an umbrella brand). Minor risk acknowledged + accepted: exposing the MK3 solution to a niche neighbor (low — they never shipped MK3).
+  - **Outreach pitch** drafted separately by copywriter (not PM's artifact).
+- **Don't do:** don't build the DIY Reddit monitor yet; don't use any AI auto-reply tool ever; don't pitch Isotonik before the listing/demo are polished; don't accept an exclusive deal.
+- **Checkpoint:** Isotonik outreach gated on listing/demo polish (this/next week). F5Bot keyword tuning ~1 week out (≈2026-06-19). No metric read owed here — these feed the same 4-6 week / ~100-session strategic checkpoint as every other channel asset.
+
+## 2026-06-12 — maxforlive.com listing PUBLISHED (the top-priority distribution channel — now live)
+**What:** Control XL published as a listing on maxforlive.com — the single highest-leverage channel in the backlog (the only high-fit channel that was passive/evergreen/zero-rejection and not yet switched on; see the strategy review below). Listing: **device id 15522**, https://maxforlive.com/library/device.php?id=15522, **Device Type = MIDI Effect**, author Fadercraft, version 1.0.
+- **Copy:** rewritten benefit-first and aligned to the site's voice — opens with "Play your whole 14-channel rig like a single instrument", fixed-mapping mechanics held as the second layer (idea-first, insight #1). Bundle presented as **two Live sets to choose from (Starter OR Demo)**. Versions = "Ableton Live 11 or later". Terminology aligned with the site (instruments/mixer modes, toggle, encoder banks, Cue/Prelisten), licensing (one key / 3 activations), 48h support.
+- **Price:** deliberately NOT put in the listing (founder's call).
+- **Tags:** added, including `lcxl` / `mk3` / `lcxl mk3` for internal catalog search.
+- **Discovery channel = INTERNAL maxforlive search/browse**, not Google (founder's call — external SEO for the device page is explicitly not a goal).
+
+**Numbers:** none yet — listing just went live; no downloads/ratings/views captured. First check is a future-dated follow-up, not now (anti-impulse — a fresh listing has no signal to read for days).
+
+**Qualitative:** n/a at publish. Note for the next check: the device is currently in the catalog's "new releases" feed = a finite attention window; early downloads/ratings push it up in the organic catalog sort.
+
+**Read (PM):**
+- This closes the cheapest, highest-leverage miss from the 2026-06-12 strategy review. It's a *passive evergreen* asset, not a campaign — its job is to accumulate qualified, intent-driven traffic over months with zero ongoing effort. No conversion read is owed here; it feeds the same 4-6 week / 100-session strategic checkpoint as the Reddit posts.
+- Two real-world gaps surfaced *because* of the listing, both worth fixing (logged as follow-ups, not blockers): (a) a **site/bundle inconsistency** — the landing's kit section shows only Starter, but there are genuinely two sets on offer (Starter/Demo); writing the listing forced the catalog truth and exposed the site as incomplete; (b) the listing's preview image is a default UI screenshot, not a branded one — weak first impression in a visual catalog.
+- The "discovery = internal catalog search, not Google" decision means we should NOT judge this channel on external-SEO/Google-impression terms; the right success proxy is catalog rank + downloads/ratings inside maxforlive, and downstream `/m4l` site sessions.
+
+**Decision (direction):**
+- **Listing closed as shipped, not as validated** — same posture as every other channel asset. No metric read now; first look at downloads/ratings + any `/m4l` site sessions at the next analyst cut / the ~06-17 checkpoint, NOT before.
+- **Open follow-ups captured so they don't get lost** (roadmap synced):
+  1. **Site kit — add Demo as the second Live-set option** (TheKitSection shows only Starter; reality = two on offer). Site is incomplete — fix. Logged in roadmap T7-real.
+  2. **maxforlive preview image** — replace the default UI screenshot with a styled one (instruments + mixer on the brand dark background). Owner: ux-ui-designer. Logged in the maxforlive roadmap line.
+  3. **Nudge first downloads/ratings** (Discord / first buyers) — moves the device up in the catalog's organic sort while it's also in the new-releases feed (attention window). Logged in the maxforlive roadmap line.
+  4. **`demo_interact` event + baseline** — deferred to the next launch (details in analyst memory, `demo-engagement-baseline.md`).
+- **Next top-priority distribution step is now the Reddit post in the proven post-#1 format** (insight #11), NOT r/Novation again (rule-5 brand-account risk) — candidates r/abletonlive / r/madewithableton, pass-bar (ratio ≥~80%, no AI/spam top comment) set before posting.
+- **Don't do:** don't add a price to the listing (founder's call), don't chase Google SEO for the device page (founder's call — discovery is internal catalog search), don't read conversions off a day-old listing.
+
 ## 2026-06-12 — Strategy review: channel map, product future, go/no-go horizon (founder asked "what next / how long")
 **What:** Not an experiment — a direct strategic question from the founder: what's next, what other channels beyond r/Novation, what future for the product, what else to try, and **how long to keep spending effort on it** (explicitly open to pivot/shelve). Synthesized from the full journal + insights + roadmap + a quick external sanity-check on market size (r/ableton ~479k members; r/Novation tiny — topping it costs ~8 upvotes; LCXL MK3 is a niche channel-strip controller, grid controllers Launchpad/APC are the more populous Ableton market). No invented numbers — live sales/sessions stay with analyst.
 

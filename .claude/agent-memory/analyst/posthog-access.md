@@ -76,6 +76,27 @@ Saved insights (favorited):
 
 Pre-existing = PostHog templates only: Web Analytics starter dashboard **1680409** (WAU/DAU/retention/referring domain), LLM-analytics dashboard **1680554** (ignore — not the landing).
 
+## Channel UTM markers (how to split traffic by campaign)
+Each acquisition channel has its own UTM marker. When slicing traffic, filter by these to
+attribute a session to its channel — don't lump them. Reddit-app WebView strips referrer
+(→ `$direct`), so UTM + entry path + timing are the reliable signal, not referrer alone.
+
+| Channel | `utm_campaign` | `utm_source` | `utm_medium` | Notes / entry |
+|---|---|---|---|---|
+| r/Novation post #1 (the introduction post) | `introduction_post` | `reddit` | `social` | The original 06-10 r/Novation post; entry usually `/free-custom-modes`. Its tail keeps trickling. |
+| r/ableton post | `ableton_post` | `reddit` | `social` | The 06-11 r/ableton post (buried link, AI-flagged, ~0 real clicks). |
+| **maxforlive.com listing** | **`control_xl_listing`** | **`maxforlive`** | **referral** | **Added 2026-06-12.** Control XL device listing (device id **15522**). |
+
+**maxforlive.com listing (deployed to prod 2026-06-12).** Vanity redirects on `fadercraft.com`, all
+carrying `utm_source=maxforlive&utm_medium=referral&utm_campaign=control_xl_listing`:
+- `/m4l` → homepage
+- `/m4l-modes` → `/free-custom-modes`
+- `/m4l-buy` → Gumroad
+ANY session with `utm_campaign=control_xl_listing` (or `utm_source=maxforlive`) = a click from the
+maxforlive listing. Do NOT confuse with the reddit markers above. Attribution starts accumulating
+only AFTER the founder swaps the listing's External Link to `https://fadercraft.com/m4l` — listing is
+fresh, no traffic yet (don't count maxforlive numbers until they appear).
+
 ## State of traffic (as of 2026-06-12)
 Data starts 2026-06-07. **First Reddit post 2026-06-10 ~19:00 Thai** (r/Novation, `reddit.com/r/Novation/comments/1u20ebm/`) → burst of ~37 sessions in 24h, but after removing owner-TH + bots, ~20-25 real external sessions. Reddit gave 811 post views → ~3% click-through to site. Funnels / A/B still premature; Session Replay is the lens.
 
