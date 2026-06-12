@@ -8,6 +8,10 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-06-12 — Новый reference: outbound-links (tracked vanity redirects)
+
+Создан `outbound-links.md` — единый retrievable список всех campaign-tracked outbound short links (vanity-редиректы CF Pages с UTM) для YT/Reddit-плейсментов. Зеркалит `app/public/_redirects` (источник истины). Группировка по кампаниям: YouTube `control_xl_presentation` (`/yt`, `/yt-modes`, `/yt-buy`), Reddit r/Novation `introduction_post` (`/r`, `/r-modes`, `/r-buy`), Reddit r/ableton `ableton_post` (`/r-ableton`, `/r-ableton-modes`). Зафиксированы правила (новый канал = новый редирект ДО публикации; 1 `utm_source`/канал + 1 `campaign`/пост; 302 не 301) и процедура add→deploy→verify. Попутно в проде задеплоен новый `/r-ableton-modes` → `/free-custom-modes` (commit `100003e`). Кросс-линк с [[external-links]]. Индекс обновлён.
+
 ## 2026-06-08 — Demo video script: добавлен тег On-screen titles
 
 В `demo-video-script.md` (v3→v4) к каждой из 5 сцен добавлен новый блок **On-screen titles:** — отдельно от существующего «On screen:» (описание кадра) и «Caption:» (исходная одиночная подпись). Туда вынесены визуальные титры под монтаж: герой-титр на ревил + опорные микро-подписи для немого просмотра. Текстовки дистиллированы из VO, держат три термина (pages/banks/jump), без жаргона, цена только в финальном стинге, Solo Follower отсутствует ([[feedback_no_solo_follower_marketing]]). Источник озвучки и связка — [[project_fadercraft_vo_voice]].
