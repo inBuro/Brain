@@ -28,6 +28,7 @@ updated: 2026-05-06
 
 - [[payment-rails]] — матрица платёжных рельсов (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) с вердиктами под профиль «русский паспорт + Таиланд», расшифровка какие тайские документы что разблокируют.
 - [[external-links]] — единая таблица всех внешних ссылок Fadercraft (соцсети, Gumroad, support, лендинг); single source of truth для футера и outreach.
+- [[outbound-links]] — все campaign-tracked vanity-редиректы (UTM short links) для YT/Reddit-плейсментов; правила (новый канал = новый редирект до публикации), таблицы по кампаниям, процедура add→deploy→verify. Зеркало `app/public/_redirects`.
 
 ## Synthesis
 

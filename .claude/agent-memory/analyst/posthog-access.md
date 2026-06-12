@@ -47,6 +47,12 @@ Added 2026-06-10 (same delegated pattern in index.html) — **deployed & verifie
 
 Principle (user, 2026-06-10): when context is unambiguous from existing events, DON'T add code — derive it (e.g. legal/custom-modes page views = `$pageview` URL filter). Only add an explicit event where there'd be ambiguity (video play, file download).
 
+**GAP — interactive-demo engagement has NO event (confirmed 2026-06-12).** Clicks on the hero
+interactive-demo controls are NOT captured: `video_play` is the demo-*video* Play button (different
+element), `$autocapture` is OFF (not in the schema), only `$rageclick`/`$dead_click` exist (negative
+signals). To measure demo interaction we'd need a new `demo_interact` event. Full baseline + proposal
++ before/after plan for the 2026-06-12 demo UX fix → [[demo-engagement-baseline]].
+
 ## Goals & insights created (2026-06-10)
 Actions (the CTA goals):
 - **277920** — CTA — Buy click (`buy_click`) — primary conversion ✅ verified firing 2026-06-10
@@ -70,8 +76,10 @@ Saved insights (favorited):
 
 Pre-existing = PostHog templates only: Web Analytics starter dashboard **1680409** (WAU/DAU/retention/referring domain), LLM-analytics dashboard **1680554** (ignore — not the landing).
 
-## State of traffic (as of 2026-06-11)
+## State of traffic (as of 2026-06-12)
 Data starts 2026-06-07. **First Reddit post 2026-06-10 ~19:00 Thai** (r/Novation, `reddit.com/r/Novation/comments/1u20ebm/`) → burst of ~37 sessions in 24h, but after removing owner-TH + bots, ~20-25 real external sessions. Reddit gave 811 post views → ~3% click-through to site. Funnels / A/B still premature; Session Replay is the lens.
+
+**Second Reddit post 2026-06-11 (r/ableton, "How do you handle controller setup across different Live sets?", fadercraft.com dropped in OP comment, NOT in post body; flagged as AI-generated, 0 upvotes, 50% ratio, 2.5K post-views) → ZERO measurable site traffic.** Verified 2026-06-12: in the whole 06-11→06-12 window, NO session arrived with a reddit referrer pointing at the new post, and NO non-UTM `$direct` session entered the bare homepage `/` from a target country after the post went live. Every reddit-attributable session in this window still carries `utm_campaign=introduction_post` + entry `/free-custom-modes` = leftover TAIL OF THE OLD r/Novation post (that UTM is the old post's marker; it keeps trickling). Lesson: a dead/down-voted post that buries the link in a comment converts to ~0 clicks; the AI-generated flag likely killed it. Session-level pageview totals (owner excluded, bots NOT yet removed): 06-07=2, 06-09=3, 06-10=30, 06-11=21, 06-12=4 sessions. The 06-11 count is inflated by a ~14-session bot burst at 10:49–10:51 Thai (TH/US Chrome+Windows, vh==sh, same-second, 1 pv on `/`); real human 06-11 traffic ≈ 6-7 sessions, all old-post tail.
 
 **Attribution gotchas (Reddit window):**
 - The post's first hours had NO UTM — traffic arrived as `$direct` with entry `/free-custom-modes` (the post linked the free-modes page directly). From ~00:53 06-11 sessions carry `utm_source=reddit&utm_medium=social&utm_campaign=introduction_post` (link was updated/comment added). Reddit app (WebView) strips referrer → `$direct`; only occasionally `com.reddit.frontpage`. So referrer alone undercounts Reddit badly — use entry path + UTM + timing.
@@ -80,6 +88,15 @@ Data starts 2026-06-07. **First Reddit post 2026-06-10 ~19:00 Thai** (r/Novation
 **Bot/in-app markers:**
 - `$viewport_height == $screen_height` (no browser chrome) ⇒ WebView/headless.
 - NEW (2026-06-10): **same-second pairs** of US Desktop-Chrome + US Mobile-Chrome sessions (e.g. 21:07:43+21:07:48, 21:36:24+21:36:25, 21:49:47+21:49:48), each 1 pageview on `/`, ~5-15s, 0 clicks — link-preview/scraper bots that come after posting a URL on Reddit. Discount them.
+
+**LIFETIME DEMAND READ (2026-06-12, full history 06-07 → 06-12, owner excluded, manual bot tag):**
+- Total `$pageview`: 78 events / 60 sessions raw. After manual bot removal (15 bot sessions): **45 human sessions / ~38 unique visitors**.
+- Human sessions by source: **direct/unattributed 31, reddit 11, internal inter-page nav 3.** ZERO organic-search referrers in the entire history (no google/bing/ddg ref ever). Two real sources only: Reddit (r/Novation 06-10 post) + direct/in-app.
+- Conversion events, ALL TIME: `mode_download`=3 (3 sessions), `video_play`=3, **`buy_click`=0 (NEVER fired once)**, `social_click`=0, `newsletter_signup`=0 (not in event schema = never fired). `purchase`=2 but BOTH `is_bot=1`/`is_test=True` Gumroad pings → **ZERO real purchases ever.**
+- Conversion shares (N too small for significance, report as raw): visit→mode_download = 3/45 ≈ 6.7%; visit→buy_click = 0/45 = 0%; visit→purchase = 0/45 = 0%.
+- Quality by source: of 3 downloads, 2 came from `internal_ref`/`fadercraft.com`-referrer sessions (= engaged multi-page visitors) + 1 reddit; all 3 video_plays were reddit sessions (reddit visitors are the only ones who pressed play). Direct/$direct 31 sessions → mostly single-pageview bounces on `/`, only 1 download. Reddit = highest-engagement source (every multi-pageview + every video_play). Direct = bounciest.
+- Day trend: 06-07=2, 06-09=3, 06-10=18, 06-11=18, 06-12=4 human sessions. Shape = ONE promo spike (Reddit r/Novation post) + decay, no organic tail. Not growth, not plateau — single push, fading.
+- **Verdict: essentially pure push, no market pull yet.** People arrive only when actively pushed (Reddit), grab the FREE modes a little (3 downloads), but 0 buy-intent clicks and 0 sales across the whole life of the site. Demand signal is near-zero on the paid funnel; the only faint positive is free-mode pull from Reddit.
 
 **Owner devices & the leakage (audited 2026-06-11):**
 - `$identify` → `fadercraft-owner` fired 4× total: 06-07 23:44 Brave/Desktop/Mac (laptop), 06-07 23:44 **Chrome iOS** (= Brave on iPhone — Brave iOS uses CriOS UA, PostHog detects it as "Chrome iOS", NOT "Brave"), 06-10 14:41 Mobile Safari ×2 (both with FRESH anon ids 16s apart — typical of private tab / in-app SFSafariViewController where localStorage doesn't persist).

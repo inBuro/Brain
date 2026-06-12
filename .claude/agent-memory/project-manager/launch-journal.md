@@ -2,6 +2,73 @@
 
 Newest entries at the top. Format: What / Numbers / Qualitative / Read / Decision.
 
+## 2026-06-12 — Strategy review: channel map, product future, go/no-go horizon (founder asked "what next / how long")
+**What:** Not an experiment — a direct strategic question from the founder: what's next, what other channels beyond r/Novation, what future for the product, what else to try, and **how long to keep spending effort on it** (explicitly open to pivot/shelve). Synthesized from the full journal + insights + roadmap + a quick external sanity-check on market size (r/ableton ~479k members; r/Novation tiny — topping it costs ~8 upvotes; LCXL MK3 is a niche channel-strip controller, grid controllers Launchpad/APC are the more populous Ableton market). No invented numbers — live sales/sessions stay with analyst.
+
+**Numbers (recap, no new data):** best post → ~20-24 real sessions (~1% of post views); sales 0 (analyst, n≈20 = noise, offer-conclusion threshold ~100+ sessions); post #1 = 93.3% ratio / 12 shares (the cleanest positive signal we have).
+
+**Qualitative / external calibration:** the value hypothesis is validated (4 independent DIY rigs in the post #1 thread = ICP exists, insight #1). The bottleneck is volume, not value. Channel map by descending fit: r/Novation (core, friendly, but tiny + can't spam) → maxforlive.com listing (high-fit, passive, evergreen, zero rejection risk — NOT YET DONE) → FB LCXL groups → r/ableton (big but rule-heavy, rule-5 caps promo) → r/abletonlive / r/madewithableton (untested) → Ableton forum / Elektronauts / Gearspace (relationship channels) → YouTube (currently hosting-only, evergreen potential via search-intent tutorials). Key law: farther from r/Novation = wider audience but smaller share of actual LCXL owners.
+
+**Read (PM):**
+- **Stage diagnosis is the crux: this is pre-revenue CHANNEL validation, not offer validation.** 0 sales on ~20 sessions is not an offer verdict — it's "channel not yet pumped enough to even test the offer". Conflating the two is the main self-deception risk to guard against.
+- **Single biggest cheap miss = maxforlive.com listing.** It's the only high-fit channel we simply haven't switched on: passive, evergreen, zero rejection risk, qualified intent. Highest leverage-per-effort in the whole backlog. Made it top-priority in roadmap.
+- **TAM honesty:** Control XL on one piece of hardware (niche LCXL MK3) = "nice passive side-income on a niche", tens-to-low-hundreds of sales realistically. The ONLY path to something bigger is the umbrella-brand + line strategy (same engine/idea ported to APC/Launchpad/Push = materially larger market). But line-extension is forbidden until the first device makes its first sale — extending before that is scaling an unvalidated hypothesis.
+- **The 12 shares on post #1 remain the truest positive signal** (cleaner than upvotes — people forwarding = "worth passing on"). Track shares as first-class on every future post.
+
+**Decision (direction, re-openable per the founder's "decisions are direction" rule; synced to roadmap):**
+- **Measurable horizon set:** give the channels **4-6 weeks + ~5-6 quality touches** (proven-format posts + maxforlive listing + 1-2 content assets), target **~100+ cumulative real sessions**. Deciding signal = **first real paying sale** (not a Gumroad test ping).
+- **Fork at end of window:** GO (≥1 real sale or clear buy-intent on 100+ sessions → think device #2 / umbrella line) / PASSIVE (100+ sessions, warm qualitative but zero sales/intent → listing+landing+free-modes run passively, stop manual marketing, don't kill the asset) / NO-GO-pivot (idea itself stops resonating in the proven format across subs).
+- **Next 2-4 weeks, prioritized by leverage:** (1) ship maxforlive.com listing FIRST (with `/m4l` UTM redirect pre-publish); (2) let the bridge + hero A/B 376381 accumulate — DON'T touch (anti-impulse), bridge checkpoint ~2026-06-17; (3) next Reddit post in the PROVEN format (insight #11), NOT r/Novation again (rule-5 brand-account risk) — candidates r/abletonlive or r/madewithableton, pass-bar ratio ≥80%/no AI call-out set before posting; (4) seed one evergreen YouTube search-intent tutorial (flips YT from hosting to discovery); (5) keep harvest-tactic in live threads (insight #10) — Gig Performer 4×LCXL photos = social-proof candidate with permission.
+- **Don't do this window:** no offer/price change (n≈20 = noise), no second post same sub same day, no device #2 (no first sale yet), no landing polish without bridge data.
+- **Handoff:** founder will merge this with analyst's live numbers for the final call. Roadmap updated: maxforlive bumped to ★ top-priority; STRATEGIC CHECKPOINT block (go/passive/no-go + 4-6wk/100-sessions/first-sale criteria + TAM/umbrella note) added under the distribution section; next-post (proven format) and evergreen-tutorial tasks added.
+
+## 2026-06-12 — Second Reddit post: r/ableton, soft-launch "question + comment-drop" format
+**What:** Second product-distribution post, first in r/ableton (post id `1u2wwuz`), published ~16 h before this snapshot (≈evening 06-11 ICT). New FORMAT vs post #1: a question/discussion post framed as a user's own dilemma — title "How do you handle controller setup across different Live sets? (and what I landed on)?" — with **no link in the body**; the fadercraft.com link is dropped organically in OP's own comment ("If you're curious, this is what I ended up with: fadercraft.com"). Goal: drive landing traffic + validate the pain, without tripping r/ableton's "No AI" / "No selling" rules. This is the post wave that also feeds the hero A/B (376381) and the bridge measurement.
+
+**Numbers (Reddit Post Insights, INTERIM snapshot 2026-06-12 ~16 h after publish — superseded by the 24 h cut below):**
+- Views: **2.5K** (US 40%, UK 11.7%, DE 7.1%, Other 41.2%)
+- Upvotes: **0 (−1 net)**; upvote ratio **50%**
+- Comments: **8**
+- ~~Shares: 0~~ — **ERROR, corrected below: the Shares row was cut off on the screenshot; real value = 3.**
+- Badges: "#6 post of all time" (account), "#9 post on r/ableton today"
+- Caveat: link target was the bare `fadercraft.com` in a comment — NOT a UTM vanity redirect (`/r-modes` etc.). Attribution for this post is weaker than it should be; see Decision.
+
+**Numbers (Reddit Post Insights, FINAL cut — snapshot 2026-06-12, post ~16 h old, ~24 h-window update; supersedes the interim cut above):**
+- Views: **2.6K** (+46 over the interim cut). Top countries by views: US 40.1%, UK 11.6%, DE 7.1%, Other 41.3%
+- Upvotes: **1** (rebounded from 0); upvote ratio **66.7%** (rebounded from 50%)
+- Comments: **8**
+- **Shares: 3** (NOT 0 — the interim "0 shares" was a screenshot-crop error; the Shares section was clipped). Reposts: 0; Awards: 0
+- Status: "**#5 post of all time**" (account, up from #6), "**#7 post on r/ableton today**" (up from #9)
+
+**Read (PM, FINAL cut 2026-06-12) — the verdict holds but is softer than "the post died at zero":**
+- The 16 h "0 up / 50% ratio / 0 shares" read was the bottom, not the resting state. By the 24 h window the post **rebounded**: upvote 0→1, ratio 50%→66.7%, and it actually carries **3 shares**. Part of the audience did value the content — 3 people forwarded it and the early downvote(s) got diluted/reversed. The "format failed" read stands, but the accurate framing is "**the format performed several times weaker**", not "the post died in the ground". Reach (2.6K) is normal niche-sub volume; this was never a reach failure.
+- **The natural A/B vs post #1 re-reads as a magnitude gap, not all-or-nothing.** Post #1: 12 shares / 93.3% ratio / 13 upvotes at 4.4K views. Post #2: 3 shares / 66.7% ratio / 1 upvote at 2.6K views — **comparable reach (4.4K vs 2.6K)**. The shares contrast is **~4× (12 vs 3)**, not "everything vs nothing". The conclusion is unchanged — post #1's format won decisively on every engagement metric, most sharply on ratio (93.3 vs 66.7) and upvotes (13 vs 1) — but it won by a wide margin, not by a knockout. insight #11 corrected accordingly.
+- **Site traffic from this post stays 0 (analyst).** A share is an in-Reddit action (forwarding the post), not a click on the external link — so 3 shares do not move site sessions. No funnel change from this correction.
+
+**Qualitative (the main signal — read this, not the vote count):**
+- **Top comment (ya_rk, +5): "I don't get why you need to use AI to write a reddit question."** The post was made as AI-generated, and that call-out is the single most-upvoted thing in the thread — more upvoted than the post itself. AutoModerator separately reminded the sub's rules ("No AI", "No selling").
+- OP's reply (+1): "Fair point 😅 ... the AI part wasn't the point ... I ended up building a solution for myself after getting tired of rebuilding mappings in every project ... became a Max for Live device ... fadercraft.com ... Would genuinely be interested to hear how you're handling it." — recovered by owning it and re-asking the real question.
+- **braintransplants (+2): "Remote script + master template"** — on-topic, the same job-to-be-done as post #1's commenters (insight #1 holds: people answer with their own permanent-interface workaround).
+- After the recovery, a normal technical dialogue followed (OP ↔ participants on remote script vs master template, fixed mixer layer, etc.).
+
+**Read (PM):**
+- **The format failed on its own terms, and the cause is specific: AI-detection, not the topic.** The negative reaction was not "stop selling" or "spam" — it was "this reads as AI-written". On r/ableton (an explicit "No AI" sub) a question-shaped post in polished AI prose pattern-matches to karma-farming/astroturf, and the community punished the *form*. Net −1 / 50% ratio is real rejection (contrast post #1's 100% ratio, zero downvotes at 2.8K views). This is the first rejection signal we've gotten on either channel — and it's a format verdict, not an offer or audience verdict.
+- **Why post #1 (r/Novation) outperformed — the differences, ranked by likely impact:**
+  1. **Voice/authenticity.** Post #1 was a first-person "here's the rig I built and why" — a builder showing his thing. Post #2 was a *question* ("how do you all handle X?") that the author already knew the answer to, written in AI-polished prose → reads as manufactured/disingenuous. The Socratic-question-with-a-product-reveal is a known astroturf shape; r/Novation didn't catch it because post #1 wasn't that shape.
+  2. **Sub culture.** r/ableton is bigger, more rule-heavy (explicit No-AI/No-selling + active AutoModerator), more cynical about marketing than the smaller, friendlier r/Novation. Same content gets a harsher read here.
+  3. **Link placement.** Post #1: link in the body, in context of a genuine show-and-tell. Post #2: link withheld from body and dropped in a comment — intended as "soft", but combined with the question-framing it reads as a setup/reveal, which is *more* manipulative-looking, not less.
+  - Note what did NOT differ: the underlying idea ("stop rebuilding your controller every project") pulled the same on-topic responses in BOTH subs (braintransplants' "remote script + master template" = insight #1 again). The pain resonates; the *packaging* is what r/ableton rejected.
+- **The recovery is the salvageable part.** OP owning the AI call-out plainly + re-asking the real question (insight #10: ask about THEIR setup) turned a hostile open into a working technical thread (+1, +2, ongoing dialogue). The thread is not a write-off; the *post* is.
+- **Reach was fine, conversion-readability is poor.** 2.5K views in 16 h is normal niche-sub reach (post #1 hit 2.8K @ 15 h). But (a) the bare-`fadercraft.com` link instead of `/r-modes` means we can't cleanly attribute this post's site traffic via UTM — only entry-page + timing; (b) the link sits in a low-upvote comment under a downvoted post, so it's less visible than post #1's body link. Expect weaker site sessions than post #1's ~1% of views, but the analyst cut will tell.
+
+**Decision (honors anti-impulse + UTM-from-minute-one rules):**
+- **Don't panic, don't delete, don't re-post today.** One post in one sub is not a channel verdict (insight #4). r/ableton is not "burned" — the *format* is. The recovered thread is doing fine; let it breathe.
+- **Format verdict — retire the AI-prose question-with-comment-reveal shape.** Next post returns to post #1's proven shape: first-person show-and-tell, written in the user's own voice (NOT model-drafted prose), link in the body, idea-first framing. New insight #11.
+- **UTM gap — process fix.** This post shipped with a raw `fadercraft.com` link, violating insight #9 (UTM from minute one). For the NEXT post the link must be a vanity redirect with a distinct campaign so r/ableton traffic is separable from r/Novation's — e.g. add `/ra` or reuse `/r-modes` with a new `utm_campaign`. Pre-publish checklist item.
+- **Next experiment (proposed, not yet scheduled):** one more r/ableton attempt in the corrected format to test whether the sub rejected the *format* or *us* — first-person, own-voice, body link, no question-bait. If that ALSO gets a hostile read, the verdict shifts from "format" to "sub culture" and we pivot effort to r/abletonlive / r/Novation / maxforlive.com listing. Success criterion set BEFORE posting: upvote ratio ≥ ~80% and no AI/spam call-out as a top comment.
+- **Analyst dependency (running in parallel):** the offer/funnel read for this window needs live numbers — see the metrics list I'm sending separately. Until then, no funnel conclusions from this post.
+- **Checkpoint:** re-snapshot r/ableton at ~24 h (≈2026-06-12 evening ICT) for the real reach + whether the downvote/ratio recovered or worsened; pair with the analyst site cut.
+
 ## 2026-06-11 — Hero A/B experiment LAUNCHED: `hero-permanent-interface` (PostHog 376381)
 **What:** First live application of insight #1 (permanent interface). PostHog experiment **id 376381** (https://us.posthog.com/project/458316/experiments/376381), **running since 12:46 ICT 2026-06-11** on the home page. Control = current feature-led hero. Test = eyebrow "M4L INTERFACE FOR LCXL MK3" / H1 "One controller. Your permanent interface." / sub "Map once — the same layout from studio to stage, in every Live Set." Primary metric: **buy_click**.
 
@@ -133,6 +200,26 @@ The checkpoint recommendation was "product + price visible on the page + return 
 - Reddit badges: "your #1 post of all time" (trivial — first product post) and "#2 post on r/Novation today"
 - Top countries by views: US 30.1%, UK 11%, Thailand 5.1% (Thailand ≈ the owner himself), Other 53.9%
 - Dynamics across snapshots: 518 views / 3 up (~1.5 h) → 811 views / 4 up / 8 comments (~2 h) — +57% views in ~30 min
+
+**Numbers (FINAL cut, snapshot 2026-06-12 ≈ post ~2 days old, Reddit Post Insights — supersedes the 15 h interim cut):**
+- **Views: 4.4K** (still growing, +19 in the moment — algorithm is still distributing the post 2 days in; supersedes the ~2.8K / 15 h interim figure)
+- Top countries by views: US 33.2%, UK 9.8%, DE 7.0%, Other 50.1%
+- Upvotes: **13**; upvote ratio **93.3%**
+- Comments: **10**
+- **Shares: 12** — meaningful organic-distribution signal (people forwarded the post)
+- Reposts: 0; Awards: 0
+- Status badge: "**#1 post of all time**" (account)
+- Snapshot timeline (full): 518 (~1.5 h) → 811 (~2 h) → 2,800 (~15 h) → 4,400 (~2 d) ⇒ reach kept compounding well past 24 h; even at ~2 d the counter is still ticking up (+19 in the moment)
+
+**Read (PM, FINAL cut 2026-06-12):**
+- **This pair of posts is a natural A/B test — one product, one author, two formats, near-equal reach (4.4K vs 2.6K).** Holding product and author constant, the only big variable between this post and post #2 (r/ableton) is the FORMAT: first-person show-and-tell, own voice, body link, friendly small sub (this post) vs AI-drafted question-with-comment-reveal in a rule-heavy sub (post #2). The outcome contrast is wide but not all-or-nothing: **shares 12 vs 3 (~4×)**, **upvote ratio 93.3% vs 66.7%**, **upvotes 13 vs 1**. That is direct empirical confirmation that post #2's format performed several times weaker — a *format* problem, not an *audience/product* problem (insight #11). r/Novation kept getting fed by the algorithm for 2 days; r/ableton stalled early.
+- **12 shares is the standout signal — stronger than the upvote count.** Shares = people actively forwarding the post to someone else, the cheapest real proxy for "this is worth passing on" we have. Post #2 got 3 — some value, but ~4× less. This is organic distribution working, and it's why the algorithm kept serving this post.
+- Ratio drifted 100% → 93.3% (a handful of downvotes appeared at 4.4K views) — still overwhelmingly positive, no rejection signal; normal dilution as a post reaches a broader, less self-selected audience.
+
+**Decision (FINAL):**
+- **Post #1 closed as the channel's proven template.** Its format is the default Reddit shape (insight #11): first-person show-and-tell, own voice, body link. This is no longer a hypothesis — the A/B against post #2 confirms it on near-equal reach.
+- No further action on this post — it's a 2-day-old asset still distributing on its own; let it ride. No re-snapshot needed unless something anomalous appears.
+- The 12 shares are a candidate signal to watch on future posts: track shares as a first-class metric alongside ratio (not just upvotes/views) — it predicted continued algorithmic reach here.
 
 **Qualitative:** Commenters discuss fixed layouts, dawless workflows, hardware mixing, MIDI ports, Elektron. Almost nobody discusses the concrete features: 14 channels, 6 controls, pages, banks, hotkeys — or the Fadercraft name itself. Nobody asked "how do the hotkeys work?", but people volunteered "I also built one fixed template".
 
