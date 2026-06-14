@@ -9,6 +9,8 @@ updated: 2026-05-26
 
 **Summary**: Single source of truth for all Fadercraft external URLs (social, storefronts, support, docs). Used by the landing site, footer, README and any outreach. Update here first, then propagate to code.
 
+> **Looking for the short tracked links** (`/r`, `/yt`, `/r-ableton`, `/m4l`, …)? Those are **campaign-tracked vanity redirects** and live on their own page — see [[outbound-links]] (mirrors `app/public/_redirects`). They are intentionally NOT in this file.
+
 **Sources**: —
 
 **Last updated**: 2026-05-26
@@ -54,6 +56,7 @@ When updating a link here, also touch:
 
 ## Related pages
 
+- [[outbound-links]]
 - [[index]]
 - [[roadmap]]
 - [[payment-rails]]
