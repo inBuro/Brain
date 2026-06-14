@@ -2,7 +2,7 @@
 type: reference
 project: Fadercraft
 created: 2026-06-12
-updated: 2026-06-12
+updated: 2026-06-14
 ---
 
 # Outbound Links (tracked vanity redirects)
@@ -11,7 +11,7 @@ updated: 2026-06-12
 
 **Sources**: `~/Projects/Claude/Fadercraft/app/public/_redirects` (canonical source of truth — this page mirrors it for quick retrieval).
 
-**Last updated**: 2026-06-12
+**Last updated**: 2026-06-14
 
 ---
 
@@ -32,11 +32,10 @@ updated: 2026-06-12
 
 ## Reddit — r/Novation post — campaign `introduction_post`
 
-First Reddit post (2026-06-10). Keep these tagged to this campaign so they don't mix with later Reddit posts.
+First Reddit post (2026-06-10); the post itself linked `/r-modes`. Keep these on `introduction_post` so they don't mix with later posts. **`/r` was repurposed** into the general `organic` link (see below) — it was never the post's active link.
 
 | Short link | → Target | utm_source / medium / campaign | Use for |
 |---|---|---|---|
-| `https://fadercraft.com/r` | home `/` | reddit / social / introduction_post | site link |
 | `https://fadercraft.com/r-modes` | `/free-custom-modes` | reddit / social / introduction_post | free modes link (this is what the original post linked) |
 | `https://fadercraft.com/r-buy` | gumroad `l/control-xl` | reddit / social / introduction_post | buy link |
 
@@ -50,6 +49,22 @@ Second Reddit post (2026-06-11/12). Links go **only in replies**, never in the p
 | `https://fadercraft.com/r-ableton-modes` | `/free-custom-modes` | reddit / social / ableton_post | reply about free modes (goodwill / safest, not selling) |
 
 > No `r-ableton-buy` was created on purpose — pushing a buy link in r/ableton risks the No-selling rule. Reveal the product via `/r-ableton` (home) only when asked.
+
+## Reddit — general outreach — campaign `organic`
+
+Evergreen link for ad-hoc Reddit replies across threads (not a dedicated post). One link, no per-post variants. Use **value-first** — drop only when contextual or asked, to avoid shadowban.
+
+| Short link | → Target | utm_source / medium / campaign | Use for |
+|---|---|---|---|
+| `https://fadercraft.com/r` | home `/` | reddit / social / organic | ad-hoc Reddit comment replies (evergreen) — short canonical, repurposed from the old first-post link |
+
+## Max for Live — maxforlive.com listing — campaign `control_xl_listing`
+
+| Short link | → Target | utm_source / medium / campaign | Use for |
+|---|---|---|---|
+| `https://fadercraft.com/m4l` | home `/` | maxforlive / referral / control_xl_listing | site link in the maxforlive.com listing |
+| `https://fadercraft.com/m4l-modes` | `/free-custom-modes` | maxforlive / referral / control_xl_listing | free modes link |
+| `https://fadercraft.com/m4l-buy` | gumroad `l/control-xl` | maxforlive / referral / control_xl_listing | buy link |
 
 ## Non-tracked placement links
 
