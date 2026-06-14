@@ -93,9 +93,16 @@ carrying `utm_source=maxforlive&utm_medium=referral&utm_campaign=control_xl_list
 - `/m4l-modes` → `/free-custom-modes`
 - `/m4l-buy` → Gumroad
 ANY session with `utm_campaign=control_xl_listing` (or `utm_source=maxforlive`) = a click from the
-maxforlive listing. Do NOT confuse with the reddit markers above. Attribution starts accumulating
-only AFTER the founder swaps the listing's External Link to `https://fadercraft.com/m4l` — listing is
-fresh, no traffic yet (don't count maxforlive numbers until they appear).
+maxforlive listing. Do NOT confuse with the reddit markers above.
+**ALIVE as of 2026-06-15:** first real maxforlive session landed 2026-06-15 00:16 ICT (ES/Desktop
+Edge): entered `/`, went to `/free-custom-modes`, 74s, **mode_download ×1**. Quality visit (the
+listing's External Link swap worked). Maxforlive numbers are now real — start counting them.
+
+**NEW reddit UTM marker `organic` (seen 2026-06-15).** Fresh reddit sessions now arrive with
+`utm_source=reddit&utm_medium=social&utm_campaign=organic` (NOT `introduction_post`). The old
+r/Novation `introduction_post` tail is DEAD — its last session was 2026-06-12 10:10 ICT. So as of
+mid-June there are two live channels: reddit `organic` (mostly bounce on `/`, ref `$direct` = app
+WebView) + maxforlive `control_xl_listing`. Treat `introduction_post` sessions as historical only.
 
 ## State of traffic (as of 2026-06-12)
 Data starts 2026-06-07. **First Reddit post 2026-06-10 ~19:00 Thai** (r/Novation, `reddit.com/r/Novation/comments/1u20ebm/`) → burst of ~37 sessions in 24h, but after removing owner-TH + bots, ~20-25 real external sessions. Reddit gave 811 post views → ~3% click-through to site. Funnels / A/B still premature; Session Replay is the lens.
