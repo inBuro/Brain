@@ -2,7 +2,7 @@
 type: reference
 project: Fadercraft
 created: 2026-06-12
-updated: 2026-06-14
+updated: 2026-06-15
 ---
 
 # Outbound Links (tracked vanity redirects)
@@ -11,7 +11,7 @@ updated: 2026-06-14
 
 **Sources**: `~/Projects/Claude/Fadercraft/app/public/_redirects` (canonical source of truth — this page mirrors it for quick retrieval).
 
-**Last updated**: 2026-06-14
+**Last updated**: 2026-06-15
 
 ---
 
@@ -58,6 +58,16 @@ Evergreen link for ad-hoc Reddit replies across threads (not a dedicated post). 
 |---|---|---|---|
 | `https://fadercraft.com/r` | home `/` | reddit / social / organic | ad-hoc Reddit comment replies (evergreen) — short canonical, repurposed from the old first-post link |
 
+## Telegram — organic — campaign `organic`
+
+Evergreen links for organic Telegram posts (own channel / music-production communities). Telegram's in-app browser strips the referrer, so the entry page + UTM is the only attribution — same as Reddit. Lead value-first (free modes) in communities.
+
+| Short link | → Target | utm_source / medium / campaign | Use for |
+|---|---|---|---|
+| `https://fadercraft.com/tg-modes` | `/free-custom-modes` | telegram / social / organic | **primary** — value-first hook (free Launch Control XL modes) for organic posts |
+| `https://fadercraft.com/tg` | home `/` | telegram / social / organic | full product story (when leading with the device, not the free modes) |
+| `https://fadercraft.com/tg-buy` | gumroad `l/control-xl` | telegram / social / organic | direct buy link |
+
 ## Max for Live — maxforlive.com listing — campaign `control_xl_listing`
 
 | Short link | → Target | utm_source / medium / campaign | Use for |
@@ -73,8 +83,8 @@ Evergreen link for ad-hoc Reddit replies across threads (not a dedicated post). 
 ## Adding / changing a link
 
 1. Edit `~/Projects/Claude/Fadercraft/app/public/_redirects` (whitespace-delimited: `/<slug>  <target+utm>  302`).
-2. From `~/Projects/Claude/Fadercraft`: `git add -A && git commit && git push`, then `cd app && npm run build`, then `source ~/.config/cloudflare/env && wrangler pages deploy app/dist --project-name=fadercraft-landing`.
-3. Verify on prod: `curl -sI "https://fadercraft.com/<slug>"` → expect `302` + correct `location:` with the UTM.
+2. **Run the deploy from `app/`, not the repo root** — `cd ~/Projects/Claude/Fadercraft/app && npm run build && source ~/.config/cloudflare/env && wrangler pages deploy dist --project-name=fadercraft-landing`. Wrangler resolves `functions/` relative to CWD: deploying `app/dist` from the repo root silently ships **without** the Pages Functions (PostHog `/ingest` proxy, www→apex 301, the cache-poisoning guard) — confirmed-broken-then-fixed 2026-06-15. The successful run prints `✨ Compiled Worker successfully` + `Uploading Functions bundle`; if you don't see those, functions were dropped. Then `git add -A && git commit && git push` for history.
+3. Verify on prod: `curl -sI "https://fadercraft.com/<slug>"` → expect `302` + correct `location:` with the UTM. Also confirm functions survived: `curl -s -o /dev/null -w '%{content_type}' https://fadercraft.com/ingest/static/array.js` → `application/javascript` (not `text/html`).
 4. Mirror the change into this page.
 
 ## Related pages
