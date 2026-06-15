@@ -103,12 +103,26 @@ maxforlive listing. Do NOT confuse with the reddit markers above.
 **ALIVE as of 2026-06-15:** first real maxforlive session landed 2026-06-15 00:16 ICT (ES/Desktop
 Edge): entered `/`, went to `/free-custom-modes`, 74s, **mode_download ×1**. Quality visit (the
 listing's External Link swap worked). Maxforlive numbers are now real — start counting them.
+**LIFETIME maxforlive (as of 2026-06-15 18:11 ICT): 2 sessions / 2 unique persons / 3 pageviews,
+mode_download ×1, buy_click 0, video_play 0.** Both visits 06-15 (00:16 ES Desktop/Edge → `/`→
+`/free-custom-modes`, dl×1; 04:58 DK Desktop/Firefox → `/` only, bounce, ref=maxforlive.com). No
+per-week breakdown — both same day. Still single drops, not a stream.
+**ATTRIBUTION GOTCHA (verified 2026-06-15): UTM lives on `$pageview`, NOT on conversion events.**
+Filtering `mode_download`/`buy_click` by `properties.utm_source='maxforlive'` returns 0 — the
+download/buy event fires WITHOUT utm props. To count a channel's conversions you MUST go session-level:
+take session_ids whose `$pageview` carried the UTM, then count conversion events within those sessions
+(subquery on `$session_id`). The per-UTM-on-event count undercounts (misses every dl/buy/video).
 
 **NEW reddit UTM marker `organic` (seen 2026-06-15).** Fresh reddit sessions now arrive with
 `utm_source=reddit&utm_medium=social&utm_campaign=organic` (NOT `introduction_post`). The old
 r/Novation `introduction_post` tail is DEAD — its last session was 2026-06-12 10:10 ICT. So as of
 mid-June there are two live channels: reddit `organic` (mostly bounce on `/`, ref `$direct` = app
 WebView) + maxforlive `control_xl_listing`. Treat `introduction_post` sessions as historical only.
+
+**NEW channel `telegram` (first seen 2026-06-15).** A `utm_source=telegram` session appeared in the
+06-15 breakdown (1 pageview). New acquisition surface — watch it; UTM params for the telegram link
+not yet documented. The 06-15 push was multi-source: reddit `organic` 9 pv + maxforlive 3 pv +
+telegram 1 pv (+ direct/None 9 pv). Same impulse-spike shape as Reddit, not a steady tail.
 
 ## State of traffic (as of 2026-06-12)
 Data starts 2026-06-07. **First Reddit post 2026-06-10 ~19:00 Thai** (r/Novation, `reddit.com/r/Novation/comments/1u20ebm/`) → burst of ~37 sessions in 24h, but after removing owner-TH + bots, ~20-25 real external sessions. Reddit gave 811 post views → ~3% click-through to site. Funnels / A/B still premature; Session Replay is the lens.
