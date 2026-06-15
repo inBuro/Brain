@@ -5,7 +5,17 @@ metadata:
   type: project
 ---
 
-# r/Novation post #1 — measured site impact (analysed 2026-06-14)
+# r/Novation post #1 — measured site impact (analysed 2026-06-14, re-confirmed 2026-06-15)
+
+**Re-run 2026-06-15 (Reddit Insights screenshot: 6.6K views, post id 1u20ebm, US37/UK8.9/DE6.3/Other47.8, 19up/95.2%/14c/25sh):** all findings below hold. This post's PostHog
+marker = `utm_campaign=introduction_post`. Its flow was alive 06-11 (7 sessions) → 06-12 (4,
+last at 10:10 ICT) → **06-13=0, 06-14=0** = fully spent, no organic tail. One late tail session
+06-15 04:18 (NL /free-modes). `buy_click`=0 across the whole window AND across ALL sources
+(maxforlive, direct too) → buy-intent bottleneck is on-site, not reddit-specific. The 06-14/15
+mini-bump is NEW reddit markers, NOT this post: `organic` (06-14 23:39 US, 06-15 ×3) +
+`ableton_post` (06-15 02:50 US video_play, 06-15 05:39 RU/Yandex **download**). So as of mid-June
+`introduction_post` is historical; live reddit = `organic` + `ableton_post`. Both purchases in the
+window were `is_test=True` (US, SG, both 06-10) → still zero real sales lifetime.
 
 The single best-performing organic post of the account. Reddit-side stats (founder, not
 PostHog): 6.2K post views in 48h, 19 upvotes, 95.2% ratio, 14 comments, 21 shares (shares >

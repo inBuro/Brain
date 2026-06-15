@@ -2,6 +2,30 @@
 
 Newest entries at the top. Format: What / Numbers / Qualitative / Read / Decision.
 
+## 2026-06-15 — Post #1 confirm-cut (shares keep climbing while votes/comments freeze — pure tail decay)
+**What:** Yet another Reddit Post Insights cut of the SAME r/Novation post #1 (id 1u20ebm), fed by the founder 2026-06-15 (~5 days / ~120 h after the ~19:00 ICT 2026-06-10 launch). Not a new experiment — a confirm-snapshot that SUPERSEDES the 2026-06-14 cut. No new qualitative input (thread unchanged). The only purpose here is to record the delta and check whether the engagement profile held.
+
+**Numbers (Reddit Post Insights, cut fed 2026-06-15; vs the 2026-06-14 / ~4-day cut in brackets):**
+- Views: **6.6K** (was 6.2K → +0.4K; "still trickling +25" — long tail per insight #3, now ~120 h in and nearly flat)
+- Upvotes: **19** (was 19 — frozen)
+- Upvote ratio: **95.2%** (was 95.2% — held exactly)
+- Comments: **14** (was 14 — frozen)
+- **Shares: 25** (was 21 → +4; **shares now exceed upvotes by 6 — the gap WIDENED, 25 > 19**)
+- Reposts: 0; Awards: 0 (unchanged)
+- Geo by views: US 37%, UK 8.9%, Germany 6.3%, Other 47.8% (consistent with all prior cuts — US core, UK/DE secondary; US share ticked up vs 36.2% on 06-14)
+- Curve note from founder: "sharp early peak, long decay tail — typical Reddit profile." Confirms insight #3 (reach is feed-driven and tail-dominant), nothing new.
+
+**Read (PM) — this is a confirmation, not news; the one live signal is shares decoupling from everything else:**
+- **Votes, ratio and comments have all flat-lined; only shares are still moving (+4 in a day, 21→25).** Reach is essentially done (~120 h, +25 views), and the cheap/medium signals (upvotes, comments) stopped accumulating — but people are STILL forwarding the post. Shares are the last metric standing. That sharpens insight #15: in the dead tail, the only behavior that persists is the most socially-expensive one (a deliberate "this is so you" forward). The post stopped earning votes but keeps earning forwards — strongest possible read that what landed is a *specific, named pain* someone keeps recognizing in a friend, not a momentary upvote-worthy novelty.
+- **shares > upvotes is now stable across two independent cuts (21>19 on 06-14, 25>19 on 06-15), and the gap widened.** This was the rare/headline finding on 06-14; a second cut confirms it wasn't a one-read artifact. The share-to-upvote inversion is a durable property of this post, not a blip. Decompose: at 6.6K views → 19 upvotes ≈ **347:1 views-per-upvote** (still the ~350:1 feed-impression ratio — reach never became vote-driven, insight #3 holds end-to-end).
+- **What this cut does NOT change:** still ONE post (insight #4 — not a license to over-rotate); still an *engagement/resonance* read, NOT a conversion read (sales/sessions stay with analyst, unchanged by shares which are in-Reddit forwards, not link clicks — insight #7); angle (permanent-interface) + format (first-person own-voice show-and-tell) already triangulated to VALIDATED on 06-14 — this adds a 4th weaker confirmation, doesn't move the verdict. No benchmark shift: this is the same post that's been the account's all-time best since day one.
+
+**Decision (direction; nothing changes — the 06-14 decisions stand):**
+- **No action on this post. It's a 5-day-old asset in flat decay — let it fully retire.** Do not snapshot it again unless something anomalous appears (a sudden vote/comment swing, a hostile late comment, or the Gig-Performer 4×LCXL photos landing — the one high-value re-engagement, insight #10). Routine re-snapshots of a frozen post are vanity-metric watching (железное правило #3) — stop here.
+- **Carry forward, don't restate:** the next-post plan (re-use the validated angle + format, channel/sub sequencing, r/ableton corrected-format retry, evergreen YT tutorial) is fully set in the 2026-06-14 + 2026-06-12 entries and the roadmap — no change. The conversion verdict stays under the 4-6 week / ~100-session / first-sale strategic checkpoint (2026-06-12 entry); shares do NOT touch it.
+- **One durable takeaway for future posts:** shares are the metric that keeps reporting after everything else flat-lines — on every future post, the LAST cut should specifically watch shares-after-freeze, not upvotes. It's the truest late signal of whether the angle had real legs.
+- **Checkpoint:** none owed for this post. Next real read is the analyst conversion cut → the 100-session/first-sale checkpoint.
+
 ## 2026-06-14 — Post #1 engagement-profile review (NEW Reddit cut: shares now exceed upvotes — 4-day winner)
 **What:** Re-read of the r/Novation post #1 ("I started using the Launch Control XL MK3 as a fixed performance layer instead of remapping it per project") on a FRESH Reddit cut fed by the founder 2026-06-14 — best post of the account all-time. Same post already logged at 2026-06-10 / -11 / -12; this cut SUPERSEDES the 2026-06-12 FINAL figures and adds an engagement-PROFILE analysis the journal didn't have. Not a new experiment — a deeper read of the winning one.
 
