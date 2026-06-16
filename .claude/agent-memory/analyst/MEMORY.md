@@ -7,6 +7,8 @@ Read at the start of every task. One line per memory file.
 - [demo-engagement-baseline.md](demo-engagement-baseline.md) — before/after baseline for the 2026-06-12 interactive-demo UX fix; NO demo-interaction event yet (gap → propose `demo_interact`); comparison plan for the next ~100+ session spike
 - [reddit-novation-post-1.md](reddit-novation-post-1.md) — the 2026-06-10 r/Novation post measured: ~10x traffic day, 11 reddit sessions, ~0.2–0.4% post→site CTR, geo matches US/UK/DE, 0 buy_click/0 sales → verdict REACH not conversion
 - [buy-cta-visibility-2026-06-15.md](buy-cta-visibility-2026-06-15.md) — replay+scroll read of 06-15 engaged sessions: buy CTA = 10th of 11 blocks (bottom), no nav/hero Buy; nobody scrolled to it → VISIBILITY not persuasion. ALSO: $autocapture clicks + scroll-depth props ARE queryable (corrects old "autocapture OFF")
+- [day-2026-06-16.md](day-2026-06-16.md) — FIRST buy_click ever (06-16 17:56, US iPad, control variant, $direct, no scroll on `/` → buy CTA now reachable above-fold?); experiment exposure bug FIXED ($feature_flag_called fires, control 6/test 7); 22 sessions (4th-biggest), reddit `abletonlive_post` #3 the engine; NEW reddit campaign value `abletonlive_post`
+- [teams-referrer-2026-06-16.md](teams-referrer-2026-06-16.md) — NEW channel: 2 GB sessions opened from inside Microsoft Teams (referrers statics.teams.cdn.office.net + teams.public.onecdn.static.microsoft), 06-16 ~22:07–22:12, one a High Wycombe (Novation HQ) RETURNER first seen on free-modes 06-10 → fits Isotonik/Novation-insider hypothesis; n=2, no UTM, both bare `/`
 
 ## Standing context
 - Reports in Russian (chat), artifacts/docs in English. Clock times in Thai time (UTC+7).

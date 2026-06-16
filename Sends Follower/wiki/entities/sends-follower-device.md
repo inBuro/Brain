@@ -12,7 +12,7 @@ patcher; the object IDs in parentheses are the patcher box IDs.
 | Self-detects which return it sits on | Works | Patch path chain and a JS fallback, see [[../concepts/self-healing-return-index\|Self-healing]] |
 | Writes follow value to a downstream parameter via modulation | Needs verification | `live.remote~` maps to `devices 1 parameters 5` — see Limitations |
 | Exposes follow value on internal buses | Works | `---max_send` and `---max_send_percent`, see [[../concepts/internal-buses\|Internal buses]] |
-| Embedded JavaScript shipped inside the device | No (missing) | `sends_follower.js` is referenced but NOT embedded and NOT on disk next to the device — see Limitations |
+| Embedded JavaScript shipped inside the device | Yes (frozen 2026-06-16) | `sends_follower.js` is now embedded in the frozen container, byte-identical to the Archive copy — see Limitations |
 | Front-panel parameter exposed to Live | No | The dial (`obj-3`) has `parameter_enable: 0`; no Live-automatable parameter is published |
 
 ## What it does (plain terms)
@@ -108,15 +108,12 @@ Two cooperating subgraphs run in parallel.
 
 ## Limitations / open questions
 
-- **The embedded JavaScript is not present.** The patch references `js sends_follower.js` and the
-  `dependency_cache` lists it (`bootpath ~/Music/Ableton/User Library/Max Devices`, `type TEXT`,
-  `implicit 1`), but the container is **unfrozen** and the JS text is NOT embedded (no `function
-  buildRefs`, `autowatch`, or `send_follower:` bytes inside the `.amxd`; the name appears 3× only as
-  references). The file is also NOT on disk next to the device. The only copy found anywhere is the
-  older `Archive/sends_follower.js`. As shipped, this device will throw `js: can't find file
-  sends_follower.js` and produce no follow value until the script is placed next to it (or the device
-  is frozen with it embedded). **Needs action before distribution.** See
-  [[../concepts/send-gathering-via-liveapi\|Send gathering]] for the archived script's behavior.
+- **The embedded JavaScript — resolved 2026-06-16.** The device was previously unfrozen and the
+  `js sends_follower.js` script was neither embedded nor on disk next to it, so it failed with
+  `js: can't find file sends_follower.js` and produced no follow value. The script has now been
+  pulled into the device object and **frozen**: the JS text is embedded in the container (verified
+  byte-identical to the `Archive/sends_follower.js` source, 113 lines) and the device loads and runs.
+  See [[../concepts/send-gathering-via-liveapi\|Send gathering]] for the script's behavior.
 - **`devices 1 parameters 5` is positional and fragile.** `live.remote~` modulates "the parameter at
   index 5 of the device at index 1 of this return's device chain." `devices 1` is the **second**
   device in the chain (0-based), i.e. whatever sits right after Sends Follower — in the shipped rack
