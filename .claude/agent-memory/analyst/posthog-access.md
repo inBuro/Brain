@@ -123,6 +123,28 @@ WebView) + maxforlive `control_xl_listing`. Treat `introduction_post` sessions a
 06-15 breakdown (1 pageview). New acquisition surface — watch it; UTM params for the telegram link
 not yet documented. The 06-15 push was multi-source: reddit `organic` 9 pv + maxforlive 3 pv +
 telegram 1 pv (+ direct/None 9 pv). Same impulse-spike shape as Reddit, not a steady tail.
+Telegram link uses `utm_source=telegram&utm_medium=social&utm_campaign=organic` (confirmed 06-15
+14:15 ICT, EE Mobile Safari, 1 pv on `/`, bounce).
+
+**`ableton_post` IS ALIVE after all (revised 2026-06-15/16).** The earlier "r/ableton post = ~0
+clicks" read was true for 06-11/12, but on 2026-06-15 the `utm_campaign=ableton_post` marker
+delivered 3 real sessions: 02:50 US Mobile Safari (video_play ×1), 05:39 RU/Yandex Mobile
+(**mode_download ×1**, entered `/free-custom-modes`), 15:40 RU/Yandex Mobile (`/` bounce). So
+ableton_post now converts at least as well as organic. As of 06-15 there are FOUR live reddit
+markers, not two: `organic`, `ableton_post`, plus tail `introduction_post` (one NL /free-modes
+session 04:18) — treat all reddit markers as potentially live, don't pre-write any off.
+
+## Daily traffic log (owner-excluded $pageview sessions)
+06-07=2, 06-09=3, 06-10=30, 06-11=21, 06-12=4, **06-13=0, 06-14=1, 06-15=16** sessions.
+**2026-06-15** = the second-biggest day ever (16 human sessions / 13 unique / 22 pv), a fresh
+multi-source push the day after a dead 06-13/14. NO bot burst (sessions arrived 1-3/hour, evenly
+00:00-16:00 ICT — contrast the 06-11 14-session same-minute scraper cluster). Source split (06-15,
+session-level): reddit 8 (organic 4, ableton_post 3, introduction_post tail 1), direct 7, maxforlive
+2, telegram 1, internal nav 2. Conversions 06-15: **mode_download ×2** (1 maxforlive ES, 1 reddit
+ableton_post RU), **video_play ×1** (reddit ableton_post US), **buy_click 0, social_click 0, real
+purchase 0**. Still the same shape: free-mode pull (2 dl) + zero buy-intent. Geo widened: US, ES, DK,
+DE, NL, RU, PL, EE, TH, GB. One GB Desktop Chrome with `vh==sh` (1080==1080) 16:34 = likely
+WebView/headless — minor, discount.
 
 ## State of traffic (as of 2026-06-12)
 Data starts 2026-06-07. **First Reddit post 2026-06-10 ~19:00 Thai** (r/Novation, `reddit.com/r/Novation/comments/1u20ebm/`) → burst of ~37 sessions in 24h, but after removing owner-TH + bots, ~20-25 real external sessions. Reddit gave 811 post views → ~3% click-through to site. Funnels / A/B still premature; Session Replay is the lens.

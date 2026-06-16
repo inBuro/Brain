@@ -2,7 +2,7 @@
 type: reference
 project: Fadercraft
 created: 2026-06-12
-updated: 2026-06-15
+updated: 2026-06-16
 ---
 
 # Outbound Links (tracked vanity redirects)
@@ -49,6 +49,16 @@ Second Reddit post (2026-06-11/12). Links go **only in replies**, never in the p
 | `https://fadercraft.com/r-ableton-modes` | `/free-custom-modes` | reddit / social / ableton_post | reply about free modes (goodwill / safest, not selling) |
 
 > No `r-ableton-buy` was created on purpose — pushing a buy link in r/ableton risks the No-selling rule. Reveal the product via `/r-ableton` (home) only when asked.
+
+## Reddit — r/abletonlive post — campaign `abletonlive_post`
+
+Dedicated post for **r/abletonlive** (2026-06-16). Sub **Rule 1 = "Don't buy, sell, or beg for anything here"** → value-first only: the post's single body link goes to the genuinely-free modes (sharing free stuff, not selling). No buy link created.
+
+| Short link | → Target | utm_source / medium / campaign | Use for |
+|---|---|---|---|
+| `https://fadercraft.com/r-abl` | `/free-custom-modes` | reddit / social / abletonlive_post | free modes link — the post's single body link |
+
+> No `r-abl-buy` on purpose — Rule 1 bans selling. **Slug note:** `/r-abl` = r/abletonlive; do not confuse with `/r-ableton` = r/ableton. r/abletonlive is small (~9.2K weekly visitors / ~121 weekly contributions) — low-risk warm placement, not a traffic driver.
 
 ## Reddit — general outreach — campaign `organic`
 
