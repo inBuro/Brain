@@ -76,6 +76,12 @@ Actions (the CTA goals):
 - **`$feature_flag_called` exposure STILL = 0 lifetime** (absent from taxonomy, flag `last_called_at` still null) AFTER c0dde357 — BUT this does NOT disprove the fix yet: **0 events arrived after 07:30 UTC (14:30 ICT), and c0dde357 went live ~14:50 ICT, so NOT A SINGLE real visitor has hit the patched bundle yet.** Verdict on exposure = UNVERIFIABLE until the next real session loads the new bundle. Monitor: re-run schema check + `last_called_at` after the next visit; expect `$feature_flag_called` to appear.
 - Flag config is CLEAN: one group, rollout 100%, empty property filter, no cohort/release condition, `aggregation_group_type_index:null` (bucket by distinct_id). Activity log shows only created (06-11 12:39 ICT) + activated (06-11 12:46 ICT) — NOTHING changed in the last 12h, so the empty-headless-flags anomaly is not a config edit. `system.ingestion_warnings` EMPTY → no quota/drop warning; no `quotaLimited` on any flag response. No billing flag-request limit evident from the data (billing itself is org-scoped, outside MCP).
 
+**EXPOSURE BUG FIXED — confirmed 2026-06-16 (see [[day-2026-06-16]]).** The above two paragraphs
+are now HISTORICAL. After deploy c0dde357 (~06-15 14:50 ICT), `$feature_flag_called` FIRES for real
+visitors: lifetime 13 events / 13 persons, earliest 06-15 15:40 ICT, by variant control 6 / test 7.
+Experiment 376381 is accumulating exposures again. The first-ever `buy_click` (06-16) landed on
+`control`. Still tiny N — don't peek at significance, but exposure is no longer null.
+
 Saved insights (favorited):
 - **A24NPDaz** — Landing conversion — Pageview → Buy click (funnel)
 - **j8HECUNN** — Social clicks by platform (trends, breakdown by `platform`)

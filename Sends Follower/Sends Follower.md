@@ -19,10 +19,13 @@ This is a **separate device, unrelated to [[Instrument Follower]]** — they onl
 - **Wiki:** [[wiki/index|technical reference TOC]] — entity page + concept pages on the read path,
   return-index detection, the modulation chain, internal buses, and the `.adg` rack wrapper.
 
-## Known issue (top action item)
+## Status
 
-The device references `js sends_follower.js`, but the container is **unfrozen and the script is not
-embedded** and not on disk next to the device. As shipped it errors (`js: can't find file
-sends_follower.js`) and produces no follow value. The only surviving copy is the older
-`~/Music/Ableton/User Library/Max Devices/Archive/sends_follower.js`. Restore or freeze the script
-before relying on the device. See [[wiki/entities/sends-follower-device]] → Limitations.
+Working. The `sends_follower.js` script was pulled into the device and **frozen on 2026-06-16**, so
+it now ships embedded in the `.amxd` (verified byte-identical to the source) and the device loads
+without the old `js: can't find file` error. `raw/SendsFollower.amxd` holds the frozen copy.
+
+One pre-existing item is still needs-verification (unaffected by the freeze): the `live.remote~`
+target `devices 1 parameters 5` is positional and fragile — it modulates parameter index 5 of
+whatever device sits right after Sends Follower in the return chain. See
+[[wiki/entities/sends-follower-device]] → Limitations.

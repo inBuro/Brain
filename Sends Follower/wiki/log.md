@@ -2,6 +2,17 @@
 
 Append-only. Newest first.
 
+## 2026-06-16 — JS embedded via freeze, verified
+
+- The user pulled `sends_follower.js` into the device object and **froze** it in the Max editor.
+- Verified on the User Library device (now 36211 bytes, was 21673): the embedded JS is **byte-identical**
+  to `Archive/sends_follower.js` (113 lines, `function buildRefs` / `sendRefs` / `outlet(0, "max", …)`
+  all present). The patcher JSON parses, still 50 boxes / 51 lines, the `js sends_follower.js` box and
+  `live.remote~` are intact. The earlier `js: can't find file` error is **resolved** — device is functional.
+- Refreshed `raw/SendsFollower.amxd` to the frozen working copy (md5 `6b85d12dcff2e412f15ae75897505f20`).
+- Still needs-verification (unchanged by the freeze): what `devices 1 parameters 5` resolves to on the
+  downstream LFO, and whether the bipolar `scale 0. 1. -100. 100.` modulation mapping is intended.
+
 ## 2026-06-16 — initial wiki created (read-only analysis)
 
 - Source analyzed: `raw/SendsFollower.amxd` (21673 bytes, unfrozen `ampf` container; JSON patcher
