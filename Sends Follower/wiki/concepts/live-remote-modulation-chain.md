@@ -21,23 +21,21 @@ the path right to left:
 - `devices 1` — the device at index 1 of that chain. Indices are 0-based, so `devices 1` is the
   **second** device, i.e. whatever sits immediately after Sends Follower. In the shipped
   [[adg-rack-wrapper|Audio Effect Rack]] that is the stock Ableton **LFO**.
-- `parameters 5` — the parameter at index 5 (the 6th parameter) of that device.
+- `parameters 5` — the parameter at index 5 of that device, which is the LFO's **Offset** parameter.
 
-So `live.remote~` modulates "parameter #5 of the device right after me."
+So `live.remote~` modulates the **Offset** parameter of the device right after Sends Follower (the
+stock LFO).
 
-**Re-verified 2026-06-17.** After the rack re-save, the message box still reads exactly
+**Target confirmed (founder, 2026-06-17).** `devices 1 parameters 5` resolves to the stock LFO's
+**Offset** parameter, and that is the only thing this device modulates. The founder built the device
+this way and confirms it works as intended. After the rack re-save the message box still reads exactly
 `path this_device canonical_parent devices 1 parameters 5` (one occurrence in the patcher), and
-`devices 1` in the shipped rack is still the stock LFO (confirmed via the rack chain, see
-[[adg-rack-wrapper|Audio Effect Rack wrapper]]). The LFO exposes far more than six parameters, so
-index 5 is in range and the target does not fall off the end.
+`devices 1` in the shipped rack is the stock LFO (see [[adg-rack-wrapper|Audio Effect Rack wrapper]]).
 
-The **exact LFO parameter** that index 5 resolves to is still **not confirmed**. It cannot be read
-reliably from the `.adg`: Live stores a device's `ParameterList` in the `.adg`/`.als`
-**alphabetically by name** (Depth, Freq Rate, Hold, Jitter, Map 1, …), which is *not* the order Live's
-`device.parameters[N]` returns at runtime. The LiveAPI index order is fixed by the device itself and
-only resolvable live. Confirm index 5 with `path live_set ... devices 1` → `getinfo` / `get name` on
-`parameters 5` in Live (likely candidates given the LFO's exposed controls are Depth/Rate/Offset, but
-this is unverified).
+Note that the `.adg` alone does not prove the parameter name: Live stores a device's `ParameterList`
+in the `.adg`/`.als` **alphabetically by name** (Depth, Freq Rate, Hold, Jitter, Map 1, …), which is
+*not* the order Live's `device.parameters[N]` returns at runtime. The runtime LiveAPI index is fixed
+by the device itself, and the founder's confirmation establishes that index 5 is Offset.
 
 ## The signal feeding it
 
@@ -68,9 +66,12 @@ chain finish building before resolving `devices 1`, so the second device exists 
 is read. This mirrors the read-side anti-race ladder in
 [[self-healing-return-index|Self-healing return-index detection]].
 
-## Fragility
+## Usage caveat — positional target
 
-Because the target is **positional** (`devices 1`, `parameters 5`), it breaks silently if the next
-device is swapped, removed, or reordered, or if a device with fewer than 6 parameters is placed
-there. The shipped rack pins the layout (Sends Follower then LFO) precisely to keep this mapping
-stable — see [[adg-rack-wrapper|Audio Effect Rack wrapper]].
+The target is addressed by **position** (`devices 1`, `parameters 5`), so it stays on the LFO's
+Offset only while the LFO is the second device in the chain. If the device after Sends Follower is
+swapped, removed, or reordered — or if a device with fewer than 6 parameters is placed there — the
+modulation moves to a different parameter/device or fails silently. The shipped rack pins the layout
+(Sends Follower then LFO) precisely to keep this mapping on the LFO's Offset — see
+[[adg-rack-wrapper|Audio Effect Rack wrapper]]. This is a use-it-correctly caveat, not an open
+verification item.

@@ -5,29 +5,34 @@ The object-level analysis below covers the **core** patcher (50 boxes / 51 lines
 Library device is the frozen build with the update notifier added on top, described in the update note
 below.
 
-> Update 2026-06-17: the shipped User Library device is now the frozen build with the update notifier
-> added — 61 boxes / 61 lines, 37444 bytes, md5 `b5286b33d9adc12e023981ab1a117859`, two embedded JS
-> resources (`sends_follower.js`, `sf_version_check.js`). See [[../concepts/version-check\|Version
-> check]].
+> Update 2026-06-18: the shipped User Library device is the frozen build with the update notifier and
+> the **Follow Mode (Max / Sum) switch** — 65 boxes / 65 lines, 42090 bytes, md5
+> `7ca595b44db993c8bf91269fbeb7d97a`, two embedded JS resources (`sends_follower.js` 5808 bytes,
+> `sf_version_check.js` 3106 bytes), self-contained (no external `.js` needed). This build was rebuilt
+> after Live overwrote the previous frozen build (md5 `725a06ea…`, 41504 bytes) on save before it was
+> archived; the patcher is unchanged (semantically identical, only JSON whitespace differs). See the log
+> entry for 2026-06-18, [[../concepts/version-check\|Version check]], and the Follow Mode section below.
 
 ## Status
 
 | Aspect | Status | Notes |
 |---|---|---|
-| Reads max send level toward its return | Works | Computed by the embedded JS (`obj-46`), see [[../concepts/send-gathering-via-liveapi\|Send gathering]] |
+| Reads follow level toward its return | Works | Computed by the embedded JS (`obj-46`); algorithm selectable Max / Sum, see [[../concepts/send-gathering-via-liveapi\|Send gathering]] |
+| Follow Mode switch (Max / Sum) | Works (added 2026-06-17) | `live.tab` (`follow_mode`) selects max-of-sends or sum-of-sends (clamped to 1.0); saved with set + preset, default Max — see the Follow Mode section |
 | Self-detects which return it sits on | Works | Patch path chain and a JS fallback, see [[../concepts/self-healing-return-index\|Self-healing]] |
 | Writes follow value to a downstream parameter via modulation | Works (signed offset to the LFO's **Offset** parameter, founder-confirmed 2026-06-17) | `live.remote~` (`obj-11`) applies a **bipolar/signed offset** to the stock LFO's **Offset** parameter (`devices 1 parameters 5`). Both the signed-offset character and the exact target are confirmed — see Limitations for the positional usage caveat |
 | Exposes follow value on internal buses | Works | `---max_send` and `---max_send_percent`, see [[../concepts/internal-buses\|Internal buses]] |
 | Embedded JavaScript shipped inside the device | Yes (frozen 2026-06-16) | `sends_follower.js` is now embedded in the frozen container, byte-identical to the Archive copy — see Limitations |
 | Update notifier ("New Version" button) | Works (frozen 2026-06-17) | `node.script sf_version_check.js` pings the manifest; mint button shows only when an update exists — see [[../concepts/version-check\|Version check]] |
-| Front-panel parameter exposed to Live | No | The dial (`obj-3`) has `parameter_enable: 0`; no Live-automatable parameter is published |
+| Front-panel parameter exposed to Live | Partial | The dial (`obj-3`) is a passive meter (`parameter_enable: 0`), but the **Follow Mode** `live.tab` (`follow_mode`) is parameter-enabled and is published as a Live/preset parameter |
 
 ## What it does (plain terms)
 
 Sends Follower is meant to sit on a **return track**. It watches the send knobs of every track that
-routes to that return, takes the **maximum** of those send amounts, and turns that single number into
-a control value. The intent is "the more signal the rest of the set is pushing into this return, the
-more this value rises" — a one-number summary of how hard the return is being driven.
+routes to that return, combines those send amounts into a single number via the selected **Follow
+Mode** (the **maximum** of the sends, or their **sum** clamped to 1.0), and turns that into a control
+value. The intent is "the more signal the rest of the set is pushing into this return, the more this
+value rises" — a one-number summary of how hard the return is being driven.
 
 That follow value is then made available three ways:
 
@@ -66,14 +71,40 @@ That follow value is then made available three ways:
 
 ## Parameters
 
-The device exposes **no Live-automatable parameter**. The only UI object is a `dial` (`obj-3`) with
-`parameter_enable: 0`, so it is a passive meter, not a mapped parameter. It is driven for display
-only: `receive ---max_send` (`obj-7`) → `* 127.` (`obj-11_scale`) → `prepend set` (`obj-11_set`) →
-`dial`. The `prepend set` means the dial is updated **silently** (set, not output), so it shows the
-current follow level without re-emitting it.
+The device exposes **one** Live/preset parameter: **Follow Mode** (`live.tab`, object id
+`follow_mode`, enum `Max` / `Sum`, default `Max`). It is `parameter_enable: 1`, so it saves with the
+set and with device presets and can be automated/mapped. See the Follow Mode section.
+
+The other front-panel object is a `dial` (`obj-3`) with `parameter_enable: 0` — a passive meter, not a
+mapped parameter. It is driven for display only: `receive ---max_send` (`obj-7`) → `* 127.`
+(`obj-11_scale`) → `prepend set` (`obj-11_set`) → `dial`. The `prepend set` means the dial is updated
+**silently** (set, not output), so it shows the current follow level without re-emitting it.
 
 Two `flonum` boxes (`obj-19`, `obj-49`) are bench/monitor read-outs (one shows the 0–100 percent
 value, the other shows the raw 0.–1. value).
+
+## Follow Mode (Max / Sum)
+
+The aggregation algorithm is selectable at runtime via the **Follow Mode** switch (`live.tab`,
+`follow_mode`):
+
+- **Max** (index 0, default): the follow value is the single largest send amount among all tracks
+  routing to the return — the original behavior.
+- **Sum** (index 1): the follow value is the **sum** of all send amounts to the return, then
+  **clamped to 1.0**. Each send is 0.–1.; the sum is capped at 1.0 so the value stays in the 0.–1.
+  range the downstream `scale 0. 1. …` boxes expect and the percent monitor (`---max_send_percent`)
+  never exceeds 100%.
+
+Flow: `follow_mode` outlet 0 (the selected index) → `prepend mode` (`mode_prepend`) →
+`js sends_follower.js` (`obj-46`) inlet 0, delivering `mode 0` / `mode 1`. The embedded JS keeps a
+`followMode` state (defaulting to 0 = Max) and switches `bang()` between max and clamped-sum
+accordingly; the output message keeps its `"max"` label regardless of mode, because the downstream
+`route max` / `---max_send` / percent paths key on that word.
+
+The saved value is restored to the JS on load via `loadbang` (`mode_loadbang`) → `delay 300`
+(`mode_delay`) → `follow_mode`: banging the tab makes it re-emit its current/saved index, which then
+travels the same path to the JS. Because the JS also initializes `followMode` to 0, a late or missing
+bang still leaves the device in the default Max behavior.
 
 ## Signal / data flow
 
@@ -147,11 +178,12 @@ Two cooperating subgraphs run in parallel.
   silently. The shipped [[../concepts/adg-rack-wrapper\|rack]] pins the layout (Sends Follower then
   LFO) precisely to keep the target on the LFO's Offset. This is a use-it-correctly caveat, not an
   open question.
-- **No mapped Live parameter.** Nothing is exposed for Live automation or controller mapping; the
-  device communicates only through `live.remote~` modulation and the two Max named buses. A consumer
-  patch must either be the modulation target or `receive ---max_send` / `---max_send_percent`.
-- **Aggregation is a plain maximum, not a sum.** Per the archived JS, the output is the single
-  largest send value among all tracks routing to the return, not their sum or average.
+- **One mapped Live parameter (Follow Mode).** The only Live-automatable/mappable parameter is the
+  Follow Mode `live.tab`. The follow value itself is not exposed as a parameter; consumers must be the
+  `live.remote~` modulation target or read `receive ---max_send` / `---max_send_percent`.
+- **Aggregation is selectable: Max or Sum (clamped).** Default is the single largest send value among
+  all tracks routing to the return (Max). Sum mode adds all send amounts and clamps the total to 1.0.
+  Neither mode produces an average. See the Follow Mode section.
 - **Polling, not observing.** The value is refreshed by a `qmetro 33` poll (~30 Hz) rather than
   LiveAPI property observers, so it is CPU-cheap but not sample-accurate and has up to ~33 ms latency
   plus the `change`/`speedlim 30` de-duplication.

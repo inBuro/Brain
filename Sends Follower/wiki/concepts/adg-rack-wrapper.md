@@ -5,10 +5,12 @@ stock device. It shows the intended usage and keeps the positional modulation ta
 
 Source analyzed: `~/Music/Ableton/User Library/Presets/Audio Effects/Audio Effect Rack/
 SendsFollowerRack.adg` (gzipped Live preset). Re-verified 2026-06-17 against the current on-disk file:
-gzip of 6406 bytes, **decompressing to 88296 bytes** of XML. The rack's internal saved name
-(`UserName` on the group device) is `SendsFollowerRack`; the string `MaxSendsFollower` survives only
-inside the rack's own `LastPresetRef`/`PresetRef` metadata (the preset's previous saved name), not as
-the file name or the displayed name.
+`.adg` md5 `66896a8b2fce2ff050feae0d09d24468`, gzip of 6371 bytes, **decompressing to 88286 bytes** of
+XML. The rack's internal saved name (`UserName` on the group device) is `SendsFollowerRack`. The
+**canonical name is `SendsFollowerRack`** (file on disk + `UserName`); the stale `MaxSendsFollower`
+string from earlier saves is gone from the current file — every `LastPresetRef`/`PresetRef` now reads
+`SendsFollowerRack.adg`. (Landing/mockup copy that still says `MaxSendsFollower.adg` should be updated
+to `SendsFollowerRack.adg`.)
 
 ## What is inside
 
@@ -22,8 +24,8 @@ The rack is a single-chain `AudioEffectGroupDevice`: one `BranchPresets` → one
    factory content).
 
 No third device, no reorder. This order is the point: Sends Follower's `live.remote~` modulates
-`devices 1 parameters 5` — the second device in the chain — which is exactly this LFO. See
-[[live-remote-modulation-chain|live.remote~ chain]].
+`devices 1 parameters 5` — the second device in the chain — which is this LFO's **Offset** parameter
+(founder-confirmed 2026-06-17). See [[live-remote-modulation-chain|live.remote~ chain]].
 
 ## FileRef status (does it pull the frozen device?)
 
@@ -42,6 +44,31 @@ path are unchanged, so the freeze loads fine. Notes:
 - The `<OriginalFileSize>` values stored in the FileRefs (21673 for Sends Follower, 542384 for the
   LFO) are stale FileRef metadata, not the current sizes; Live does not validate against them.
 
+## Self-containment: referenced, not embedded (and why it cannot be embedded)
+
+The rack is **not** a single self-contained file. The Sends Follower device is **referenced by
+`FileRef`, not embedded inside the `.adg`**. Verified from the file: the 88286-byte decompressed XML
+contains **zero `.amxd` container bytes** (`ampf` / `mx@c` / `ptch` = 0 occurrences), and both
+`MxDBlob` slots are empty (`<Blob />`). The `PatchSlot` → `MxPatchRef` → `FileRef` carries
+`RelativePathType=6` (RelativeToUserLibrary), so on any machine the rack resolves the device **relative
+to that machine's User Library**. With no `SendsFollower.amxd` in `Max Devices/`, the device slot loads
+empty.
+
+**An `.adg` cannot embed a Max for Live device.** Freeze is an `.amxd`-level operation (it bundles
+sub-patchers/JS/externals into the `.amxd`, which our device already has — md5 `b5286b33…`); Live
+provides no XML field to fold the `.amxd` bytes into the `.adg`. The `<Blob>`/`HasData` slot stores a
+Max parameter-state blob, not the device container. So a lone `.adg` is structurally impossible to make
+device-self-contained by editing XML.
+
+**Supported "single deliverable" routes** (when you want a recipient to install one thing):
+
+- **Pack (`.alp`)** — File > Manage Files > Manage Project > Create Pack. Installing the pack copies
+  `SendsFollower.amxd` into the User Library, after which the rack resolves it by FileRef. This is the
+  closest thing to "one file, no setup". `.alp` is proprietary (gzip + manifest) and must be exported
+  from inside Live — it **cannot be built safely outside Live**.
+- **`.amxd` + `.adg` together** with a one-line install step: drop `SendsFollower.amxd` into User
+  Library `Max Devices/`, then the rack loads. (Same model the Control XL product uses.)
+
 ## Macros and mapping (re-confirmed after the re-save)
 
 - All 16 rack macros are **default and unnamed** (`MacroDisplayNames.0…15` = `Macro 1` … `Macro 16`);
@@ -53,11 +80,11 @@ path are unchanged, so the freeze loads fine. Notes:
   parameters. They are not actual modulation routings, and the file holds no automation envelopes.
 
 So the rack adds **no extra wiring** of its own. It is a packaging convenience: it pins the two
-devices together in the right order so the positional `live.remote~` target lands on the LFO, and
-saves you from assembling the chain by hand. Any custom macro mapping (e.g. exposing an LFO depth or
+devices together in the right order so the positional `live.remote~` target lands on the LFO's
+**Offset** parameter, and saves you from assembling the chain by hand. Any custom macro mapping (e.g. exposing an LFO depth or
 rate on a rack macro) would need to be added by the user.
 
-## Why the file grew (52194 → 88296 bytes)
+## Why the file grew (52194 → ~88286 bytes)
 
 The rack was re-saved in **Ableton Live 12.4.2** (`Creator="Ableton Live 12.4.2"`). The growth is the
 LFO device block, which now stores the LFO's **fully expanded `ParameterList`** — about 91 parameters,
