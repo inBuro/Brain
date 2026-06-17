@@ -90,14 +90,17 @@ These are not stylistic preferences — each pattern below caused a documented h
 
 ## The positive reference (what to imitate)
 
-The one reply that converted TrieMond from hostile to "I'll buy it":
+The one reply that converted TrieMond from hostile to "I'll buy it" (current live text as of 2026-06-17):
 
-> "It's a plugin that lets you switch Launch Control XL pages and layers directly from the controller using encoders and buttons. It also provides instrument modes, custom controller modes, and a pre-mapped Live Set for demo. It includes an ALS file with all routing already configured. Take a look at the Gumroad page."
+> "It's a plugin that lets you switch Launch Control XL pages and layers directly from the controller using encoders and buttons. It also provides access to instrument modes, custom controller modes, and a pre-mapped Live Set for demo. The custom modes are based on the standard ones, with only a few MIDI values changed. It also includes an ALS file with all routing already configured."
 
 Properties of this reply:
 - Opens with "It's a plugin" — the most concrete possible noun
 - Names the hardware (Launch Control XL) immediately
 - Lists what is in the bundle using plain nouns (ALS file, instrument modes, custom modes)
 - Zero adjectives doing marketing work
-- Closes with a single specific action (look at the Gumroad page), not a soft CTA
-- Total: ~50 words, zero buzzwords, no philosophy
+- No pitch tail — reply ends on the last fact, not a CTA
+- No follow-up question either — a plain factual answer is self-contained; closing on "…an ALS file with all routing already configured." is the canonical close
+- Total: ~65 words, zero buzzwords, no philosophy
+
+**Curate, don't sanitize (2026-06-17 example):** when editing a comment thread, remove our own empty abstractions first, not the audience's hostile ones. The "bridge between that space and a physical instrument… make that flexibility learnable" reply was our content — it triggered the same "mood concept" reaction. Killing it is the edit; keeping the hostile audience reply intact is the principle.
