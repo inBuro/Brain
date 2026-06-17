@@ -1,10 +1,15 @@
 # Audio Effect Rack wrapper
 
-`MaxSendsFollower.adg` is an Ableton Audio Effect Rack preset that bundles Sends Follower with a
+`SendsFollowerRack.adg` is an Ableton Audio Effect Rack preset that bundles Sends Follower with a
 stock device. It shows the intended usage and keeps the positional modulation target stable.
 
 Source analyzed: `~/Music/Ableton/User Library/Presets/Audio Effects/Audio Effect Rack/
-MaxSendsFollower.adg` (gzipped Live preset, 52194 bytes decompressed, Live 12.3.7).
+SendsFollowerRack.adg` (gzipped Live preset; `MaxSendsFollower` is the rack's internal saved name).
+
+> **Needs re-verification (2026-06-17):** the current file decompresses to 88296 bytes, which does not
+> match the 52194 bytes recorded in the original pass — the rack was re-saved since this analysis. The
+> macro/mapping details below predate the current file and should be re-confirmed by m4l-master before
+> they are trusted.
 
 ## What is inside
 

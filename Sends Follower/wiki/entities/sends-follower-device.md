@@ -1,8 +1,9 @@
 # Sends Follower device
 
-Source analyzed: `raw/SendsFollower.amxd` (21673 bytes, unfrozen `ampf` container, JSON patcher
-spans bytes 32–21671, 50 boxes / 51 lines). Every claim below is grounded in objects read from that
-patcher; the object IDs in parentheses are the patcher box IDs.
+Source analyzed: the Sends Follower device patcher (object IDs in parentheses are patcher box IDs).
+The object-level analysis below covers the **core** patcher (50 boxes / 51 lines); the shipped User
+Library device is the frozen build with the update notifier added on top, described in the update note
+below.
 
 > Update 2026-06-17: the shipped User Library device is now the frozen build with the update notifier
 > added — 61 boxes / 61 lines, 37444 bytes, md5 `b5286b33d9adc12e023981ab1a117859`, two embedded JS
@@ -46,7 +47,7 @@ That follow value is then made available three ways:
 - **Device type:** audio effect (`plugin~`/`plugout~` pass audio straight through, `obj-1` → `obj-2`,
   so the device is audio-transparent and just observes/modulates).
 - **Intended pairing:** the shipped [[../concepts/adg-rack-wrapper\|Audio Effect Rack preset]]
-  `MaxSendsFollower.adg` places Sends Follower first, then a stock Ableton **LFO** device after it,
+  `SendsFollowerRack.adg` places Sends Follower first, then a stock Ableton **LFO** device after it,
   so the follow value can drive the LFO (or whatever device you drop in slot 2 — that is what
   `devices 1 parameters 5` points at).
 
