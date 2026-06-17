@@ -16,7 +16,7 @@ below.
 |---|---|---|
 | Reads max send level toward its return | Works | Computed by the embedded JS (`obj-46`), see [[../concepts/send-gathering-via-liveapi\|Send gathering]] |
 | Self-detects which return it sits on | Works | Patch path chain and a JS fallback, see [[../concepts/self-healing-return-index\|Self-healing]] |
-| Writes follow value to a downstream parameter via modulation | Needs verification | `live.remote~` maps to `devices 1 parameters 5` — see Limitations |
+| Writes follow value to a downstream parameter via modulation | Works (signed offset to the LFO's **Offset** parameter, founder-confirmed 2026-06-17) | `live.remote~` (`obj-11`) applies a **bipolar/signed offset** to the stock LFO's **Offset** parameter (`devices 1 parameters 5`). Both the signed-offset character and the exact target are confirmed — see Limitations for the positional usage caveat |
 | Exposes follow value on internal buses | Works | `---max_send` and `---max_send_percent`, see [[../concepts/internal-buses\|Internal buses]] |
 | Embedded JavaScript shipped inside the device | Yes (frozen 2026-06-16) | `sends_follower.js` is now embedded in the frozen container, byte-identical to the Archive copy — see Limitations |
 | Update notifier ("New Version" button) | Works (frozen 2026-06-17) | `node.script sf_version_check.js` pings the manifest; mint button shows only when an update exists — see [[../concepts/version-check\|Version check]] |
@@ -31,14 +31,15 @@ more this value rises" — a one-number summary of how hard the return is being 
 
 That follow value is then made available three ways:
 
-1. As a normalized 0.–1. control fed into a native `live.remote~` modulation output that targets a
-   parameter on the **next device in this return's chain** (`devices 1 parameters 5`).
+1. As a normalized 0.–1. control fed into a native `live.remote~` modulation output that targets the
+   **Offset** parameter of the **next device in this return's chain** — the stock LFO
+   (`devices 1 parameters 5` = the LFO's Offset, founder-confirmed).
 2. On a Max named bus `---max_send` (raw 0.–1. value).
 3. On a Max named bus `---max_send_percent` (the value scaled to 0–100).
 
 > Note: the device computes a single follow value. The "what should this drive" question is answered
-> by the `live.remote~` target and/or by patching from the `receive ---max_send` buses. See
-> Limitations for the open question about the modulation target.
+> by the `live.remote~` target (the stock LFO's **Offset** parameter) and/or by patching from the
+> `receive ---max_send` buses. See Limitations for the positional usage caveat on that target.
 
 ## Where / when to use it
 
@@ -48,8 +49,9 @@ That follow value is then made available three ways:
   so the device is audio-transparent and just observes/modulates).
 - **Intended pairing:** the shipped [[../concepts/adg-rack-wrapper\|Audio Effect Rack preset]]
   `SendsFollowerRack.adg` places Sends Follower first, then a stock Ableton **LFO** device after it,
-  so the follow value can drive the LFO (or whatever device you drop in slot 2 — that is what
-  `devices 1 parameters 5` points at).
+  so the follow value can drive the LFO's **Offset** parameter (`devices 1 parameters 5` points at
+  the LFO's Offset — founder-confirmed; if you drop a different device into slot 2 the target moves
+  with the position, see Limitations).
 
 ## I/O
 
@@ -57,7 +59,7 @@ That follow value is then made available three ways:
 |---|---|---|---|
 | Audio in/out L+R | `plugin~` (`obj-1`) → `plugout~` (`obj-2`) | pass-through | Audio is untouched; device is a transparent insert |
 | LiveAPI read | `js sends_follower.js` (`obj-46`) | in | Reads `value` of each track's send to this return |
-| LiveAPI write | `live.remote~` (`obj-11`) | out | Modulates `devices 1 parameters 5` on the return chain |
+| LiveAPI write | `live.remote~` (`obj-11`) | out | Modulates the stock LFO's **Offset** parameter (`devices 1 parameters 5`) on the return chain |
 | Named bus out | `send ---max_send` (`obj-50`) | out | Raw follow value (0.–1.) |
 | Named bus out | `send ---max_send_percent` (`obj-20`) | out | Follow value as 0–100 |
 | Named bus in | `receive ---max_send` (`obj-7`, `obj-12`) | in | Internal consumers of the raw value |
@@ -111,7 +113,8 @@ Two cooperating subgraphs run in parallel.
 4. The mapping target itself: `delay 300` (`obj-6`, fed by its own `live.thisdevice` `obj-4` →
    `deferlow` `obj-5`) → message `path this_device canonical_parent devices 1 parameters 5`
    (`obj-9`) → `live.path` (`obj-10`) → `live.remote~` inlet 1 (`obj-11`). This binds `live.remote~`
-   to that parameter. See [[../concepts/live-remote-modulation-chain\|live.remote~ chain]].
+   to that parameter — the stock LFO's **Offset** (`devices 1 parameters 5`, founder-confirmed). See
+   [[../concepts/live-remote-modulation-chain\|live.remote~ chain]].
 
 ## Limitations / open questions
 
@@ -121,13 +124,29 @@ Two cooperating subgraphs run in parallel.
   pulled into the device object and **frozen**: the JS text is embedded in the container (verified
   byte-identical to the `Archive/sends_follower.js` source, 113 lines) and the device loads and runs.
   See [[../concepts/send-gathering-via-liveapi\|Send gathering]] for the script's behavior.
-- **`devices 1 parameters 5` is positional and fragile.** `live.remote~` modulates "the parameter at
-  index 5 of the device at index 1 of this return's device chain." `devices 1` is the **second**
-  device in the chain (0-based), i.e. whatever sits right after Sends Follower — in the shipped rack
-  that is the stock LFO. `parameters 5` is the 6th parameter of that device. If the next device is
-  changed, removed, or reordered, the modulation either lands on the wrong parameter or fails
-  silently. The exact parameter that index 5 of the LFO resolves to was not verified in this pass.
-  **Needs verification on hardware/in Live.**
+- **Bipolar (signed) modulation is intended — founder-confirmed 2026-06-17.** The `scale 0. 1.
+  -100. 100.` box (`obj-16`) maps the 0.–1. follow value onto a **bipolar -100…+100** range, and
+  `live.remote~` (`obj-11`) applies that as a **signed offset** to the target parameter. This was
+  previously flagged needs-verification; the founder has confirmed it is deliberate. The device
+  modulates not only the *amount* but the *direction*: the follow value can push the target both up
+  and down around its base value, and into the negative region (a follow value of 0 maps to -100,
+  0.5 to 0/no offset, 1 to +100). This is two-directional offset modulation by design, not a unipolar
+  0…100 mistake. See [[../concepts/live-remote-modulation-chain\|live.remote~ chain]].
+- **The modulation target is the stock LFO's "Offset" parameter — founder-confirmed 2026-06-17.**
+  `live.remote~` modulates "the parameter at index 5 of the device at index 1 of this return's device
+  chain." `devices 1` is the **second** device in the chain (0-based), i.e. whatever sits right after
+  Sends Follower — in the shipped rack that is the stock LFO. `parameters 5` resolves to that LFO's
+  **Offset** parameter. The founder built and confirms the device this way: it drives the LFO's
+  Offset and nothing else. (The `.adg` alone cannot prove this, because Live stores the parameter
+  list alphabetically rather than in LiveAPI index order — but the founder authoritatively confirms
+  the runtime target, so this is no longer an open verification item.)
+- **Usage caveat: the target is positional.** Because the mapping is addressed by position
+  (`devices 1 parameters 5`), it stays on the LFO's Offset only while the LFO is the second device in
+  the chain. If you swap, remove, or reorder the device after Sends Follower — or drop in a device
+  with fewer than six parameters — the modulation moves to a different parameter/device or fails
+  silently. The shipped [[../concepts/adg-rack-wrapper\|rack]] pins the layout (Sends Follower then
+  LFO) precisely to keep the target on the LFO's Offset. This is a use-it-correctly caveat, not an
+  open question.
 - **No mapped Live parameter.** Nothing is exposed for Live automation or controller mapping; the
   device communicates only through `live.remote~` modulation and the two Max named buses. A consumer
   patch must either be the modulation target or `receive ---max_send` / `---max_send_percent`.
