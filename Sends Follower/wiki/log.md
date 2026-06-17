@@ -2,6 +2,19 @@
 
 Append-only. Newest first.
 
+## 2026-06-17 — doc fix: rack preset filename + entity source header
+
+- Corrected the rack preset **filename** across current-state docs from `MaxSendsFollower.adg` to the
+  actual file on disk, `SendsFollowerRack.adg` (entity pairing line, `index.md`,
+  `concepts/adg-rack-wrapper.md`). `MaxSendsFollower` remains the rack's **internal** saved name. Old
+  log entries left unchanged (append-only history).
+- Cleaned the stale source header in `entities/sends-follower-device.md`: it claimed
+  `raw/SendsFollower.amxd` was 21673 bytes / unfrozen, but the shipped device is the frozen build (see
+  the 2026-06-17 update-notifier entry). Reworded to scope the object-level analysis to the core patcher.
+- **Flagged for re-verification:** `SendsFollowerRack.adg` decompresses to 88296 bytes, not the 52194
+  recorded in the original pass — the rack was re-saved since analysis, so the macro/mapping details in
+  `concepts/adg-rack-wrapper.md` need an m4l-master re-check.
+
 ## 2026-06-17 — update notifier added, device made fully self-contained
 
 - Added a Control XL-style **version check** to the User Library device

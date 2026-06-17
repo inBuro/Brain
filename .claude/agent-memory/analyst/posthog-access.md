@@ -93,6 +93,8 @@ Each acquisition channel has its own UTM marker. When slicing traffic, filter by
 attribute a session to its channel — don't lump them. Reddit-app WebView strips referrer
 (→ `$direct`), so UTM + entry path + timing are the reliable signal, not referrer alone.
 
+(Full watchlist of Reddit threads being tracked for attribution — incl. links not yet live — lives in [[reddit-threads-tracking]]. This table = markers that ALREADY fire.)
+
 | Channel | `utm_campaign` | `utm_source` | `utm_medium` | Notes / entry |
 |---|---|---|---|---|
 | r/Novation post #1 (the introduction post) | `introduction_post` | `reddit` | `social` | The original 06-10 r/Novation post; entry usually `/free-custom-modes`. Its tail keeps trickling. |

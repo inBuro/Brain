@@ -18,7 +18,7 @@ technical reference. It is a separate project, unrelated to the Instrument Follo
   output that writes the follow value into a downstream device parameter.
 - [[concepts/internal-buses|Internal send/receive buses]] — the named `---max_send` and
   `---max_send_percent` buses and where each value goes.
-- [[concepts/adg-rack-wrapper|Audio Effect Rack wrapper]] — the `MaxSendsFollower.adg` preset that
+- [[concepts/adg-rack-wrapper|Audio Effect Rack wrapper]] — the `SendsFollowerRack.adg` preset that
   bundles the device with a stock LFO.
 - [[concepts/version-check|Version check (update notifier)]] — the `sf_version_check.js` ping that
   lights a mint "New Version" button when an update is published; mirrored from Control XL.
