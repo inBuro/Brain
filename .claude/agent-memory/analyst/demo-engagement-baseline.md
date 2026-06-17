@@ -33,8 +33,16 @@ actual comparison, get the exact deploy moment from the project repo:
 - Sessions straddling the deploy moment that day are ambiguous → drop the deploy-day partial,
   or split strictly by the confirmed timestamp.
 
-## THE MEASUREMENT GAP — no demo-interaction event exists yet (confirmed 2026-06-12)
-There is currently **NO PostHog event that captures interaction with the interactive-demo
+## GAP CLOSED — `demo_interact` IS live now (confirmed 2026-06-17)
+**The gap below is HISTORICAL.** As of 2026-06-17 both `demo_interact` AND `cta_view` are in the
+live event schema (= they've fired at least once), alongside the existing `video_play`/`mode_download`/
+`buy_click`/`social_click`/`purchase`. So demo-control interaction is now an explicit, queryable event —
+the before/after demo-engagement rate (plan below) can finally be computed forward from whenever
+`demo_interact` first fired. TODO next time: pin `demo_interact` first-fire timestamp + count, and
+check what `cta_view` captures (new — not documented yet; likely a CTA-impression/viewport event).
+
+## THE MEASUREMENT GAP — no demo-interaction event exists yet (was true 2026-06-12, NOW CLOSED)
+There WAS **NO PostHog event that captures interaction with the interactive-demo
 controller.** Verified against the live event schema 2026-06-12:
 - `video_play` is NOT it — that fires on the demo **video** Play button
   (`button[aria-label="Play demo"]`), a different element. Don't reuse it for demo-control clicks.
@@ -73,6 +81,6 @@ date forward.
 ## Status checklist
 - [x] Baseline marker recorded (fix ≈ 2026-06-12, control=before / treated=after).
 - [ ] Exact deploy timestamp confirmed from git/deploy log (TO-CONFIRM, see above).
-- [ ] `demo_interact` event instrumented in index.html + verified firing.
+- [x] `demo_interact` event instrumented in index.html + verified firing (in schema 2026-06-17; first-fire timestamp/count still TO-PIN).
 - [ ] Action "Demo engaged" created wrapping `demo_interact`.
 - [ ] Comparison run at ~100+ treated sessions (engagement rate + demo→buy funnel).
