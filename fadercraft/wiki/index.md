@@ -11,13 +11,13 @@ updated: 2026-05-06
 
 **Sources**: —
 
-**Last updated**: 2026-05-26
+**Last updated**: 2026-06-17
 
 ---
 
 ## Roadmap
 
-- [[roadmap]] — живой checklist прогресса Phase 0 + Phase 1, статус каждой задачи, тайские мото-права как backup-документ для KYC. Обновляется при каждом крупном шаге.
+- [[roadmap]] — живой checklist прогресса Phase 0 (Control XL, 100%) + Phase 1 (post-launch дистрибуция) + **Phase 2 — Sends Follower launch** (лин-запуск продукта #2, **23 задачи / 4 done (~17%)**, [NEW] vs [REUSE]; деливерабл = рэк `SendsFollowerRack.adg` + Quickstart; **девайс заморожен `b5286b33`** + update-check вшит зеркально Control XL; нейминг ЗАКРЫТ → «Sends Follower»; видимый блок «🎯 Ближайшие шаги»: деплой в preview → хардвер-проверка update-check → откат манифеста 9.9.9→1.0 → 1-стр. спека). Обновляется при каждом крупном шаге.
 - [[landing-narrative]] — 10-битная психологическая дуга лендинга `fadercraft.com`, маппинг бит → секция → компонент, обоснование отклонений от исходной спеки.
 - [[demo-video-script]] — one-page shooting script главного демо-видео (~3 мин): hook → MIDI-routing setup → три сигнатурные фичи → close. Точки нарезки совпадают с 3 feature-шортами. Для T9 в [[roadmap]].
 - [[youtube-video-description]] — описание демо-видео для YouTube (черновик); главы пока плейсхолдеры.

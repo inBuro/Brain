@@ -4,6 +4,11 @@ Source analyzed: `raw/SendsFollower.amxd` (21673 bytes, unfrozen `ampf` containe
 spans bytes 32–21671, 50 boxes / 51 lines). Every claim below is grounded in objects read from that
 patcher; the object IDs in parentheses are the patcher box IDs.
 
+> Update 2026-06-17: the shipped User Library device is now the frozen build with the update notifier
+> added — 61 boxes / 61 lines, 37444 bytes, md5 `b5286b33d9adc12e023981ab1a117859`, two embedded JS
+> resources (`sends_follower.js`, `sf_version_check.js`). See [[../concepts/version-check\|Version
+> check]].
+
 ## Status
 
 | Aspect | Status | Notes |
@@ -13,6 +18,7 @@ patcher; the object IDs in parentheses are the patcher box IDs.
 | Writes follow value to a downstream parameter via modulation | Needs verification | `live.remote~` maps to `devices 1 parameters 5` — see Limitations |
 | Exposes follow value on internal buses | Works | `---max_send` and `---max_send_percent`, see [[../concepts/internal-buses\|Internal buses]] |
 | Embedded JavaScript shipped inside the device | Yes (frozen 2026-06-16) | `sends_follower.js` is now embedded in the frozen container, byte-identical to the Archive copy — see Limitations |
+| Update notifier ("New Version" button) | Works (frozen 2026-06-17) | `node.script sf_version_check.js` pings the manifest; mint button shows only when an update exists — see [[../concepts/version-check\|Version check]] |
 | Front-panel parameter exposed to Live | No | The dial (`obj-3`) has `parameter_enable: 0`; no Live-automatable parameter is published |
 
 ## What it does (plain terms)

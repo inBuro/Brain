@@ -198,10 +198,16 @@
 
 - **Что сработало (плейн-регистр):** «It's a plugin that lets you switch Launch
   Control XL pages and layers directly from the controller using encoders and
-  buttons. It also provides instrument modes, custom controller modes, and a
-  pre-mapped Live Set for demo. It includes an ALS file with all routing already
-  configured. Take a look at the Gumroad page.» — конкретные существительные,
-  ноль философии, что это и что внутри.
+  buttons. It also provides access to instrument modes, custom controller modes,
+  and a pre-mapped Live Set for demo. The custom modes are based on the standard
+  ones, with only a few MIDI values changed. It also includes an ALS file with
+  all routing already configured.» — конкретные существительные, ноль
+  философии, что это и что внутри. Pitch-хвост («Take a look at the Gumroad
+  page») убран; финал — обрыв на последнем факте («…an ALS file with all
+  routing already configured.»). Вопрос про сетап НЕ нужен — содержательный
+  конкретный ответ самодостаточен. Пример применения правила «curate, don't
+  sanitize»: из треда удаляется собственная пустая абстракция, а не чужая
+  критика.
 - **Реакция хейтера:** «so the way you just responded should be the standard
   bro… sell it with a human feel, from the first post, you will go much further…
   Then I might buy it.»
@@ -235,4 +241,4 @@
 - [2026-06-17] https://www.reddit.com/r/abletonlive/comments/1u74c6t/stopped_remapping_my_controller_for_every_live/ — 13 реплик всего (7 от аудитории: TrieMond, robust_nachos, skwander; 6 — AI-ответы OP, занесены в раздел «Анти-паттерн»). Контекст: собственный промо-пост Fadercraft, встречен враждебно.
 - [2026-06-17] https://www.reddit.com/r/ableton/comments/1u2wwuz/how_do_you_handle_controller_setup_across/ — 14 реплик (8 от аудитории: ya_rk ×2, HammyHavoc, No-Satisfaction6771, de_skipper, twotimefind ×2, braintransplants; 5 — AI-ответы OP; AutoModerator-бот отброшен). Контекст: тот же промо-пост в r/ableton. Новое: грустно-разочарованный анти-AI регистр, лаконичные настоящие ответы, нейм-дроп Knobbler/Push.
 - [2026-06-17] https://www.reddit.com/r/Novation/comments/1u20ebm/i_started_using_the_launch_control_xl_mk3_as_a/ — 12 реплик (8 от аудитории: scooter_looter, MycolNewbie, Tysonviolin, boobzombie ×2, Practical_Claim8921, grasspikemusic ×2; 4 — ответы OP). Контекст: тот же пост в r/Novation, приём ТЁПЛЫЙ. Новое: позитивный gear-nerd регистр, intent на покупку, запрос на deep-dive/manual, спор mkii↔mkiii, лексикон железа (dawless, H4MIDI, Gig Performer, Widgets).
-- [2026-06-17] https://www.youtube.com/watch?v=UsJxPBdf568 (Fadercraft «Control XL presentation») — 10 комментов, 5 от аудитории (triemond9961 ×3 — тот же TrieMond с Reddit; souptron ×2). OP-ответы Fadercraft в анализ голоса не идут, но один из них = эталон конвертящего плейн-ответа (см. «Что конвертирует»). Новое: формула конверсии из уст хейтера, кросс-платформенная враждебность, новичок-персона с перегрузом MIDI-маппинга, лексикон AI slop / mood concept / human feel / deep dive.
+- [2026-06-17, сверка 2026-06-17] https://www.youtube.com/watch?v=UsJxPBdf568 (Fadercraft «Control XL presentation») — 10 комментов, 5 от аудитории (triemond9961 ×3 — тот же TrieMond с Reddit; souptron ×2). OP-ответы Fadercraft в анализ голоса не идут, но один из них = эталон конвертящего плейн-ответа (см. «Что конвертирует»). Новое: формула конверсии из уст хейтера, кросс-платформенная враждебность, новичок-персона с перегрузом MIDI-маппинга, лексикон AI slop / mood concept / human feel / deep dive. Правки 2026-06-17: pitch-хвост «Take a look at the Gumroad page» убран из плейн-ответа; реплика «Ableton gives us almost unlimited control space… make that flexibility learnable» (пустая абстракция-мост) подлежала удалению — по состоянию на сверку ещё жива в треде (правка не применена на стороне YouTube).
