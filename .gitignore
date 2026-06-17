@@ -28,3 +28,10 @@ scripts/sync.err.log
 scripts/sync-trigger.log
 scripts/sync-trigger.err.log
 scripts/.trigger.env
+
+# Large rebuildable build artifacts + dated bundle backups — keep on disk, NEVER commit.
+# These exceeded GitHub's 100MB/file limit and silently broke autobackup for ~3 weeks;
+# history was cleaned with git-filter-repo on 2026-06-17. Bundles rebuild from dist/ source.
+Fadercraft/dist/*.zip
+Fadercraft/raw/archive/*.zip
+Fadercraft/raw/Demo-set Project/Samples/Processed/Crop/Melody 1 28 *.aif
