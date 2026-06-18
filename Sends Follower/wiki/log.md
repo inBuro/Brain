@@ -403,3 +403,15 @@ Not deployed; site/Gumroad untouched.
 - Open items flagged needs-verification: the missing `sends_follower.js` (device will error until
   recovered/embedded); what `devices 1 parameters 5` resolves to on the LFO; whether the bipolar
   `scale 0. 1. -100. 100.` modulation mapping is intended.
+
+## 2026-06-18 — SendsFollower LFO (experimental spin-off device, v1)
+- New device `SendsFollower LFO.amxd` (User Library): SendsFollower's full 8-slot mapper (reused
+  verbatim) fed by a NATIVE portable LFO generator. Replaces the dead-end of embedding the stock
+  Ableton LFO multimap (`liveui.multimap`), which crashed Live with `error -1 making directory`.
+- LFO: `phasor~` → 6 waveforms (Sine/Triangle/Saw Up/Saw Down/Square/Random S&H) → `selector~` →
+  `snapshot~` (50 Hz) → Depth → `send ---max_send` (the mapper's source bus). Rate = Sync (tempo-locked,
+  1/1…1/32 via `transport` BPM) or Free (0.01–20 Hz). All portable MSP objects — no stock internal-UI,
+  no bpatcher, no embed → distributable, frozen, self-contained.
+- Shipping `SendsFollower.amxd` UNTOUCHED. md5 `7ae739b3`, 493 box / 655 line.
+- Status: built + structurally validated; pending hardware load-test in Live. Not yet wikied as a full
+  product (experimental); device facts in m4l-master memory `sends-follower-lfo.md`.

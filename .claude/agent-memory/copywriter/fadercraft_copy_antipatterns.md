@@ -88,6 +88,36 @@ These are not stylistic preferences — each pattern below caused a documented h
 
 ---
 
+## 8. Defending AI as a tool in a hostile thread
+
+**Pattern:** Responding to «AI-generated» accusation with a meta-defense: «I'm genuinely curious where the line is for you. Research, UX, architecture, development, testing, bug fixing, analytics, documentation, voiceovers, videos, support, and community discussions. AI can contribute to every one of those. Why is that a problem?»
+
+**Why it fails (documented):** This reply scored -6, the second-worst in the thread. It shifts the conversation fully off the product and onto the author's choices. The audience is not interested in debating AI ethics — they are interested in removing what they perceive as spam. A defense of AI convinces no one and confirms to everyone else that the accusation was right.
+
+**How to apply:** If accused of AI replies — one of two options only: (a) say nothing, (b) give one short concrete product fact and stop. Never explain, justify, or contextualize the use of AI. The word «AI» in any OP reply in a DAW-purist sub is radioactive regardless of what follows it. See [[fadercraft-audience-voice]] anti-pattern #7.
+
+---
+
+## 9. The «meta-lament» as self-identification
+
+**Pattern:** When the pile-on has started, shifting to a meta-observation: «We started with a controller layout and somehow ended up discussing the author instead of the idea.»
+
+**Why it fails:** This is the language of someone who has already lost the thread. It reads as deflection and self-pity. The audience is not wrong to discuss the author — they are applying community norms to a post that violated Rule 1. The meta-lament frames the OP as a victim rather than as a peer.
+
+**Fix:** No meta-commentary. If the thread is hostile, the only move is a single concrete factual reply or silence. If the thread cannot be recovered, do not post further.
+
+---
+
+## 10. Broadcast posts in r/abletonlive (Rule-1 and reputation risk)
+
+**Pattern:** Posting a direct promotional link in r/abletonlive, even as an «AMA» or first-person format.
+
+**Why it fails (documented, 2026-06-16 post, full read 2026-06-18):** r/abletonlive Rule 1 prohibits buy/sell/beg. A post with a product link is a Rule-1 violation and was reported. Additionally, the RoundWitty4668 account is now publicly tagged as an ad account in the thread — any future reply from this account inherits that stigma.
+
+**Fix:** Never broadcast own posts in r/abletonlive. Only organic replies on *other people's questions* — one short paragraph, concrete nouns, link only in a follow-up comment if directly asked.
+
+---
+
 ## The positive reference (what to imitate)
 
 The one reply that converted TrieMond from hostile to "I'll buy it" (current live text as of 2026-06-17):
