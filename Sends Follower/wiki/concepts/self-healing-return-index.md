@@ -4,6 +4,11 @@ Sends Follower must learn **which return track it sits on** before it can gather
 The return index appears in the LiveAPI path `live_set tracks i mixer_device sends <returnIdx>`, so
 getting `returnIdx` right is the whole game. The device resolves it two ways, with anti-race timing.
 
+Since the 2026-06-18 frozen build (md5 `bd21b848…`), the **script** owns the resolution and keeps it
+live with LiveAPI property observers; the patch's `build <index>` is now only a startup hint. See
+[[#Script-side detection (current — observer-based)]] for the authoritative path. The earlier
+patch-only behavior is kept below for reference.
+
 ## Why it is hard
 
 At cold set load, the Live object model is not fully built when the device's `loadbang` fires.
@@ -42,14 +47,36 @@ Once an index is found, `prepend build` → `t l b b` (`obj-43`) does three thin
 This is the "self-healing" loop: it keeps probing on a 500 ms metro until the path resolves, then
 latches and switches to polling.
 
-## Script-side fallback (archived behavior)
+## Script-side detection (current — observer-based)
 
-The archived `sends_follower.js` carried a second safety net (`autoDetect()`): on a `bang` with an
-empty reference array, no more often than every 400 ms, it queries
-`LiveAPI("this_device canonical_parent")`, reads `.unquotedpath`, and matches `return_tracks (\d+)`
-to recover the index itself, then calls `buildRefs`. This protects against the case where the patch's
-`build` message never arrived.
+The bug this fixes: the patch resolves the index **once** at load (`change -1` suppresses repeats,
+and a hit stops the resolve pump), and the old script only auto-detected while `sendRefs` was empty.
+So after the first success nothing recomputed the index. Dragging the device to a neighboring return,
+adding or removing returns, or adding tracks left the device pointing at the original return — it kept
+following the first return's sends and ignored the change. A reload revived it (loadbang fired
+again and `sendRefs` was zeroed) but a move-without-reload did not.
 
-It is **needs-verification** whether the current (missing) `sends_follower.js` still includes this
-fallback, since the current patch already does the discovery natively. See
+The fix moved the source of truth into `sends_follower.js` and made it self-correcting through LiveAPI
+property observers rather than periodic probing (observers fire only on a real change — cheaper and
+idiomatic versus building LiveAPI objects every few hundred ms forever):
+
+- **`detectReturnIndex()`** queries `LiveAPI("this_device canonical_parent")`, reads its path, and
+  matches `return_tracks (\d+)`. On a non-return track (ordinary or master) it returns `-1`, so the
+  device quietly holds an empty `sendRefs` with no console spam.
+- **Three observers**, re-armed each rebuild via `new LiveAPI(onLiveChange, …)`:
+  - device path — `this_device canonical_parent`, property `name`: catches the device being **moved**
+    to another track (`canonical_parent` resolves to a different object, firing the callback).
+  - `live_set` property `return_tracks`: catches return **add / delete / reorder** (which shifts the
+    return index).
+  - `live_set` property `tracks`: catches ordinary-track **add / delete** (which changes the set of
+    sends to rebuild).
+- **`resync(force)`** recomputes the index via `detectReturnIndex()` and the track count, and rebuilds
+  `sendRefs` only when the index or the count actually changed. A `rebuilding` re-entrancy flag guards
+  against overlapping observer callbacks.
+- **Anti-race `bang()`**: besides producing the output value, `bang()` cheaply re-syncs at most
+  every `RESYNC_MS` (500 ms) — one `detectReturnIndex` plus one `getcount`, no track walk — so a cold
+  load where the observers or path have not yet resolved still self-heals.
+
+The patch's `build <index>` message is now a **hint only**; the script's own detection is authoritative.
+This resolves the prior needs-verification note. See
 [[send-gathering-via-liveapi|Send gathering via LiveAPI]].

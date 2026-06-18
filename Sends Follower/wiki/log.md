@@ -2,6 +2,124 @@
 
 Append-only. Newest first.
 
+## 2026-06-18 — Map button (direct parameter mapping, second live.remote~)
+
+Added a front-panel **Map** button to the frozen User Library device. It maps Sends Follower's own
+bipolar follow signal directly onto any Live parameter the user clicks, **bypassing the LFO**. The
+existing LFO leg (`obj-11` → the next device's Offset) is untouched; a **second** `live.remote~`
+(`map_remote`) drives the user target in parallel. Re-frozen via Path B (both the patcher JSON and the
+embedded `sends_follower.js` grew, so the embedded resource offsets and the size fields were
+recomputed).
+
+Action taken (via m4l-master, Live closed):
+
+- **Base** was the clean frozen build `raw/archive/SendsFollower.2026-06-18-113530-frozen.amxd` (md5
+  `5a8ba853…`, 49134 bytes, 66/65), not the on-disk file (Live had unfrozen it on save). The on-disk
+  device was archived first as `raw/archive/SendsFollower.2026-06-18-120211-predmap-ondisk.amxd` (md5
+  `55726d24…`).
+- **Patcher:** +16 boxes / +20 lines (66/65 → 82/85). New objects: `map_button` (`live.text` Map
+  toggle), `map_unmap` (`live.text` "X", stock `multimap-unmap.svg`), `map_label` (target-name
+  comment), `map_route`, `map_arm_set`, `map_pathprep`, `map_path` (`live.path`), `map_lblset`,
+  `map_id0` (`id 0`), `map_remote` (second `live.remote~`), `map_sig` (`sig~` tap from `obj-16`),
+  `map_pattr` (`pattr map_target @parameter_enable 1 @autorestore 1`), `map_restoreprep`,
+  `map_arm_send`, `map_unmap_tb`, `map_unmap_msg`. The `js` box (`obj-46`) was bumped from one outlet
+  to two (outlet 1 = map control).
+- **Embedded JS:** `sends_follower.js` extended with `outlets = 2`, an `arm`/`unmap`/`restorepath`
+  message set, a `live_set view selected_parameter` observer that captures the next clicked parameter
+  only while armed, a defer/retry resolve ladder for cold-load, and `pattr`-backed persistence. The
+  follow-value output (`outlet(0, "max", result)`) and the return-index observers are unchanged. New
+  md5 `c63475322970c9f8ea02d01620806551`, 22368 bytes, `node --check` clean.
+- **Icon:** the unmap "X" uses the real stock Cycling '74 asset `multimap-unmap.svg` from the built-in
+  "Max for Live" Max package, referenced by filename (on the Max search path on every Live install), so
+  it is **not** embedded and will not cause a missing-file error for buyers. The Map toggle recreates
+  the stock LFO Map look (colors read from `liveui.map.maxpat` `obj-48`: grey idle, orange when armed)
+  because Live's Map button is a `live.text` toggle, not a shareable image.
+- **Layout:** `openrect` height grew 169 → 196 (+27) to add the Map row at presentation `y = 172`,
+  below the Mode switch. No overlaps with the dial, the Mode switch, or the "New Version" button.
+- **Container (Path B):** JSON of32 = 16 / sz32 = 42632; `sends_follower.js` of32 = 42648 /
+  sz32 = 22368; `sf_version_check.js` of32 = 65016 / sz32 = 3106 (md5 `a5d905fc…`, unchanged). dlst
+  still 3 resources (total field 332); invariants held: `0x30 + mx@c − dlst = 16`,
+  `ptch = filesize − 0x20`. Path-B note: the prefix copied into the new container must include the
+  `mx@c` sub-header at `0x20`–`0x30`, i.e. the first **48** bytes (the JSON starts at `0x20 + 16 = 48`).
+- **Result:** device md5 `6f156eab973ecec0d9793f794c75cfce`, 68498 bytes, 82 boxes / 85 lines,
+  self-contained. Frozen archive `raw/archive/SendsFollower.2026-06-18-121509-frozen.amxd`.
+- **Validation:** JSON re-parsed (Python `json.loads` + `jq -e`), brace/bracket balance 0, first `{`
+  last `}`; all 16 new objects present and all patchlines in range (0 bad); both `live.remote~` objects
+  present (`obj-11` + `map_remote`); all prior features intact (LFO leg, `route max`, Mode switch,
+  return-index observers, version notifier, `outlet(0,"max",…)` label); embedded JS bytes match the
+  on-disk canon. See [[concepts/map-button|Map button]].
+
+## 2026-06-18 — cosmetic relabel: Mode switch (Peak / Total) + "Mode" label
+
+Cosmetic patcher pass on the frozen User Library device. Three patcher-only edits (the embedded JS was
+not touched). Re-frozen via Path B (the patcher JSON grew by 549 bytes, so the embedded resource
+offsets and the size fields were recomputed; both JS bodies were re-embedded byte-for-byte).
+
+Action taken (via m4l-master):
+
+- **Pre-edit state** already archived (byte-identical to the on-disk device) as
+  `raw/archive/SendsFollower.2026-06-18-110402-frozen.amxd` (md5 `bd21b848…`, 48585 B); not
+  re-archived.
+- **Edit 1 — switch labels:** the `follow_mode` `live.tab` enum was renamed from `["Max","Sum"]` to
+  `["Peak","Total"]`. The index-to-behavior mapping is unchanged: Peak = index 0 = old Max (running
+  maximum, default), Total = index 1 = old Sum (clamped sum). The JS `mode 0/1` handler is unchanged.
+- **Edit 2 — parameter name:** the parameter long name and short name were renamed from "Follow Mode"
+  to **"Mode"**. The `varname` stays `follow_mode` so the existing patch cords (by object id) are not
+  broken; no saved preset existed, so the long-name change is safe.
+- **Edit 3 — label:** a `comment` reading **"Mode"** (`mode_label`, Arial Bold 9, grey) was added in
+  the presentation view directly above the switch. The device had no existing comment idiom, so a
+  Live-theme grey comment was used. To open room above the switch, the `live.tab` moved down from
+  presentation rect `[7,134,116,17]` to `[7,150,116,17]`; the label sits at `[7,134,60,14]`. No
+  overlap with the dial, switch, or "New Version" button (presentation height 169).
+- **Result device:** md5 `5a8ba853a3c31d80cb84870e977a13f4`, 49134 bytes, **66 boxes / 65 lines**
+  (+1 box for the label; lines unchanged). Frozen, self-contained. Both embedded JS resources are
+  byte-for-byte identical to before (`sends_follower.js` md5 `3bc5ab8e…`, 12303 B, with the
+  return-index observers; `sf_version_check.js` md5 `a5d905fc…`, 3106 B). The output `"max"` label,
+  the `route max` path, and the Follow Mode wiring (`mode_prepend` / `mode_loadbang` / `mode_delay`)
+  are intact.
+- **Frozen result archived** immediately as
+  `raw/archive/SendsFollower.2026-06-18-113530-frozen.amxd`.
+- **Validation:** JSON re-parsed (Python + `jq -e`), brace/bracket balance 0; enum `["Peak","Total"]`
+  with default index 0; parameter long name "Mode", `varname` `follow_mode`, `parameter_enable` 1;
+  label present without a colon and not overlapping neighbours; both JS bodies byte-for-byte equal to
+  the previous build (`node --check` clean on `sends_follower.js`); container invariants
+  (`ptch == filesize − 0x20`, `dlst` total 332, `0x30 + mx@c − dlst == 16`, tail `mdat` preserved).
+
+Reminder: do not open this device in the Max editor and save from there; Live caches the loaded
+device, so reload it (remove and re-add to the track, or reload the M4L device).
+
+## 2026-06-18 — re-freeze: self-healing return-index fix embedded
+
+The return-index freeze bug (the device kept following the first return's sends after the index was
+resolved once — see [[concepts/self-healing-return-index]]) was fixed in the external canon
+`sends_follower.js` by moving detection into the script and keeping it live with LiveAPI property
+observers (device-move, `return_tracks`, `tracks`). With Live closed, that script was embedded into
+the frozen device (Path B) in place of the old body.
+
+Action taken (via m4l-master):
+
+- **Pre-edit state** already archived (byte-identical to the on-disk device) as
+  `raw/archive/SendsFollower.2026-06-18-002423-frozen.amxd` (md5 `7ca595b4…`, 42090 B); not
+  re-archived.
+- **Embedded resource swap only** — the patcher (65 boxes / 65 lines, Follow Mode intact) was not
+  touched. The embedded `sends_follower.js` went from the old body (md5 `29ff530b…`, 5808 B, no
+  observers) to the new canon (md5 `3bc5ab8e…`, 12303 B, observers). `sf_version_check.js`
+  (md5 `a5d905fc…`, 3106 B) kept as-is. ΔL = +6495 B.
+- **Container patched (Path B):** `sends_follower.js` `sz32` 5808 → 12303 (`of32` unchanged 32800);
+  `sf_version_check.js` `of32` 38608 → 45103 (`sz32` unchanged); JSON resource unchanged
+  (`of32` 16, `sz32` 32784); `ptch` and `mx@c` each += 6495; `dlst total` 332,
+  `0x30 + mx@c − dlst = 16`, `ptch = filesize − 0x20` all held. Resource order JSON →
+  `sends_follower.js` → `sf_version_check.js` preserved.
+- **Validated before install:** JSON re-parsed (`json.loads` + `jq -e`), brace/bracket balance 0,
+  65 / 65 boxes / lines, three `dire` records in `dlst`, both embedded scripts byte-for-byte against
+  canon and `node --check` clean, Follow Mode objects (`follow_mode`, `mode_prepend`, `mode_loadbang`,
+  `mode_delay`) and the `route max` / `---max_send` output labels present.
+- **Result:** md5 `bd21b848…`, 48585 B, self-contained (both JS embedded — no external `.js` needed).
+  Installed to the User Library device and archived immediately as
+  `raw/archive/SendsFollower.2026-06-18-110402-frozen.amxd`.
+
+Rack `.adg`, the version manifest, and Gumroad were not touched.
+
 ## 2026-06-18 — frozen build rebuilt after Live overwrote the lost freeze
 
 The Follow Mode frozen build from 2026-06-17 (md5 `725a06ea…`, 41504 B) was lost: Live was open when

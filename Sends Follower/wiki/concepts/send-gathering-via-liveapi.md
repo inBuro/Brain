@@ -24,23 +24,26 @@ on every `bang`.
   and, for each track `i`, creates a `LiveAPI("live_set tracks i mixer_device sends N")`. Only
   references whose `.id != 0` are kept (a valid send exists). `N` is the return index for the return
   this device sits on.
-- **`mode <0|1>`** (`mode`): sets the follow algorithm — `0` = Max (default), `1` = Sum. Driven by the
-  Follow Mode `live.tab` in the patch (see [[../entities/sends-follower-device|the device page]]).
+- **`mode <0|1>`** (`mode`): sets the follow algorithm — `0` = Peak (default), `1` = Total. Driven by
+  the Mode `live.tab` in the patch (see [[../entities/sends-follower-device|the device page]]). The
+  switch labels were Max / Sum until 2026-06-18 and were renamed Peak / Total; the index-to-behavior
+  mapping is unchanged (Peak = index 0 = running maximum, Total = index 1 = clamped sum).
 - **`bang`** (the poll, ~30 Hz from `qmetro 33`, `obj-35`): iterates the kept references and calls
-  `ref.get("value")` on each. In **Max** mode it tracks the running maximum; in **Sum** mode it
+  `ref.get("value")` on each. In **Peak** mode it tracks the running maximum; in **Total** mode it
   accumulates the total and clamps it to `1.0`. Either way it outputs `max <value>` on outlet 0 — the
   `"max"` label is fixed so the patch's `route max` (`obj-47`) keeps working in both modes; only the
   computed value changes.
 
-So the published number is either the **largest single send amount** (Max) or the **clamped sum** of
-all send amounts (Sum) among the tracks feeding the return — never an average. Send values are LiveAPI
-mixer values in the normalized 0.–1. range.
+So the published number is either the **largest single send amount** (Peak) or the **clamped sum** of
+all send amounts (Total) among the tracks feeding the return — never an average. Send values are
+LiveAPI mixer values in the normalized 0.–1. range.
 
 ## Why these two algorithms
 
-**Max** answers "is anything pushing hard into this return right now?" with an envelope that tracks the
-loudest contributor. **Sum** answers "how much total send energy is hitting this return?" — useful when
-several quieter sources should add up. Both are monotonic and bounded 0.–1. (Sum via the 1.0 clamp),
+**Peak** answers "is anything pushing hard into this return right now?" with an envelope that tracks
+the loudest contributor. **Total** answers "how much total send energy is hitting this return?" —
+useful when several quieter sources should add up. Both are monotonic and bounded 0.–1. (Total via the
+1.0 clamp),
 which is exactly what the downstream `scale` objects and `live.remote~` expect (see
 [[live-remote-modulation-chain|live.remote~ chain]]). The clamp also keeps the percent monitor at or
 below 100%.

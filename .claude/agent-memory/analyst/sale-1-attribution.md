@@ -58,11 +58,38 @@ austacademy@gmail.com, Fadercraft Control XL $39 qty1, receipt ~13:50 ICT.
   has no email-collection that fires $identify for buyers. Email↔visitor link exists only
   via the manual fingerprint above, not in PostHog data.
 
-## WEBHOOK — real purchase STILL not captured (re-confirmed 2026-06-17 19:17 ICT)
-- Lifetime `purchase` = 2, BOTH `is_test=True`, BOTH 06-10 (gumroad-ping ACLFuPRB US,
-  distinct_id `gumroad:6976309857072` + my test_sale_claude_check SG,
-  `gumroad:test_purchaser_001`). NO `is_test=False` purchase for the Holger Aust sale.
-  The real sale did NOT reach PostHog as a purchase event.
+## WEBHOOK — real ping arrived but mislabeled is_test=True (revised 2026-06-18)
+- REVISED: the Gumroad ping for THIS sale DID reach PostHog — there's a 3rd `purchase`
+  at **06-17 13:50:33 ICT, sale_id `aKrKs--u0JFZjW2haKM73w==`, order_number 1010996217,
+  $39 USD qty1, product Fadercraft Control XL** — but it landed `is_test=True` (the
+  webhook mislabeled a REAL sale as test → scenario (a) from the old note) and fell to
+  fallback distinct_id `gumroad:5290360120821` (no ph_did, so not stitched to the buyer).
+  Its `country` prop = "The Netherlands" (Gumroad billing country = confirms NL);
+  `$geoip_country_code=US` on it is just Gumroad's server IP, ignore it.
+- So the real sale was INVISIBLE to analytics (is_test filter drops it) and detached
+  from the buyer's person. The earlier "lifetime purchase = 2" read missed this 3rd ping
+  because it counted from memory; on 06-18 the live query showed 3.
+
+## BACKFILL — clean purchase event inserted 2026-06-18 (~11:43 ICT)
+- Inserted ONE `purchase` event via PostHog capture API (first-party `/ingest` proxy,
+  public client token) to make the first real sale visible in analytics/funnel and
+  attached to the buyer.
+- distinct_id = `019eca70-97b0-7184-9316-370840d48ae7` (the buy_click visitor) → person
+  **bcf21ee7** (this same buyer). $session_id `019ed447-168b-7b62-ac2b-9ee9df925fa2`
+  (the buy session) so source/variant inherit via the session.
+- Props: timestamp `2026-06-17T13:50:00+07:00`, product_name "Fadercraft Control XL",
+  product_permalink "control-xl", price 39, currency USD, quantity 1, **country NL**
+  (= $geoip_country_code of the buy_click session), **is_test=false**,
+  source="manual-backfill", backfill_reason="lost-first-sale-pre-ping-fix",
+  + sale_id/order_number copied from the real ping for dedupe, no PII (no email/name).
+- VERIFIED: landed on 06-17, person_id bcf21ee7, real-purchase count now 1 (is_test=false),
+  no dup. Attribution re-confirmed via the person's first $pageview $referrer =
+  maxforlive listing (utm_source=maxforlive…control_xl_listing).
+- DEDUPE RULE for future real-sale counts: filter `is_test != true` AND, when both the
+  mislabeled ping and this backfill coexist, dedupe on `sale_id='aKrKs--u0JFZjW2haKM73w=='`
+  (count the backfill row, not the is_test=True ping). Better fix = the webhook should
+  send is_test=false on real sales (eng task), then drop the backfill or keep it as the
+  canonical one and ignore the test-flagged ping.
 - `purchase` event carries NO email and NO buyer name (verified via event_properties):
   only sale_id, order_number, product_name, price, currency, seller_id, is_test, refunded,
   geo. So even when the webhook works, the buyer's identity never lands in PostHog from the

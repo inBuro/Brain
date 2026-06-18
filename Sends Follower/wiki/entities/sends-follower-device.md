@@ -5,32 +5,41 @@ The object-level analysis below covers the **core** patcher (50 boxes / 51 lines
 Library device is the frozen build with the update notifier added on top, described in the update note
 below.
 
-> Update 2026-06-18: the shipped User Library device is the frozen build with the update notifier and
-> the **Follow Mode (Max / Sum) switch** — 65 boxes / 65 lines, 42090 bytes, md5
-> `7ca595b44db993c8bf91269fbeb7d97a`, two embedded JS resources (`sends_follower.js` 5808 bytes,
-> `sf_version_check.js` 3106 bytes), self-contained (no external `.js` needed). This build was rebuilt
-> after Live overwrote the previous frozen build (md5 `725a06ea…`, 41504 bytes) on save before it was
-> archived; the patcher is unchanged (semantically identical, only JSON whitespace differs). See the log
-> entry for 2026-06-18, [[../concepts/version-check\|Version check]], and the Follow Mode section below.
+> Update 2026-06-18 (Map button): the shipped User Library device now adds a front-panel **Map**
+> button — 82 boxes / 85 lines, 68498 bytes, md5 `6f156eab973ecec0d9793f794c75cfce`, two embedded JS
+> resources (`sends_follower.js` 22368 bytes with the return-index observers **and** the map
+> subsystem, `sf_version_check.js` 3106 bytes unchanged), self-contained (no external `.js` needed;
+> the unmap icon is a built-in Max package asset referenced by name, not embedded). The Map button maps
+> Sends Follower's own bipolar follow signal directly onto any Live parameter you click, via a
+> **second** `live.remote~` — additive, the LFO leg (`obj-11`) is untouched. See
+> [[../concepts/map-button\|Map button]] and the log entry for 2026-06-18 (Map button).
+>
+> Update 2026-06-18 (Mode relabel): the prior frozen build (md5
+> `5a8ba853a3c31d80cb84870e977a13f4`, 66 boxes / 65 lines, 49134 bytes) added the **Mode (Peak /
+> Total) switch** with the update notifier. The cosmetic pass renamed the switch labels from Max / Sum
+> to **Peak / Total**, renamed the parameter from "Follow Mode" to **"Mode"**, and added a **"Mode"**
+> comment label above the switch; the index-to-behavior mapping is unchanged (Peak = old Max, Total =
+> old Sum). See [[../concepts/version-check\|Version check]] and the Follow Mode section below.
 
 ## Status
 
 | Aspect | Status | Notes |
 |---|---|---|
-| Reads follow level toward its return | Works | Computed by the embedded JS (`obj-46`); algorithm selectable Max / Sum, see [[../concepts/send-gathering-via-liveapi\|Send gathering]] |
-| Follow Mode switch (Max / Sum) | Works (added 2026-06-17) | `live.tab` (`follow_mode`) selects max-of-sends or sum-of-sends (clamped to 1.0); saved with set + preset, default Max — see the Follow Mode section |
+| Reads follow level toward its return | Works | Computed by the embedded JS (`obj-46`); algorithm selectable Peak / Total, see [[../concepts/send-gathering-via-liveapi\|Send gathering]] |
+| Mode switch (Peak / Total) | Works (added 2026-06-17, relabelled 2026-06-18) | `live.tab` (`follow_mode`) selects Peak (max-of-sends) or Total (sum-of-sends clamped to 1.0); saved with set + preset, default Peak — see the Follow Mode section |
 | Self-detects which return it sits on | Works | Patch path chain and a JS fallback, see [[../concepts/self-healing-return-index\|Self-healing]] |
 | Writes follow value to a downstream parameter via modulation | Works (signed offset to the LFO's **Offset** parameter, founder-confirmed 2026-06-17) | `live.remote~` (`obj-11`) applies a **bipolar/signed offset** to the stock LFO's **Offset** parameter (`devices 1 parameters 5`). Both the signed-offset character and the exact target are confirmed — see Limitations for the positional usage caveat |
+| Maps the follow signal to any Live parameter (Map button) | Works (added/frozen 2026-06-18) | A front-panel **Map** button drives the same bipolar follow signal onto any user-clicked Live parameter via a **second** `live.remote~` (`map_remote`), bypassing the LFO and additive to it. Arm, click a parameter, capture; unmap with the "X" icon; the target path persists via `pattr`. See [[../concepts/map-button\|Map button]] |
 | Exposes follow value on internal buses | Works | `---max_send` and `---max_send_percent`, see [[../concepts/internal-buses\|Internal buses]] |
 | Embedded JavaScript shipped inside the device | Yes (frozen 2026-06-16) | `sends_follower.js` is now embedded in the frozen container, byte-identical to the Archive copy — see Limitations |
 | Update notifier ("New Version" button) | Works (frozen 2026-06-17) | `node.script sf_version_check.js` pings the manifest; mint button shows only when an update exists — see [[../concepts/version-check\|Version check]] |
-| Front-panel parameter exposed to Live | Partial | The dial (`obj-3`) is a passive meter (`parameter_enable: 0`), but the **Follow Mode** `live.tab` (`follow_mode`) is parameter-enabled and is published as a Live/preset parameter |
+| Front-panel parameter exposed to Live | Partial | The dial (`obj-3`) is a passive meter (`parameter_enable: 0`), but the **Mode** `live.tab` (`follow_mode`) is parameter-enabled and is published as a Live/preset parameter |
 
 ## What it does (plain terms)
 
 Sends Follower is meant to sit on a **return track**. It watches the send knobs of every track that
-routes to that return, combines those send amounts into a single number via the selected **Follow
-Mode** (the **maximum** of the sends, or their **sum** clamped to 1.0), and turns that into a control
+routes to that return, combines those send amounts into a single number via the selected **Mode**
+(Peak = the **maximum** of the sends, or Total = their **sum** clamped to 1.0), and turns that into a control
 value. The intent is "the more signal the rest of the set is pushing into this return, the more this
 value rises" — a one-number summary of how hard the return is being driven.
 
@@ -65,15 +74,21 @@ That follow value is then made available three ways:
 | Audio in/out L+R | `plugin~` (`obj-1`) → `plugout~` (`obj-2`) | pass-through | Audio is untouched; device is a transparent insert |
 | LiveAPI read | `js sends_follower.js` (`obj-46`) | in | Reads `value` of each track's send to this return |
 | LiveAPI write | `live.remote~` (`obj-11`) | out | Modulates the stock LFO's **Offset** parameter (`devices 1 parameters 5`) on the return chain |
+| LiveAPI write | `live.remote~` (`map_remote`) | out | Modulates the **user-mapped** parameter (Map button); same bipolar signal, bypasses the LFO — see [[../concepts/map-button\|Map button]] |
+| LiveAPI read | `js sends_follower.js` (`obj-46`) selected-parameter observer | in | Captures `live_set view selected_parameter` while the Map button is armed |
 | Named bus out | `send ---max_send` (`obj-50`) | out | Raw follow value (0.–1.) |
 | Named bus out | `send ---max_send_percent` (`obj-20`) | out | Follow value as 0–100 |
 | Named bus in | `receive ---max_send` (`obj-7`, `obj-12`) | in | Internal consumers of the raw value |
 
 ## Parameters
 
-The device exposes **one** Live/preset parameter: **Follow Mode** (`live.tab`, object id
-`follow_mode`, enum `Max` / `Sum`, default `Max`). It is `parameter_enable: 1`, so it saves with the
-set and with device presets and can be automated/mapped. See the Follow Mode section.
+The device exposes **one** Live/preset parameter: **Mode** (`live.tab`, object id `follow_mode`
+— the varname is unchanged from when the parameter was named "Follow Mode", enum `Peak` / `Total`,
+default `Peak`). It is `parameter_enable: 1`, so it saves with the set and with device presets and can
+be automated/mapped. See the Follow Mode section.
+
+A `comment` label reading **"Mode"** (`mode_label`, Arial Bold 9, grey) sits directly above the switch
+in the presentation view.
 
 The other front-panel object is a `dial` (`obj-3`) with `parameter_enable: 0` — a passive meter, not a
 mapped parameter. It is driven for display only: `receive ---max_send` (`obj-7`) → `* 127.`
@@ -83,28 +98,29 @@ mapped parameter. It is driven for display only: `receive ---max_send` (`obj-7`)
 Two `flonum` boxes (`obj-19`, `obj-49`) are bench/monitor read-outs (one shows the 0–100 percent
 value, the other shows the raw 0.–1. value).
 
-## Follow Mode (Max / Sum)
+## Follow Mode (Peak / Total)
 
-The aggregation algorithm is selectable at runtime via the **Follow Mode** switch (`live.tab`,
-`follow_mode`):
+The aggregation algorithm is selectable at runtime via the **Mode** switch (`live.tab`,
+`follow_mode`). The labels were Max / Sum until 2026-06-18 and were renamed to Peak / Total; the
+index-to-behavior mapping is unchanged.
 
-- **Max** (index 0, default): the follow value is the single largest send amount among all tracks
+- **Peak** (index 0, default): the follow value is the single largest send amount among all tracks
   routing to the return — the original behavior.
-- **Sum** (index 1): the follow value is the **sum** of all send amounts to the return, then
+- **Total** (index 1): the follow value is the **sum** of all send amounts to the return, then
   **clamped to 1.0**. Each send is 0.–1.; the sum is capped at 1.0 so the value stays in the 0.–1.
   range the downstream `scale 0. 1. …` boxes expect and the percent monitor (`---max_send_percent`)
   never exceeds 100%.
 
 Flow: `follow_mode` outlet 0 (the selected index) → `prepend mode` (`mode_prepend`) →
 `js sends_follower.js` (`obj-46`) inlet 0, delivering `mode 0` / `mode 1`. The embedded JS keeps a
-`followMode` state (defaulting to 0 = Max) and switches `bang()` between max and clamped-sum
+`followMode` state (defaulting to 0 = Peak) and switches `bang()` between max and clamped-sum
 accordingly; the output message keeps its `"max"` label regardless of mode, because the downstream
 `route max` / `---max_send` / percent paths key on that word.
 
 The saved value is restored to the JS on load via `loadbang` (`mode_loadbang`) → `delay 300`
 (`mode_delay`) → `follow_mode`: banging the tab makes it re-emit its current/saved index, which then
 travels the same path to the JS. Because the JS also initializes `followMode` to 0, a late or missing
-bang still leaves the device in the default Max behavior.
+bang still leaves the device in the default Peak behavior.
 
 ## Signal / data flow
 
@@ -147,6 +163,21 @@ Two cooperating subgraphs run in parallel.
    to that parameter — the stock LFO's **Offset** (`devices 1 parameters 5`, founder-confirmed). See
    [[../concepts/live-remote-modulation-chain\|live.remote~ chain]].
 
+### C. Map leg — drive a user-clicked parameter (added 2026-06-18)
+
+A parallel, additive leg taps the same bipolar signal and drives a user-mapped target with a
+**second** `live.remote~`:
+
+1. `scale 0. 1. -100. 100.` (`obj-16`) outlet 0 also feeds `sig~` (`map_sig`) → `live.remote~`
+   inlet 0 (`map_remote`). The LFO leg (`obj-11`) is untouched.
+2. The Map button (`map_button`, `live.text` toggle) sends `arm 0/1` to the JS (`obj-46`). While
+   armed, the JS observes `live_set view selected_parameter`, captures the next clicked parameter's
+   path, and emits it on outlet 1 → `route … target_path …` (`map_route`) → `prepend path`
+   (`map_pathprep`) → `live.path` (`map_path`) → `live.remote~` inlet 1 (`map_remote`).
+3. The captured path is persisted in `pattr map_target` (`map_pattr`) and re-resolved on load via
+   `prepend restorepath` (`map_restoreprep`) → the JS. The "X" icon (`map_unmap`) clears it and sends
+   `id 0` to `map_remote`. See [[../concepts/map-button\|Map button]] for the full object table.
+
 ## Limitations / open questions
 
 - **The embedded JavaScript — resolved 2026-06-16.** The device was previously unfrozen and the
@@ -178,12 +209,12 @@ Two cooperating subgraphs run in parallel.
   silently. The shipped [[../concepts/adg-rack-wrapper\|rack]] pins the layout (Sends Follower then
   LFO) precisely to keep the target on the LFO's Offset. This is a use-it-correctly caveat, not an
   open question.
-- **One mapped Live parameter (Follow Mode).** The only Live-automatable/mappable parameter is the
-  Follow Mode `live.tab`. The follow value itself is not exposed as a parameter; consumers must be the
+- **One mapped Live parameter (Mode).** The only Live-automatable/mappable parameter is the Mode
+  `live.tab`. The follow value itself is not exposed as a parameter; consumers must be the
   `live.remote~` modulation target or read `receive ---max_send` / `---max_send_percent`.
-- **Aggregation is selectable: Max or Sum (clamped).** Default is the single largest send value among
-  all tracks routing to the return (Max). Sum mode adds all send amounts and clamps the total to 1.0.
-  Neither mode produces an average. See the Follow Mode section.
+- **Aggregation is selectable: Peak or Total (clamped).** Default is the single largest send value
+  among all tracks routing to the return (Peak). Total mode adds all send amounts and clamps the total
+  to 1.0. Neither mode produces an average. See the Follow Mode section.
 - **Polling, not observing.** The value is refreshed by a `qmetro 33` poll (~30 Hz) rather than
   LiveAPI property observers, so it is CPU-cheap but not sample-accurate and has up to ~33 ms latency
   plus the `change`/`speedlim 30` de-duplication.

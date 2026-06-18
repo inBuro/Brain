@@ -58,10 +58,30 @@ Actions (the CTA goals):
 - **277920** — CTA — Buy click (`buy_click`) — primary conversion ✅ verified firing 2026-06-10
 - **277921** — CTA — Newsletter signup (`newsletter_signup`)
 - **277922** — CTA — Social click (`social_click`)
-- **277924** — CTA — Legal view (`$pageview` URL contains `p=legal`) — no code
+- ~~**277924** — CTA — Legal view~~ **DELETED 2026-06-18** (legacy misconfig — `cta_view`
+  never fires on `/legal`, so the action — which actually matched `$pageview` URL contains
+  `p=legal` — was a meaningless "CTA impression" sitting at 0→0→0.0% in monitoring; only ever
+  1 hit, a pageview on 06-07). Replaced by 280502 below.
 - **277925** — CTA — Custom Modes page view (`$pageview` URL contains `p=free-modes`) — no code
 - **277926** — CTA — Video play (`video_play`) — needs deploy
 - **277927** — CTA — Mode download (`mode_download`) — needs deploy
+- **280502** — **Footer CTA view** (created 2026-06-18, replaces 277924). Impression of the
+  footer Buy-CTA on the product page. **Two OR steps spanning an event RENAME**: step1
+  `footer_cta_view` (NEW name, code-deployed 06-18) + step2 `cta_view` (HISTORICAL name), BOTH
+  with `location=newsletter`. So the series is continuous across the rename. ✅ verified counting
+  the historical newsletter impressions (06-16=3, 06-17=1, 06-18=1 = 5/30d).
+
+## Footer-CTA impression event RENAME (code change 2026-06-18, NOT mine)
+- Event `cta_view` → **`footer_cta_view`** (below-fold Buy-CTA impression). Historical data lives
+  under `cta_view`; new events go under `footer_cta_view` once the fresh HTML propagates past the
+  CDN cache on the apex (delayed at task time). `footer_cta_view` not yet in the event schema —
+  expected, hasn't fired once yet.
+- Property **`location`** distinguishes WHERE the impression fired: **`newsletter`** = the Buy
+  banner in the FOOTER of the product page (this is "the footer CTA"); **`free_modes_bridge`** =
+  the Buy bridge on the free-modes page. The hedge/hero CTA is NOT tracked.
+- To count footer-CTA impressions ACROSS the rename: query Action **280502** (combines both event
+  names + `location=newsletter`), or hand-roll trends with both `footer_cta_view` and `cta_view`
+  filtered `location=newsletter`.
 
 ## A/B experiment (LAUNCHED 2026-06-11 12:46 Thai)
 - **Experiment 376381** — "Hero copy — permanent interface vs feature-led", `https://us.posthog.com/project/458316/experiments/376381`. Status **running** since 2026-06-11T05:46:30Z (12:46 Thai); landing code reading the flag was deployed to prod BEFORE launch and verified.
@@ -108,6 +128,9 @@ carrying `utm_source=maxforlive&utm_medium=referral&utm_campaign=control_xl_list
 - `/m4l-buy` → Gumroad
 ANY session with `utm_campaign=control_xl_listing` (or `utm_source=maxforlive`) = a click from the
 maxforlive listing. Do NOT confuse with the reddit markers above.
+**Custom Channel Type "Max for Live" configured 2026-06-18** — `utm_source=maxforlive` now
+classifies as its OWN channel (priority over Referral/Direct), stored in project
+`modifiers.customChannelTypeRules`. Details + coverage + gotcha → [[custom-channel-maxforlive]].
 **ALIVE as of 2026-06-15:** first real maxforlive session landed 2026-06-15 00:16 ICT (ES/Desktop
 Edge): entered `/`, went to `/free-custom-modes`, 74s, **mode_download ×1**. Quality visit (the
 listing's External Link swap worked). Maxforlive numbers are now real — start counting them.
