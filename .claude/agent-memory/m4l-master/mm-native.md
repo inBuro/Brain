@@ -51,7 +51,38 @@ name-comment overlay, X-unmap. **Source = `live.dial` "Source" 0..1** (stands in
 - Built from (read-only ref): `SendsFollower.amxd` (`7ebe7d15`) mapper idioms; container header copied
   from `SendsReader.amxd` (simplest valid container).
 
-## v2 stock-look — 2026-06-18 (CURRENT)
+## v3 name-fix + idle-border — 2026-06-18 (CURRENT)
+- **md5 `c4e3b3893b0713607ac9fd2d0002137e`, 122928 B, 144 box / 170 line (+8 line).** Two fixes; no box
+  added/removed; container = simple form, JSON GREW (no Path A — Live-resave v2 JSON was tighter, compact
+  edit was +1200 over L0 → repack via simple-container: `prefix d[:0x20] + JSON + \x00`, ptch=len(JSON)+1
+  @0x1C; NO dlst/mx@c/mdat to patch). Archive `…233828-v2-ondisk-preedit.amxd` (fa8779d7).
+- **ROOT CAUSE of "name stays Map when mapped" (definitive):** `substitute <none> Map` has TWO outlets —
+  outlet 0 = "Newly Substituted Message" (fires ONLY on match, i.e. unmapped name `<none>`→`Map`), outlet 1
+  = "Message That Was Left Intact" (fires on NO match, i.e. a REAL param name). v2 wired ONLY `namesub_N[0]`
+  → namesym → namemsg → map_btn. So unmapped showed "Map" (outlet 0), but MAPPED real names exited outlet 1
+  and were DROPPED → button stuck on "Map". Stock `liveui.map` p SetName wires BOTH substitute outlets into
+  p TruncateText for exactly this reason. **FIX:** added `namesub_N[1]→namesym_N[0]` for all 8 slots (+8
+  line). The rest of the proven chain (livemap[2]→namesub→namesym(tosymbol)→namemsg(`text $1, texton $1`)
+  →map_btn[0], plus livemap[3] state→map_btn[0]) was CORRECT — outlet routing (live.map 1=id/2=name/3=state)
+  verified against stock obj-3. ⚠️ REUSABLE CRAFT: `substitute a b` is NOT a passthrough — the unmatched
+  message leaves outlet 1, the substituted one leaves outlet 0; if you need BOTH cases downstream, wire BOTH
+  outlets (this is why stock does). Don't assume outlet 0 carries everything.
+- **Idle-border fix (cosmetic, founder ask):** v2 `map_btn_N bordercolor` was orange (`live_lcd_control_fg`,
+  #FFB532) → visible orange frame in idle (looked like a button). Founder wants stock look = grey "Map", no
+  bright frame. Set bordercolor → LCD bg #282828 (theme-bound `live_lcd_bg`) for all 8 → frame invisible;
+  idle text stays grey (textcolor/textoffcolor = `live_lcd_control_fg_zombie` #8C8C8C), mapped name orange
+  (activetextcolor/activetextoncolor = #FFB532). NOTE: stock obj-48 actually keeps bordercolor=orange-bound,
+  but founder explicitly wants no idle frame → diverged intentionally. Everything else (theme bindings,
+  appearance 2, parameter_enum) byte-equal to stock obj-48 (mine just lacks stock's `parameter_invisible 2`).
+- name display chain is sound (matches stock idiom); `text $1, texton $1` into enum-param live.text DOES
+  work — verified stock obj-48 uses the identical message into the same inlet. The dead-end was the dropped
+  substitute outlet, NOT the live.text-label mechanism. (Contrast SendsFollower's earlier comment-overlay
+  workaround — there the live.text-label genuinely misbehaved; here it's fine once fed correctly.)
+- **OPEN:** still needs hardware verification in Live (map → name appears in button → Source moves target
+  within Min/Max → unmap restores "Map"; confirm no orange idle frame). Not frozen / no version-check (test
+  device). Source dial = encoder stand-in (integration into real encoder bus still TODO, see below).
+
+## v2 stock-look — 2026-06-18 (superseded by v3)
 - **md5 `fa8779d7312551c562278903a3aea19e`, 121728 B, 144 box / 162 line.** openrect `[0,0,304,169]`,
   pres bbox max x+w=296, y+h=161 (fits 169px shelf). Self-contained (no embedded files; SVG by name).
 - **WHY v2:** founder rejected v1 look (looked like SF mapper — fat orange Map-button frames + separate

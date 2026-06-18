@@ -58,12 +58,25 @@ austacademy@gmail.com, Fadercraft Control XL $39 qty1, receipt ~13:50 ICT.
   has no email-collection that fires $identify for buyers. Email↔visitor link exists only
   via the manual fingerprint above, not in PostHog data.
 
-## WEBHOOK — real ping arrived but mislabeled is_test=True (revised 2026-06-18)
-- REVISED: the Gumroad ping for THIS sale DID reach PostHog — there's a 3rd `purchase`
-  at **06-17 13:50:33 ICT, sale_id `aKrKs--u0JFZjW2haKM73w==`, order_number 1010996217,
-  $39 USD qty1, product Fadercraft Control XL** — but it landed `is_test=True` (the
-  webhook mislabeled a REAL sale as test → scenario (a) from the old note) and fell to
-  fallback distinct_id `gumroad:5290360120821` (no ph_did, so not stitched to the buyer).
+## WEBHOOK — only setup/test pings reached PostHog for this sale (revised 2026-06-19; root-cause corrected)
+- NO WEBHOOK BUG. `gumroad-ping.js` line `is_test: f('test') === 'true'` HONESTLY MIRRORS
+  the `test` form-field Gumroad sends — it does not set, invert, or mislabel the flag.
+  Verified against deployed `app/functions/api/gumroad-ping.js` (owner sign-off 2026-06-19).
+- So the 5 `is_test=True` rows for this sale are almost certainly **setup/test pings** fired
+  while the Gumroad Ping endpoint was being stood up (instrumentation was wired ~same time
+  as sale #1), NOT a real sale mis-flagged. There was no real non-test ping for sale #1
+  because the pipeline wasn't live yet when it happened.
+- Live re-check 2026-06-18 23:55 ICT: filtering `purchase` by order_number=1010996217 /
+  sale_id returns **6 rows** for ONE logical sale: my 1 backfill (is_test=false) + **5
+  IDENTICAL gumroad-ping rows (is_test=True)** all stamped 06-17 13:50:33 ICT — Gumroad
+  RETRIED/re-fired the ping 5× (same sale_id, same order, $39), all on fallback distinct_id
+  `gumroad:5290360120821` / person `431759b1-5ac2-55e9-aa22-1822200ad68d` (no ph_did → not
+  stitched to the buyer). The "3rd purchase" wording in the old note was an undercount of
+  these ping repeats; the true picture is 5 test-pings + 1 backfill. Dedupe on sale_id → 1
+  real sale. (Retries like this no longer double-count — see DEDUP fix in [[day-2026-06-17]].)
+  Each ping `country` prop = "The Netherlands"; `$geoip_country_code=US` = Gumroad's
+  server IP, ignore (the backfill's geo_cc=TH is likewise the capture-proxy IP, not the
+  buyer — the buyer's real geo is NL/Serooskerke, read off the buy_click session).
   Its `country` prop = "The Netherlands" (Gumroad billing country = confirms NL);
   `$geoip_country_code=US` on it is just Gumroad's server IP, ignore it.
 - So the real sale was INVISIBLE to analytics (is_test filter drops it) and detached
@@ -85,11 +98,23 @@ austacademy@gmail.com, Fadercraft Control XL $39 qty1, receipt ~13:50 ICT.
 - VERIFIED: landed on 06-17, person_id bcf21ee7, real-purchase count now 1 (is_test=false),
   no dup. Attribution re-confirmed via the person's first $pageview $referrer =
   maxforlive listing (utm_source=maxforlive…control_xl_listing).
+- RE-VERIFIED LIVE 2026-06-18 23:55 ICT: the backfill `purchase` sits in the SAME session
+  as the buy_click (`$session_id 019ed447-168b-7b62-ac2b-9ee9df925fa2`), timestamp
+  13:50:00 ICT (between buy_click 13:47:20 and pageleave 13:51:17) — so source/variant
+  inherit cleanly via the buy session. Person's full lifetime event sequence holds exactly
+  as logged below (2 touches, control on every event, NO mode_download/video_play/demo_interact/
+  cta_view ever). Nothing drifted. The Gumroad CSV (Sales20260618.csv) line for this sale —
+  referrer=direct, all UTM empty, order 1010996217, NL/ZH — matches: Gumroad sees `direct`
+  because the checkout URL is unstamped (CODE FINDING below); the TRUE source only survives
+  in PostHog's first-pageview $referrer.
 - DEDUPE RULE for future real-sale counts: filter `is_test != true` AND, when both the
-  mislabeled ping and this backfill coexist, dedupe on `sale_id='aKrKs--u0JFZjW2haKM73w=='`
-  (count the backfill row, not the is_test=True ping). Better fix = the webhook should
-  send is_test=false on real sales (eng task), then drop the backfill or keep it as the
-  canonical one and ignore the test-flagged ping.
+  test-flagged ping and this backfill coexist, dedupe on `sale_id='aKrKs--u0JFZjW2haKM73w=='`
+  (count the backfill row, not the is_test=True ping). NOTE 2026-06-19: `gumroad-ping.js`
+  now generates a deterministic per-sale `uuid` from `sale_id`, so PostHog collapses Gumroad
+  webhook RETRIES into one `purchase` event — future real sales won't fan out into a row per
+  retry the way these 5 setup pings did. Manual sale_id dedupe on OLD data is still a good
+  habit. For sale #1 the backfill IS the canonical real (is_test=false) purchase; the
+  is_test=True rows are setup pings, keep filtering them out.
 - `purchase` event carries NO email and NO buyer name (verified via event_properties):
   only sale_id, order_number, product_name, price, currency, seller_id, is_test, refunded,
   geo. So even when the webhook works, the buyer's identity never lands in PostHog from the
@@ -99,10 +124,12 @@ austacademy@gmail.com, Fadercraft Control XL $39 qty1, receipt ~13:50 ICT.
   with the code finding below.
 - What to check on the Gumroad→PostHog side: (1) is the Gumroad Ping (Settings → Advanced →
   Ping) URL set to `https://fadercraft.com/api/gumroad-ping?token=<GUMROAD_PING_TOKEN>` and
-  is the token current; a wrong/missing token → 403, ping silently dropped; (2) does it fire
-  on real (non-test) sales at all, or only on the "Send test ping" button; (3) `is_test`
-  must arrive false on a real sale. Until a real sale lands as purchase(is_test=False),
-  conversion-to-money is invisible in PostHog and reconciled by hand vs Gumroad.
+  is the token current; a wrong/missing token → 403, ping silently dropped; (2) confirm it
+  fires on real (non-test) sales — sale #1 only ever saw "Send test ping"-style pings because
+  the endpoint was being set up at the time. `is_test` itself is reliable: it just mirrors
+  Gumroad's `test` field (no code bug), so a real sale WILL land as purchase(is_test=False)
+  once a genuine non-test ping comes through. Until then, conversion-to-money is reconciled
+  by hand vs Gumroad.
 
 ## CODE FINDING — checkout URL is NOT stamped (corrects old pipeline memory)
 - `app/src/links.ts`: `GUMROAD_URL = 'https://fadercraft.gumroad.com/l/control-xl'` — a

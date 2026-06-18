@@ -15,7 +15,9 @@ last at 10:10 ICT) → **06-13=0, 06-14=0** = fully spent, no organic tail. One 
 mini-bump is NEW reddit markers, NOT this post: `organic` (06-14 23:39 US, 06-15 ×3) +
 `ableton_post` (06-15 02:50 US video_play, 06-15 05:39 RU/Yandex **download**). So as of mid-June
 `introduction_post` is historical; live reddit = `organic` + `ableton_post`. Both purchases in the
-window were `is_test=True` (US, SG, both 06-10) → still zero real sales lifetime.
+window were `is_test=True` setup/test pings (US, SG, both 06-10; not mis-flagged real sales) →
+zero real sales in THIS window. (First real sale came later, 06-17, attributed to maxforlive
+not reddit — see [[sale-1-attribution]].)
 
 The single best-performing organic post of the account. Reddit-side stats (founder, not
 PostHog): 6.2K post views in 48h, 19 upvotes, 95.2% ratio, 14 comments, 21 shares (shares >
@@ -55,9 +57,10 @@ session; multi-page + downloads cluster here. Sample replays (all entered `/free
 Direct/non-reddit sessions = bounciest (single pv on `/`, no CTA).
 
 ## Conversion outcome
-`buy_click` = **0** in the whole window (lifetime still 0). `purchase` = 2 but both
-`is_test=True` Gumroad pings (US, SG) → **zero real sales**. Only paid-funnel signal is free
-pull: 3 downloads (1 reddit, 1 internal_ref, 1 TH-direct) + 3 video_plays (all reddit).
+`buy_click` = **0** in the whole window. `purchase` = 2 but both were `is_test=True` Gumroad
+setup/test pings (US, SG) — genuine test pings, NOT real sales mis-flagged (the webhook honestly
+mirrors Gumroad's `test` field) → **zero real sales in this window**. Only paid-funnel signal is
+free pull: 3 downloads (1 reddit, 1 internal_ref, 1 TH-direct) + 3 video_plays (all reddit).
 
 ## VERDICT — this post is REACH, not conversion
 It delivered the best top-of-funnel the site has ever seen (10x traffic day, highest-engagement
