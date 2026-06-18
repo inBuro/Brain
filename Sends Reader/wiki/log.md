@@ -125,3 +125,42 @@ no-op; `aggmode(1)` (Max) leaves a single-send read unchanged. `node --check` cl
 State: **unfrozen** (external scripts next to the device). Freeze still required before distribution.
 Archive: `raw/archive/SendsReader.2026-06-18-v1.2.amxd` (pre-edit v1.1 archived
 `raw/archive/SendsReader.2026-06-18-165500-v1.1-preedit.amxd`).
+
+## 2026-06-18 — v1.3 (founder feedback: remove the Sum / Max switch entirely)
+
+Founder decision: the Sum / Max switch had been functionally idle since v1.2 (the device reads a
+single send, so there is nothing to aggregate), so remove it for good — not a new fork, an iteration
+of the same device. Clean removal only; nothing else was repositioned or resized. All other behaviour
+kept (host auto-detect, N/A on return/master, observer self-healing, 8-slot mapper, `pattr`
+persistence, anti-feedback warning, version-check, letters-only Send dropdown, 169 px ceiling). New
+device: md5 `9c0386abc1fb3b1bd597a6d695c33322`, 118474 bytes (size unchanged — length-preserving
+repack), openrect unchanged `[0,0,328,169]` (max y+h = 166, max x+w = 320).
+
+**Patcher: removed 5 boxes + 4 lines** (now **182 boxes / 190 lines**). Boxes: `agg_mode` (the
+`live.tab` Sum / Max), `agg_prepend` (`prepend aggmode`), `agg_loadbang` (`loadbang`), `agg_delay`
+(`delay 300` — the one feeding the tab, not the unrelated Sends-Follower-inherited `obj-6 delay 300`,
+which was left intact), and `mode_label` (the "Mode" comment that labelled the switch). Lines:
+`agg_mode → agg_prepend`, `agg_prepend → obj-46[0]`, `agg_loadbang → agg_delay`,
+`agg_delay → agg_mode`. The JS box `obj-46` keeps four live feeds on inlet 0 (`mode_prepend`,
+`obj-35`, `sr_restprep`, `sr_init`), so no inlet was orphaned; zero dangling line endpoints remain.
+
+**JS (`sends_reader.js`): removed all Sum / Max remnants.** Cut the `AGG_SUM` / `AGG_MAX` constants,
+the `aggMode` variable, the `function aggmode(m)` handler, the aggregation-mode doc comment block, the
+`aggmode <0|1>` line in the inlet-0 message list, and the v1.2 "Sum/Max idle" inline comment in
+`bang()`. The single-send read in `bang()`, persistence/restore (`<id> <name…>` / `none` — no `all`
+token, already gone in v1.2), and the observers were not touched. `node --check` clean. 18640 →
+16993 bytes, md5 `0716dff3808e6d9cd619c6394352a288`.
+
+**Left column after removal:** `send_menu [5,2,46,14]` → `version_link "New Version" [54,4,70,14]` →
+dial `[5,16,116,116]` (ends y132) → `status_label [5,151,118,15]`. The y132–151 band where the "Mode"
+label and the Sum / Max tab used to sit is left empty by request — nothing was moved or stretched.
+
+`sr_version_check.js` `DEVICE_VERSION` bumped `1.2` → `1.3` (manifest should publish `latest: "1.3"`).
+
+Validation: JSON re-parsed (python + jq) from the installed file, 182/190 boxes/lines, the five boxes
+and four lines confirmed gone, no remaining line references a removed id, `ptch` invariant holds
+(118442 = filesize − 0x20), prefix and trailing `\x00` byte-identical to the pre-edit file.
+
+State: **unfrozen** (external scripts next to the device). Freeze still required before distribution.
+Archive: `raw/archive/SendsReader.2026-06-18-v1.3.amxd` (pre-edit v1.2 archived
+`raw/archive/SendsReader.2026-06-18-193718-v1.2-preedit.amxd`).

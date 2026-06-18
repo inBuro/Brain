@@ -29,6 +29,13 @@
 //   сохранённому id (self-healing-паттерн).
 //   Выбор переживает reload через pattr.
 //
+// Режим агрегации (Sum / Max), переключатель на лице:
+//   ⚠️ v1.2: после удаления пункта «All» девайс всегда читает ОДНУ величину
+//   (один send), поэтому агрегировать нечего — Sum == Max == это значение.
+//   Переключатель оставлен ВИДИМЫМ (по просьбе, как в Sends Follower), но
+//   функционально холостой: на читаемое значение он не влияет. Если позже
+//   понадобится реальный агрегат — вернуть пункт «All» и readAllSends().
+//
 // Анти-feedback:
 //   если пользователь смапит ЧИТАЕМЫЙ нами send на параметр СВОЕГО же трека
 //   (на сам этот send или другой send того же трека), получится петля
@@ -41,6 +48,7 @@
 // Сообщения из патча (inlet 0):
 //   bang                — прочитать выбранный send и выдать значение
 //   selectsend <i>      — пользователь выбрал пункт меню i (0-based, буква)
+//   aggmode <0|1>       — режим агрегации (холостой в v1.2): 0=Sum, 1=Max
 //   refreshmenu         — перестроить пункты меню из текущих return-треков
 //   restoresel <id|none> <name...> — восстановить выбор из pattr на загрузке
 //   init                — инициализация (ставит наблюдателей)
@@ -54,6 +62,10 @@ var TYPE_RETURN = 1;  // return-трек — недоступно
 var TYPE_MASTER = 2;  // master — недоступно
 var TYPE_NONE   = -1; // ещё не разрешено
 
+// Режим агрегации (v1.2: холостой — пункта «All» больше нет, всегда один send).
+var AGG_SUM     = 0;  // Sum (без эффекта при одиночном send)
+var AGG_MAX     = 1;  // Max (без эффекта при одиночном send)
+
 var hostType    = TYPE_NONE;  // тип трека-хоста
 var trackPath   = "";         // канонический путь СВОЕГО трека (live_set tracks N)
 
@@ -61,6 +73,7 @@ var selReturnId = -1;         // LiveAPI id выбранного return-трек
 var selReturnNm = "";         // имя выбранного return (для восстановления)
 var sendIndex   = -1;         // текущий индекс send (резолвится из selReturnId)
 var sendRef     = null;       // LiveAPI на mixer_device sends <sendIndex>
+var aggMode     = AGG_SUM;    // режим агрегации (холостой в v1.2)
 
 var returnIds   = [];         // id всех return-треков (в порядке списка)
 var returnNms   = [];         // имена всех return-треков (в порядке списка)
@@ -295,6 +308,14 @@ function selectsend(i) {
     persistSelection();
 }
 
+// "aggmode <m>" — режим агрегации: 0 = Sum, 1 = Max.
+// ⚠️ v1.2: ХОЛОСТОЙ — всегда читается один send, агрегировать нечего.
+// Значение хранится (для будущего возврата «All»), но на вывод не влияет.
+function aggmode(m) {
+    m = parseInt(m, 10);
+    aggMode = (m === AGG_MAX) ? AGG_MAX : AGG_SUM;
+}
+
 // "refreshmenu" — принудительно перестроить меню.
 function refreshmenu() {
     rebuildReturnList();
@@ -337,7 +358,7 @@ function bang() {
 
     var result = 0.0;
 
-    // Читаем ровно один выбранный send своего трека.
+    // v1.2: всегда один выбранный send (Sum/Max холостой — агрегата нет).
     if (!sendRef || sendRef.id == 0) { bindSendRef(); if (!sendRef) { outlet(0, "max", 0.0); return; } }
     try {
         var v = sendRef.get("value");

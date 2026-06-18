@@ -135,20 +135,49 @@ observer self-heal, 8-slot mapper, pattr persist, anti-feedback warn, 169px ceil
   `raw/archive/SendsReader.2026-06-18-v1.2.amxd` (+ both JS dated). Pre-edit v1.1 archived
   `…-165500-v1.1-preedit.amxd`.
 
+## v1.3 (2026-06-18) — Sum/Max switch removed entirely
+Founder decision: Sum/Max was functionally idle since v1.2 (device reads ONE send → nothing to
+aggregate) → delete it, NOT a new fork. Clean removal, NO repositioning of anything else.
+- **Patcher: removed 5 boxes + 4 lines.** Boxes: `agg_mode` (live.tab Sum/Max), `agg_prepend`
+  (`prepend aggmode`), `agg_loadbang` (loadbang), `agg_delay` (`delay 300` @pat y648 — NOT the SF-
+  inherited `obj-6 delay 300` @y1120, left intact), `mode_label` (comment "Mode" @[5,118,60,17] —
+  belonged to Sum/Max since Send-menu moved to top-left in v1.2). Lines: `agg_mode→agg_prepend`,
+  `agg_prepend→obj-46[0]`, `agg_loadbang→agg_delay`, `agg_delay→agg_mode`. obj-46 (js) inlet 0 keeps
+  4 live feeds (mode_prepend, obj-35, sr_restprep, sr_init) — no orphan. Zero dangling line endpoints.
+- **JS (`sends_reader.js`): cut all Sum/Max remnants.** Removed `AGG_SUM`/`AGG_MAX` consts, `aggMode`
+  var, `function aggmode(m)`, the aggregation-mode doc comment block, the `aggmode <0|1>` line in the
+  inlet-0 message list, and the v1.2 "Sum/Max idle" inline comment in `bang()`. `bang()` single-send
+  read + persist/restore (id+name only, no "all" token — already gone in v1.2) + observers UNTOUCHED.
+  node --check clean. 18640→16993 B. Remaining `"max"` matches in grep are the bus outlet label, not agg.
+- **Left col after removal:** send_menu `[5,2,46,14]` (top-left letters) → version_link "New Version"
+  `[54,4,70,14]` → dial `[5,16,116,116]` (ends y132) → status_label `[5,151,118,15]`. Empty band
+  y132..151 where Mode label + Sum/Max tab used to sit — left empty per ask (nothing moved/stretched).
+- **Version-check:** DEVICE_VERSION `1.2`→`1.3` (`sr_version_check.js`, md5 `dbb3dda0…`, 3102 B).
+- **State:** v1.3 UNFROZEN, device md5 `9c0386abc1fb3b1bd597a6d695c33322`, 118474 B (size unchanged,
+  Path A length-preserving, pad 2840), **182 box / 190 line**. `sends_reader.js` md5
+  `0716dff3808e6d9cd619c6394352a288` 16993 B. Archive `raw/archive/SendsReader.2026-06-18-v1.3.amxd`
+  (+ both JS dated). Pre-edit v1.2 archived `…-193718-v1.2-preedit.amxd` (+ both JS).
+
 ## State (one slice)
-- **v1.2 UNFROZEN** (CURRENT), device md5 `74a7d1e6edae4ba1dab888b84063bfe0`, 118474 B, **187 box /
-  194 line**, openrect `[0,0,328,169]` (MAX y+h=166, MAX x+w=320). External JS: `sends_reader.js`
-  `acaeed47…` 18640B, `sr_version_check.js` `4362747a…` 3102B (DEVICE_VERSION 1.2). Archive
-  `raw/archive/SendsReader.2026-06-18-v1.2.amxd`. Left col now: send_menu `[5,2,46,14]` / dial
-  `[5,16,116,116]` / mode_label "Mode" `[5,118,60,17]` / agg_mode Sum/Max `[5,134,116,16]` /
-  status_label `[5,151,118,15]`. Menu = letters only (no All); Sum/Max idle (single send).
+- **v1.3 UNFROZEN** (CURRENT), device md5 `9c0386abc1fb3b1bd597a6d695c33322`, 118474 B, **182 box /
+  190 line**, openrect `[0,0,328,169]` (MAX y+h=166, MAX x+w=320). External JS: `sends_reader.js`
+  `0716dff3…` 16993B, `sr_version_check.js` `dbb3dda0…` 3102B (DEVICE_VERSION 1.3). Archive
+  `raw/archive/SendsReader.2026-06-18-v1.3.amxd`. Left col now: send_menu `[5,2,46,14]` / version_link
+  `[54,4,70,14]` / dial `[5,16,116,116]` / status_label `[5,151,118,15]`. NO Mode label, NO Sum/Max
+  tab (removed). Menu = letters only (one send always). ⚠️ JSON starts at offset **32** (after ptch),
+  end = first `\x00` @EOF; the `48` in amxd-format is the frozen mx@c layout, NOT this UNFROZEN device.
+- Prior **v1.2 UNFROZEN**, device md5 `74a7d1e6edae4ba1dab888b84063bfe0`, 118474 B, **187 box /
+  194 line**. External JS: `sends_reader.js` `acaeed47…` 18640B, `sr_version_check.js` `4362747a…`
+  3102B (DEVICE_VERSION 1.2). Archive `raw/archive/SendsReader.2026-06-18-v1.2.amxd`. Left col:
+  send_menu `[5,2,46,14]` / dial / mode_label "Mode" `[5,118,60,17]` / agg_mode Sum/Max
+  `[5,134,116,16]` / status_label. Menu = letters only (no All); Sum/Max idle (single send).
 - Prior **v1.1 UNFROZEN**, device md5 `4145a620167ae558a88becf35ee0ad8d`, 118476 B, 187/194. External JS:
   `sends_reader.js` `840340c4…` 20953B, `sr_version_check.js` `e0e13294…` 3102B (DEVICE_VERSION 1.1).
   Archive `raw/archive/SendsReader.2026-06-18-v1.1.amxd`. Menu = `A B C … All`, Sum/Max real for All.
 - Prior **v1.0 UNFROZEN**, md5 `2f78a8d03ce2fa692ba447f929930a9a`, 108511 B, 183/190. Archive
   `raw/archive/SendsReader.2026-06-18-v1.0.amxd`. JS `sends_reader.js` 15731B, `sr_version_check.js` 3102B.
 - **Open items**: (1) FREEZE before distribution; (2) hardware test in Live not done (mock only);
-  (3) consider removing inert LFO leg; (4) deploy manifest `…/api/sends-reader.json` with `latest:"1.2"`;
-  (5) decide whether to remove the now-idle Sum/Max switch OR re-add real "All" aggregate.
+  (3) consider removing inert LFO leg; (4) deploy manifest `…/api/sends-reader.json` with `latest:"1.3"`.
+  (Sum/Max removal — DONE in v1.3.)
 - ⚠️ Repack = UNFROZEN Path: `prefix=d[:0x20]` (32B, ends with ptch LE) + new JSON (from 0x20) + single
   `b'\x00'` at EOF; fix `ptch`(LE@0x1C)=fs−0x20. NO mx@c subheader, NO dlst (those appear only after freeze).

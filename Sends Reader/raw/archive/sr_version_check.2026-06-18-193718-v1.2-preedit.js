@@ -9,7 +9,7 @@
 const maxApi = require('max-api');
 const https  = require('https');
 
-const DEVICE_VERSION = '1.3';                                   // this build's version
+const DEVICE_VERSION = '1.2';                                   // this build's version
 const URL            = 'https://fadercraft.com/api/sends-reader.json';
 const RECHECK_MS     = 30 * 60 * 1000;                        // re-ping every 30 min
 

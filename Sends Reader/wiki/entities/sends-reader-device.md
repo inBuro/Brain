@@ -6,10 +6,10 @@ detailed here. For the reused machinery (8-slot mapper, version check, observer 
 see the [[../../../Sends Follower/wiki/index|Sends Follower wiki]].
 
 - **Device file:** `~/Music/Ableton/User Library/Max Devices/SendsReader.amxd`
-  (v1.2; md5 `74a7d1e6edae4ba1dab888b84063bfe0`, 118474 bytes, 187 boxes / 194 lines, openrect
+  (v1.3; md5 `9c0386abc1fb3b1bd597a6d695c33322`, 118474 bytes, 182 boxes / 190 lines, openrect
   `[0,0,328,169]`).
 - **External scripts (must be next to the device while unfrozen):** `sends_reader.js`,
-  `sr_version_check.js` (`DEVICE_VERSION = 1.2`).
+  `sr_version_check.js` (`DEVICE_VERSION = 1.3`).
 
 ## Status
 
@@ -17,8 +17,7 @@ see the [[../../../Sends Follower/wiki/index|Sends Follower wiki]].
 |---|---|---|
 | Reads one send of its own track | Works | `sends_reader.js` (`obj-46`) resolves `this_device canonical_parent` → own track → `mixer_device sends <M> value`, emits `outlet(0,"max",value)` → `route max` (`obj-47`) → `send ---max_send` |
 | Host-type auto-detect | Works | Normal / group track → working; return track or master → N/A (value forced to 0, status message shown). See "Host detection" |
-| Send chosen via a dropdown (letters) | Works | `umenu` (`send_menu`) populated at runtime with **letters only** `A, B, C…` (one per return, by ordinal, regardless of return name). v1.2 moved it to the top-left corner (presentation_rect `[5,2,46,14]`). Selection → `prepend selectsend` → JS |
-| Aggregate mode Sum / Max | **Visible but idle (v1.2)** | `live.tab` (`agg_mode`, enum `Sum`/`Max`) → `prepend aggmode` → JS. Since v1.2 removed the `All` item the device always reads a single send, so there is nothing to aggregate (`Sum == Max == that value`). Kept on-screen by request, styled / placed like Sends Follower's Peak/Total switch. See "Aggregate (Sum / Max)" |
+| Send chosen via a dropdown (letters) | Works | `umenu` (`send_menu`) populated at runtime with **letters only** `A, B, C…` (one per return, by ordinal, regardless of return name). Sits in the top-left corner (presentation_rect `[5,2,46,14]`). Selection → `prepend selectsend` → JS |
 | Selection stored by return identity, not index | Works | JS stores the selected return's LiveAPI id + name; re-resolves the index on add / remove / reorder of returns (observer on `live_set return_tracks`) |
 | Selection persists across reload | Works | `pattr sr_sel @autorestore 1` stores `id + name` (or the `none` token); on load → `prepend restoresel` → JS, then re-resolved when the menu rebuilds |
 | 8-slot mapper (native `live.map`) | Works (inherited) | 8× `live.map @strict 1` → `live.remote~`, each with Min/Max scaling; taps the raw `---max_send` value (0..1). Unchanged from Sends Follower |
@@ -34,11 +33,6 @@ Sends Reader sits on an ordinary track (audio, MIDI, or a group). It reads **one
 send knobs — how much this track is sending to a return you pick from the **Send** dropdown (returns
 are listed as letters `A, B, C…`, top-left corner) — and turns that 0..1 value into a modulation
 source. You then map that source onto up to eight Live parameters with the 8-slot mapper.
-
-The **Sum / Max** switch under the dial is left visible (styled like Sends Follower's Peak/Total
-switch) but, since v1.2 removed the `All` option, the device always reads a single send, so the
-switch has no effect on the output (`Sum == Max == that value`). It is kept on-screen for visual
-parity with Sends Follower; see "Aggregate (Sum / Max)".
 
 This is the **mirror** of Sends Follower: instead of "how much does the whole set push into this
 return" (read on the return), it is "how much does *this track* push into a chosen return" (read on
@@ -68,31 +62,14 @@ The follow `live.tab` (Peak/Total) from Sends Follower was repurposed into a `um
 `live.menu` because `live.menu` cannot be reliably populated at runtime — `umenu` supports
 `clear`/`append`). On load and on any change to `live_set return_tracks`, the JS rebuilds the menu:
 `menu clear`, then one **letter** per return (`A`, `B`, `C…` from `idxToLetter(k)` — by ordinal, not
-by the return's name). As of v1.2 there is **no `All` item** — the menu is letters only, and the
-device always reads exactly one send. The JS then re-selects the saved return (`select <idx>`,
-applied via `prepend set` so it does not re-fire `selectsend`). A user click outputs the index →
+by the return's name). The menu has **no `All` item** — it is letters only, and the device always
+reads exactly one send. The JS then re-selects the saved return (`select <idx>`, applied via
+`prepend set` so it does not re-fire `selectsend`). A user click outputs the index →
 `prepend selectsend` → JS, which binds the send reference and persists the choice.
 
-In v1.2 the dropdown was moved to the **top-left corner** (presentation_rect `[5,2,46,14]`, compact
-because the labels are single letters); it sits to the left of the "New Version" button (`x54`) and
-above the dial (`y16`), so there is no overlap.
-
-## Aggregate (Sum / Max) (`agg_mode`, a `live.tab`)
-
-The Sum / Max switch (`live.tab`, enum `Sum`/`Max`, `parameter_enable 1`, `parameter_initial [0]` =
-`Sum`, native persistence) is wired `agg_mode` → `prepend aggmode` → JS `aggmode(0|1)`, with a
-`loadbang` → `delay 300` → `agg_mode` chain re-emitting the saved value on load.
-
-**As of v1.2 this switch is functionally idle.** When the `All` menu item was removed the device
-became a single-value reader, so there is no set of sends to aggregate — `Sum` and `Max` both reduce
-to the one selected send's value. `aggmode()` still stores the chosen index (so a future "All" mode
-could be revived without churn), but `bang()` no longer consults it. The switch is **kept visible**
-by request, placed and styled to match Sends Follower's Peak/Total switch (presentation_rect
-`[5,134,116,16]`, full-width left column, with the "Mode" label above it at `[5,118,60,17]` — the
-same geometry as Sends Follower's `follow_mode` / `mode_label`).
-
-To restore a real aggregate, re-add the `All` menu item and the `readAllSends()` walk over
-`<own track> mixer_device sends 0..count` (present in the v1.1 build, removed in v1.2).
+The dropdown sits in the **top-left corner** (presentation_rect `[5,2,46,14]`, compact because the
+labels are single letters); it sits to the left of the "New Version" button (`x54`) and above the
+dial (`y16`), so there is no overlap.
 
 ## Selection persistence and self-healing
 
@@ -101,14 +78,12 @@ The selected return is stored by **identity**, not index: JS keeps `selReturnId`
 `pattr sr_sel` (a cleared selection is stored as `store none`). On reload, `pattr` emits →
 `prepend restoresel` → JS `restoresel` (which understands `none` / `<id> <name…>`), and the next menu
 rebuild re-resolves the index from the saved id (falling back to name, then to the first return).
-This mirrors the return-index self-healing in Sends Follower. (v1.2 removed the `all` token and the
-`SEL_ALL` sentinel that the dropped `All` item used.)
+This mirrors the return-index self-healing in Sends Follower.
 
 ## Read path (object chain)
 
 `sends_reader.js` (`obj-46`):
-- inlet 0 receives `init`, `bang` (33 ms poller), `selectsend <i>`, `aggmode <0|1>`, `refreshmenu`,
-  `restoresel …`.
+- inlet 0 receives `init`, `bang` (33 ms poller), `selectsend <i>`, `refreshmenu`, `restoresel …`.
 - outlet 0 = `max <value>` → `route max` (`obj-47`) → … → `send ---max_send` (`obj-50`). Downstream
   (dial, percent, 8-slot mapper) is inherited unchanged.
 - outlet 1 = persistence: `store …` → `route store` (`sr_strrt`) → `pattr sr_sel`.
@@ -145,9 +120,6 @@ filename ≤19 chars rule — `sr_version_check.js` = 19 chars, fits).
 
 - **Unfrozen** — must be frozen for distribution (embed `sends_reader.js` + `sr_version_check.js`).
 - **Anti-feedback is a warning, not a block** — by design (native `live.map`).
-- **Sum / Max switch is idle (v1.2)** — kept visible for parity with Sends Follower, but with the
-  `All` item removed it has no effect on a single-send read. Decide later whether to remove the switch
-  or re-add a real "All" aggregate (`readAllSends()`).
 - **Inherited LFO leg** (`obj-9..11`) is positional (`devices 1 parameters 5`); inert unless an LFO
   is the next device in a rack. Consider removing it on a later cleanup pass since Sends Reader's
   primary output is the mapper, not a rack-paired LFO.
