@@ -2,6 +2,65 @@
 
 Append-only. Newest first.
 
+## 2026-06-18 — 8-slot mapper (replaces the single Map button)
+
+Replaced the single Map-button experiment with a full **8-slot mapper** on the device face, mirroring
+the stock LFO's mapping list (Parameter / Mode / Range). Each slot maps Sends Follower's own follow
+value onto any clicked Live parameter, **bypassing the LFO**, with its own Min/Max range. The LFO leg
+(`obj-11` → the next device's Offset) is untouched; eight independent `live.remote~` objects drive the
+user targets in parallel. Re-frozen via Path B (both the patcher JSON and the embedded
+`sends_follower.js` grew).
+
+Action taken (via m4l-master, Live running but the device file not held open — `lsof` empty):
+
+- **Base** was the on-disk User Library device (md5 `c5b736c5…`, 67606 bytes, 82/84), which carried the
+  founder's hand-edits (single Map row moved to the top, `openrect` height back to 169, his own
+  `map_target` object). The 8-slot list is his explicit request that **supersedes** the single Map
+  experiment, so the single-Map objects were folded into the mapper; the dial, Mode switch/label,
+  version-check, the LFO `live.remote~` leg, the `route max` label, and the observer logic were kept.
+  The on-disk device was archived first as
+  `raw/archive/SendsFollower.2026-06-18-134954-preedit-8slot-ondisk.amxd`.
+- Note: that on-disk file had been re-frozen by Live with a **stale** embedded `sends_follower.js`
+  (`29ff530b…`, 5808 bytes, no observers, no map subsystem) even though the canon `sends_follower.js`
+  next to it was current. The new freeze re-embeds the current (now 8-slot) JS, so the device and its
+  canon JS are back in sync.
+- **Patcher:** removed 16 single-Map boxes, added the 8-slot table → **256 boxes / 274 lines** (from
+  82/84). Per slot (×8): `live.text` Map toggle (`mode 1`), `live.text` X (stock svg), `comment` target
+  label, static "Remote" Mode label, two `live.numbox` Min/Max (`parameter_enable 1`), a per-slot
+  `route path name arm store release`, `live.path` + `prepend path`, `prepend set` (name/arm),
+  `prepend store` + `pattr slot_N_path`, `prepend restorepath N`, `message id 0`, `live.remote~`,
+  `scale 0. 1. 0. 1.` + `sig~`, `/ 100.` ×2 for Min/Max, `prepend arm N`, `t b` + `message unmap N`.
+  Shared: `route 0 1 2 3 4 5 6 7` (demultiplexes the JS map outlet by slot index), header/sub-label
+  comments. `obj-46` (the `js` box) kept two outlets.
+- **JS (`sends_follower.js`):** slot-indexed the map subsystem (`NSLOTS = 8`): `arm <slot> 0/1`
+  (single-arm — arming one disarms the previous), `unmap <slot>`, `restorepath <slot> <tokens…>`,
+  per-slot `slotPath[]` / `slotRetry[]`, `captureTarget(slot, path)`, `resolveAndConnect(slot)`,
+  `retryResolve(slot)` (defer/retry ladder, same anti-race as the return index), `emitTargetName(slot)`,
+  `persistPath(slot)`. Outlet-1 messages now lead with the slot index (`<slot> path|name|arm|store|
+  release …`). The follow-value path (`outlet(0, "max", result)`), Peak/Total mode, and observer-based
+  return-index detection are unchanged. `node --check` clean (md5 `53bdbfbd…`, 24242 bytes).
+- **Signal source change:** each slot taps the **raw** follow value 0…1 (`obj-7 receive ---max_send`),
+  not the bipolar −100…100 leg the old single Map used, and scales it into `[Min/100 … Max/100]` so
+  Min/Max behave exactly like a stock LFO map row.
+- **Layout:** `openrect` `[…,169]` → `[0, 0, 340, 385]` (wider + taller, like a stock LFO map list —
+  expected and agreed for the full 8-row list). Top controls (dial, Mode, "New Version") unchanged;
+  the table sits below. Visually close, not pixel-identical to Ableton's mapping list.
+- **Container (Path B):** JSON 57668 → 147778 bytes (sz32 147779); embedded order JSON → svg → version
+  check → `sends_follower.js`; the `sends_follower.js` body grew 5808 → 24242 bytes; `sf_version_check.js` (`a5d905fc…`,
+  3106 bytes) and `multimap-unmap.svg` (`1a31f546…`, 535 bytes) unchanged. `dlst total` = 440 (4
+  resources), `0x30 + mxc − dlst = 16`, `ptch = filesize − 0x20`. Result device md5 **`194ff283…`,
+  176150 bytes, 256 boxes / 274 lines**, self-contained. Frozen archive
+  `raw/archive/SendsFollower.2026-06-18-135002-8slot-mapper-frozen.amxd`.
+- **Validation:** JSON re-parse (Python + `jq`), brace/bracket balance 0; no duplicate ids, no dangling
+  lines, no out-of-bounds inlet/outlet; 8× `live.remote~` / Map toggle / `pattr` / Min / Max / `scale`
+  present and wired; preserved features verified (`route max`, `obj-9` LFO path, `obj-11` LFO remote,
+  `obj-16` bipolar, `follow_mode` live.tab, "Mode" label, `version_link`, `version_node`); embedded
+  `sends_follower.js` `node --check` clean; all container invariants hold.
+
+**Reload note:** remove the device from the track and drag it back in (or reload the M4L device) so Live
+drops its cached copy. If the device is open in the Max editor, close it **without saving** so the
+in-memory version does not overwrite this freeze.
+
 ## 2026-06-18 — Map button (direct parameter mapping, second live.remote~)
 
 Added a front-panel **Map** button to the frozen User Library device. It maps Sends Follower's own
