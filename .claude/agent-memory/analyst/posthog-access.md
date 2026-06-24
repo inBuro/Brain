@@ -70,6 +70,17 @@ Actions (the CTA goals):
   `footer_cta_view` (NEW name, code-deployed 06-18) + step2 `cta_view` (HISTORICAL name), BOTH
   with `location=newsletter`. So the series is continuous across the rename. ✅ verified counting
   the historical newsletter impressions (06-16=3, 06-17=1, 06-18=1 = 5/30d).
+- **281487** — **CTA — Video section view** (created 2026-06-22). Event `section_view` with
+  property `section=video`. Tracks visitors who scrolled to the demo video section (engagement
+  depth signal). Not yet pinned to Goals tile.
+
+**`section_view` IS LIVE & scroll-depth IS now instrumented (confirmed 2026-06-24).** Event fires
+from 2026-06-22 onward with prop **`section`** ∈ {`video`, `faq`, `requirements`} — these are
+mid/lower-page blocks, so a `section_view` = the session scrolled that far. 7d (06-17→24): `video`
+10 sessions, `faq` 2, `requirements` 2. **GAP: NO `section=buy`/footer-CTA value** — buy-CTA reach
+is still only inferable via the separate `footer_cta_view`/`cta_view` impression event (Action
+280502), not via section_view. So scroll-to-video is measurable now; scroll-to-buy still needs the
+footer_cta_view path. `section_view` carries NO buy/hero section yet.
 
 ## Footer-CTA impression event RENAME (code change 2026-06-18, NOT mine)
 - Event `cta_view` → **`footer_cta_view`** (below-fold Buy-CTA impression). Historical data lives
@@ -106,6 +117,9 @@ Saved insights (favorited):
 - **A24NPDaz** — Landing conversion — Pageview → Buy click (funnel)
 - **j8HECUNN** — Social clicks by platform (trends, breakdown by `platform`)
 
+Cohorts:
+- **378522** — `Review candidates — engaged 2026-06-24` (STATIC, count=3). The three engaged-but-non-converting sessions worth a Session Replay watch: CH/maxforlive 06:14 (30 clicks, demo_interact+2 video_play), IE/facebook 19:57 (527s, 3 pages incl. /updates), TR/reddit 14:11 (scrolled to footer Buy-CTA without clicking). Built from a HogQL query on the three distinct_ids → person_ids. https://us.posthog.com/project/458316/cohorts/378522 — created by Kirill 2026-06-24, verified live. Filter Session Replays by this cohort to find them. Pattern reusable for future "watch these" batches.
+
 Pre-existing = PostHog templates only: Web Analytics starter dashboard **1680409** (WAU/DAU/retention/referring domain), LLM-analytics dashboard **1680554** (ignore — not the landing).
 
 ## Channel UTM markers (how to split traffic by campaign)
@@ -120,6 +134,7 @@ attribute a session to its channel — don't lump them. Reddit-app WebView strip
 | r/Novation post #1 (the introduction post) | `introduction_post` | `reddit` | `social` | The original 06-10 r/Novation post; entry usually `/free-custom-modes`. Its tail keeps trickling. |
 | r/ableton post | `ableton_post` | `reddit` | `social` | The 06-11 r/ableton post (buried link, AI-flagged, ~0 real clicks). |
 | **maxforlive.com listing** | **`control_xl_listing`** | **`maxforlive`** | **referral** | **Added 2026-06-12.** Control XL device listing (device id **15522**). |
+| **Facebook (`utm_source=facebook`)** — TWO DISTINCT ORIGINS, see note | **`novation_group`** | **`facebook`** | **`community`** | **Added 2026-06-24.** The `facebook` source spans TWO different things on two days — DO NOT lump them. **(1) 06-20 traffic = manual outreach:** owner hand-dropping links in REPLIES to random people's comments on FB — 1-on-1, one-off, NOT self-sustaining, NO tail expected. **(2) 06-24 traffic (the 5 sessions) = a REAL Novation-group POST:** organic group post, so `novation_group` is the CORRECT name for today's traffic and this IS a proper channel that MAY produce a multi-day tail like the Reddit post — WATCH whether 06-25+ shows facebook day-tails to judge if the group post has legs. Entry mostly `/free-custom-modes` + `/`. CAVEAT: medium is `community` (NOT `social`); some clicks arrive via **`fbclid` only with NO UTM** (referrer `www.facebook.com`/`m.facebook.com`/`Facebook Mobile`) → to catch the whole source use `utm_source=facebook` OR referrer icontains `facebook`. Best session 06-24 IE Mobile 527s/3 pages/2 video_play. **PostHog Action: 282107** `Channel — Facebook / Novation group` (two OR steps: $pageview utm_source=facebook; $pageview $referring_domain icontains facebook), https://us.posthog.com/project/458316/data-management/actions/282107 — created by Kirill 2026-06-24, verified live. |
 
 **maxforlive.com listing (deployed to prod 2026-06-12).** Vanity redirects on `fadercraft.com`, all
 carrying `utm_source=maxforlive&utm_medium=referral&utm_campaign=control_xl_listing`:
@@ -166,8 +181,8 @@ markers, not two: `organic`, `ableton_post`, plus tail `introduction_post` (one 
 session 04:18) — treat all reddit markers as potentially live, don't pre-write any off.
 
 ## Daily traffic log (owner-excluded $pageview sessions)
-06-07=2, 06-09=3, 06-10=30, 06-11=21, 06-12=4, **06-13=0, 06-14=1, 06-15=16, 06-16=22, 06-17=10, 06-18=4 (partial)** sessions.
-**7-day social slice 06-11→06-18 (reported for copywriter/PM 2026-06-18).** Window totals (session-level, owner-excluded): reddit **39 sess / 61 pv** (the dominant channel, ~52% of all sessions), $direct/none 25, internal/onsite-ref 5, telegram 3, maxforlive 3, teams 2. Reddit by campaign over window: `abletonlive_post` 14 sess (1 dl, 5 cta_view — the 06-16/17 engine), `introduction_post` tail 14 sess (still trickling, 0 conv), `organic` 8 sess (2 video_play, 1 demo), `ableton_post` 3 sess (1 video_play). NO `youtube` source ever appeared. **social_click = 0 all window** (no on-site clicks to social hosts). Engagement in window: video_play 8 (reddit 3 + organic concentrated), mode_download 3 (reddit abletonlive_post DE, reddit ableton_post RU, maxforlive ES), demo_interact 5 (live since ~06-16), cta_view 8 reddit / scattered. Conversions in window: buy_click **4 total** (06-16 US iPad first-ever; 06-17 NL buyer; 06-18 PL ×2 — none reddit-sourced), real purchase **1** (the NL Control XL $39, see below). Spike days: 06-16 (22 sess, reddit abletonlive_post push) & 06-15 (16 sess, multi-source). 06-13 dead (0). **Sale #1 was NOT social** — buyer person `019eca70-97b0-…` (NL/Firefox) touched maxforlive listing 06-15 (UTM hid in $referrer → shows source None) then returned $direct 06-17, buy_click→backfilled purchase; reddit contributed 0 sales.
+06-07=2, 06-09=3, 06-10=30, 06-11=21, 06-12=4, **06-13=0, 06-14=1, 06-15=16, 06-16=22, 06-17=10, 06-18=4 (partial), 06-21=7 (external), 06-22=5 (external, excl. TH owner-noise)** sessions.
+**7-day social slice 06-11→06-18 (reported for copywriter/PM 2026-06-18).** Window totals (session-level, owner-excluded): reddit **39 sess / 61 pv** (the dominant channel, ~52% of all sessions), $direct/none 25, internal/onsite-ref 5, telegram 3, maxforlive 3, teams 2. Reddit by campaign over window: `abletonlive_post` 14 sess (1 dl, 5 cta_view — the 06-16/17 engine), `introduction_post` tail 14 sess (still trickling, 0 conv), `organic` 8 sess (2 video_play, 1 demo), `ableton_post` 3 sess (1 video_play). NO `youtube` source ever appeared (CORRECTED 2026-06-22: first `utm_source=youtube` sessions appeared 22:47 ICT on 06-21 evening — 2 sessions GE/Chrome/Windows, near-simultaneous, one engaged (demo_interact + footer_cta_view in 18s), one bounce (1s) — see [[day-2026-06-22]]). **social_click = 0 all window** (no on-site clicks to social hosts). Engagement in window: video_play 8 (reddit 3 + organic concentrated), mode_download 3 (reddit abletonlive_post DE, reddit ableton_post RU, maxforlive ES), demo_interact 5 (live since ~06-16), cta_view 8 reddit / scattered. Conversions in window: buy_click **4 total** (06-16 US iPad first-ever; 06-17 NL buyer; 06-18 PL ×2 — none reddit-sourced), real purchase **1** (the NL Control XL $39, see below). Spike days: 06-16 (22 sess, reddit abletonlive_post push) & 06-15 (16 sess, multi-source). 06-13 dead (0). **Sale #1 was NOT social** — buyer person `019eca70-97b0-…` (NL/Firefox) touched maxforlive listing 06-15 (UTM hid in $referrer → shows source None) then returned $direct 06-17, buy_click→backfilled purchase; reddit contributed 0 sales.
 **2026-06-15** = the second-biggest day ever (16 human sessions / 13 unique / 22 pv), a fresh
 multi-source push the day after a dead 06-13/14. NO bot burst (sessions arrived 1-3/hour, evenly
 00:00-16:00 ICT — contrast the 06-11 14-session same-minute scraper cluster). Source split (06-15,

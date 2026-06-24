@@ -8,6 +8,24 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-06-23 — Custom Mode SysEx Layout: исправлена модель label-маркеров
+
+Реверс-инженерингом `11.syx` установлена корректная формула декодирования label-байтов. Прежняя гипотеза «64=стандарт/66=цвет2/68=цвет3» НЕВЕРНА. **Реально: маркерный байт `0x6n`/`0x7n` кодирует ДЛИНУ текста метки**: `text_len = lower_nibble + 16*(upper_nibble − 6)`. Подтверждено на всех 12 текстовых метках mode 11. Обновлено: `wiki/concepts/Custom Mode SysEx Layout.md` — раздел Labels section полностью переписан: таблица маркеров, формула, ⚠️-предупреждение об ошибочной прежней гипотезе, примечание о чередовании descriptor/label-блоков в msg2.
+
+Полная карта меток mode 11:
+- ID 0x17 (23) → `Mixer Page` (marker 0x6A)
+- ID 0x1F (31) → `Encoder Bank` (marker 0x6C)
+- ID 0x27 (39) → `Vertical Scroll` (marker 0x6F)
+- ID 0x2F (47) → `Sends Volume` (marker 0x6C)
+- ID 0x38 (56) → `Undo` (marker 0x64)
+- ID 0x39 (57) → `Redo` (marker 0x64)
+- ID 0x3A (58) → `To prev   mixer page` (marker 0x74)
+- ID 0x3B (59) → `Momentary   Page` (marker 0x70)
+- ID 0x3C (60) → `Momentary   Bank` (marker 0x70)
+- ID 0x3D (61) → `Horizontal nav.` (marker 0x6F)
+- ID 0x3E (62) → `Launch   Clip` (marker 0x6D)
+- ID 0x3F (63) → `Launch   Scene` (marker 0x6E)
+
 ## 2026-06-18 — Social-окно 06-11→06-18 сведено (PM): канальный сплит Reddit↔maxforlive + открытые item'ы
 
 Сведён единый продуктовый разбор окна на основе двух выжимок (analyst PostHog + copywriter голос аудитории). **Только wiki + PM-память; код/деплой/UTM/посты не трогали.** Обновлено: (1) задача «Следующий Reddit-пост» в Phase-1 distribution-блоке `roadmap.md` — добавлен дат. под-буллет «PM 2026-06-18 — SOCIAL-ОКНО сведено» с P1-P5 и открытыми item'ами; (2) шапка roadmap (Last updated). **PM-вывод (n=1-дисциплина):** главное окна — **канальный сплит**: Reddit ≈52% сессий (39), весь video_play + 2/3 download, но 0 buy_click / 0 продаж (садит на бесплатные моды, воронка там кончается — insight #7); maxforlive = 3 сессии, но единственный покупатель (sale #1 $39 NL). buy_click=4 (первые в истории), ни один не из Reddit. YouTube — flip @triemond9961 hostile→advocate (живое подтверждение insight #11/#1, но резонанс, не продажа). Не коронуем maxforlive (одна продажа≠rate), не хороним Reddit (мис-таргетед, не мёртв). **Приоритеты:** P1 следующий Reddit-пост на ПРОДУКТОВУЮ страницу + свой `/x` UTM; P2 закрыть r/abletonlive `1u74c6t` (10 комментов отсутствуют + UTM-статус неизвестен) — copywriter тянет живой тред; P3 corrected-format r/ableton retry держим кандидатом, не форсим; P4 кормить maxforlive дешёвыми рычагами листинга; P5 собрать YouTube-flip как копи/соц-актив. Открытый item: URL `organic`-поста (самый вовлечённый срез) не задокументирован — назвать. Детали — PM `launch-journal.md` 2026-06-18 (SOCIAL-WINDOW SYNTHESIS).

@@ -111,6 +111,21 @@ The screen reflects the active mode, but the controller's lights and mode don't 
 
 Make sure Control XL is the last device on its track, with nothing after it — an audio effect placed directly after it can block the device's feedback to the controller. Move it to the end of the chain, or give it its own track.
 
+## Changelog
+
+### v1.1
+
+- **Performance FX controls** — CC12 + CC44. CC44 resets sends and restores send values, returning automated sends to their original state.
+- **Navigation** — CC50 steps to the next track. Hold CC49 and press CC50 to step back.
+- **Clip Launch** — CC51 launches the selected clip.
+- **Scene Launch** — CC52 launches the selected scene.
+- Minor UI improvements.
+- Updated Custom Modes.
+
+### v1.0
+
+Initial release.
+
 ## License
 
 One license key, good for up to 3 activations across your machines. Your download is watermarked with your email.

@@ -2,7 +2,7 @@
 type: reference
 project: Fadercraft
 created: 2026-06-12
-updated: 2026-06-16
+updated: 2026-06-24
 ---
 
 # Outbound Links (tracked vanity redirects)
@@ -11,7 +11,7 @@ updated: 2026-06-16
 
 **Sources**: `~/Projects/Claude/Fadercraft/app/public/_redirects` (canonical source of truth — this page mirrors it for quick retrieval).
 
-**Last updated**: 2026-06-15
+**Last updated**: 2026-06-24
 
 ---
 
@@ -85,6 +85,27 @@ Evergreen links for organic Telegram posts (own channel / music-production commu
 | `https://fadercraft.com/m4l` | home `/` | maxforlive / referral / control_xl_listing | site link in the maxforlive.com listing |
 | `https://fadercraft.com/m4l-modes` | `/free-custom-modes` | maxforlive / referral / control_xl_listing | free modes link |
 | `https://fadercraft.com/m4l-buy` | gumroad `l/control-xl` | maxforlive / referral / control_xl_listing | buy link |
+
+## Facebook — Page — campaign `fb_page`
+
+Brand Facebook Page (created 2026-06-24). Low-priority presence channel, not a traffic driver — the Page's Website field + any post links use these. Facebook's in-app browser strips referrers, so entry page + UTM is the only attribution (same as Reddit/Telegram).
+
+| Short link | → Target | utm_source / medium / campaign | Use for |
+|---|---|---|---|
+| `https://fadercraft.com/fb` | home `/` | facebook / social / fb_page | Page "Website" field + general post links |
+| `https://fadercraft.com/fb-modes` | `/free-custom-modes` | facebook / social / fb_page | free modes link in posts |
+| `https://fadercraft.com/fb-buy` | gumroad `l/control-xl` | facebook / social / fb_page | buy link in posts |
+
+## Facebook — Novation community groups — campaign `novation_group`
+
+For value-first posts/comments in **user-run Launch Control XL FB groups** (not Novation's official Page — promo there is off-limits, see PM note). Distinct `utm_medium=community` separates this from the own-Page traffic (`fb_page`) and from Reddit-Novation (`/r`). Lead value-first (free modes), brand soft. First placement: group "Launch Control XL 3 (Novation)" (public, ~89 members).
+
+| Short link | → Target | utm_source / medium / campaign | Use for |
+|---|---|---|---|
+| `https://fadercraft.com/nov-modes` | `/free-custom-modes` | facebook / community / novation_group | **primary** — value-first giveaway (free 15 LCXL modes) |
+| `https://fadercraft.com/nov` | home `/` | facebook / community / novation_group | full product story (only if asked / organic) |
+
+> No `/nov-buy` on purpose — never lead with a buy link in someone else's community. Reveal the paid device softly via `/nov` (home) only when the conversation invites it.
 
 ## Non-tracked placement links
 

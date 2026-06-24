@@ -49,8 +49,8 @@ metadata:
 ## ВСЕ СЛОТЫ (куда пропагировать)
 | # | Роль | Путь | Имя файла |
 |---|------|------|-----------|
-| 2 | **User Library — ОСНОВНОЙ РЕДАКТИРУЕМЫЙ АРТЕФАКТ** (правила 2026-06-06 (8)); md5 **`edd4bf55`** (актуальный эталон 2026-06-10 III, click-fix v2) | `/Users/Kirill/Music/Ableton/User Library/Max Devices/Control XL.amxd` | `Control XL.amxd` |
-| 1 | **Проектный репо-эталон** (propagate-target, only-on-command); md5 **`edd4bf55`** (актуальный эталон 2026-06-10 III, click-fix v2) | `/Users/Kirill/Projects/Claude/Fadercraft/device/Control XL.amxd` | `Control XL.amxd` |
+| 2 | **User Library — ОСНОВНОЙ РЕДАКТИРУЕМЫЙ АРТЕФАКТ** (правила 2026-06-06 (8)); md5 **`ab9b2cf1`** (актуальный эталон 2026-06-23 14:38, 260154 B, изменён пользователем вручную) | `/Users/Kirill/Music/Ableton/User Library/Max Devices/Control XL.amxd` | `Control XL.amxd` |
+| 1 | **Проектный репо-эталон** (propagate-target, only-on-command); md5 **`275c016a`** (НЕ синхронизирован — пропагация по команде) | `/Users/Kirill/Projects/Claude/Fadercraft/device/Control XL.amxd` | `Control XL.amxd` |
 | 3 | Demo bundle main | `/Users/Kirill/Brain/Fadercraft/dist/Control XL Demo Project/Max Devices/Control XL.amxd` | `Control XL.amxd` |
 | 4 | Demo bundle Router (ссылка из `Router.als`, type-1 relative) — РАСКЛАДКА АКТУАЛЬНА: `Control XL.amxd` в КОРНЕ dist-проекта (НЕ `XL_Performance.amxd`) | `/Users/Kirill/Brain/Fadercraft/dist/Control XL Demo Project/Control XL.amxd` | `Control XL.amxd` |
 | 5 | Starter bundle main | `/Users/Kirill/Brain/Fadercraft/dist/Control XL Starter Project/Max Devices/Control XL.amxd` | `Control XL.amxd` |
@@ -62,9 +62,11 @@ metadata:
 - Огрызок `XL_Performance.amxd` 150220 B (прошлый) больше не актуален — заменён эталоном.
 
 ## ZIP-ДЕЛИВЕРАБЛЫ (публикация пользователям)
-- `/Users/Kirill/Brain/Fadercraft/dist/Fadercraft Control XL v1.0 - Demo.zip` (~144 МБ, с Samples)
-- `/Users/Kirill/Brain/Fadercraft/dist/Fadercraft Control XL v1.0 - Starter.zip` (~170 КБ)
-- Внутр. структура zip: верхняя папка `Fadercraft Control XL v1.0 - {Demo,Starter}/` → `Control XL {Demo,Starter} Project/` → те же файлы, что в dist-папке.
+- `/Users/Kirill/Brain/Fadercraft/dist/Fadercraft Control XL v1.1 - Demo.zip` (201132046 B, md5 `090ecde4`, пересобран 2026-06-23 с обновлёнными .syx)
+- `/Users/Kirill/Brain/Fadercraft/dist/Fadercraft Control XL v1.1 - Starter.zip` (244621 B, md5 `d08e008b`, пересобран 2026-06-23 с обновлёнными .syx)
+- Старые v1.0 zip остались в dist/ (не удалять без команды).
+- Внутр. структура zip: верхняя папка `Fadercraft Control XL v1.1 - {Demo,Starter}/` → `Control XL {Demo,Starter} Project/` → те же файлы, что в dist-папке + папка `15 Custom Modes/` с 15 .syx.
+- ⚠️ ГРАБЛИ ZIP Demo: Demo Project содержит `Router.als` в корне папки проекта на диске — при сборке через rsync он попадает внутрь; в финальный zip его надо ИСКЛЮЧИТЬ (`-x "*/Control XL Demo Project/Router.als"`). В корне zip `Router.als` должен быть ОДИН (взятый из dist-папки проекта).
 - **Пересборка zip = ОТДЕЛЬНЫЙ публикационный шаг.** Делать ТОЛЬКО по явной команде (правила: no-auto-deploy + version-bump→Gumroad-proof). Никогда автоматически.
 
 ## ПРОЦЕДУРА правки (правила 2026-06-06 (8); итеративная — см. [[feedback-iterative-no-versionlog]])
@@ -78,7 +80,18 @@ metadata:
 ### Explicit-only шаг: «копируй дальше» / «пропагируй»
 Только по явной команде. Тогда: заархивировать целевые слоты с датой-временем → скопировать User Library .amxd байт-в-байт в указанные слоты (1 и/или 3–6, имена файлов слотов соблюдать) → md5 целей = источник. zip — отдельный публикационный шаг.
 
-## ⚠️ АКТУАЛЬНЫЙ ЭТАЛОН с 2026-06-10 (IV): `28840e394da60839f71c33c39e0922ec` (212123 B, 271 box / 413 line)
+## ⚠️ АКТУАЛЬНЫЙ ЭТАЛОН с 2026-06-23 (14:38, user-edited): `ab9b2cf13664cb8b3ead5477a0ddb462` (260154 B) — СЛОТЫ 2,3,4,5,6 СИНХРОНИЗИРОВАНЫ; СЛОТ 1 НЕ СИНХРОНИЗИРОВАН
+Пользователь вручную изменил User Library 2026-06-23 14:38. Пропагация выполнена 2026-06-23 14:42 в слоты 3–6 (dist bund). Слот 1 (проектный репо-эталон) НЕ трогался — только по явной команде. Zip-деливераблы пересобраны: Starter `cff3321f` (244616 B), Demo `ac5040c9` (201114565 B). Архивы бандл-слотов до sync: `raw/archive/Control XL.2026-06-23-144024-pre-sync-slot{3,4,5,6}-*.amxd`. Архивы старых zip: `raw/archive/Fadercraft Control XL v1.1 - {Demo,Starter}.2026-06-23-144024-pre-rebuild.zip`.
+**2026-06-23 (16:27): .als файлы обновлены.** `OriginalFileSize`+`OriginalCrc` в 3 устаревших сетах обновлены с `size=255775 crc=12801` → `size=260154 crc=63244`. Архивы pre-edit: `raw/archive/Control XL Demo.2026-06-23-162759-pre-als-update.als`, `Router-Demo.*`, `Control XL Starter.*`, `Router-Starter.*`. Все 4 .als теперь консистентны с эталоном `ab9b2cf1`. Zip-пересборка не выполнялась (будет по явной команде). ⚠️ ALS-формат: `OriginalCrc` в Ableton ALS = **`binascii.crc_hqx(data, <init>)`** (Python), алгоритм CRC-CCITT BinHex; `init` зависит от контекста — Live сам вычисляет при save. Значение `63244` для `ab9b2cf1` (260154B) подтверждено из Demo.als, который Live сохранил сам. При несовпадении CRC/Size Live всё равно находит файл по `RelativePath` и обновляет метаданные при следующем save сета.
+
+## ⚠️ ПРЕДЫДУЩИЙ ЭТАЛОН 2026-06-23 (14:31): `275c016a9ff93fbb5cdd30c7d4ba7594` (203266 B, DEVICE_VERSION='1.1') — был во всех 6 слотах
+Пропагация выполнена 2026-06-23 14:31. Девайс **FROZEN**, 4 ресурса в dlst: JSON-патчер + version_check.js + solo_follower.js + nav_track.js. Граф: 332 box / 477 line. Прежний эталон `11733d4d` (255775 B, 2 JS вшитых, без nav_track) заменён. Архивы pre-sync: `raw/archive/Control XL.2026-06-23-143121-pre-sync-slot{1,3,4,5,6}-*.amxd`. Zip-деливераблы пересобраны: Starter `9d0957b4` (242983 B), Demo `4a4b8714` (201112932 B). Архивы старых zip: `raw/archive/Fadercraft Control XL v1.1 - {Demo,Starter}.2026-06-23-143257-pre-rebuild.zip`. ⚠️ внешние JS (version_check.js + solo_follower.js) в dist-папках НЕ нужны — девайс FROZEN (самодостаточен). Прежний «Вариант B» (JS рядом) отменён.
+
+## ⚠️ ПРЕДЫДУЩИЙ ЭТАЛОН 2026-06-23 00:52: `11733d4ddbbfa9ace4748a3007b3f8f4` (255775 B, DEVICE_VERSION='1.1', FROZEN, 2 JS)
+DEVICE_VERSION бамп 1.0→1.1 (Clear Sends automation-aware). Прежний эталон `d1b2b29b` (244469 B, UNFROZEN, 2026-06-22) заменён. Архивы: pre-bump User Library `raw/archive/Control XL.2026-06-23-005226-pre-version-bump-1.1.amxd`, pre-sync repo canon `raw/archive/Control XL.2026-06-23-005238-pre-sync-repo-canon-v1.1.amxd` (`d1b2b29b`).
+⚠️ Для рассылки правильный шаг = FREEZE через Max Editor (вшивает JS в dlst), а не внешние файлы. Текущий Вариант B — временный workaround до заморозки.
+
+## ПРЕДЫДУЩИЙ ЭТАЛОН 2026-06-10 (IV): `28840e394da60839f71c33c39e0922ec` (212123 B, 271 box / 413 line)
 **Вернули диагностический `maxApi.post` в `version_check.js` (продакт решил, что полезен — видеть статус апдейт-детекта в Max Console).** vc 2933→3100 B (dL=+167, Путь B по хвосту). Все 6 слотов = `28840e39` (explicit-пропагация), оба зипа Demo/Starter пересобраны. JSON-патчер (271/413) НЕ тронут — правка только в embedded JS. (md5 отличается от прошлого `edd4bf55` лишь хвостовой mdat-checksum'ой, которую Max пересчитывал при freeze; Live её игнорит — функционально это `edd4bf55` + post.)
 - **Возвращённая строка (единственный post в JS), вставлена в `check()` сразу после вычисления `dot`, до outlet'ов:** `maxApi.post(\`version check: device=${DEVICE_VERSION} latest=${m.ok ? m.latest : '?'} (${m.ok ? 'ok' : m.reason}) url=${m.ok ? (m.url || '-') : '-'} -> dot ${dot}\`);` — теперь включает `url=` (диагностика, что ссылка тянется с сервера). `url` уже был в объекте `m` из `fetchManifest` — прокидывать не пришлось. Остальная логика (extract latest+url, cmp, outlet dot/url, fetch, redirect, setInterval) НЕ тронута.
 - **Путь B по хвосту:** vc region splice на of32=201803 (граница перед solo_follower.js); патч dlst: vc sz32 2933→3100, solo_follower.js of32 +167 (204736→204903); `ptch`(LE@0x1C) +167, `mx@c`(BE@0x2C) +167; JSON sz32/of32 не тронуты (длина JSON-патчера = та же). Хвост diff = ровно 2 dlst-поля (vc sz32, solo of32) + head diff = ровно ptch/mxc. JSON identical, solo_follower.js байт-в-байт цел, `node --check` embedded JS OK.

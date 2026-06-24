@@ -11,7 +11,49 @@ Added and frozen 2026-06-18 (device md5 `194ff283…`, 176150 bytes, 256 boxes /
 **replaces** the earlier single Map-button experiment (one `live.remote~`, one row), which was an
 explicit precursor to this full list.
 
-## Status
+> The current shipping device (2026-06-19, md5 `79be0d3a`) is the **Remote-only** build:
+> each slot maps via `live.map @strict 1 → live.remote~` (not the JS-observer mechanism described in
+> the lower sections, which documented an earlier architecture). The Map-button blink/state machine
+> below is the live, verified one.
+
+## Map-button blink & state machine (2026-06-19, verified rebuild)
+
+Rebuilt from scratch on the LFO Plus technique (see
+[[concepts/lfoplus-mapbutton-recipe|LFO Plus Map-button recipe]]). Device md5 `79be0d3a`,
+246297 bytes, 314 boxes / 412 lines. Per slot the cluster is `bk_*_N` (off-screen in patching view;
+not in presentation, so the panel layout is unchanged).
+
+| Aspect | Status | Notes |
+|---|---|---|
+| Empty slot shows grey "Map" | ✅ Works | `map_btn_N` idle `textcolor #8C8C8C`, bg `#282828`; never an orange fill |
+| Arm → button blinks | ✅ Works | `live.map` out3 (armed 0/1) → `bk_arm_N (sel 1)` → `bk_start_N (t b)` → `bk_metro_N (qmetro 200)` → `bk_tgl_N` toggles → `bk_phsel_N` alternates `bk_phA_N` (orange α1.0) / `bk_phB_N` (orange α0.5). The blink pulses the **text alpha** 1.0↔0.5 at ~2.5 Hz; bg/border never change |
+| Capture → solid orange name | ✅ Works | On capture, `live.map` disarms (out3→0); `bk_stop_N (t b 0)` stops the metro and bangs the state-aware restore, which lands on the orange branch because the slot is now mapped |
+| Disarm on a mapped slot keeps orange name | ✅ Works | State-aware restore: `xcmp_N (zl compare <none>)` feeds `bk_flag_N (int)` (0=mapped, 1=empty); disarm bangs it → `bk_rsel_N (sel 0)` → mapped→`bk_rmap_N` (orange) / empty→`bk_ridle_N` (grey) |
+| Unmap (X) → grey "Map" | ✅ Works | `map_unmap_N` → `unmap` → `live.map` releases; name returns to `<none>` → `substitute <none> Map` restores the label; `xcmp_N` flips the flag to empty → next restore is grey |
+| Empty arm then cancel → grey "Map" | ✅ Works | Same state-aware restore: flag is still empty (1) so the disarm restores grey |
+| Color only on text, bg stays `#282828` | ✅ Works | Every blink/restore message sets only `textcolor`/`textoffcolor`/`activetextcolor`/`activetextoncolor`; no `bgcolor`/`bordercolor` is ever messaged |
+| Min range starts at 0 | ✅ Works | `slot_min_N.parameter_mmin` changed `-100 → 0`; range now 0…100, init 0, unit `%` |
+| Font Ableton Sans Medium 9.5 | ✅ Works | Unchanged by this edit |
+
+### What was the missing key (vs the earlier broken attempts)
+
+1. **The metro was never stopped on disarm.** The old cluster started `qmetro` on arm but only
+   selected a restore message on disarm — the metro kept ticking. The fix is LFO Plus's `t b 0`
+   (`bk_stop_N`): the `0` outlet stops `qmetro`, then the bang outlet triggers the restore.
+2. **Restore is state-aware**, not a blind "set grey": `bk_flag_N` always holds the mapped state
+   (from `xcmp_N`), and the disarm bang emits it through `sel 0` so a mapped slot restores to the
+   orange name and an empty slot to grey "Map".
+3. **Blink = text-alpha pulse 1.0↔0.5 of the orange**, not a grey↔orange flash and never a bg flash.
+
+### Objects (per slot N)
+
+`bk_arm_N` (`sel 1`), `bk_start_N` (`t b`), `bk_stop_N` (`t b 0`), `bk_metro_N` (`qmetro 200`),
+`bk_tgl_N` (toggle), `bk_phsel_N` (`sel 1`), `bk_phA_N` (orange α1.0 msg), `bk_phB_N` (orange α0.5 msg),
+`bk_flag_N` (`int`), `bk_rsel_N` (`sel 0`), `bk_rmap_N` (orange α1.0 msg), `bk_ridle_N` (grey msg).
+Driven by `live.map @strict 1` out3 (armed) and `xcmp_N` (mapped flag); all outputs land on
+`map_btn_N` inlet 0.
+
+## Status (earlier JS-observer architecture — historical)
 
 | Aspect | Status | Notes |
 |---|---|---|

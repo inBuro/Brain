@@ -2,6 +2,147 @@
 
 Append-only. Newest first.
 
+## 2026-06-24 — Self-feed mapping = un-breakable loop; auto-exclude dropped; engine reverted to clean Peak/Total
+
+Documented a second known behavior and removed the non-working auto-exclude feature. Mapping the
+Sends Follower – Return output onto a send that feeds the return it watches creates a feedback loop
+the device **cannot** auto-break: the right-hand mapper (`multimap.maxpat` → `MapButton.maxpat`,
+native `live.map` → `live.remote~`) captures its target natively and never exposes the target
+id/path to the `js` engine, so the engine cannot know which send to exclude from the aggregate
+(verified: `slotPath` always empty, `selfDriven` all-zero). Exposing it would mean rewiring the
+shared mapper, which is also used by Sends Follower – Track and Sends Reader — too much blast radius
+for an edge case, so auto-exclude is deliberately not implemented. Recommendation: do not map the
+Return output onto a bus-feeding send. The engine `sends_follower.js` was reverted to the clean
+all-tracks Peak/Total build (`53bdbfbd`) — all the exclude-attempt code and diagnostics removed.
+See [[concepts/known-behaviors|Known behaviors]].
+
+## 2026-06-24 — Known-behavior note: Total 1.0 latch in the self-feeding loop case
+
+Documented an intentional behavior so it is not re-reported as a bug. With Sends Follower – Return in
+**Total** mode and its output mapped to a **send that feeds the watched return bus**, a slot **Max =
+1.0** makes the follow value latch at the Total clamp ceiling (`result > 1.0 -> 1.0`); the mapped
+parameter then holds at maximum and does not return down until the sum of the other sends drops below
+1.0. Headroom (**Max <= 0.99**) keeps the operating point on the clamp slope and it tracks down
+correctly. The self-driven send is already excluded from aggregation (`sends_follower.js` build
+`eb2b2518`), so this is not the old feedback loop — only the inherent Total ceiling. Peak mode is
+unaffected. User-accepted resolution: keep Max <= 0.99 for this configuration; no code change. New doc
+page [[concepts/known-behaviors|Known behaviors]].
+
+## 2026-06-19 — Right frame replaced with the LFO Plus multi-map panel (embedded whole)
+
+Stopped reinventing the mapper: removed the self-made right frame entirely and embedded the **proven
+`multimap.maxpat` panel from the free LFO Plus device** (`raw/References/LFO Plus.amxd`, used with
+permission), fed by Sends Follower's own follow signal. Left half (dial, Peak/Total, "New Version") and
+the whole tracking engine untouched.
+
+- Extracted from LFO Plus and verified self-contained: `multimap.maxpat` (md5 `657fa074`),
+  `MapButton.maxpat` (`50975cdc`), `multimap-closed-off.svg` (`d1c2fffd`), `multimap-open-off.svg`
+  (`a7f47192`). Only external refs are `multimap → {MapButton, closed-off.svg, open-off.svg}` and
+  `MapButton → multimap-unmap.svg` (already in SF, `1a31f546`); no LFO Plus internals imported.
+- Removed 253 boxes (all `livemap_N`/`remote_N`/`scale_N`/`sig_N`/`map_btn_N`/`map_unmap_N`/
+  `slot_min_N`/`slot_max_N` + `mapprep`/`namesub`/`namesym`/`namemsg`/`unmapmsg`/`xcmp`/`xhide`/
+  `div_min`/`div_max`/`tmin`/`tmax`, the `bk_*_N` blink cluster, shared `followf`, panel `lcd_panel`,
+  headers `hdr_*`) and pruned 16 orphaned `parameters` entries (`slot_min_N`/`slot_max_N`).
+- Added: one `bpatcher` `multimap_panel` (`name multimap.maxpat`) in presentation `[128, 0, 204, 163]`,
+  plus `mm_sig` (`sig~`). Wiring: `obj-7` (`receive ---max_send`, branched not cut — still feeds the
+  dial via `obj-11_scale`) → `mm_sig` → `multimap_panel` inlet 0. `MapButton` expects a signal 0..1;
+  our follow value is already 0..1, so `sig~` is the only conversion.
+- The 4 new files were embedded into the freeze by reusing LFO Plus's own verbatim `dire` records
+  (only `of32` recomputed). `multimap-unmap.svg` was already present and reused.
+- Device: User Library `SendsFollower.amxd`, md5 `24f8a008` → **`a1c060f8`**, 282087 bytes,
+  **63 boxes / 61 lines** (was 314/412). Pre-edit archive
+  `raw/archive/SendsFollower.2026-06-19-144532-preedit-lfoplus-multimap-integration.amxd`
+  (md5 `24f8a008`).
+- Validation: container valid (`ptch == fs − 0x20`, `v3 == dlst_rel_base`, amxdtype `aaaa`, JSON parses,
+  **0 dangling lines**, no leftover refs to any deleted object), all 8 embedded files extract with
+  correct md5 incl. **`sends_follower.js` `53bdbfbd` byte-identical** and `sf_version_check.js`
+  `a5d905fc`; the imported `.maxpat`/SVG match their LFO Plus source byte-for-byte; bpatcher 1 in / 1
+  out matches `multimap.maxpat`; no crash markers. **Not declared done — one Live hardware test
+  pending.** Note: LFO Plus's `multimap.maxpat` ships **7** map rows (was 8 in our frame). See
+  [[entities/embedded-multimap-panel|Embedded multi-map panel]].
+
+## 2026-06-19 — Map-button blink + state machine rebuilt on the LFO Plus technique
+- Reverse-engineered the LFO Plus reference device (`raw/References/LFO Plus.amxd`, read-only): its
+  panel is built from its own `multimap.maxpat` (container) + `MapButton.maxpat` (slot), not the stock
+  `liveui.multimap`. The blink lives in `MapButton`'s `p setButtonColor`: `qmetro 200` → toggle →
+  alternate `lcdcolor … 1.`/`lcdcolor … 0.5` (orange text-alpha pulse), stopped state-aware by `t 0 b`.
+  Recipe documented in [[concepts/lfoplus-mapbutton-recipe|LFO Plus Map-button recipe]].
+- Applied the technique to the shipping device on our own objects (no LFO Plus files embedded). Rebuilt
+  the per-slot blink cluster (`bk_*_N`) for all 8 slots, driven by `live.map @strict 1` out3 (armed) and
+  `xcmp_N` (mapped flag): reliable blink on arm, state-aware restore (mapped→orange name, empty→grey
+  "Map"), color on text only (bg stays `#282828`). The earlier breakage was that `qmetro` was never
+  stopped on disarm and the restore was not state-aware.
+- Also fixed slot Min range: `parameter_mmin` −100 → 0 (range now 0…100). Unmap (X) and the working
+  `live.map → live.remote~` mapping mechanic are unchanged.
+- Device: User Library `SendsFollower.amxd`, md5 `f46350db` → **`79be0d3a`**, 246297 bytes,
+  314 boxes / 412 lines. Pre-edit archive
+  `raw/archive/SendsFollower.2026-06-19-130443-preedit-lfoplus-blink.amxd` (md5 `f46350db`).
+- Validation: container valid (`ptch == fs − 0x20`, JSON parses, 0 dangling lines, no dup ids),
+  embedded files byte-identical incl. **`sends_follower.js` md5 `53bdbfbd` untouched**, presentation
+  box count preserved (40). Only `blink_*`→`bk_*` objects and `slot_min_N` changed. Pending one
+  hardware load-test in Live (not declared done).
+
+## 2026-06-19 — Right-frame replaced with stock multi-map look (Remote-only)
+
+Replaced the right half of the shipping `SendsFollower.amxd` (the 8-slot mapper UI plus its Mod / ± /
+Depth machinery) with the founder-approved **MM-Native stock frame**, keeping the left half (dial,
+Peak / Total switch, "New Version" button) and all tracking untouched.
+
+- Before (on disk): md5 `7ebe7d15ffcd8fc49aad46aa93baafbd`, 342759 bytes, 444 boxes / 594 lines — heavy
+  tracking JS (`53bdbfbd`) plus a native `live.map` 8-slot mapper carrying Remote **and** Mod legs
+  (`live.modulate~`, ± / Depth, per-slot Remote/Mod toggle) and the orange-frame / comment-overlay name
+  display.
+- After: md5 `2bbc12eebc1f8914c280f67a62e61117`, 192221 bytes, 218 boxes / 268 lines, openrect width
+  332 → 304. Removed 221 boxes (all 8 Mod legs, the standalone LFO leg `obj-9/10/11/16/17`, the per-slot
+  Mode toggle and its range show/hide `script` messages plus their `thispatcher`, the colour-message
+  fan) and 24 stale parameter entries (`bipol_N` / `depth_N` / `map_mode_N`).
+- New right half = stock-look table: one dark LCD panel, **Parameter / Min / Max** headers, per row a
+  grey **Map** button that shows the mapped target name in orange (no orange idle frame), an SVG unmap
+  **X** shown only when mapped, orange **%** Min / Max number boxes. Mechanism unchanged
+  (`live.map @strict 1` → `live.remote~`, Min/Max via `/ 100.` + `scale`); now **Remote-only**, source =
+  `receive ---max_send` (0–1) scaled into each row's [Min/100 .. Max/100]. The name is shown via
+  `live.text` (both outlets of `substitute <none> Map` → `tosymbol` → `text $1, texton $1`), not the old
+  comment overlay.
+- Untouched and byte-verified: embedded `sends_follower.js` (`53bdbfbd`, tracking / Peak-Total /
+  observers), `sf_version_check.js` (`a5d905fc`), unmap SVG (`1a31f546`); the follow → `---max_send`
+  chain, the percent monitor (`---max_send_percent`), and the dial display.
+- Container Path B (frozen): JSON 314387 → 163849 bytes; 4 dlst resources with trailing offsets
+  shifted; `ptch = filesize − 0x20`, `(0x30 + mx@c) − dlst = 16`, amxdtype `aaaa`; JSON validates with
+  `jq`.
+- Archives: pre-edit `raw/archive/SendsFollower.2026-06-19-111500-preedit-rightframe-mmnative.amxd`
+  (`7ebe7d15`); frozen result `…-112744-rightframe-mmnative-remote-only-frozen.amxd` (`2bbc12ee`).
+- Status: built and on disk, **awaiting founder hardware test** (map → name in button → encoder moves
+  target within Min/Max → unmap restores "Map", no orange idle frame; tracking and Peak / Total still
+  work).
+
+## 2026-06-19 — Poller-autostart fix on the simple on-disk device
+
+Fixed a start-of-follow bug on the **simple** on-disk SendsFollower (md5 `b5286b33`, embedded engine
+`sends_follower.js` `4f74ef1f` — the pre-Follow-Mode build, not the 8-slot canon). On an
+already-configured return the device loaded and the encoder froze at its init value with no follow;
+copying the return so it received a fresh signal was the only way to revive it.
+
+Root cause: `qmetro 33` (the only object that banged the JS poll) was started solely by the load-time
+detect chain, which ran through a `change -1` gate. On reload onto the **same** return the detected
+index was unchanged, so `change` swallowed the trigger, the build/start messages never fired, and the
+poller never ran. A fresh-copy return produced a different index, passed the gate, and started.
+
+Patch-only fix (the embedded JS was kept byte-identical, `4f74ef1f`):
+
+- Added `delay 400` driven from the load trigger (`live.thisdevice/loadbang → deferlow`) into the
+  previously-orphaned `1` message, so `qmetro 33` now **always** starts ~400 ms after load, independent
+  of the detect gate.
+- Added `delay 500` tapping the raw detected index **before** `change -1` into `prepend build`, forcing
+  the JS to rebuild its send references against the actual return even when the index is unchanged.
+- The JS's own self-heal (re-detect when no refs) remains as a third safety net; the index-selection
+  detect chain is unchanged.
+
+Re-frozen via Path B (JSON grew 29936 → 31099 bytes; both embedded scripts byte-identical). Result
+device md5 `584acc1b`, 38607 bytes, 63 boxes / 65 lines. Send chain, percent monitor, dial output,
+audio skeleton, and version-check untouched. Pre-edit and frozen archives in `raw/archive/`. Pending
+the founder's hardware test: place on the same already-configured return, reload, confirm follow
+without the copy-return trick.
+
 ## 2026-06-18 — 8-slot mapper (replaces the single Map button)
 
 Replaced the single Map-button experiment with a full **8-slot mapper** on the device face, mirroring

@@ -18,6 +18,7 @@
 - **Плагин CC31 прочитать НЕ может:** DAW-порт принадлежит Ableton Control Surface, M4L видит только вход трека. In-device `[midiin]` должен биндиться к DAW-порту напрямую (`port`-сообщение); имя порта НЕ хардкодить (варьируется) — авто-детект по подстроке `DAW`/`LCXL` через `midiinfo`.
 - **DAW-порт (машина пользователя):** `LCXL3 1 (DAW In)` / `LCXL3 1 (DAW Out)`.
 - **Relative (endless) энкодеры:** существуют ТОЛЬКО в DAW mode (per-row, pivot `0x40`=64, `>64` CW / `<64` CCW). В **custom mode НЕДОСТУПНЫ** — подтверждено техподдержкой Novation (feature-request, не реализовано). Для custom-mode `.syx` флага absolute/relative нет.
+  - **Гипотеза (НЕ подтверждена, 2026-06-23):** firmware может откликаться на per-row relative toggle через CC69/CC72/CC73 ch7 val=127 даже в Custom Mode. Точные CC не опубликованы — programmer's reference страницы Novation отдают 403/404. Артефакты для теста: `EncoderRelativeMonitor.amxd` + `EncoderRelativeTest.amxd` в `~/Brain/Fadercraft/raw/`. Детали: [encoder-relative-research.md](encoder-relative-research.md).
 
 ## Связь с custom-mode `.syx`
 

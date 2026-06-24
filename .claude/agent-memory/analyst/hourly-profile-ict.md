@@ -1,6 +1,6 @@
 ---
 name: hourly-profile-ict
-description: Hour-of-day traffic profile in Asia/Bangkok (ICT) for fadercraft.com — when visits land in the OWNER's timezone; peak windows for posting; built 2026-06-17 over full lifetime (n=100 sessions)
+description: Hour-of-day traffic profile in Asia/Bangkok (ICT) for fadercraft.com — when visits land in the OWNER's timezone; trough 07-08 ICT, ramp from 10:00, peaks 19:00+21:00; built 2026-06-17, updated 2026-06-19 (n=94 human sessions)
 metadata:
   type: project
 ---
@@ -17,28 +17,58 @@ view (a separate prior analysis).
 Treat them as "what times have historically converted a post into a spike," and re-check after
 more independent drops accumulate — it's self-fulfilling until organic pull exists.
 
-## The numbers (full lifetime 2026-06-07 → 2026-06-17, owner excluded, n=100 sessions / 131 pv / 90 persons)
-Top hours by HUMAN sessions (after grubby bot strip: browser empty OR vh==sh & 1pv):
-- **21:00 ICT — 10 human sessions (biggest, 17 raw, 7 bots stripped)**
-- **19:00 ICT — 10 human sessions (15 raw, 4 bots)**
-- 00:00 ICT — 6
-- 03:00 ICT — 6 (note: these are insomnia-hour US/EU-daytime visitors, real)
-- 10:00 ICT — 8 human (11 raw, but 3 were the 06-11 same-minute scraper cluster → discount this hour)
-- 13:00 / 15:00 ICT — 5 each
-- 23:00 ICT — 5
+## The numbers v2 (2026-06-01 → 2026-06-19, owner excluded, n=94 human / 115 raw / 21 bots stripped)
 
-Raw bot caveat: the 22:00 hour looks tiny (2 human, 3 bots) and 10:00 is inflated by the
-06-11 10:49–10:51 bot burst (already known in [[posthog-access]] traffic state).
+Full 24-hour table (bot-strip: browser empty OR vh==sh AND pvs=1):
 
-## PEAK WINDOW = 19:00–22:00 ICT (the evening block)
-~30% of human sessions land 19:00–23:00 ICT. Clear single peak at 19:00 and 21:00.
+| Hour ICT | Human sessions |
+|----------|---------------|
+| 00 | 7 |
+| 01 | 2 |
+| 02 | 5 |
+| 03 | 6 |
+| 04 | 3 |
+| 05 | 3 |
+| 06 | 1 |
+| **07** | **0** — absolute minimum |
+| **08** | **0** — absolute minimum |
+| 09 | 1 |
+| **10** | **8** — first strong jump (start of ramp-up) |
+| 11 | 2 |
+| 12 | 3 |
+| 13 | 7 |
+| 14 | 2 |
+| 15 | 5 |
+| 16 | 2 |
+| 17 | 3 |
+| 18 | 1 |
+| **19** | **12** — MAIN PEAK |
+| 20 | 3 |
+| **21** | **10** — MAIN PEAK |
+| 22 | 3 |
+| 23 | 5 |
+
+**ABSOLUTE MINIMUM: 07:00–08:00 ICT** (= 00:00–01:00 UTC = deep EU night + early US evening,
+0 sessions across the full window). Audience is EU-centric; their night = TH morning trough.
+
+**RAMP-UP STARTS: 10:00 ICT** (= 03:00 UTC = 09:00–10:00 Berlin/London). Jump from 1 → 8,
+first consistent traffic. Stable presence from 10:00 onwards through the full day.
+
+## PEAK WINDOW = 19:00–21:00 ICT (the evening block)
+19:00 = 12:00 UTC = 08:00 US East + 14:00 Europe — both audiences active simultaneously.
+~23% of human sessions land in 19:00–21:00 alone (22 of 94). Clear double peak at 19:00 and 21:00.
 Secondary minor: late night / early AM 00:00–05:00 ICT (US/EU daytime bleeding into TH night).
-Recommendation given: post/drop links ~18:30–19:00 ICT so they're fresh going into the peak.
+Recommendation: post/drop links ~18:30–19:00 ICT so they're fresh going into the peak.
+
+## Audience interpretation
+07:00–08:00 ICT = 00:00–01:00 UTC = deep night in EU, early evening US → zero traffic is
+structural (audience-clock-driven), not a site issue. Traffic is fully audience-timezone-driven.
 
 ## Weekday vs weekend — NOT separable yet
-Only 2 weekend days in the whole dataset (Sun 06-07, Sun 06-14) with ~3 sessions total; the
-rest is weekdays. No statistical basis to split weekday/weekend. Don't claim a weekly pattern.
+~30-day window but total n=94 is still too small to split weekday/weekend reliably.
+Don't claim a weekly pattern.
 
 ## Caveat to always state
-n=100 lifetime sessions, single-promo-spike history (06-10 Reddit + 06-15/16 multi-source pushes
-dominate). Hours mirror posting times, not audience habit. Honest read, no significance claims.
+n=94 human sessions, push-driven history (Reddit + maxforlive spikes dominate).
+Hours mirror posting times, not an independent organic circadian rhythm.
+Honest read; no significance claims. Re-check when n reaches ~300+.

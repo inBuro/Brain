@@ -5,6 +5,39 @@ The object-level analysis below covers the **core** patcher (50 boxes / 51 lines
 Library device is the frozen build with the update notifier added on top, described in the update note
 below.
 
+> Update 2026-06-19 (right frame → embedded LFO Plus multi-map panel): the self-made right frame was
+> removed and replaced by the **proven `multimap.maxpat` panel embedded whole from the free LFO Plus
+> device** (used with permission), fed by Sends Follower's own follow signal. md5 `a1c060f8`,
+> **63 boxes / 61 lines**, 282087 bytes. The right half is now a single `bpatcher` (`multimap_panel`,
+> `name multimap.maxpat`) in presentation at `[128, 0, 204, 163]` — **7** mapping rows (LFO Plus ships
+> 7, not 8) with Parameter / Min / Max. Map/blink/range/unmap are all handled inside the imported
+> `MapButton.maxpat` (the proven LFO Plus state machine), not our own objects. Source for every slot:
+> `receive ---max_send` (`obj-7`, 0–1, **branched** — still feeds the dial) → `sig~` (`mm_sig`) →
+> bpatcher inlet → 7× `MapButton` → `clip~ 0. 1.` → Min/Max → `live.remote~`. Five files embedded in
+> the freeze (`multimap.maxpat` `657fa074`, `MapButton.maxpat` `50975cdc`, `multimap-closed-off.svg`
+> `d1c2fffd`, `multimap-open-off.svg` `a7f47192`, `multimap-unmap.svg` `1a31f546`), self-contained for
+> the buyer. The tracking JS (`sends_follower.js` `53bdbfbd`), `sf_version_check.js` (`a5d905fc`), and
+> the left half (dial, Peak/Total, "New Version") are byte-identical / untouched. **Status: built and on
+> disk, awaiting founder hardware test.** Supersedes the in-house frame below. See
+> [[embedded-multimap-panel|Embedded multi-map panel]] and the 2026-06-19 log entry.
+>
+> Update 2026-06-19 (right-frame → stock multi-map look, Remote-only): the shipped User Library device
+> now carries the founder-approved **MM-Native stock frame** in place of the older 8-slot mapper UI.
+> md5 `2bbc12eebc1f8914c280f67a62e61117`, 218 boxes / 268 lines, 192221 bytes, openrect width 332 → 304.
+> The right half is now an 8-row table styled like Live's stock multi-map panel — one dark LCD panel,
+> headers **Parameter / Min / Max**, a grey **Map** button per row that turns into the mapped target's
+> name in orange (no orange idle frame), an SVG unmap **X** that appears only when mapped, and orange
+> **%** Min/Max number boxes. The mapping engine is unchanged in mechanism (native `live.map @strict 1`
+> → `live.remote~` with Min/Max scaling) but is now **Remote-only**: the per-slot Mod path
+> (`live.modulate~`), the ±/Depth controls, the per-slot Remote/Mod toggle, and the standalone LFO leg
+> (`obj-11`) were all removed. The source for every slot is the existing follow value on
+> `receive ---max_send` (0–1), scaled into each slot's [Min/100 .. Max/100]. The name now appears in the
+> button via `live.text` (both outlets of `substitute <none> Map` → `tosymbol` → `text $1, texton $1`),
+> not the old comment overlay. The tracking JS (`sends_follower.js`, `53bdbfbd`), `sf_version_check.js`
+> (`a5d905fc`), and the unmap SVG (`1a31f546`) are byte-identical — follow, Peak/Total, percent monitor,
+> and the dial display are untouched. **Status: built and on disk, awaiting founder hardware test.** See
+> [[../concepts/stock-multimap-visual-spec\|Stock multi-map visual spec]] and the log entry for 2026-06-19.
+>
 > Update 2026-06-18 (Map button): the shipped User Library device now adds a front-panel **Map**
 > button — 82 boxes / 85 lines, 68498 bytes, md5 `6f156eab973ecec0d9793f794c75cfce`, two embedded JS
 > resources (`sends_follower.js` 22368 bytes with the return-index observers **and** the map
@@ -29,7 +62,7 @@ below.
 | Mode switch (Peak / Total) | Works (added 2026-06-17, relabelled 2026-06-18) | `live.tab` (`follow_mode`) selects Peak (max-of-sends) or Total (sum-of-sends clamped to 1.0); saved with set + preset, default Peak — see the Follow Mode section |
 | Self-detects which return it sits on | Works | Patch path chain and a JS fallback, see [[../concepts/self-healing-return-index\|Self-healing]] |
 | Writes follow value to a downstream parameter via modulation | Works (signed offset to the LFO's **Offset** parameter, founder-confirmed 2026-06-17) | `live.remote~` (`obj-11`) applies a **bipolar/signed offset** to the stock LFO's **Offset** parameter (`devices 1 parameters 5`). Both the signed-offset character and the exact target are confirmed — see Limitations for the positional usage caveat |
-| Maps the follow signal to any Live parameter (Map button) | Works (added/frozen 2026-06-18) | A front-panel **Map** button drives the same bipolar follow signal onto any user-clicked Live parameter via a **second** `live.remote~` (`map_remote`), bypassing the LFO and additive to it. Arm, click a parameter, capture; unmap with the "X" icon; the target path persists via `pattr`. See [[../concepts/map-button\|Map button]] |
+| Maps the follow value to any Live parameter (embedded LFO Plus panel) | Built 2026-06-19 (LFO Plus `multimap.maxpat` embedded whole), **needs hardware test** | A **7**-row multi-map panel imported verbatim from LFO Plus. Each row: click **Map**, then click any parameter of any device — its name appears in the button; the follow value (`receive ---max_send` → `sig~`, 0–1 signal) drives the target scaled into that row's [**Min** .. **Max**] %; the **X** unmaps. Map/blink/range/unmap all live inside the imported `MapButton.maxpat` (`live.map` → `live.remote~`). Replaces the prior in-house frame. See the 2026-06-19 update note and [[embedded-multimap-panel\|Embedded multi-map panel]] |
 | Exposes follow value on internal buses | Works | `---max_send` and `---max_send_percent`, see [[../concepts/internal-buses\|Internal buses]] |
 | Embedded JavaScript shipped inside the device | Yes (frozen 2026-06-16) | `sends_follower.js` is now embedded in the frozen container, byte-identical to the Archive copy — see Limitations |
 | Update notifier ("New Version" button) | Works (frozen 2026-06-17) | `node.script sf_version_check.js` pings the manifest; mint button shows only when an update exists — see [[../concepts/version-check\|Version check]] |

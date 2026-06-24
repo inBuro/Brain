@@ -2,7 +2,7 @@
 type: reference
 project: Novation
 created: 2026-05-06
-updated: 2026-05-06
+updated: 2026-06-24
 ---
 
 # Payment Rails for a Russian-passport Seller in Thailand
@@ -11,14 +11,14 @@ updated: 2026-05-06
 
 **Sources**: research-2026-05-06, vendor ToS pages cited inline, `wiki/roadmap.md` (Phase 0 progress).
 
-**Last updated**: 2026-05-06
+**Last updated**: 2026-06-24
 
 ---
 
 ## Why a dedicated page
 
 The "just sign up for Lemon Squeezy / Polar / PayPal" advice that works for most digital-product sellers fails three ways for this profile:
-1. **Citizenship-based sanctions screen** — Stripe, Wise, Polar (via Stripe Connect), Patreon all screen Russian citizenship independently of country of residence. Post-2022 EU/UK/US sanctions packages tightened through 2025–2026, not loosened.
+1. **Citizenship-based sanctions screen** — Stripe, Polar (via Stripe Connect), Patreon screen Russian citizenship independently of country of residence. Post-2022 EU/UK/US sanctions packages tightened through 2025–2026, not loosened. **Note on Wise**: for this profile the binding limit is not the passport but the **country** — Wise Thailand is send-only (no receive/hold/convert), verified at signup 2026-06-24 (see verdict matrix). So Wise is out for inbound payouts regardless of the sanctions question.
 2. **Thai NDID requirement** — PayPal Thailand has required NDID (Thai citizen-only digital ID) since Oct 2022; foreigners cannot register or hold a Thai PayPal account. This is independent of Russian citizenship.
 3. **Thai entity requirement** — Stripe Thailand requires a Thai-registered juristic person (Co., Ltd. or sole proprietor with Thai tax ID). Foreign-passport individuals do not onboard directly.
 
@@ -30,7 +30,7 @@ The Bangkok Bank account in own name (opened on Russian passport as foreign resi
 |---|---|---|
 | **PayPal Thailand** | Blocked | NDID (Thai-citizen-only) since Oct 2022; foreigners cannot register |
 | **Stripe Thailand (direct)** | Blocked | Requires Thai entity + Thai tax ID; sanctions EDD on Russian directors |
-| **Wise personal** | Blocked | EU 19th sanctions package (Jan 2026): Russian-passport cards closed except for EEA/Swiss residents; Thai residence does not qualify |
+| **Wise personal** | **Blocked for RECEIVING (Thailand = send-only)** | Real choke point is **country, not passport**. Verified empirically 2026-06-24 at Wise signup (`wise.com/register/.../#availability`): "What you can do with Wise in Thailand" lists **only Send money abroad** as available; **Receive money (with account details), Hold and convert, card, Earn a return are all "Not available yet."** Since residence is Thailand, the Wise account can only be a Thai one → cannot receive inbound payouts at all, regardless of citizenship. (The earlier sanctions/card analysis was on the wrong axis — moot, because Wise Thailand has no receive feature to begin with.) **Consequence:** Isotonik's Wise-only payout cannot land for this profile → need a non-Wise rail (see Isotonik row). |
 | **Lemon Squeezy** | Blocked | Payout rail requires Stripe in supported country; Russia not listed |
 | **Gumroad** | Blocked | Payout-country list excludes Russia; PayPal fallback dead |
 | **Polar.sh** | Blocked | Stripe Connect Express + explicit Russia exclusion |
@@ -38,7 +38,7 @@ The Bangkok Bank account in own name (opened on Russian passport as foreign resi
 | **Paddle** | In progress | KYC via Sumsub — first attempt rejected for photo quality; awaiting support reply on session re-unlock |
 | **Payhip** | Blocked (transitively) | No nationality clause itself, but requires active Stripe/PayPal seller — both unavailable |
 | **Payoneer** | **Works** | Russian passport + Thai address proof + Bangkok Bank THB payout supported |
-| **Isotonik Studios** | **Works** | Private B2B reseller; no public nationality restriction; payout via PayPal/bank/Wise on contract terms |
+| **Isotonik Studios** | **BLOCKER — Wise-only payout, Wise can't receive here** | Private B2B reseller; no public nationality restriction. Their intro pack (2026-06-24) states Wise is the **ONLY** payout rail (monthly, net-after-VAT). But Wise Thailand cannot **receive** money at all (see Wise row, verified 2026-06-24) — so their default payout cannot land for this profile. **Darren confirmed 2026-06-24: payment process is fully automated through Wise, NO flexibility on alternative rails.** Combined with Wise Thailand = send-only → channel is **blocked at current profile**. Relationship stays warm (graceful pause, door open), not a hard no. Only unlock = an entity-level workaround that yields a receive-capable Wise account (Georgian IE → Wise Business, see row below). Decision: do NOT set up the entity just for Isotonik now (no greenlit product yet, low revenue) — revisit when product (polished Sends Follower) AND a Wise-compatible payout structure both exist. See [[roadmap]] Isotonik block. |
 | **Crypto checkout** (NOWPayments / Cryptomus / Coinbase Commerce) | **Works** | Self-hosted; USDT/USDC payout to self-custody; off-ramp via Bybit P2P → Bangkok Bank THB |
 | **Georgian Individual Entrepreneur** | **Works (entity setup)** | Remote registration on Russian passport via PoA; 1% tax up to 500k GEL; unlocks Wise Business and possibly Stripe Georgia |
 
@@ -67,7 +67,7 @@ The single Thai document with the largest unlock surface is the **Thai company r
 4. **Paddle approval** (in flight) — wait for Sumsub re-upload; if it lands, Paddle becomes the main fiat MoR. If it fails after Thai DL upload, treat as permanently blocked and stop chasing.
 5. **Georgian Individual Entrepreneur** — defer until revenue ≥ $500–1000/month. Then $1–1.5k setup + remote registration unlocks Wise Business and potentially Stripe Georgia, opening Lemon Squeezy / Polar / Paddle through the Georgian entity.
 
-PayPal, Stripe Thailand, Wise personal, Polar.sh direct, Lemon Squeezy direct, Gumroad direct — all dead-end for this profile in 2026 without entity-level workaround.
+PayPal, Stripe Thailand, Wise personal (Thailand = send-only, can't receive), Polar.sh direct, Lemon Squeezy direct, Gumroad direct — all dead-end for this profile in 2026 without entity-level workaround.
 
 ## Choke-point summary for future me
 

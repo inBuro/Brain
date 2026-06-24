@@ -191,3 +191,13 @@ When the user asks you to lint or audit the wiki:
 - Write in clear, plain language
 
 - When uncertain about how to categorize something, ask the user
+
+## Дизайн-система
+
+В проекте индексирована дизайн-система через `ds_scan`. Все правила работы с интерфейсом — в `ds/CONTRACT.md`. При любых задачах, связанных с дизайном экранов, форм, компонентов:
+
+1. Прочитай `ds/CONTRACT.md` целиком.
+2. Прочитай `ds/foundation.md` и `ds/components.md` для актуального состояния токенов и UI-кита.
+3. Действуй строго по правилам контракта: компоненты — из каталога, цвета/размеры/радиусы — через Variables, без прибитых значений.
+
+Для запуска сканирования или обновления индекса — запусти директиву `directives/directive_ds_scan.md`.

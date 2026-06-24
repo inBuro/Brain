@@ -7,6 +7,27 @@ metadata:
 
 # Buy CTA: visibility vs persuasion — session-replay read (2026-06-15)
 
+## ⚠️ STALE PREMISE CORRECTED 2026-06-24 — HERO NOW HAS A BUY CTA
+The "THE LANDING STRUCTURE" section below ("Hero has ZERO CTA", "buy CTA is the 10th of
+11 blocks, only at #subscribe") was true on 2026-06-16 but is **NO LONGER TRUE**. The hero
+was changed AFTER that: `HeroProduct.tsx` now renders a `<BuyButton>` under the body when
+`ctaHref` is set (comment in code: "top-of-page placement so the offer is visible before any
+scroll"), and `ProductPage.tsx` passes `<StaticHeroProduct ctaHref={GUMROAD_URL} …>` → so the
+**$39 Buy button now sits above the fold in the hero, right next to the interactive demo.**
+There are now THREE buy surfaces: hero (top), #subscribe/newsletter footer, free_modes_bridge.
+IMPLICATIONS for the old verdict: the blanket "VISIBILITY, nobody ever saw a paid offer" read
+is now only partially valid (still true for the footer CTA + for visitors who bounce the hero
+without it loading), but for any engaged hero visitor the offer IS now in view. Re-frame
+per session, don't reuse the old blanket verdict.
+**INSTRUMENTATION GAP (confirmed 2026-06-24):** the hero BuyButton is passed NO `ctaLocation`
+→ its IMPRESSION is NOT tracked (footer_cta_view only ever has location ∈ {newsletter,
+free_modes_bridge}; no hero/above-fold impression value exists). Its CLICK *is* tracked — the
+global delegated `buy_click` listener fires on any `a[href*="gumroad.com/l/"]` regardless of
+location/placement. So: hero-Buy clicks ARE visible as `buy_click` (with prop `label`/`path`),
+hero-Buy *views* are invisible. To split "saw hero-Buy, didn't click" from "bounced before it
+rendered" we'd need to pass a `ctaLocation` (e.g. `hero`) to the hero BuyButton so it emits a
+footer_cta_view impression too. Until then, hero-Buy impressions are a blind spot.
+
 ## METHOD FIND (reusable, important) — autocapture + scroll ARE queryable
 Two data sources I previously thought were missing are actually present in raw events,
 just not in the event-definition list:
