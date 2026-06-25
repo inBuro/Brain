@@ -28,7 +28,8 @@ Pages: `00 — Product` (frames 1920/1440/960/640/360), `02 — Atoms` (`25:2`),
 ## Hot tokens — Spacing / Density
 
 Base unit 4px. Figma name = plain number, comma for fractions. CSS = hyphen. No prefixes/suffixes.
-Common: `1,5`=6px, `2`=8, `3`=12, `4`=16, `5`=20, `6`=24, `7`=28, `8`=32, `10`=40, `12`=48, `20`=80, `24`=96, `32`=128.
+Common: `1,5`=6px, `2`=8, `3`=12, `4`=16, `5`=20, `6`=24, `7`=28, `8`=32, `10`=40, `12`=48, `16`=64, `20`=80, `24`=96, `32`=128, `40`=160.
+Note: `16`, `20`, `24`, `32`, `40` были добавлены 2026-06-25 (ранее отсутствовали в коллекции Density).
 
 ## Hot tokens — Radii
 
@@ -49,6 +50,21 @@ Button `33:20`, Icon, Avatar, Badge, TagChip, Input, ModeButton, AccordionItem, 
 **Button variants**: `primary` mint, `secondary` lavender, `dark`, `outlined`, `cta` amber `#ffad56` (revenue). CTA nodes: sm `2094:5213`, md `2094:5215`, lg `2094:5217`. Convention: `primary`=free/positive, `cta`=revenue. Never primary for amber.
 
 **TrackReturnCard** (local, SendsFollower only): ComponentSet `2511:25712` (on page, x=-1500 y=-4644). `Layout=Desktop` `2505:21696` w=1184, gap=48, top-row horizontal. `Layout=Mobile` `2511:25690` w=390, gap=32, image top / article bottom, device preview hidden. Instances in Frame 7 `2505:21667`: TRACK `2511:25735`, RETURN `2505:21697`.
+
+## SendsFollower responsive frames (созданы 2026-06-25)
+
+| Frame | Node | Width | URL |
+|---|---|---|---|
+| SendsFollower · 1440 | `2518:26053` | 1440 | [link](https://figma.com/design/OdPRdjodGO3WiR6tgSP7AA?node-id=2518-26053) |
+| SendsFollower · 960 | `2519:26628` | 960 | [link](https://figma.com/design/OdPRdjodGO3WiR6tgSP7AA?node-id=2519-26628) |
+| SendsFollower · 640 | `2519:26851` | 640 | [link](https://figma.com/design/OdPRdjodGO3WiR6tgSP7AA?node-id=2519-26851) |
+| SendsFollower · 360 | `2519:27076` | 360 | [link](https://figma.com/design/OdPRdjodGO3WiR6tgSP7AA?node-id=2519-27076) |
+
+**SectionWhoItsFor** ComponentSet `2518:26047` (props: `Breakpoint=1440|960|640|360`). Variants: `2518:25851`, `2518:25900`, `2518:25949`, `2518:25998`.
+**HeroSubtitle** ComponentSet `2518:26052` (props: `Layout=desktop|mobile`). Variants: `2518:26048`, `2518:26050`.
+**TrackReturnCard** updated: Mobile variant image constraints → STRETCH (fluid on 360–640).
+
+Density tokens added: `16`=64px `2518:25843`, `20`=80px `2518:25844`, `24`=96px `2518:25845`, `32`=128px `2518:25846`, `40`=160px `2518:25847`.
 
 ## SendsFollower screen node map (`2505:17290`)
 
