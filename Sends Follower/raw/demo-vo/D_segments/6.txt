@@ -1,0 +1,1 @@
+In Peak mode, it follows the highest send value.

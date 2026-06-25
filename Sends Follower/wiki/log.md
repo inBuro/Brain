@@ -2,6 +2,23 @@
 
 Append-only. Newest first.
 
+## 2026-06-25 — Feedback-loop warning now works via real-target detection; CANON snapshot
+
+Replaced the best-effort `selected_parameter` warning (which missed mapping done through the Map
+button) with a deterministic detector based on the **actual mapped target id**. Done additively on
+the shared bpatchers so Track and Sends Reader are unaffected: `MapButton.maxpat` exposes the
+resolved target id on a new last outlet; `multimap.maxpat` tags each slot's id with its index and
+exposes them on a new last outlet; the Return patch routes that into `sends_follower.js` as
+`targetmap <slot> <id>`. The engine keeps `mapTargetIds[8]` and lights the **"Feedback loop"**
+warning when any mapped target is a member of `sendRefs` (recomputed on target change and on sendRefs
+rebuild). User-confirmed working in Live, with Track and Sends Reader unbroken.
+
+CANON-2026-06-25 (unfrozen source of truth) snapshotted: Return `be5955d3`, Track `25df3d6a`,
+`sends_follower.js` `566db5ba`, `sends_follower_track.js` `6a000af3`, shared `MapButton.maxpat`
+`b410e4c0` / `multimap.maxpat` `02d24003` / `sf_version_check.js` `a5d905fc`. Frozen release builds
+pending (freeze must be done in Max GUI; node.script version-check resolution to be confirmed).
+See [[concepts/known-behaviors|Known behaviors]].
+
 ## 2026-06-24 — Self-feed mapping = un-breakable loop; auto-exclude dropped; engine reverted to clean Peak/Total
 
 Documented a second known behavior and removed the non-working auto-exclude feature. Mapping the

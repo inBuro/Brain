@@ -1,0 +1,1 @@
+Track — follows the send amount of a single track.

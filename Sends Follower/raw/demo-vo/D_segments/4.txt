@@ -1,0 +1,1 @@
+One source can control up to eight parameters, each with its own range and polarity.

@@ -27,29 +27,31 @@ mapped send tracks it down.
 This is the user-accepted resolution; no code change is made. Note this only adds headroom — the
 underlying feedback (next section) still drives the value toward maximum.
 
-## Mapping the output onto a send that feeds the watched bus = un-breakable feedback loop
+## Mapping the output onto a send that feeds the watched bus = feedback loop (now warned)
 
 **Configuration.** Sends Follower – Return sits on Return A and its follow output is mapped (via the
 right-hand multi-map panel) onto a **send that feeds Return A** — i.e. the device drives one of its
 own inputs. On the smallest input the output runs away to the extreme and latches (bistable
 max/min). This applies in both Peak and Total.
 
-**Why the device cannot auto-break it.** The engine (`sends_follower.js`) reads every track's send
-into the watched return and aggregates them. To break the loop it would need to *exclude* the send
-it is driving. It cannot, because **the mapper captures its target natively and never tells the
-engine**: the right panel is `multimap.maxpat` → eight `MapButton.maxpat`, each using a native
-`live.map` → `live.remote~`. The captured target id/path lives inside `live.remote~` and is **not
-exposed to an outlet** of the bpatcher; the `js` object's mapper-control outlet is unconnected, so
-the engine's capture path (`captureTarget`/`slotPath`) is never called and stays empty. The engine
-therefore has no way to know which send it is driving, so it cannot remove that send from the
-aggregate. (Verified by EXCLDIAG instrumentation: `slotPath` is always empty, `selfDriven` always
-all-zero.)
+**The device cannot auto-break the loop**, but it now **detects and warns** about it. Breaking the
+loop would require excluding the driven send from the aggregate, and the aggregation engine cannot
+silently drop one send without changing the metering semantics. So instead the device lights a
+**"Feedback loop"** warning (red, in the version_link slot) whenever the output is mapped onto a
+send that feeds the watched return.
 
-Adding the exposure would require **rewiring the shared mapper** (`multimap.maxpat` +
-`MapButton.maxpat`), which is also used by Sends Follower – Track and Sends Reader — too much blast
-radius for this edge case. So auto-exclude is **deliberately not implemented**.
+**How the warning works (real-target detection).** The mapper captures its target natively (each
+`MapButton.maxpat` uses `live.map` → `live.remote~`, with `p RangeAndName` resolving the target id
+via `live.observer property id`). That id is now **exposed out of the shared bpatchers additively**:
+`MapButton.maxpat` gained a last outlet carrying the target id; `multimap.maxpat` tags each slot's id
+with its slot index and exposes them on a last outlet; the Return patch routes that into the engine
+as `targetmap <slot> <id>`. The engine (`sends_follower.js`) keeps `mapTargetIds[8]` and runs
+`recomputeWarn()` — **warn = 1 if any slot's target id is a member of `sendRefs`** (a send feeding
+the watched return), recomputed both on target change and on `sendRefs` rebuild (track add/del). The
+new outlets are last-index only, so Sends Follower – Track and Sends Reader (which share these
+bpatchers) are unaffected.
 
-**Recommendation.** **Do not map the Sends Follower – Return output onto a send that feeds the return
-it is watching.** If you must drive a bus-feeding send, keep the slot **Max <= 0.99** (Total
-1.0-clamp headroom, see above) — but the feedback toward maximum still applies; this only softens it,
-it does not remove the loop.
+**Recommendation.** When the **"Feedback loop"** warning lights, you have mapped the output onto a
+send that feeds the return being watched — **undo that mapping**. If you intentionally drive a
+bus-feeding send anyway, keep the slot **Max <= 0.99** (Total 1.0-clamp headroom, see above) — but
+the feedback toward maximum still applies; the warning is informational, it does not break the loop.
