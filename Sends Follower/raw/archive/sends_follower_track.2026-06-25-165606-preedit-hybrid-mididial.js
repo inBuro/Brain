@@ -27,20 +27,8 @@
 // "live_set view selected_parameter". Не зависит от источника follow-значения.
 
 inlets  = 1;
-outlets = 4;   // 0 = выход девайса ("max" <v>) → mm_sig → 8-слот мэппер;
-               // 1 = меню + map-слоты + "barvis 0/1" (видимость бара «for MIDI map»);
-               // 2 = "knobset <0..1>"     — обновить БОЛЬШОЙ круг (plain dial, UI-зеркало);
-               // 3 = "mididialset <0..1>" — обновить бар live.slider (MIDI-параметр).
-               //
-               // ДВА РЕЖИМА (выбор «Source»):
-               //   • A/B/C/D: выход = уровень выбранного трек-send; большой круг ↔ send
-               //     (двусторонне+гард). Бар «for MIDI map» СПРЯТАН.
-               //   • None: выход = РУЧНОЙ источник manualVal (бар live.slider, 0..1) →
-               //     мэппер; сенд НЕ трогается. Большой круг ↔ бар (двусторонне+гард).
-               //     Бар + подпись ПОКАЗАНЫ.
-               // Контролы: БОЛЬШОЙ круг (plain dial obj-3, parameter_enable:0) = визуал+мышь,
-               // по MIDI не мапится; бар live.slider (midi_dial, parameter_enable:1) =
-               // ЕДИНСТВЕННЫЙ Live-параметр → его пользователь мапит на хардвер/MIDI.
+outlets = 3;   // 0 = значение слежения ("max" <v>); 1 = управление меню + map-слотами;
+               // 2 = "knobset <0..1>" — обновить ГЛАВНУЮ ручку под текущий send (тихо, без output)
 
 var NSLOTS         = 8;    // число слотов маппера (как у return-версии)
 
@@ -54,29 +42,18 @@ var selectedSend   = NONE; // дефолт при свежей вставке = 
 var onTrack        = false;// стоит ли девайс на обычном треке (иначе N/A)
 var returnCountSnap = -1;  // сколько return'ов было на момент последнего наполнения меню
 
-// ---- два контрола одного send'а (гибрид: большой круг + live.dial) ---------
-// Оба контрола ОТРАЖАЮТ уровень выбранного send'а (чтение из bang) и ПИШУТ в
-// него (userval <src> <v> от движения: мышь по кругу / MIDI-энкодер по live.dial
-// / автоматизация параметра live.dial). Гард read↔write (детали ниже у bang).
-// ГАРД read↔write для ГИБРИДА (два контрола + send):
-//   • lastWritten — значение, ТОЛЬКО ЧТО записанное в send от любого контрола;
-//     следующий read с тем же значением (в пределах EPS) = наше эхо → не толкаем.
-//   • bigShown / midiShown — последнее значение, ВЫСТАВЛЕННОЕ на каждый контрол.
-//     Контрол обновляем из send ТОЛЬКО когда его текущее показанное расходится с
-//     send'ом на EPS. Это и рвёт пинг-понг между двумя ручками: контрол, который
-//     сам сдвинул send, уже имеет bigShown/midiShown == send → его не дёргаем;
-//     ВТОРОЙ контрол расходится → подтягивается к send (один проход, без борьбы).
+// ---- двусторонняя главная ручка (mappable live.dial) ----------------------
+// Ручка одновременно ОТРАЖАЕТ уровень выбранного send'а (чтение из bang) и
+// ПИШЕТ в него (userval <v> от движения ручки: мышь / замапленный энкодер /
+// автоматизация параметра ручки). Гард read↔write рвёт петлю:
+//   • при записи запоминаем lastWritten — следующий read с тем же значением
+//     (в пределах EPS) НЕ толкает ручку обратно (нет эха/дрожания);
+//   • ручку из read обновляем ТОЛЬКО когда значение реально отличается на EPS
+//     от того, что на ручке сейчас (knobShown) — внешняя правка подхватится,
+//     микро-джиттер LiveAPI/автоматизации не вызовет борьбы.
 var KNOB_EPS       = 0.0009; // порог различия (send value 0..1; ~1/1024)
-var lastWritten    = -1;     // последнее значение, записанное В send ОТ контрола
-var bigShown       = -1;     // последнее значение на БОЛЬШОМ круге (knobset)
-var midiShown      = -1;     // последнее значение на баре live.slider (mididialset)
-
-// ---- РУЧНОЙ источник (режим None) -----------------------------------------
-// В None бар live.slider = РУЧНОЙ источник модуляции 0..1: его значение идёт в
-// выход девайса (outlet(0,"max",manualVal) → mm_sig → мэппер). Сенд НЕ трогается.
-// Большой круг ↔ бар синхронны (гард). manualVal — хранимое ручное значение.
-var manualVal      = 0.0;
-var barVisShown    = -1;     // последнее посланное состояние видимости бара (0/1; -1=не слали)
+var lastWritten    = -1;     // последнее значение, записанное В send ОТ ручки
+var knobShown      = -1;     // последнее значение, ВЫСТАВЛЕННОЕ на ручку (knobset)
 
 // Наблюдатели LiveAPI (живут всё время работы устройства)
 var devPathObs     = null; // за путём this_device canonical_parent (перемещение девайса)
@@ -257,8 +234,6 @@ function init() {
     installObservers();
     if (!selParamObs) installSelParamObserver();
     rebuildMenu();                              // clear + append None+буквы + show/hide + set + buildRef
-    barVisShown = -1;                           // форс пере-эмит видимости бара на load
-    updateBarVis();                             // None → показать бар+подпись; A/B/C/D → спрятать
 }
 
 // ---- сообщения из патча: выбор send'а -------------------------------------
@@ -269,23 +244,11 @@ function select(menuIndex) {
     var mi = parseInt(menuIndex, 10);
     if (isNaN(mi) || mi < 0) return;
     selectedSend = mi - 1;        // 0(None)→-1, 1→A(0), 2→B(1)…
-    buildRef();                   // None → sendRef=null (ручной источник)
-    // Выбор сменился — форсируем ресинк ОБОИХ контролов под значение новой цели:
-    // сбрасываем гард/последнее-показанное, чтобы СЛЕДУЮЩИЙ bang сразу выставил их.
+    buildRef();                   // None → sendRef=null (инертно)
+    // Выбор сменился — форсируем ресинк ручки под значение новой цели (или 0 для None):
+    // сбрасываем гард/последнее-показанное, чтобы СЛЕДУЮЩИЙ bang сразу выставил ручку.
     lastWritten = -1;
-    bigShown    = -1;
-    midiShown   = -1;
-    updateBarVis();               // None → показать бар+подпись; A/B/C/D → спрятать
-}
-
-// Видимость бара «for MIDI map» + подписи: видны ТОЛЬКО в None (ручной источник).
-// outlet(1,"barvis",0/1) → патч (route barvis → script show/hide). Шлём при смене.
-function updateBarVis() {
-    var vis = (selectedSend < 0) ? 1 : 0;
-    if (vis !== barVisShown) {
-        barVisShown = vis;
-        outlet(1, "barvis", vis);
-    }
+    knobShown   = -1;
 }
 
 // "restoreidx <k>" из патча на загрузке — восстановить выбор из параметра.
@@ -304,33 +267,14 @@ function clamp01(x) {
     return x;
 }
 
-// "userval <src> <v>" из патча — контрол <src> ("big"|"midi") подвинули.
-//   • A/B/C/D: пишем 1:1 в выбранный send (как раньше).
-//   • None: НЕ пишем send — обновляем РУЧНОЙ источник manualVal (он идёт в выход).
-// Источник уже стоит на val → метим его *Shown=val (его не толкаем назад);
-// ВТОРОЙ контрол подтянет следующий bang() к новому значению.
-// Шкала: оба контрола 0..1 == диапазон 0..1 (send или ручной), масштаб не нужен.
-function userval(src, v) {
-    // обратная совместимость: если пришёл один аргумент (старый "userval <v>"),
-    // трактуем как big (но патч теперь всегда шлёт src).
-    if (v === undefined) { v = src; src = "big"; }
+function userval(v) {
     if (v === undefined || v === null) return;
     var val = parseFloat(v);
     if (isNaN(val)) return;
     val = clamp01(val);
-
-    // источник уже стоит на val — пометить его *Shown (не дёргаем назад)
-    if (src === "midi") midiShown = val;
-    else                bigShown  = val;
-
-    if (selectedSend < 0) {
-        // None — РУЧНОЙ источник: обновляем manualVal, сенд НЕ трогаем.
-        manualVal = val;
-        return;                                // выход выдаст bang() (mm_sig → мэппер)
-    }
-
     if (!sendRef || sendRef.id == 0) return;   // не на треке / ещё не готово
     lastWritten = val;                         // гард: следующий read это значение не толкнёт назад
+    knobShown   = val;                         // ручка уже стоит на этом значении (юзер её сам туда привёл)
     try {
         sendRef.set("value", val);
     } catch (e) {}
@@ -508,15 +452,13 @@ function bang() {
         resync(false);
     }
 
-    // === None — РУЧНОЙ источник: выход = manualVal, оба контрола ↔ manualVal ===
-    // Сенд НЕ читаем/НЕ пишем. Выход (mm_sig→мэппер) гонит ручное значение.
+    // None — ручка ИНЕРТНА: не читаем send, ручку сами НЕ двигаем, mapper-выход
+    // выдаём 0 (замапленные через mapper параметры в None не дёргаются).
     if (selectedSend < 0) {
-        outlet(0, "max", manualVal);
-        syncControls(manualVal);
+        outlet(0, "max", 0.0);
         return;
     }
 
-    // === A/B/C/D — следим за выбранным send ===
     // Не на треке или ещё не готово — выдаём 0 (N/A), метку "max" сохраняем.
     if (!sendRef || sendRef.id == 0) {
         outlet(0, "max", 0.0);
@@ -534,25 +476,17 @@ function bang() {
 
     // Метка "max" сохранена: downstream (route max, ---max_send, percent) общий с return-версией.
     outlet(0, "max", result);
-    syncControls(result);
-}
 
-// Привести ОБА контрола (большой круг + бар) к target с гардом read↔write.
-// Эхо-гард: read ≈ lastWritten = наше эхо записи → снимаем гард. Затем КАЖДЫЙ
-// контрол подтягиваем НЕЗАВИСИМО, только когда его показанное расходится с target
-// на EPS: контрол-источник уже на target (не дёргается), ВТОРОЙ догоняет (рвёт
-// пинг-понг); внешняя правка (микшер/MIDI) расходит оба → едут оба. Работает
-// одинаково в обоих режимах (target = send value ИЛИ manualVal).
-function syncControls(target) {
-    if (lastWritten >= 0 && Math.abs(target - lastWritten) <= KNOB_EPS) {
+    // --- двусторонняя ручка: подтянуть ГЛАВНУЮ ручку под текущий send ----------
+    // Гард от петли: если только что писали в send ОТ ручки и значение почти
+    // совпало (read == lastWritten в пределах EPS) — это наше же эхо, ручку НЕ
+    // трогаем. Иначе обновляем ручку, только когда она реально расходится с
+    // send'ом (внешняя правка в микшере / автоматизация) — без джиттера/борьбы.
+    if (lastWritten >= 0 && Math.abs(result - lastWritten) <= KNOB_EPS) {
         lastWritten = -1;             // эхо поглощено, снимаем гард
-    }
-    if (Math.abs(target - bigShown) > KNOB_EPS) {
-        bigShown = target;
-        outlet(2, "knobset", target);     // → БОЛЬШОЙ круг (prepend set, тихо)
-    }
-    if (Math.abs(target - midiShown) > KNOB_EPS) {
-        midiShown = target;
-        outlet(3, "mididialset", target); // → бар live.slider (set, тихо)
+        knobShown   = result;         // ручка и send согласованы
+    } else if (Math.abs(result - knobShown) > KNOB_EPS) {
+        knobShown   = result;
+        outlet(2, "knobset", result); // "set <v>" на live.dial — тихо, без output (петли нет)
     }
 }
