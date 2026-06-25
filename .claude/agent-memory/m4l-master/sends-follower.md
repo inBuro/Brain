@@ -7,8 +7,15 @@ metadata:
 
 # Sends Follower — device facts (m4l-master)
 
-## ✅ Track: НОВАЯ семантика Source — None=ручной MIDI-источник (бар), A/B/C/D=send — 2026-06-25 (CURRENT, UNFROZEN)
-«Source» теперь = выбор источника МОДУЛЯЦИИ для 8-слот мэппера (выход девайса). **None стал АКТИВНЫМ** (не инертным): бар live.slider = ручной источник 0..1 → выход.
+## ✅ Track: лейбл пункта «None» → «Manual» (только надпись) — 2026-06-25 (CURRENT, UNFROZEN)
+Пользователь: переименовать пункт меню «None»→«Manual» (он = ручной MIDI-источник). ЧИСТО лейбл, внутренняя логика `selectedSend=-1` (числовой маркер) НЕ менялась.
+- **Два места** (меню наполняется рантайм из JS, что override-ит статику — но правлю оба для консистентности): (1) **js `b1bd009d`** строка `outlet(1,"menu","append","None")`→`"Manual"` (это РЕАЛЬНО отображаемый лейбл; node OK); коммент-маркер актуализирован. (2) **патч `1d0345fb`** `send_menu.items` `["None",",","A"…]`→`["Manual",",","A"…]` + `parameter_enum` «None»→«Manual». ⚠️ числовой маркер `var NONE=-1`/`selectedSend<0` — НЕ трогал (это число, не строка).
+- **Хирургически чисто:** в патче изменён ТОЛЬКО `send_menu` (items+enum), все прочие 79 box байт-в-байт; `parameter_initial:[1]` (дефолт A) цел; 0 остаточных «None»-литералов; 80 box/85 line, 0 dangling, ptch ok, jq OK. Большой круг/live.slider «for MIDI map»/подпись/show-hide/ручной-источник/гард/прозрачность/theme/дефолт-A/персист — byte-цело.
+- **Track .amxd `16fb11f3`→`1d0345fb`** + **js `a42ef291`→`b1bd009d`** (UNFROZEN). Архив pre-edit `…181049-preedit-none-to-manual.{amxd `16fb11f3`, js `a42ef291`}`. Return/SendsReader/shared НЕ тронуты. ⚠️ КАНОН ещё `16fb11f3`/`a42ef291` — НЕ обновлять до подтверждения (мелкая косметика, но финализировать по команде).
+- ⚠️ OPEN founder: пункт меню теперь «Manual» (был «None»), всё работает как раньше. Полный рестарт Live.
+
+## ✅ Track: НОВАЯ семантика Source — Manual(None)=ручной MIDI-источник (бар), A/B/C/D=send — 2026-06-25 (UNFROZEN)
+«Source» теперь = выбор источника МОДУЛЯЦИИ для 8-слот мэппера (выход девайса). **Manual (бывш. None, маркер selectedSend=-1) — АКТИВНЫЙ** (не инертный): бар live.slider = ручной источник 0..1 → выход.
 - **Два режима (по selectedSend):** A/B/C/D (≥0) — выход=уровень выбранного трек-send, большой круг ↔ send (двусторонне+гард), бар+подпись СПРЯТАНЫ. **None (<0)** — выход=`manualVal` (бар live.slider) → mm_sig → мэппер; **сенд НЕ трогается** (нет send.set); большой круг ↔ бар (двусторонне+гард); бар+подпись «for MIDI map» ПОКАЗАНЫ.
 - **`midi_dial`: live.dial → горизонтальный `live.slider`** (`orientation:1`, `relative:0`), остаётся ЕДИНСТВЕННЫЙ value-Live-параметр (parameter_enable:1, type0 Float, unitstyle1, range0..1, longname «MIDI Source»). presentation `[6,2,60,9]` ЛЕВЫЙ ВЕРХНИЙ угол (над дугой круга). showname0/shownumber0, БЕЗ явных цветов (live.* theme-default).
 - **Новый comment `midi_label` «for MIDI map»** `[6,11,70,12]` fontsize8, textcolor = theme-токен `live_control_fg_zombie` (БЕЗ литерала, как send_label). ⚠️ позиция бара+подписи под подтверждение (пользователь подвинет).
