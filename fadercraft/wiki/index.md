@@ -21,7 +21,9 @@ updated: 2026-05-06
 - [[landing-narrative]] — 10-битная психологическая дуга лендинга `fadercraft.com`, маппинг бит → секция → компонент, обоснование отклонений от исходной спеки.
 - [[demo-video-script]] — one-page shooting script главного демо-видео (~3 мин): hook → MIDI-routing setup → три сигнатурные фичи → close. Точки нарезки совпадают с 3 feature-шортами. Для T9 в [[roadmap]].
 - [[youtube-video-description]] — описание демо-видео для YouTube (черновик); главы пока плейсхолдеры.
-- [[gumroad-description]] — копи для Gumroad: страница продукта, чек-нота (receipt), bundle-сводка.
+- [[gumroad-description]] — копи для Gumroad (Control XL): страница продукта, чек-нота (receipt), bundle-сводка.
+- [[gumroad-description-sends-follower]] — копи для Gumroad-листинга Sends Follower ($14); зеркалит сайт + [[sends-follower-vo-script]]; черновик с флагами ⚑ (лицензия/состав бандла — на подтверждение).
+- [[sends-follower-vo-script]] — финальный VoiceOver demo-видео Sends Follower; залоченный голос, источник копи для листинга.
 - [[copy-inventory]] — единый хаб всей текстовой копи под анализ: снапшот живых строк лендинга из кода + ссылки на VO/скрипт/нарратив/YT/Gumroad.
 
 ## Reference

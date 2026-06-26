@@ -573,3 +573,22 @@ Not deployed; site/Gumroad untouched.
 - Shipping `SendsFollower.amxd` UNTOUCHED. md5 `7ae739b3`, 493 box / 655 line.
 - Status: built + structurally validated; pending hardware load-test in Live. Not yet wikied as a full
   product (experimental); device facts in m4l-master memory `sends-follower-lfo.md`.
+
+## 2026-06-26 — Orphaned map slot now returns to outline on target-device deletion
+
+Bug: a filled (mapped) map-button stayed solid after the device holding its target was deleted. Root
+cause traced statically in `MapButton.maxpat → p RangeAndName`: the filled/outline decision
+(`obj-31 sel 0` on the resolved id) was only re-evaluated on capture/load/`live.observer property id`,
+and that observer does not reliably fire when the containing device is removed.
+
+Fix (additive, shared `MapButton.maxpat` only): a low-priority self-poll (`poll_*`: int latch from
+`obj-133`, `sel 0` start/stop gate, `qmetro 400`, dedicated `live.object` re-bound by id each tick +
+`getid`). On loss (fresh id == 0) it drives the existing `obj-31` outline path and `ran_idout` (clears
+the engine's feedback warn), then stops. Alive target = no-op. Theme-token colors only, no hex.
+
+Surgical: +12 boxes / +18 lines inside `p RangeAndName`; all other boxes + top-level wiring
+byte-identical; 0 dangling; jq + python-json OK. MapButton.maxpat `3e937392` → `c3747869`.
+Pre-edit archive `raw/archive/MapButton.2026-06-26-142712-preedit-orphan-outline.maxpat`. multimap and
+all three .amxd (Return `be5955d3`, Track `6f73a43f`, Sends Reader `9c0386ab`) unchanged — fix
+propagates by filename. Status: structurally validated, pending live test in Live. See
+`wiki/concepts/known-behaviors.md`.

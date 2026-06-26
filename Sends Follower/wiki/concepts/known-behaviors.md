@@ -55,3 +55,34 @@ bpatchers) are unaffected.
 send that feeds the return being watched — **undo that mapping**. If you intentionally drive a
 bus-feeding send anyway, keep the slot **Max <= 0.99** (Total 1.0-clamp headroom, see above) — but
 the feedback toward maximum still applies; the warning is informational, it does not break the loop.
+
+## Orphaned map slot returns to outline when its target device is deleted (fixed 2026-06-26)
+
+**Old behavior (bug).** A filled (mapped) map-button kept its solid "mapped" look after the device
+holding its target parameter was deleted from the set. The slot looked mapped but pointed at nothing.
+
+**Why it happened.** The filled/outline decision lives in `MapButton.maxpat → p RangeAndName`:
+`obj-31 (sel 0)` on the resolved target id drives the outline path (id == 0) or the filled path
+(id != 0, via `p setButtonColor`). The id was queried (`getid` on the held `live.object obj-130`)
+only on capture, on load, and on a `live.observer property id` event — and that observer does not
+reliably fire when the *containing device* is removed, so the color machine was never told the target
+was gone.
+
+**Fix (additive, inside `p RangeAndName`).** A low-priority self-poll re-validates the slot's id while
+a target is set. New objects (`poll_*`): an `int` (`poll_id`) latches the last resolved id from
+`obj-133` (`route … id`); a `sel 0` (`poll_dec`) starts a `qmetro 400` (`poll_metro`) when a target is
+present and stops it when empty. Each tick re-binds a dedicated `live.object` (`poll_obj`) from the
+stored id (`prepend id` → `id N`) and re-`getid`s it — Live returns id 0 for a destroyed object.
+`route id` → `sel 0` (`poll_chk`): **only on loss (id == 0)** does it emit a `0` into the existing
+`obj-31` color decision (→ outline) and into `ran_idout` (→ the engine's `targetmap`, which also
+clears the "Feedback loop" warning), then stops the poll for that dead slot. A still-alive target is a
+no-op (no min/max/name re-fetch). Colors use the existing theme-token path — no hex, no new colors.
+
+**Scope.** The fix is entirely inside the shared `MapButton.maxpat` (purely additive: +12 boxes,
++18 lines; every other box and all top-level wiring byte-identical). It therefore applies to all three
+consumers — Sends Follower – Return, Sends Follower – Track, and Sends Reader — with no edits to the
+devices or to `multimap.maxpat`.
+
+**Needs-verification (live).** Confirmed by static trace; the runtime assumption that re-binding a
+`live.object` by a destroyed id reports id 0 still needs a hardware/Live check (delete a mapped target
+device → the slot should drop to outline within ~0.5 s).

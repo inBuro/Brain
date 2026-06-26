@@ -37,7 +37,7 @@ Create in this order:
 | Role | Color | Hoist | Permissions | Assignment |
 |---|---|---|---|---|
 | `@Founder` | `#63F2CA` (mint) | Yes | Administrator | You (kbbureau) |
-| `@Verified Owner` | `#FFAD56` (amber) | Yes | Default + post in all community/support channels | Manual by `@Founder` after license-key check (Phase 1: auto via Gumroad webhook + bot) |
+| `@Verified Owner` | `#FFAD56` (amber) | Yes | Default + post in all community/support channels | Manual by `@Founder` after license-key check (Phase 1: auto via Gumroad webhook + bot). **Tier caveat (PM 2026-06-26): the key→DM→role flow is NOT mandatory for every product. For Flagship-tier (Control XL, $39) it's the documented owner-verification path; for Utility-tier (Sends Follower, $14 impulse-buy) the role is OPTIONAL/REACTIVE — a buyer who wants the badge DMs their key, but it is NOT a documented SF onboarding step and no automation is built for it. SF buyers get the server via the native Gumroad→Discord auto-invite only; "membership without role" is the intended state for that tier. Rationale: post-purchase verification friction is a conversion tax a $14 impulse buy shouldn't carry. See PM `launch-journal.md` 2026-06-26 + insights #17/#20.** |
 | `@everyone` (Member) | none | No | Discord default minus posting in `#welcome`, `#rules`, `#announcements` | Auto on join |
 
 ## Channel structure
