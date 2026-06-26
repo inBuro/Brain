@@ -592,3 +592,25 @@ Pre-edit archive `raw/archive/MapButton.2026-06-26-142712-preedit-orphan-outline
 all three .amxd (Return `be5955d3`, Track `6f73a43f`, Sends Reader `9c0386ab`) unchanged — fix
 propagates by filename. Status: structurally validated, pending live test in Live. See
 `wiki/concepts/known-behaviors.md`.
+
+## 2026-06-26 — Orphan map-button reset: PARKED (the entry above is superseded)
+
+Correction to the entry directly above. The orphan-map-button reset was NOT actually fixed — the
+self-poll `getid` approach logged there fails because Live returns the cached id for a deleted object,
+so loss is never detected (confirmed broken after a full Live restart). Three further approaches were
+then tried and all failed: `live.path` re-resolve (same cache), `live.observer property id` → fire on
+`id 0` (does not fire on container delete AND killed the Map-button blink), and the canonical stock-LFO
+dedicated argument-less `live.observer` (caused a stack overflow — reset-on-`id 0` re-touched
+`live.object`/`live.remote~` and re-fired the observer; device degraded, encoders stopped obeying
+mapping, button stuck blinking).
+
+Root cause: the stock `Abl.Map.maxpat` breaks that observer loop via a separate `mapped` bool and by
+deliberately not sending `id 0` back into `live.remote`/`live.modulate` on target loss (in-patch
+comments ~lines 3347/3433). Replicating it cleanly = porting the ~4000-line stock mapping engine, not
+a point edit — disproportionate for a cosmetic glitch the user accepted leaving.
+
+Final state: reverted to pristine `MapButton.maxpat` md5 `3e937392` (no fix, no regression). Pre-edit
+archives kept: `…-142712-preedit-orphan-outline`, `…-165338-preedit-orphan-livepath2`,
+`…-171352-preedit-dedicated-observer` (all `3e937392`). Parked. Full write-up in
+`wiki/concepts/known-behaviors.md`. Recovery from the approach-4 crash latch ("outlets are disabled"):
+a full Live restart — a device re-drag alone does not clear the cached crashed patch.

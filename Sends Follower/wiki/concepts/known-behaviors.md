@@ -56,33 +56,48 @@ send that feeds the return being watched — **undo that mapping**. If you inten
 bus-feeding send anyway, keep the slot **Max <= 0.99** (Total 1.0-clamp headroom, see above) — but
 the feedback toward maximum still applies; the warning is informational, it does not break the loop.
 
-## Orphaned map slot returns to outline when its target device is deleted (fixed 2026-06-26)
+## Orphaned map slot stays filled when its target device is deleted (PARKED — not fixed, 2026-06-26)
 
-**Old behavior (bug).** A filled (mapped) map-button kept its solid "mapped" look after the device
-holding its target parameter was deleted from the set. The slot looked mapped but pointed at nothing.
+**Behavior (cosmetic, accepted).** A filled (mapped) map-button keeps its solid "mapped" look after
+the device holding its target parameter is deleted from the set. The slot looks mapped but points at
+nothing. It is **purely visual** — audio, mapping, and the "X"/unmap button all work normally; a dead
+slot drives nothing. The user accepted leaving this as-is ("very minor, can let it go").
 
-**Why it happened.** The filled/outline decision lives in `MapButton.maxpat → p RangeAndName`:
-`obj-31 (sel 0)` on the resolved target id drives the outline path (id == 0) or the filled path
-(id != 0, via `p setButtonColor`). The id was queried (`getid` on the held `live.object obj-130`)
-only on capture, on load, and on a `live.observer property id` event — and that observer does not
-reliably fire when the *containing device* is removed, so the color machine was never told the target
-was gone.
+**Where the look is decided.** In `MapButton.maxpat → p RangeAndName`: `obj-31 (sel 0)` on the
+resolved target id drives the outline path (id == 0) or the filled path (id != 0, via
+`p setButtonColor`). The id is resolved on capture, on load, and on a `live.observer property id`
+event. That observer does not fire when the *containing device* is removed, so the color machine is
+never told the target is gone.
 
-**Fix (additive, inside `p RangeAndName`).** A low-priority self-poll re-validates the slot's id while
-a target is set. New objects (`poll_*`): an `int` (`poll_id`) latches the last resolved id from
-`obj-133` (`route … id`); a `sel 0` (`poll_dec`) starts a `qmetro 400` (`poll_metro`) when a target is
-present and stops it when empty. Each tick re-binds a dedicated `live.object` (`poll_obj`) from the
-stored id (`prepend id` → `id N`) and re-`getid`s it — Live returns id 0 for a destroyed object.
-`route id` → `sel 0` (`poll_chk`): **only on loss (id == 0)** does it emit a `0` into the existing
-`obj-31` color decision (→ outline) and into `ran_idout` (→ the engine's `targetmap`, which also
-clears the "Feedback loop" warning), then stops the poll for that dead slot. A still-alive target is a
-no-op (no min/max/name re-fetch). Colors use the existing theme-token path — no hex, no new colors.
+**Four detection approaches were tried — all failed. Do not re-attempt these:**
 
-**Scope.** The fix is entirely inside the shared `MapButton.maxpat` (purely additive: +12 boxes,
-+18 lines; every other box and all top-level wiring byte-identical). It therefore applies to all three
-consumers — Sends Follower – Return, Sends Follower – Track, and Sends Reader — with no edits to the
-devices or to `multimap.maxpat`.
+1. **`getid` self-poll** (qmetro re-binds a `live.object` by the stored id and re-`getid`s it,
+   expecting id 0 for a destroyed object) — Live returns the **cached id even for a deleted object**,
+   so loss is never detected. Confirmed broken even after a full Live restart.
+2. **`live.path` re-resolve** (re-resolve the target path, expecting it to fail) — hits the same Live
+   cache; no deletion signal.
+3. **`live.observer property id` → fire on `id 0`** (the stock-Ableton MapButton trick) — does **not**
+   fire on container-device deletion here, and it **does** emit a spurious `id 0` during the
+   mapping handshake, which **killed the Map-button blink** (a regression).
+4. **Dedicated argument-less `live.observer` fed the resolved id** (the canonical pattern copied from
+   the stock LFO `Abl.Map.maxpat`, ~lines 3494–3589, where an argument-less `live.observer` natively
+   emits `id 0` when its object is destroyed) — caused a **stack overflow** ("outlets are disabled
+   until this message is cleared"): our reset-on-`id 0` re-touched the `live.object`/`live.remote~`,
+   which re-fired the observer → feedback loop. The device degraded (encoders stopped obeying
+   mapping, button stuck blinking).
 
-**Needs-verification (live).** Confirmed by static trace; the runtime assumption that re-binding a
-`live.object` by a destroyed id reports id 0 still needs a hardware/Live check (delete a mapped target
-device → the slot should drop to outline within ~0.5 s).
+**Root cause of the failures.** The stock LFO breaks that observer feedback loop indirectly: it
+updates the UI through a separate `mapped` boolean and deliberately does **not** send `id 0` back into
+`live.remote`/`live.modulate` when the target disappears (see the in-patch comments in `Abl.Map.maxpat`
+at obj-7/obj-16 ~lines 3347, 3433 — "no need to send out id 0 … only send id 0 when the mapping is
+reset by the user"). Replicating that cleanly would mean porting the whole `Abl.Map.maxpat` mapping
+engine (~4000 lines) with its mapped-bool path and undo guards — not a point edit, and disproportionate
+for a cosmetic glitch.
+
+**Status.** Parked at the pristine `MapButton.maxpat` (md5 `3e937392`). No fix in place; no regression.
+If ever revisited, the only viable route is "port the stock `Abl.Map` engine wholesale", filed as a
+separate task — not another point patch into the current `p RangeAndName`.
+
+**Operational note.** A crash from approach 4 latched Max's "outlets are disabled" state; a device
+re-drag did not clear it. Recover with a **full Live restart** (the stale compiled patch + latched
+error state need clearing), after which the pristine file's Map-button blink returns.
