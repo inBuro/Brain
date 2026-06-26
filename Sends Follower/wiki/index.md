@@ -37,6 +37,9 @@ technical reference. It is a separate project, unrelated to the Instrument Follo
   lights a mint "New Version" button when an update is published; mirrored from Control XL.
 - [[concepts/known-behaviors|Known behaviors (by design)]] — intentional/inherent behaviors that
   should not be re-reported as bugs; currently the Total-mode 1.0 latch in the self-feeding loop case.
+- [[concepts/performance|Performance — CPU profiling findings]] — the devices are not the CPU
+  bottleneck (idle floor is Live's own GUI/FramePacing); the 50 Hz `outlet("max")` poll was
+  change-gated; Live-side levers for the idle floor.
 
 ## Logs
 

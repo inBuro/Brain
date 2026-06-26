@@ -614,3 +614,21 @@ archives kept: `…-142712-preedit-orphan-outline`, `…-165338-preedit-orphan-l
 `…-171352-preedit-dedicated-observer` (all `3e937392`). Parked. Full write-up in
 `wiki/concepts/known-behaviors.md`. Recovery from the approach-4 crash latch ("outlets are disabled"):
 a full Live restart — a device re-drag alone does not clear the cached crashed patch.
+
+## 2026-06-26 — CPU profiling: devices are not the bottleneck; 50 Hz poll change-gated
+
+Triggered by a report of Live near 100% CPU "because of" Sends Follower. Profiled the Live process
+(`sample` + a 1 Hz `top` CPU log) while removing devices group by group. Removing ALL Sends Follower
+devices dropped CPU only ~28% → ~25% of one core (within the 7–50% noise band) — so the devices are
+NOT the dominant consumer. The earlier 92–100% was transient (post-crash set load / interaction /
+profiler). With zero devices the hottest thread is still Live's `com.apple.main-thread` doing
+`objc_msgSend` / `FramePacing` / AppKit / CFRunLoop — i.e. Live's own GUI redraw, not DSP.
+
+Did find a real (minor) device poll loop: both engines' `bang()` (`qmetro 20`, 50 Hz) called
+`outlet(0,"max",result)` unconditionally each tick (the `js_messagehandler → defer → gensym("max")`
+seen in the profile). Change-gated it (emit only when |Δ| > 5e-4): `sends_follower.js`
+`566db5ba → f0eb7d86`, `sends_follower_track.js` `b1bd009d → d3136f2f`; `lastResult` reset in
+buildRefs/buildRef so a target change always passes. Pre-edit archives `…-200939-preedit-change-gate.js`.
+node --check OK. Note: this removes downstream churn only — `js` is still banged 50×/s to sample state,
+so `js_messagehandler` stays nonzero even when working; measure `defer`/`gensym` instead. Activating the
+new JS needs a full device reload (Live caches JS by path). Full write-up: wiki/concepts/performance.md.

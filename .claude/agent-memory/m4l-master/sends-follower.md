@@ -7,6 +7,40 @@ metadata:
 
 # Sends Follower — device facts (m4l-master)
 
+## ✅ FROZEN RELEASE BUILD — 2026-06-26 (в `dist/build-v1.0/`)
+Оба девайса заморожены пользователем в Max/Live GUI и скопированы в релизную папку. Headless-заморозка через скрипт НЕ потребовалась — файлы в User Library уже содержали корректные frozen контейнеры.
+
+**Frozen builds (v1.0):**
+- `Return`: `/Users/Kirill/Brain/Sends Follower/dist/build-v1.0/Sends Follower – Return.amxd`
+  - md5=`ae513363b3789ca4003dd9646b89a103`, size=497631 bytes
+  - Вшиты: `sends_follower.js` (`f0eb7d86`), `multimap.maxpat` (`33942de2`), `MapButton.maxpat` (`1ac478ef`), `multimap-unmap.svg` (`1a31f546`), `sf_version_check.js` (`a5d905fc`)
+- `Track`: `/Users/Kirill/Brain/Sends Follower/dist/build-v1.0/Sends Follower – Track.amxd`
+  - md5=`a4fdd2b37e384c3574e74b27af47442d`, size=504408 bytes
+  - Вшиты: `sends_follower_track.js` (`d3136f2f`), `multimap.maxpat` (`33942de2`), `MapButton.maxpat` (`1ac478ef`), `multimap-unmap.svg` (`1a31f546`), `sf_version_check.js` (`a5d905fc`)
+
+**Структура freeze-контейнера (задокументировано reverse-engineering):**
+- `ampf/ptch/mx@c` + JSON(@0x30) + `\x00` + deps inline + `dlst`-директория
+- `mx@c` поле @0x2C = 16 (заголовок) + content_size (контент от 0x30)
+- `dlst` at = 0x20 + mxc_field
+- Замороженные файлы ЗНАЧИТЕЛЬНО крупнее unfrozen (~60-68 KB → ~498-504 KB)
+
+**НЕ трогать:** `dist/Sends Follower/` — старые замороженные (устаревшие, 766/753 КБ, от 25 июня), оставлены как есть.
+
+## ✅ Change-gate оптимизация (CPU) — 2026-06-26 (CURRENT, EMBEDDED IN FROZEN)
+Профайлер показал петлю `js_messagehandler → defer` с `gensym` на каждом тике 50 Гц. Источник: `qmetro 20` (obj-35) → `js bang()` → `outlet(0,"max",result)` каждые 20 мс независимо от изменений.
+- **Что было:** `outlet(0,"max",result)` шла каждый тик. В патче стоит `change 0.` (obj-48) — гейтует flonum/send, но сам вызов js_messagehandler+defer происходил каждый тик.
+- **Что добавлено в ОБА JS** (`sends_follower.js` + `sends_follower_track.js`):
+  - `var RESULT_EPS = 5e-4` + `var lastResult = -1` (уровень модуля)
+  - В `bang()`: `outlet(0,"max",result)` обёрнут в `if (Math.abs(result - lastResult) > RESULT_EPS)` + обновление `lastResult`
+  - Track None-режим: аналогичный гейт для `manualVal`
+  - `buildRefs()` (Return) и `buildRef()` (Track): `lastResult = -1` при смене цели → первый тик после смены пробивает гейт
+  - `syncControls()` уже был гейтован по `KNOB_EPS` — не тронут
+  - warn/barVis/menu уже были гейтованы — не тронуты
+- **Ожидаемый эффект:** `outlet(0,"max",...)` → только при изменении; `js_messagehandler` вызывается каждый тик, но само сообщение `defer`-вниз + `gensym` строки "max" — только при изменении send-уровня. На стабильном сете (send не двигается) = 0 посылок в секунду вместо 50.
+- **Архивы:** `sends_follower.2026-06-26-200939-preedit-change-gate.js` (`566db5ba`), `sends_follower_track.2026-06-26-200939-preedit-change-gate.js` (`b1bd009d`)
+- **CURRENT md5:** Return JS `f0eb7d86`, Track JS `d3136f2f`; вшиты в frozen build
+- **Тест:** Load Live, удалить+заново перетащить оба девайса; профилировать `sample` → `js_messagehandler` должен появляться только при движении send-фейдеров/фейдеров
+
 ## ⏳ SHARED MapButton: ORPHANED slot → OUTLINE через native `live.observer id 0` (попытка 3) — 2026-06-26 (ON-DISK, NEEDS LIVE TEST)
 Попытки 1 (self-poll getid) и 2 (live.path re-resolve) — обе откачены к `3e937392` (getid возвращал КЭШ удалённого id). Попытка 3 = **другой принцип, авторитетный**: НЕ запрашивать держимый live.object (кэш), а ловить НАТИВНЫЙ сигнал удаления — `live.observer property id` шлёт **`id 0` при удалении наблюдаемого объекта** (подтверждено C74-доками + форумом; ровно так детектит стоковый Ableton MapButton). В RangeAndName наблюдатель `obj-5 live.observer` УЖЕ есть.
 - **МЕХАНИЗМ (аддитив, +3 box/+5 line внутри `p RangeAndName` obj-16):** параллельная ветка от `obj-5[0]` (live.observer left out, формат `id <value>`): `obj-134 (route id)` → `obj-135 (sel 0)` → `obj-136 (message 0)` → (a) `obj-129[0]` (trigger b l: 'l'=0 → live.object set id 0; 'b'→getid→`id 0`→route→`obj-31 sel 0`→OUTLINE) + (b) `obj-18[0]` (t l b: property-id observer reset). Это БУКВАЛЬНО эмулирует то, что X-кнопка делает снаружи через «id 0»→inlet3(obj-51). Цвета — существующий theme-token путь (X-путь), без хекса.
