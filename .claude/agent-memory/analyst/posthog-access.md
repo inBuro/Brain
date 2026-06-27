@@ -73,6 +73,22 @@ Actions (the CTA goals):
 - **281487** — **CTA — Video section view** (created 2026-06-22). Event `section_view` with
   property `section=video`. Tracks visitors who scrolled to the demo video section (engagement
   depth signal). Not yet pinned to Goals tile.
+- **283039** — **Plugin — Mixer tab click** (created 2026-06-27). `$autocapture` on `<button>`
+  with text exact `11`/`12`/`13`/`14` (4 OR steps). ✅ CONFIRMED LIVE: 54 autocapture hits
+  over the last 30 days (breakdown: 11=15, 12=13, 13=13, 14=13). The `aria-label` (`Mode 11`…)
+  is NOT captured as a flat property in SQL — PostHog stores element attrs in the internal
+  elements table. The TEXT-based matcher is the confirmed reliable signal. NOT pinned to Goals.
+- **283040** — **Plugin — Checkbox row click** (created 2026-06-27, matcher UPDATED 2026-06-28).
+  One step: custom event `demo_interact` + property filter `control = 'checkbox'` (exact).
+  Props also include `element` ∈ {Page, Bank, Daw, Prelisten} — breakdown by `element` for
+  per-row split. ⚠️ Code built locally 2026-06-27, NOT yet deployed → zero historical hits;
+  fills from first visit after release. NOT pinned to Goals.
+
+**AUTOCAPTURE GOTCHA (confirmed 2026-06-27): `<li role="button">` is invisible to PostHog
+autocapture.** Only native-interactive HTML tags captured by default (`<a>`, `<button>`,
+`<input>` etc.). RESOLVED via variant A: custom `demo_interact` event with `control='checkbox'`
++ `element='Page'|'Bank'|'Daw'|'Prelisten'` fired in onClick handlers in PluginMockup.
+Action 283040 updated accordingly — `$autocapture`+`<li>` matcher replaced.
 
 **`section_view` IS LIVE & scroll-depth IS now instrumented (confirmed 2026-06-24).** Event fires
 from 2026-06-22 onward with prop **`section`** ∈ {`video`, `faq`, `requirements`} — these are

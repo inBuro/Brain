@@ -36,7 +36,7 @@
 - Хвост (suffix от `\x00`) при правке сохранять **байт-в-байт**.
 
 ## Текущее состояние домена
-XL_Performance: 2026-06-02 добавлен round-trip для кастом-мода 15 (QUE/prelisten). Подробности и карта объектов — в [xl-performance.md](xl-performance.md).
+Control XL: 2026-06-27 CPU-fix frozen и распространён. Эталон `6a348306` (264344 B). Слоты 3–6 синхронизированы. Зипы пересобраны: Starter `d3192494` (265621 B), Demo `3639754b` (201136254 B). `version_check.js` (node.script, embed:0) в dlst НЕТ — кладётся рядом с `.amxd` в dist-папках и зипах. Слот 1 (репо) НЕ синхронизирован. Детали — [xl-performance.md](xl-performance.md), [controlxl-project-map.md](controlxl-project-map.md).
 
 ⚠️ **Файл девайса переименован 2026-06-02:** `XL_Performance.amxd` → **`Control XL.amxd`** (везде: канон в User Library, бандлы в `dist/`, ссылки в `.als`). **Внутреннее имя Max-патча всё ещё «XL_Performance»** — переименован только файл. Если нужно переименовать и внутренний патч (чтобы на дорожке Live отображалось «Control XL») — отдельная правка. При работе с девайсом теперь это `Control XL.amxd`.
 
