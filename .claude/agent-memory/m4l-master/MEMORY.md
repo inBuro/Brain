@@ -18,7 +18,7 @@
 
 ## Конвенции (железно)
 - **Где редактировать Control XL (РАЗВОРОТ 2026-06-06):** основной артефакт = **User Library** `.amxd`. Пропагация дальше (репо, бандл-слоты, zip) — только по явной команде. Все 6 слотов = `28840e39…` (с 2026-06-10). Browser Load (CC51) + HW-feedback — ОТЛОЖЕНЫ. Детали/грабли zip/механизм — [controlxl-project-map.md](controlxl-project-map.md), [xl-performance.md](xl-performance.md).
-- **Архив до правки.** Текущий девайс → `raw/archive/<Name>.YYYY-MM-DD.amxd` (если занято — `-HHMMSS`). Для XL_Performance это `~/Brain/Fadercraft/raw/archive/`. **Pre-edit backup обязателен ВСЕГДА.** Никогда не перезаписывать архив.
+- **Архив до правки.** Текущий девайс → `raw/archive/<Name>.YYYY-MM-DD.amxd` (если занято — `-HHMMSS`). Для Control XL это `~/Brain/Fadercraft/Control XL/raw/archive/`. **Pre-edit backup обязателен ВСЕГДА.** Никогда не перезаписывать архив.
 - **Правка на месте.** Меняем сам `.amxd`, не шлём куски кода, не просим руками патчить в Max.
 - **Валидация перед подменой.** Re-parse JSON, счётчики boxes/lines, хвост байт-в-байт, инварианты размеров. Не сошлось — откат к архиву.
 - **Перезагрузка в Live.** Live кеширует — убрать/добавить девайс заново; Max-редактор закрывать без сохранения.
@@ -26,7 +26,7 @@
 
 ## Где что лежит
 - Девайсы: `/Users/Kirill/Music/Ableton/User Library/Max Devices/` (`Control XL.amxd`, `SendsFollower.amxd`).
-- Архив: `~/Brain/Fadercraft/raw/archive/` (не рядом с девайсом).
+- Архив: `~/Brain/Fadercraft/Control XL/raw/archive/` (не рядом с девайсом).
 - `.syx` кастом-моды (канон): `~/Projects/Claude/Fadercraft/custom-modes/` (`1.syx`…`15.syx`).
 - Wiki проекта (логика, форматы): `~/Brain/Fadercraft/wiki/concepts/` и `…/entities/`.
 

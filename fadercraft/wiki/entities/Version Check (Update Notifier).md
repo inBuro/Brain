@@ -51,7 +51,7 @@ version_link (textbutton «Update ready») ──▶ ;max launchbrowser https://
 ```
 
 ## Где лежат файлы
-- **Канон скрипта**: `~/Brain/Fadercraft/raw/version_check.js` (2525 B — основной; `version_check 17.14.40.js` — старый дубль; `/tmp/version_check2,3.js` — тестовые харнессы, не рабочие).
+- **Канон скрипта**: `~/Brain/Fadercraft/Control XL/raw/version_check.js` (2525 B — основной; `version_check 17.14.40.js` — старый дубль; `/tmp/version_check2,3.js` — тестовые харнессы, не рабочие).
 - **Рантайм-копия** (чтобы `node.script` нашёл): `~/Music/Ableton/User Library/Max Devices/version_check.js` рядом с девайсом.
 - **Манифест**: `~/Projects/Claude/Fadercraft/app/public/api/version.json`.
 

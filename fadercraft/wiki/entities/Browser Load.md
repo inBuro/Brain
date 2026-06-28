@@ -72,7 +72,7 @@
 
 ## Пути рантайм-файлов
 
-- Канон (Brain): `~/Brain/Fadercraft/raw/browser_load.js`.
+- Канон (Brain): `~/Brain/Fadercraft/Control XL/raw/browser_load.js`.
 - Рядом с девайсом (проектный эталон): `~/Projects/Claude/Fadercraft/device/browser_load.js`.
 - Во `freeze` (`dlst` контейнера `.amxd`) **НЕ вшит** — на диске лежат `solo_follower.js` и `version_check.js`, `browser_load.js` пока нет.
 

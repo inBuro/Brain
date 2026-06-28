@@ -8,6 +8,10 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-06-28 — Реорганизация репозитория: Control XL выделен в отдельную папку
+
+`Fadercraft/raw/` и `Fadercraft/dist/` перемещены в `Fadercraft/Control XL/raw/` и `Fadercraft/Control XL/dist/` через `git mv` (сохранена история). Все 517 трекаемых файлов получили статус R (rename). Также перемещены: `Fadercraft/Novation XL.md` → `Control XL/`, `Fadercraft/demo-video-titles.html` → `Control XL/`, `Fadercraft/solo_follower.js` → `Control XL/raw/`. Маркетинг-ассеты (`Fadercraft Presentation.mp4`, `.srt`, `Photos/`, `IMG_8046.jpg`, `References/`) переехали автоматически как часть `raw/` → `Control XL/raw/`. `.gitignore` обновлён на новые пути. Wiki, brand, ds, wiki, directives, research, docs — не тронуты. Пути в agent-memory (MEMORY.md, xl-performance.md, controlxl-project-map.md, controlxl-bundle-zips.md) и wiki (Version Check, Browser Load) обновлены.
+
 ## 2026-06-23 — Custom Mode SysEx Layout: исправлена модель label-маркеров
 
 Реверс-инженерингом `11.syx` установлена корректная формула декодирования label-байтов. Прежняя гипотеза «64=стандарт/66=цвет2/68=цвет3» НЕВЕРНА. **Реально: маркерный байт `0x6n`/`0x7n` кодирует ДЛИНУ текста метки**: `text_len = lower_nibble + 16*(upper_nibble − 6)`. Подтверждено на всех 12 текстовых метках mode 11. Обновлено: `wiki/concepts/Custom Mode SysEx Layout.md` — раздел Labels section полностью переписан: таблица маркеров, формула, ⚠️-предупреждение об ошибочной прежней гипотезе, примечание о чередовании descriptor/label-блоков в msg2.
@@ -849,3 +853,8 @@ Append-only журнал операций над вики.
 - Updated index.md with both new pages.
 - Update: Kirill supplied FINAL VO (2026-06-26). Diffs from prior: "converts"→"turns"; Track/Return drop "device —" + use "follows"; Manual line tightened ("switch to Manual for mouse or MIDI control"); key line "Instead of adding more effect, you're shaping its behavior" (was "changing the amount… changing its behavior"). Synced sends-follower-vo-script.md + gumroad-description-sends-follower.md (top bullet, WHAT IT DOES, Track, Return).
 - Voice pass (2026-06-26): aligned remaining CXL-inherited sections to VO tone — bundle lists now verb-forward ("follows one track's send… / an entire return bus"), consistent across product page / receipt / short; REFUNDS de-legalized ("Refunds within 14 days if it doesn't work as described… what went wrong"); SUPPORT line made human ("Stuck, or found a bug? … replies within 48 hours"); dropped ⚑ on receipt (now in-voice + grounded). Listing copy publish-ready pending demo video + Vale.
+
+## 2026-06-28 — Repo nesting fix: Sends Follower + Dynamic Focus consolidated under Fadercraft
+- Pulled new **`Dynamic Focus/`** folder (5 files: `dynamic_focus.js`, `Dynamic Focus.maxpat/.amxd`, `build_device.py`, `README.md`) from remote branch `claude/dynamic-focus-folder-kwbhti` into `Fadercraft/Dynamic Focus/`. It's a track-focus M4L proof-of-concept (device self-activates only while its host track is the selected track; no central manager, event-driven via `live_set view selected_track` observer — idioms mirror `solo_follower.js`). README verdict: architecture sound, recommended as product foundation.
+- **Resolved long-open org question (roadmap open-item #6):** moved `~/Brain/Sends Follower/` → **`~/Brain/Fadercraft/Sends Follower/`** via `git mv` (266 files, history preserved). Internal `raw/ dist/ wiki/ Sends Follower.md CLAUDE.md` kept verbatim — only the nesting changed, per founder's directive "keep the existing raw/dist distribution system, fix nesting." Sends Follower no longer a top-level sibling of Fadercraft; now sits inside the Fadercraft umbrella next to `Dynamic Focus/`.
+- Control XL untouched (its bundles stay in shared `dist/`, deploy-wired). Historical `~/Brain/Sends Follower/...` paths in older log entries left as-is (append-only journal).

@@ -83,6 +83,15 @@ Actions (the CTA goals):
   Props also include `element` ∈ {Page, Bank, Daw, Prelisten} — breakdown by `element` for
   per-row split. ⚠️ Code built locally 2026-06-27, NOT yet deployed → zero historical hits;
   fills from first visit after release. NOT pinned to Goals.
+- **283077** — **FAQ — question opened** (created 2026-06-28). One step: custom event `faq_open`
+  (no property filter = any question). For per-question breakdown use `question` prop.
+  ⚠️ Zero historical hits — `faq_open` deployed 2026-06-28. NOT pinned to Goals.
+
+Saved insights (favorited):
+- **NnXsc3IV** — **FAQ opens by question** (created 2026-06-28). TrendsQuery, `faq_open`,
+  `math=total`, breakdown by `question` (event prop), `ActionsBarValue` display (total bar chart,
+  not time-series). Added to dashboard **1680409** (My App Dashboard). Zero data until
+  `faq_open` accumulates events post-deploy.
 
 **AUTOCAPTURE GOTCHA (confirmed 2026-06-27): `<li role="button">` is invisible to PostHog
 autocapture.** Only native-interactive HTML tags captured by default (`<a>`, `<button>`,

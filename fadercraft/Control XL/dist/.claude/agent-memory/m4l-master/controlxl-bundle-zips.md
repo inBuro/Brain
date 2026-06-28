@@ -1,11 +1,11 @@
 ---
 name: controlxl-bundle-zips
-description: Рецепт и инварианты пересборки Control XL bundle-зипов (Demo + Starter) в ~/Brain/Fadercraft/dist/
+description: Рецепт и инварианты пересборки Control XL bundle-зипов (Demo + Starter) в ~/Brain/Fadercraft/Control XL/dist/
 metadata:
   type: project
 ---
 
-Два релизных зипа Control XL живут в `~/Brain/Fadercraft/dist/`:
+Два релизных зипа Control XL живут в `~/Brain/Fadercraft/Control XL/dist/`:
 `Fadercraft Control XL v1.0 - Demo.zip` (~193 MB, с Samples) и `... - Starter.zip` (~180 KB, без Samples).
 
 **Целевое дерево бандла** (root = `Fadercraft Control XL v1.0 - <Demo|Starter>/`):
@@ -16,9 +16,9 @@ metadata:
 - `Control XL <Demo|Starter> Project/`: `Control XL <X>.als` + `Max Devices/Control XL.amxd` + `Ableton Project Info/Cache.cfg` (+ `Samples/` только в Demo)
 - README в зип НЕ кладём.
 
-**Источник сборки (ЕДИНСТВЕННЫЙ, с 2026-06-10):** `~/Brain/Fadercraft/dist/`. Из `~/Projects/Claude/Fadercraft/` больше НИЧЕГО не брать (старый custom-modes мастер юзер снёс).
-- Моды: `dist/15 Custom Modes/` (15 `.syx`, эталон). Папка УЖЕ с правильным именем — в зип кладётся как есть, БЕЗ переименования. `15.syx` len 670, **byte574 = 0x6e**.
-- Девайс/Router/проект/Quickstart.pdf: из `dist/`. Root `Control XL.amxd` берётся из `dist/Control XL <X> Project/Control XL.amxd`.
+**Источник сборки (ЕДИНСТВЕННЫЙ, с 2026-06-10):** `~/Brain/Fadercraft/Control XL/dist/`. Из `~/Projects/Claude/Fadercraft/` больше НИЧЕГО не брать (старый custom-modes мастер юзер снёс).
+- Моды: `Control XL/dist/15 Custom Modes/` (15 `.syx`, эталон). Папка УЖЕ с правильным именем — в зип кладётся как есть, БЕЗ переименования. `15.syx` len 670, **byte574 = 0x6e**.
+- Девайс/Router/проект/Quickstart.pdf: из `Control XL/dist/`. Root `Control XL.amxd` берётся из `Control XL/dist/Control XL <X> Project/Control XL.amxd`.
 - README в зип НЕ класть.
 
 **Рецепт сборки (собираем дерево заново из dist, не из старого зипа):** для каждого KIND (Demo|Starter) staging-root = `Fadercraft Control XL v1.0 - <KIND>/`; копируем: root `Control XL.amxd`, `Router.als` (починенный), `Quickstart.pdf`, `15 Custom Modes/`; внутрь `<Проект>/`: `Control XL <KIND>.als`, `Max Devices/Control XL.amxd`, `Ableton Project Info/*.cfg`, + `Samples/` только Demo. Затем scrub: `.DS_Store`, `Icon`, `._*`, `__MACOSX`, папки `Backup/`. Дисковая папка `Control XL <X> Project/` — ГИБРИД (содержит и Router.als, и root-style amxd, и Backup/Icon), НЕ паковать как root напрямую — собирать выборочно.
@@ -32,5 +32,5 @@ metadata:
 - amxd md5 = `44aa142b...` (root и Max Devices); 0 файлов/ссылок с именем `XL_Performance`
 - нет Icon/Backup/.DS_Store/._*/__MACOSX
 
-**Бэкап перед перезаписью:** `cp -p` старых зипов в `raw/archive/` с дата-меткой `YYYY-MM-DD-HHMMSS`.
+**Бэкап перед перезаписью:** `cp -p` старых зипов в `Control XL/raw/archive/` с дата-меткой `YYYY-MM-DD-HHMMSS`.
 **Упаковка:** `cd <stage> && zip -r -X -q <out>.zip "<bundle root>" -x "*.DS_Store" -x "*/__MACOSX/*" -x "*/._*"`.
