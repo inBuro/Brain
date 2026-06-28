@@ -20,6 +20,7 @@ Read at the start of every task. One line per memory file.
 - [day-2026-06-22.md](day-2026-06-22.md) — FIRST utm_source=youtube sessions (2 GE/Windows/Chrome at 22:47 ICT 06-21, one engaged demo_interact+footer_cta_view, one bounce); reddit abletonlive_post + introduction_post still trickling; 6 sess partial day; new geo Georgia (GE)
 - [wow-2026-06-19-25.md](wow-2026-06-19-25.md) — week-over-week 06-19→25 vs 06-12→18: clean external 44 vs 57 sess (−23%; raw 61v59 was TH owner-noise mirage); reddit 30→8 (−73%) is the story; maxforlive 3→8 ↑; NEW threads/youtube/facebook channels; buy_click 1 / purchase 0 this wk; reusable TH-direct owner-noise strip method
 - [day-2026-06-21-22.md](day-2026-06-21-22.md) — full 2-day report 06-21/22 ICT: 12 external sessions, reddit #1 (5 sess), youtube 2, direct 3, maxforlive 1; 3RD-EVER buy_click (06-22 09:08 ICT, US Desktop Safari, reddit introduction_post, entry /free-modes → / → buy, no purchase); owner-noise TH cluster 14:03-14:55 on 06-22 (4 unflagged sessions, orphaned distinct_ids)
+- [day-2026-06-28.md](day-2026-06-28.md) — 06-28: 6 clean sess (4 bot stripped), 2 buy_clicks (FR Mobile/reddit introduction_post, no purchase), NEW utm_campaign=control_xl_presentation via YouTube (IE/Desktop, unknown video), FIRST-EVER Google organic referral (HU/Desktop/Safari)
 
 - [pricing-tiers.md](pricing-tiers.md) — canonical price ladder by product scope: Micro $9 / Utility $14 / Workflow $24 / Flagship $39 / Suite $59–79; reference for revenue/conversion modeling
 

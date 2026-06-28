@@ -3,6 +3,7 @@
 Дайджест. Горячие факты + карта детальных файлов. Детали — в отдельных файлах, читай по ссылке.
 
 ## Карта памяти
+- [df-master.md](df-master.md) — **DF Master.amxd** v3.5.2 + **DF Slot.amxd** v1.1 (2026-06-29): три бага исправлены. BUG1: `inactivelcdcolor.expression` в MapCCButtonDF+MapButtonDF_M → `themecolor.live_control_selection` (было пустым → тёмные кнопки). BUG2: classnamespace сброшен Max-редактором → восстановлен dsp.midieffect; Map CC работает только при ARM = ожидаемое поведение Live, нужно Monitor=In. BUG3: sentinel `"empty"` (символ) в pushState→pattr→js создавал петлю «no function empty»; заменён на `-1` (int). pattr df_data restore=[-1]. DF Slot: добавлен pattrstorage. Archive `2026-06-29-022515`.
 - [feedback-color-transparency-policy.md](feedback-color-transparency-policy.md) — ⚠️ ПОСТОЯННО: цвета M4L трогать ТОЛЬКО по явной просьбе на конкретный элемент (палитра `themecolor.*`, before/after, не перекрашивать user-цвета); alpha<1 = намеренная прозрачность пользователя, НИКОГДА не стирать. Читать перед любой правкой цвета/hex.
 - [amxd-format.md](amxd-format.md) — проверенный рецепт распаковки/пересборки `.amxd`, раскладка байт, модель Max patcher JSON, Live API практики, веб-источники.
 - [xl-performance.md](xl-performance.md) — факты по флагману: пути, объекты секции CC47, карта режимов CC30/CC47, текущее состояние (один срез, без журнала версий).
