@@ -11,10 +11,10 @@ metadata:
 Оба девайса заморожены пользователем в Max/Live GUI и скопированы в релизную папку. Headless-заморозка через скрипт НЕ потребовалась — файлы в User Library уже содержали корректные frozen контейнеры.
 
 **Frozen builds (v1.0):**
-- `Return`: `/Users/Kirill/Brain/Sends Follower/dist/build-v1.0/Sends Follower – Return.amxd`
+- `Return`: `/Users/Kirill/Brain/Fadercraft/Sends Follower/dist/build-v1.0/Sends Follower – Return.amxd`
   - md5=`ae513363b3789ca4003dd9646b89a103`, size=497631 bytes
   - Вшиты: `sends_follower.js` (`f0eb7d86`), `multimap.maxpat` (`33942de2`), `MapButton.maxpat` (`1ac478ef`), `multimap-unmap.svg` (`1a31f546`), `sf_version_check.js` (`a5d905fc`)
-- `Track`: `/Users/Kirill/Brain/Sends Follower/dist/build-v1.0/Sends Follower – Track.amxd`
+- `Track`: `/Users/Kirill/Brain/Fadercraft/Sends Follower/dist/build-v1.0/Sends Follower – Track.amxd`
   - md5=`a4fdd2b37e384c3574e74b27af47442d`, size=504408 bytes
   - Вшиты: `sends_follower_track.js` (`d3136f2f`), `multimap.maxpat` (`33942de2`), `MapButton.maxpat` (`1ac478ef`), `multimap-unmap.svg` (`1a31f546`), `sf_version_check.js` (`a5d905fc`)
 
@@ -161,7 +161,7 @@ Founder: главную ручку (`obj-3`) сделать двусторонн
 - ⚠️ OPEN founder HW-тест: (а) кручу ручку мышью→send едет; (б) мапаю HW/фейдер на ручку→send за движением; (в) меняю send в микшере→ручка подхватывает; (г) переключаю dropdown→ручка ресинкается под новый send; (д) нет петли/дрожания (особ. при автоматизации send). Полный рестарт Live (stale cache).
 
 ## 🟢🟢 CANON-2026-06-25 (UNFROZEN source of truth) — Track ГИБРИД Source (A/B/C/D=send + None=ручной MIDI) ПОДТВЕРЖДЁН в Live
-Снапшот `~/Brain/Sends Follower/raw/archive/CANON-2026-06-25/` (7 файлов). **Актуальные md5 — обновлять при ЛЮБОЙ правке.** User Library working-копии UNFROZEN (дев продолжается на них).
+Снапшот `~/Brain/Fadercraft/Sends Follower/raw/archive/CANON-2026-06-25/` (7 файлов). **Актуальные md5 — обновлять при ЛЮБОЙ правке.** User Library working-копии UNFROZEN (дев продолжается на них).
 - ⚠️ **CANON Track ОБНОВЛЁН 2026-06-25** (пользователь подтвердил «Manual»-финал в Live): **Track `6f73a43f`** + **`sends_follower_track.js` `b1bd009d`**. Эволюция Track-канона: `25df3d6a`→`03879b16`→`16fb11f3`→**`6f73a43f`** (js `6a000af3`→`33b24f50`→`a42ef291`→**`b1bd009d`**). SUPERSEDED-копии каждой ступени в archive root. **Source пункт 0 = «Manual»** (бывш. «None»; лейбл, логика selectedSend=-1 та же). **Return/SendsReader/shared канон НЕ тронуты.**
 - **НОВАЯ СЕМАНТИКА Source (финал) = выбор ИСТОЧНИКА МОДУЛЯЦИИ для 8-слот мэппера:**
   - **A/B/C/D:** выход=уровень выбранного трек-send; БОЛЬШОЙ круг (plain `dial`, parameter_enable:0, floatoutput Float 0..1, большой rect, мышь) ↔ send двусторонне+гард; бар+подпись СПРЯТАНЫ.
@@ -169,7 +169,7 @@ Founder: главную ручку (`obj-3`) сделать двусторонн
   - **Видимость:** JS `updateBarVis()`→`outlet(1,"barvis",0/1)` (1=None) на load+смену source; патч `route barvis→sel 0 1→script show/hide midi_dial+midi_label→thispatcher`. **Дефолт A**, персист выбора через umenu-параметр. Гард `syncControls` (lastWritten/bigShown/midiShown, EPS) рвёт пинг-понг в обоих режимах. Детали — секции выше (none-manual-source / hybrid-mididial).
 - **Return** `be5955d3` (88352B) + движок `sends_follower.js` `566db5ba`. **Track `6f73a43f`** (~66KB, UNFROZEN, JSON@0x20, 80 box/85 line, Source пункт0=«Manual») + `sends_follower_track.js` `b1bd009d` (outlets 4). Shared: `MapButton.maxpat` `b410e4c0`→**`3e937392`** (per-instance filled-mapped по id≠0 фикс 2026-06-26, см. секцию вверху; канон НЕ финализирован до теста), `multimap.maxpat` `02d24003`, `sf_version_check.js` `a5d905fc`. SendsReader `9c0386ab` (НЕ продуктовый, не в релизе).
 - **Полное дерево deps продуктового девайса:** движок.js (js) + `sf_version_check.js` (**node.script**) + `multimap.maxpat`(bpatcher)→`MapButton.maxpat`→`multimap-unmap.svg`.
-- **🟡 RELEASE-FROZEN (2026-06-25) — Track УСТАРЕЛ:** **Релиз-артефакты `~/Brain/Sends Follower/dist/`:** `Sends Follower – Return.amxd` **`16fc2b2b`** (766416B, FROZEN — АКТУАЛЕН) + `Sends Follower – Track.amxd` **`2cd82bca`** (753897B, FROZEN). ⚠️🔴 **dist-Track `2cd82bca` УСТАРЕЛ** относительно канона `6f73a43f` (заморожен ДО гибрид-Source: двусторонний круг / Manual-ручной-MIDI-источник / live.slider). **При следующем релизе Track НАДО ПЕРЕМОРОЗИТЬ** из канон-Track `6f73a43f`+js `b1bd009d`. Return-freeze `16fc2b2b` актуален (Return не менялся). dist/ НЕ трогаю сейчас (только пометка). SendsReader НЕ в релизе.
+- **🟡 RELEASE-FROZEN (2026-06-25) — Track УСТАРЕЛ:** **Релиз-артефакты `~/Brain/Fadercraft/Sends Follower/dist/`:** `Sends Follower – Return.amxd` **`16fc2b2b`** (766416B, FROZEN — АКТУАЛЕН) + `Sends Follower – Track.amxd` **`2cd82bca`** (753897B, FROZEN). ⚠️🔴 **dist-Track `2cd82bca` УСТАРЕЛ** относительно канона `6f73a43f` (заморожен ДО гибрид-Source: двусторонний круг / Manual-ручной-MIDI-источник / live.slider). **При следующем релизе Track НАДО ПЕРЕМОРОЗИТЬ** из канон-Track `6f73a43f`+js `b1bd009d`. Return-freeze `16fc2b2b` актуален (Return не менялся). dist/ НЕ трогаю сейчас (только пометка). SendsReader НЕ в релизе.
   - **Валидация freeze (оба):** dlst содержит ВСЕ deps — `multimap.maxpat`(`02d24003`)+`MapButton.maxpat`(`b410e4c0`)+`multimap-unmap.svg`(`1a31f546`)+`sf_version_check.js`(`a5d905fc`)+движок(`566db5ba` Return/`6a000af3` Track), все embedded-md5 **MATCH-canon** (freeze НЕ подменил движок старой версией). JSON парсится, 0 dangling, не битый UTF-8, ptch=fs−0x20. warn-механизм/план B (version_link mode 1 / text+texton / live_alert) / прозрачность(2) / qmetro 20 / multimap_panel numoutlets 2 / mm_targetprep — целы в Return-freeze. ⚠️ **node.script `sf_version_check.js` УСПЕШНО вшит в dlst** — блокер снят, version-check внутри (single-file релиз, co-locate НЕ нужен). Track НЕ имеет warn-ветки (правильно — warning только Return).
   - **User Library возвращены в UNFROZEN канон** (все 7 файлов восстановлены из CANON-2026-06-25, md5 совпали, frozen=False) — дев продолжается на unfrozen working-копиях.
 - Док обновлён: `wiki/concepts/known-behaviors.md` (warning теперь РАБОТАЕТ — детект по реальной map-цели; убрана старая «device cannot warn»), wiki/log.md, Vale clean (только `version_link` domain-флаг).
@@ -232,7 +232,7 @@ Founder: Return на Return A, замаплен на Send A (кормит Return
 **Шаги:** полный рестарт Live → Max Console → увести один send в 0 → смотреть строки `SFLAG`: сколько тиков и мс result/vals идут от высокого к 0; падение за 1 тик = мгновенно, ползёт N тиков = Live-интерполяция.
 
 ## 📝 KNOWN BEHAVIOR (by design, не баг) — Total 1.0 latch в self-feeding петле — 2026-06-24
-Return в **Total**, выход замаплен на send, кормящий watched-шину: при слоте **Max=1.0** жёсткий кламп Total (`result>1.0→1.0`) даёт плоскую мёртвую зону на потолке — пока сумма ОСТАЛЬНЫХ сендов ≥ 1.0, выход держится на 1.0, замапленный параметр не возвращается. **Max ≤ 0.99** держит точку на наклоне → ОК. By design: кламп защищает downstream percent/dial (0..1). Self-driven send уже исключён из агрегации (`eb2b2518`) — петли НЕТ, это только инхерентный потолок Total. В Peak нет. Founder-принятое решение: для такой петли держать **Max ≤ 0.99**, кода НЕ менять. Док: `~/Brain/Sends Follower/wiki/concepts/known-behaviors.md` (+ index + log). JS остался `eb2b2518` (фикс без диагностики).
+Return в **Total**, выход замаплен на send, кормящий watched-шину: при слоте **Max=1.0** жёсткий кламп Total (`result>1.0→1.0`) даёт плоскую мёртвую зону на потолке — пока сумма ОСТАЛЬНЫХ сендов ≥ 1.0, выход держится на 1.0, замапленный параметр не возвращается. **Max ≤ 0.99** держит точку на наклоне → ОК. By design: кламп защищает downstream percent/dial (0..1). Self-driven send уже исключён из агрегации (`eb2b2518`) — петли НЕТ, это только инхерентный потолок Total. В Peak нет. Founder-принятое решение: для такой петли держать **Max ≤ 0.99**, кода НЕ менять. Док: `~/Brain/Fadercraft/Sends Follower/wiki/concepts/known-behaviors.md` (+ index + log). JS остался `eb2b2518` (фикс без диагностики).
 
 ## ✅ Return: исключение self-driven send из агрегации (анти-feedback) — 2026-06-24
 Founder замапил выход Return на send, кормящий ТУ ЖЕ watched-шину → петля: вверх замапленный send растёт, вниз не падает (Peak: сам себя держит max; Total: самоподдержка). ДИАГНОЗ: код двунаправлен (агрегация пересчитывается с нуля каждый bang, `change 0.` пропускает спад, сигнальный путь `clip~/scale/live.remote~` непрерывен — НЕ баг записи) → причина = положительная обратная связь (выход на свой вход). Founder выбрал **вариант (ii): исключать self-driven send из агрегации**.
@@ -496,13 +496,13 @@ session start: Max Console `send_follower: built 3 send refs for return 0` (JS R
 
 
 Standalone project, separate from / unrelated to Control XL & Instrument Follower. Project wiki =
-`~/Brain/Sends Follower/wiki/` (entities/concepts/index/log; docs in English, run Vale after edits).
+`~/Brain/Fadercraft/Sends Follower/wiki/` (entities/concepts/index/log; docs in English, run Vale after edits).
 Wiki has the functional model (LiveAPI send-gather → max → live.remote~ + buses); don't duplicate.
 
 ## Paths
 - Device (edit in place): `~/Music/Ableton/User Library/Max Devices/SendsFollower.amxd`
-- Archive (dated pre-edit backup, never overwrite): `~/Brain/Sends Follower/raw/archive/SendsFollower.YYYY-MM-DD[-HHMMSS].amxd`
-- raw mirror (immutable, read-only): `~/Brain/Sends Follower/raw/SendsFollower.amxd`
+- Archive (dated pre-edit backup, never overwrite): `~/Brain/Fadercraft/Sends Follower/raw/archive/SendsFollower.YYYY-MM-DD[-HHMMSS].amxd`
+- raw mirror (immutable, read-only): `~/Brain/Fadercraft/Sends Follower/raw/SendsFollower.amxd`
 - Rack wrapper: `~/Music/Ableton/User Library/Presets/Audio Effects/Audio Effect Rack/SendsFollowerRack.adg`
   (chain = Sends Follower → stock LFO). Note older wiki text says `MaxSendsFollower.adg` — actual file is `SendsFollowerRack.adg`.
 - Embedded JS on-disk canon copies: `Max Devices/sends_follower.js` (5808 B, since Follow Mode 2026-06-17), `Max Devices/sf_version_check.js` (3106 B).

@@ -20,7 +20,7 @@ portable/distributable, frozen, self-contained.
 
 ## Paths
 - Device (edit in place): `~/Music/Ableton/User Library/Max Devices/SendsFollower LFO.amxd`
-- Archive: `~/Brain/Sends Follower/raw/archive/SendsFollower LFO.YYYY-MM-DD[-HHMMSS]-*.amxd`
+- Archive: `~/Brain/Fadercraft/Sends Follower/raw/archive/SendsFollower LFO.YYYY-MM-DD[-HHMMSS]-*.amxd`
 - Built FROM (read-only base): `SendsFollower.amxd` (`7ebe7d15`, 444/594) — its mapper section reused verbatim.
 
 ## v1 initial build — 2026-06-18 (CURRENT)

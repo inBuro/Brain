@@ -47,7 +47,7 @@ name-comment overlay, X-unmap. **Source = `live.dial` "Source" 0..1** (stands in
 
 ## Paths
 - Device (edit in place): `~/Music/Ableton/User Library/Max Devices/MM Native.amxd`
-- Archive: `~/Brain/Sends Follower/raw/archive/MM Native.YYYY-MM-DD-HHMMSS-*.amxd`
+- Archive: `~/Brain/Fadercraft/Sends Follower/raw/archive/MM Native.YYYY-MM-DD-HHMMSS-*.amxd`
 - Built from (read-only ref): `SendsFollower.amxd` (`7ebe7d15`) mapper idioms; container header copied
   from `SendsReader.amxd` (simplest valid container).
 
@@ -87,7 +87,7 @@ name-comment overlay, X-unmap. **Source = `live.dial` "Source" 0..1** (stands in
   pres bbox max x+w=296, y+h=161 (fits 169px shelf). Self-contained (no embedded files; SVG by name).
 - **WHY v2:** founder rejected v1 look (looked like SF mapper — fat orange Map-button frames + separate
   comment overlay). v2 = pixel replica of stock "black frame" multimap per
-  `~/Brain/Sends Follower/wiki/concepts/stock-multimap-visual-spec.md` (extracted from
+  `~/Brain/Fadercraft/Sends Follower/wiki/concepts/stock-multimap-visual-spec.md` (extracted from
   `liveui.map.maxpat` / `liveui.multimap.maxpat`). FUNCTION unchanged (source dial → 8× live.map →
   live.remote~ + Min/Max), ONLY presentation layer rebuilt.
 - **UI deltas applied (vs v1):** (1) ONE shared `panel` #282828 `themecolor.live_lcd_bg` rounded-7

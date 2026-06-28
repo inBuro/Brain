@@ -1067,3 +1067,22 @@ The checkpoint recommendation was "product + price visible on the page + return 
 - Do NOT post a second post today, do NOT push more links/Gumroad, do NOT rescue the post with extra comments.
 - Observe for 24 h (small subs often get ~30% of traffic over the following day) → checkpoint 2026-06-11: re-snapshot same metrics (views/upvotes/comments/CTR/YT) + close the gaps above + reply to genuine comments (conversation, not selling).
 - The "fixed layout" insight is the foundation for the next post and the next video hook; landing hero — review against it, change only if hero contradicts the idea-first framing.
+
+## 2026-06-28 — ORG: Sends Follower consolidated under Fadercraft umbrella [CLOSED]
+
+**What:** Organizational decision, not an experiment. The open question flagged 2026-06-17 ("Org flag: structure is forking; open question whether to consolidate under Fadercraft") is resolved.
+
+**Numbers:** N/A.
+
+**Qualitative:** N/A — purely structural.
+
+**Read:** The forked layout (`~/Brain/Sends Follower/` as a sibling to `~/Brain/Fadercraft/`) was a temporary artifact of how the device was scaffolded. Consolidating under the umbrella keeps one coherent product-tree and avoids two separate CLAUDE.md/wiki contexts for what is clearly one brand.
+
+**Decision:** CLOSED — consolidate.
+- Sends Follower moved: `~/Brain/Sends Follower/` → `~/Brain/Fadercraft/Sends Follower/` (git mv, history preserved).
+- Internal structure (`raw/`, `dist/`, `wiki/`, `CLAUDE.md`) unchanged; only nesting changed.
+- New products Dynamic Focus also lives under `~/Brain/Fadercraft/` from the start.
+- Control XL re-homed to `~/Brain/Fadercraft/Control XL/{raw,dist}` (m4l-master, deploy paths re-bound).
+- Roadmap updated same day (see roadmap.md item 6 under Phase 2 open risks).
+- Historical paths in this journal (`~/Brain/Sends Follower/...`) remain as-is — they were accurate at time of writing.
+- Future references: canonical path is `~/Brain/Fadercraft/Sends Follower/`.

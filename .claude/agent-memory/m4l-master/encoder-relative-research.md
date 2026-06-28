@@ -42,7 +42,7 @@ for mode-select but do not publish per-row relative toggle CC numbers openly
 ## Artifacts built (2026-06-23)
 
 ### EncoderRelativeMonitor.amxd
-- **Path:** `~/Brain/Fadercraft/raw/EncoderRelativeMonitor.amxd`
+- **Path:** `~/Brain/Fadercraft/Control XL/raw/EncoderRelativeMonitor.amxd`
 - **md5:** `1094455eeb9d8a28d20d30ad1fa3fc1d`
 - **Size:** 9227 B, 20 boxes / 11 lines, unfrozen MIDI Effect (mmmm)
 - **Function:** validation tool for hardware test (Step 0)
@@ -52,7 +52,7 @@ for mode-select but do not publish per-row relative toggle CC numbers openly
 - **Use:** Drop on MIDI track → open Max editor → click Row N button → twist encoder → check Console
 
 ### EncoderRelativeTest.amxd
-- **Path:** `~/Brain/Fadercraft/raw/EncoderRelativeTest.amxd`
+- **Path:** `~/Brain/Fadercraft/Control XL/raw/EncoderRelativeTest.amxd`
 - **md5:** `1db34bd6dfa3e85b55697fd6a39b57a5`
 - **Size:** 11961 B, 25 boxes / 21 lines, unfrozen MIDI Effect (mmmm)
 - **Function:** prototype decoder for Outcome A (relative mode confirmed)
