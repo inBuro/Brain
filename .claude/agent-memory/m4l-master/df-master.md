@@ -1,17 +1,25 @@
 ---
 name: df-master
-description: DF Master.amxd current state v6.0 (2026-06-29). 128 слотов x4 params, 8 страниц, page notes (textedit+8 Int params/page), Clear Page. md5=cdbda1ee (338892B). JS v6.0 outlets=4.
+description: DF Master.amxd current state v6.3 (2026-06-29). 128 слотов, 8 страниц, page notes, Clear Page, overlay placeholder pg_name_ph, arm blink fix. md5=6f7ebfac (339477B). JS v6.3 md5=09f97964.
 metadata:
   type: project
 ---
 
-# DF Master.amxd — current state (2026-06-29, v6.0)
+# DF Master.amxd — current state (2026-06-29, v6.3)
 
 **Location:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/DF Master.amxd`
-**JS:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/df_master.js` (v6.0)
+**JS:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/df_master.js` (v6.3)
 **Type:** MIDI Effect (`classnamespace: dsp.midieffect`)
-**Container:** UNFROZEN. JSON at 0x20, ptch LE@0x1C = filesize-0x20 = 338860. Suffix = `\x00` (1 byte).
-**md5:** `cdbda1ee435249d1c7515b040691cf50` | 338892 B | boxes=742 | lines=373
+**Container:** UNFROZEN. JSON at 0x20, ptch LE@0x1C = filesize-0x20 = 339445. Suffix = `\x00` (1 byte).
+**md5 amxd:** `6f7ebfac58410695f5f733e4bba62d1b` | 339477 B | boxes=742 | lines=373
+**md5 js:** `09f9796417f9d86d7bfb6596e9180680`
+
+## Arm blink mechanism (v6.3)
+- `MapCCButtonDF.maxpat` и `MapButtonDF_M.maxpat` — оба содержат metro+toggle+gate механизм мигания, работающий от `ccArm`/`paramArm` флагов из JS outlet 0
+- **Баг**: при нажатии Map CC кнопки на контроллере — сама кнопка шлёт CC → `handleCC` захватывал его немедленно → `learnCCSlot=-1` → мигание не успевало начаться
+- **Фикс CC**: `_armCCTime = Date.now()` при армировании; в `handleCC` игнорировать CC если `elapsed < 300ms`
+- **Баг Param**: `armParam` вызывал `pollSelectedParam()` синхронно → если параметр уже выбран, захват происходил до отрисовки blink
+- **Фикс Param**: `pollSelectedParam()` отложен через Task(250ms) после renderAbsSlot
 
 ## Persistence Architecture (v6.0 — current)
 
