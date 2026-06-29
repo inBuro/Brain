@@ -1,18 +1,34 @@
 ---
 name: df-master
-description: DF Master.amxd current state v6.3 (2026-06-29). 128 слотов, 8 страниц, page notes, Clear Page, overlay placeholder pg_name_ph, arm blink fix. md5=6f7ebfac (339477B). JS v6.3 md5=09f97964.
+description: DF Master.amxd current state v6.4 (2026-06-29). md5=96a5b24b (339639B). JS v6.4 md5=77bbe340. Bugfixes: pg_numbox pie=0; pgname no cursor-reset; _restoreDone=true after retry exhaustion.
 metadata:
   type: project
 ---
 
-# DF Master.amxd — current state (2026-06-29, v6.3)
+# DF Master.amxd — current state (2026-06-29, v6.4)
 
 **Location:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/DF Master.amxd`
-**JS:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/df_master.js` (v6.3)
+**JS:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/df_master.js` (v6.4)
 **Type:** MIDI Effect (`classnamespace: dsp.midieffect`)
-**Container:** UNFROZEN. JSON at 0x20, ptch LE@0x1C = filesize-0x20 = 339445. Suffix = `\x00` (1 byte).
-**md5 amxd:** `6f7ebfac58410695f5f733e4bba62d1b` | 339477 B | boxes=742 | lines=373
-**md5 js:** `09f9796417f9d86d7bfb6596e9180680`
+**Container:** UNFROZEN. JSON at 0x20, ptch LE@0x1C = filesize-0x20 = 339607. Suffix = `\x00` (1 byte).
+**md5 amxd:** `96a5b24b4f632389a8e9bdc90b24c48e` | 339639 B | boxes=742 | lines=373
+**md5 js:** `77bbe3401dbcd6737aa08a2ff4d39a6a`
+**Archive (pre-edit):** `DF Master.2026-06-29-190540.amxd` (md5 `258065e4`, 759414 B) — was Max-editor indented
+
+## v6.4 Bugfixes (2026-06-29)
+
+**Bug 1 — pgname text immediately erased:**
+- Root cause A: `_restoreDone` never becomes `true` on fresh device (no mapped slots → all df_s*_meta=0 → all retries exhausted but `_restoreDone` stayed `false`). `pushNote()` is guarded by `if (!_restoreDone) return` → all text writes blocked.
+- Fix A (JS): In `_scheduleRetry()` exhaustion branch, set `_restoreDone = true` before returning. This allows pushNote/pushSlot on a fresh device.
+- Root cause B: `handleCmd("pgname")` called `renderNote()` which sent `outlet(3, "set", note)` back to `pg_name_edit` on every keystroke. Max `textedit` "set" message resets cursor to position 0 → next keystroke inserts at wrong position → typing feels broken.
+- Fix B (JS): Removed `renderNote()` call from pgname handler. Now only updates placeholder visibility directly via `this.patcher.getnamed("pg_name_ph").hidden`.
+
+**Bug 2 — page index deserializes to wrong value:**
+- Root cause: `pg_numbox` SAA.valueof had no `parameter_initial_enable`. Per M4L docs: PIE absent = treated as 1 → Live resets to mmin on every load (instead of restoring saved .als value).
+- Fix (amxd patch): Added `"parameter_initial_enable": 0` to `pg_numbox` SAA.valueof.
+- Note: `parameter_type=1` (Float) on pg_numbox is OK — pg_numbox shows 1..64 display values. `pg_minus1` (-1) converts to 0-based page index for JS.
+
+**CRITICAL NOTE on original file:** The archived `258065e4` (759414 B) was saved by Max-editor (indented JSON). The new `96a5b24b` (339639 B) is compact JSON — same content, different whitespace. Both are valid UNFROZEN .amxd.
 
 ## Arm blink mechanism (v6.3)
 - `MapCCButtonDF.maxpat` и `MapButtonDF_M.maxpat` — оба содержат metro+toggle+gate механизм мигания, работающий от `ccArm`/`paramArm` флагов из JS outlet 0
