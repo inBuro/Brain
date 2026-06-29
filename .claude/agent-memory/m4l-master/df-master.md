@@ -1,261 +1,243 @@
 ---
 name: df-master
-description: DF Master.amxd v3.4 + DF Slot.amxd v1.1 — current state (2026-06-29): pattrstorage added to DF Slot, inactivelcdcolor token fixed in both .maxpat files, classnamespace dsp.midieffect OK
+description: DF Master.amxd current state v5.4-shortname-fix (2026-06-29). 24 live.numbox df_s* SAA.valueof, shortname=longname. Path params: SAA.mmax=2e15, type=1 (float64). md5=edf5c84ea1b2eb4c7c6ecdc1d1676e07 (77250B). JS v5.4+DIAG. NEXT: reload in Live → DIAG max for df_sN_path should be 2e15 not 255.
 metadata:
   type: project
 ---
 
-# DF Master.amxd — current state (v3.4, 2026-06-29) + DF Slot.amxd (v1.1, 2026-06-29)
+# DF Master.amxd — current state (2026-06-29, v5.4-shortname-fix)
 
 **Location:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/DF Master.amxd`
-**Components (unfrozen deps, same User Library folder):**
-- `MapCCButtonDF.maxpat` — CC-кнопка (v3.4: inactivelcdcolor expression key added)
-- `MapButtonDF_M.maxpat` — stripped UI + SF-style Map btn (v3.4: inactivelcdcolor expression key added)
-- `df_master.js` — движок (v3.4: diagnostic logs in handleCC/armCC/captureCC)
-
-**Last archive (pre-bugfix session 2026-06-29-021237):**
-- `DF Master.2026-06-29-021237.amxd` (unchanged, 66188 B, md5=3a630f99)
-- `DF Slot.2026-06-29-021237.amxd` (pre-pattrstorage, 15184 B)
-- `MapCCButtonDF.2026-06-29-021237.maxpat` (pre-inactivelcd-token-fix, 49912 B)
-- `MapButtonDF_M.2026-06-29-021237.maxpat` (pre-inactivelcd-token-fix, 17541 B)
-
-**Current sizes/md5:**
-- DF Master.amxd: 66188 B | boxes=163 | lines=370 | md5=39f4041c | classnamespace=dsp.midieffect | pattr restore=[-1]
-- DF Slot.amxd: 15184 B | boxes=16 | lines=20 | md5=3f3fc089 (added pattrstorage)
-- MapCCButtonDF.maxpat: 111097 B | boxes=30 | lines=33 | md5=b645a5f2 (inactivelcdcolor token fixed)
-- MapButtonDF_M.maxpat: 32119 B | boxes=43 | lines=48 | md5=c82dc3931 (inactivelcdcolor token fixed)
-- df_master.js: sentinel changed 'empty'→-1 (numeric), restoreSlots guard updated
+**JS:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/df_master.js` (v5.4+DIAG)
 **Type:** MIDI Effect (`classnamespace: dsp.midieffect`)
-**ptch invariant:** 66156 = filesize - 0x20 (OK)
-**md5 (amxd):** unchanged (amxd not modified in v3.3)
-**MapCCButtonDF.maxpat:** boxes=30 (was 29), lines=33 (was 31) — +msg_inactive_cc, +2 lines
-**MapButtonDF_M.maxpat:** boxes=43 (was 42), lines=48 (was 46) — +msg_inactive_pa, +2 lines
-**openrect:** [0, 0, 520, 169]
-**devicewidth:** 520.0
+**Container:** UNFROZEN. JSON at 0x20, ptch LE@0x1C = filesize-0x20 = 77178. Suffix = `\x00` (1 byte).
+**md5:** `edf5c84ea1b2eb4c7c6ecdc1d1676e07` | 77250 B | boxes=185 | lines=368
 
-WARNING: **classnamespace сбрасывается в "box" при каждом сохранении пользователем в Max-редакторе**. Это постоянная граблина: при открытии/сохранении в Max patching classnamespace слетает с dsp.midieffect -> box, и ctlin перестаёт получать MIDI -> маппинг ломается. После каждой пользовательской правки в Max нужно восстанавливать classnamespace через скрипт или m4l-master. Compact JSON (separators=(',',':')) нормально читается Max — уменьшает размер файла с ~160KB до ~65KB.
+**MapButtonDF_M.maxpat md5:** `bfa2f07fff4590ad0a9d713b8a043f17` (shortname Min->dfmin, Max->dfmax)
 
-**MapCCButtonDF.maxpat v3.3:** boxes=30, lines=33
-**MapButtonDF_M.maxpat v3.3:** boxes=43, lines=48
+## CRITICAL LESSON: pattr vs live.numbox for per-instance persistence
 
-## Engine: df_master.js (outlets=4, v3.2-persist-fix)
-- varname=`dfengine`, numinlets=4, numoutlets=4
-- Inlet 0: bang (init from live.thisdevice)
-- Inlet 1: row command `[row, cmd, ...]` OR page command `[page, N]` (N=0..31 0-based)
-           OR named Max message `page N` — calls JS `function page(n)` directly
-- Inlet 2: `[value, cc, channel]` from ctlin → pack i i i
-- Inlet 3: restore list from pattr df_data outlet 0 (flat atom list on .als load)
-- **Outlet 0 (8 atoms):** `[visRow, ccLabel, paramLabel, outMin, outMax, mapped, ccArm, paramArm]`
-  visRow 0..7 = left column, visRow 8..15 = right column
-- **Outlet 1 (2 atoms):** `[visRow, valueInt(0-100)]`
-- **Outlet 2 (2 atoms):** `[pageIdx, active(0/1)]` — все 32 страницы при смене страницы
-- **Outlet 3 (flat atom list):** persist push to pattr df_data; fired on every state change
-- NSLOTS=512, PAGE_SIZE=16, NPAGES=32, currentPage=0 by default
-- Drive formula: `frac = lo + p*(hi-lo)`, clamp to [0,1]
+`pattr` with `parameter_enable=1` does NOT reliably persist per-instance values in .als.
+`live.numbox` with `parameter_enable=1` DOES — it is a proper Live parameter object.
 
-## Persist scheme (v3.2 push-pull, 2026-06-29)
+**pattr behaviour:** `get("name")` returns varname string → appears in `device.parameters`. But the value storage is NOT per-instance in .als even with `parameter_mmin/mmax` set. On reload, values reset to initial (or 0).
 
-**PUSH path (save to .als):**
-  1. On every state change (captureCC, onSelectedParam, clearSlot, min/max update):
-     `pushState()` → `outlet(3, [i cc ch omin omax pmin pmax name_sym ...])` (flat atoms)
-  2. `pattr df_data` (obj-300) receives via inlet 0, stores current value
-  3. `pattrstorage df_store @greedy 1 @savemode 2` reads pattr on .als save — passive, no getvalueof needed
+**live.numbox behaviour:** Proper Live parameter. `parameter_mmin/mmax` enforced by Live UI layer. `parameter_initial_enable=0` + `parameter_enable=1` + `parametervisibility=2` → stores per-instance in .als, restores correctly on reload, no initial-reset.
 
-**PULL path (restore from .als):**
-  1. pattrstorage restores stored atoms → pattr df_data outlet 0
-  2. pattr outlet 0 → js inlet 3 (via explicit wire: `obj-300[0] → obj-2[3]`)
-  3. `list()` on inlet 3 → `restoreSlots(a)` → Task.schedule(800) → resolveAll + render
+**Key box fields for live.numbox (must match SOA):**
+- `"minimum": mmin_float` — box-level minimum (must equal parameter_mmin)
+- `"maximum": mmax_float` — box-level maximum (must equal parameter_mmax)
+- `"presentation": false` — hide from Live presentation layer
+- `patching_rect`: position off-screen (x=2000, y=off-screen)
 
-**Patch wiring (obj-300 pattr):**
-  - `obj-2[3] → obj-300[0]` (PUSH: js outlet 3 → pattr inlet 0)
-  - `obj-300[0] → obj-2[3]` (PULL: pattr outlet 0 → js inlet 3)
-  - obj-ps1: `pattrstorage df_store @greedy 1 @savemode 2` (no lines needed, @greedy auto-adopts df_data)
+**Full SOA for persistent live.numbox:**
+```json
+{
+  "parameter_enable": 1,
+  "parameter_initial_enable": 0,
+  "parameter_long_name": "df_s0_cc",
+  "parameter_mappable": 0,
+  "parameter_mmin": 0.0,
+  "parameter_mmax": 13000.0,
+  "parameter_shortname": "dfs0cc",
+  "parameter_type": 0,
+  "parameter_unitstyle": 0,
+  "parametervisibility": 2
+}
+```
+NO `parameter_initial_value` — unnecessary and may trigger reset in some Live versions.
 
-**Flat atom format (8 atoms per slot):**
-  `[i, cc, ch, omin, omax, pmin, pmax, name_sym]`
-  - i: slot index (int 0..511)
-  - cc: CC number (int 0..127) or -1 if not set
-  - ch: MIDI channel (int 1..16) or 0 if not set
-  - omin/omax: OUTMIN/OUTMAX int 0..100
-  - pmin/pmax: parameter min/max (float)
-  - name_sym: parameter name with spaces → `__SP__`, or 'null' if no param
-  - Sentinel: `['empty']` when no slots mapped
+**Components (unfrozen deps, same User Library folder):**
+- `MapCCButtonDF.maxpat` — CC-кнопка
+- `MapButtonDF_M.maxpat` — Map Param кнопка
+- `df_master.js` — движок v5.4
 
-**Backward compat:** old JSON format (starts with '[') silently ignored; old .als data (if any) lost gracefully.
+**Archive dir:** `~/Brain/Fadercraft/Dynamic Focus/archive/`
+**Last clean source before SAA-fix:** `DF Master.2026-06-29-131458.amxd` (77718 B) — had SOA instead of SAA for path (broken)
+**Current on-disk (SAA-fixed, shortname=longname):** md5=edf5c84ea1b2eb4c7c6ecdc1d1676e07, 77250 B
 
-## ROOT CAUSE ANALYSIS (persist v1/v2 failures, 2026-06-29)
+## Persistence Architecture (v5.4-clean)
 
-**Previous attempt 1:** pattr df_map @bindto dfengine + pattrstorage @greedy — obj-300 had ZERO lines. Even with @greedy + @bindto, the critical path was broken: no wire from pattr outlet to js inlet. pattrstorage could not deliver restored data to js even if it stored it correctly.
+**Storage primitive:** 24 `live.numbox` objects with SOA (`saved_object_attributes`), `parameter_enable=1`, `parametervisibility=2` (Stored Only), `parameter_initial_enable=0`. These appear in `device.parameters` via LiveAPI and persist per-instance in .als.
 
-**Previous attempt 2 (same session):** Same structure, added pattrstorage but still no explicit lines. @bindto theoretically calls setvalueof internally, but pattr was also storing a JSON STRING as a single Max symbol — which has reliability risks for long strings (potential truncation or parse failures in Max atom layer).
+**CRITICAL LESSON:** pattr with parameter_enable=1 APPEARS in device.parameters but does NOT persist per-instance values. pattr live-reported min/max = 0..127 regardless of SOA mmin/mmax. live.numbox with SOA is the correct primitive.
 
-**Root causes (both):**
-  1. No explicit outlet wire from pattr to js: @bindto may send setvalueof internally, but behavior is unreliable for js without an explicit wired path
-  2. JSON string as a single Max symbol atom: risky for large payloads; atom layer expects simple values
-  3. @greedy auto-adoption of pattr requires no lines between pattr and pattrstorage, but does require the pattr be actively used (having an outlet wire to something is safer)
+**3 fields per slot, 8 slots (page 0 MVP):**
 
-**v3.2 fix:**
-  - Replaced JSON string with flat atom list (8 atoms/slot)
-  - Added explicit wires: js[3]->pattr[0] (push) + pattr[0]->js[3] (pull)
-  - Kept pattrstorage @greedy 1 @savemode 2 (still no lines to pattrstorage needed)
-  - Removed @bindto from pattr (not needed with explicit wires)
-  - Round-trip validated offline: 7 test cases PASS
+| box id      | varname     | mmin | mmax             | ptype | encoding                          |
+|-------------|-------------|------|------------------|-------|-----------------------------------|
+| dfp_N_0     | df_sN_cc    | 0    | 13000.0          | 0 (int) | `(cc+1)*100 + ch`; sentinel 0  |
+| dfp_N_1     | df_sN_path  | 0    | 2000000000000000.0 | 1 (float) | base-150 polynomial (8 tokens) |
+| dfp_N_2     | df_sN_om    | 0    | 13000.0          | 0 (int) | `omin*101 + omax`; default=100 |
 
-## Sends Follower persist scheme (reference — different from DF)
-SF does NOT use pattr for parameter paths. SF persists:
-- live.numbox Min/Max (parameter_enable=1) per slot in MapButton bpatcher — Live parameters, auto-saved
-- Parameter TARGET PATH: outlet(1, [slot,"store",path...]) but wn_route passthrough outlet 1 is UNCONNECTED
-  → SF does NOT persist the parameter path! It re-resolves by track position on reload.
-This is fundamentally different from DF's name-based approach. SF's scheme is not applicable to DF.
+N = 0..7 (8 slots). ALL stored as SOA (not flat box fields). pe=1, pie=0, pv=2, pm=0.
 
-## MIDI ingest
-`midiin → midiout` passthrough (obj-30/31)
-`ctlin` out0=val, out1=cc, out2=ch → `pack i i i` → js inlet 2
+**CC encoding:**
+- `cc_field = (cc+1)*100 + ch` — sentinel 0 = no CC; cc=0,ch=0 → 100; cc=127,ch=16 → 12816
+- Range: 0..12816 → mmax=13000 comfortably covers it
 
-## Architecture: bpatcher rows + page encoder (v3.0: dual-column, 32 pages)
+**OM encoding:**
+- `om_field = omin*101 + omax` — omin,omax ∈ [0,100]; default: omin=0, omax=100 → field=100
+- Max value: 100*101+100 = 10200 → mmax=13000 covers it
 
-Main patch boxes (163 total):
-- `obj-1` live.thisdevice, `obj-2` js df_master.js (4 outlets, varname=dfengine), `obj-30/31` midiin/midiout
-- `obj-32` ctlin, `obj-33` pack i i i
-- `obj-300` pattr df_data (varname=df_data, restore=['empty']); wired push+pull to obj-2
-- `obj-ps1` pattrstorage df_store @greedy 1 @savemode 2 (NO lines needed — greedy auto-binds pattr df_data)
-- `r0` route 0..15 <- js out0 -> uk{i} inlet 0 (i=0..15)
-- `r1` route 0..15 <- js out1 -> bmb{i}/bmb_id[4] (pct value, i=0..15)
-- **Page encoder:**
-  - `pg_numbox` = live.numbox, int 1..32, steps=32, presentation=[207,149,43,15], varname=pg_numbox
-  - Forward: pg_numbox[0] -> pg_minus1(-1) -> pg_msg_page("page $1") -> obj-2[1]
-  - Feedback: obj-2[2] -> pg_unpack(unpack i i) -> out1(active,fires first)->gate_pg_fb[0]; out0(pageIdx,fires second)->gate_pg_fb[1] -> pg_plus1(+1) -> pg_numbox[0]
-  - gate_pg_fb passes pageIdx only when active=1 (correct unpack right-to-left order)
-- **Left column** (visRow 0..7): bcc0..7 (x=192), bmb0..7 (x=-2), uk0..7 (all user-positioned)
-- **Right column** (visRow 8..15): obj-3/4=row8, obj-5/6=row9, ..., obj-17/18=row15
-- Panels: obj-62 (x=-3, w=253) = left, obj-19 (x=257, w=253) = right
+**Path encoding (base-150 polynomial, float64 exact):**
+- Keywords 1..23 (live_set, tracks, return_tracks, master_track, devices, parameters, mixer_device, sends, value, volume, panning, chains, clip_slots, clip, view, crossfader, cue_volume, track_activator, solo, arm, mute, output_routing, input_routing)
+- Index N (0..125) → code 24+N
+- Sentinel 0 = end of path
+- `float = t0 + t1*150 + ... + t7*150^7`; max ~1.7e15 < 2^53 → exact float64
+- mmax=2e15 = 2000000000000000 covers all valid paths; stored as integer in JSON (no exponent notation)
 
-## openrect
-[0, 0, 258, 169]; contnet X=-3..250, numbox X=207..250; margin 8px
+**WRITE path (pushSlot):**
+- `pushSlot(s)` → `Task(0)` deferred → `setParam("df_sN_cc", cc_f)` via LiveAPI "id pid" → `.set("value", x)`
+- Task(0) avoids "Changes cannot be triggered by notifications" error
+- `ensureCache()` called lazily inside Task body
 
-## Wiring per row (uk -> bcc/bmb)
-- uk[0] -> bcc[0] (ccLabel text)
-- uk[1] -> bmb[0] (paramLabel text)
-- uk[2] -> bmb[1] (min)
-- uk[3] -> bmb[2] (max)
-- uk[4] -> bcc[2] (xshow) + bmb[3] (mapped -> show/hide x + filled/hollow btn_pr)
-- uk[5] -> bcc[1] (ccArm -> blink)
-- uk[6] -> bmb[5] (paramArm -> blink)
+**READ path (restoreFromParams):**
+- `bang()` → `Task(400ms)` → `loadDeviceParams()` → `restoreFromParams()`
+- `restoreFromParams`: reads df_sN_cc/om/path via `getParam()` → `decodeCC/decodeOM/decodePath` → populates SLOTS[]
+- Log marker: `PARAM RESTORE (LiveAPI): slot=N cc_f=... path_f=... -> cc=... path=...`
+- If path=null: means path_f=0 (empty) OR mmax range was too small (was blocking "Invalid value" before mmin/mmax fix)
 
-## MapCCButtonDF.maxpat — inlet/outlet order
-- inlet [0] x=10: cc_inlet_text (label)
-- inlet [1] x=60: cc_inlet_blink (blink flag 0/1)
-- inlet [2] x=110: cc_inlet_xshow (X show flag 0/1)
-- outlet [0]: bang on click
-- outlet [1]: bang on X click
+**Parameter cache:**
+- `loadDeviceParams()` iterates `this_device` parameters, filters by `nm.indexOf("df_s") === 0`
+- Log: `loadDeviceParams DIAG all names: [...]` — shows ALL parameter names for debugging
+- Log: `loadDeviceParams: total=N df_s*=24` — should show 24 df_s* params
+- `_paramCache["df_sN_cc"] -> pid`; `getParam(name)` reads via `"id pid".get("value")`
 
-## MapButtonDF_M.maxpat — inlet/outlet order
-- inlet [0] x=20:  in_label (paramLabel sym -> p setText -> btn_pr)
-- inlet [1] x=80:  in_min (int 0-100 -> prepend set -> nbox_min -> out_min)
-- inlet [2] x=140: in_max (int 0-100 -> prepend set -> nbox_max -> out_max)
-- inlet [3] x=200: in_mapped (0/1 -> sel 0 1 -> hidden 1/0 -> btn_x + hollow/filled btn_pr)
-- inlet [4] x=260: in_pct (int 0-100 -> prepend set -> value display)
-- inlet [5] x=320: in_paramarm (0/1 -> paramArm blink)
-- outlet [0]: out_map (mapparam bang from btn_pr click)
-- outlet [1]: out_min (min value from nbox_min drag)
-- outlet [2]: out_max (max value from nbox_max drag)
-- outlet [3]: out_clear (clear bang from btn_x click)
+**captureParam:** uses `p.unquotedpath` — no filter, accepts ANY Live API path (device params, sends, mixer_device)
 
-## Exclusive arm (df_master.js v3.1+)
-`armCC(absSlot)`: saves `prev = learnCCSlot`, sets new, if `prev >= 0 && prev !== absSlot` — renders old slot (ccArm=0 -> blink stops). Same for `armParam(absSlot)` via `learnPSlot`.
-On page change (`setPage`): learnCCSlot/learnPSlot reset if they're on a different page.
-CC and Param arm are independent: can have one CC-armed AND one Param-armed simultaneously from different rows.
+**autowatch = 0** — prevents script reload resetting SLOTS on file change
 
-## v3.5 bugfix session (2026-06-29, three-bug fix)
+## JS Object (obj-2)
+- `text: "js df_master.js"`, `numinlets: 3`, `numoutlets: 3`
+- Inlet 0: bang (init)
+- Inlet 1: row/page command list
+- Inlet 2: CC list `[value, cc, channel]`
+- Outlet 0: row render `[visRow, ccLabel, paramLabel, outMin, outMax, mapped, ccArm, paramArm]`
+- Outlet 1: value render `[visRow, valueInt(0-100)]`
+- Outlet 2: page sel `[pageIdx, active(0/1)]`
 
-**Archive (v3.5.1):** `2026-06-29-021237` (DF Master.amxd, DF Slot.amxd, MapCCButtonDF.maxpat, MapButtonDF_M.maxpat)
-**Archive (v3.5.2):** `2026-06-29-022515` (DF Master.amxd 161071B post-Max-save, df_master.js pre-sentinel-fix)
+## live.numbox Parameter Objects (24 total, SOA format)
+IDs: dfp_0_0..dfp_7_2. All off-screen (patching_rect=[10000,10000,50,20]), presentation=false. NOT wired to js inlets — accessed ONLY via LiveAPI (parameter name lookup). cc and om: ptype=0 (int), path: ptype=1 (float).
 
-### BUG 1 FIX: dark buttons — inactivelcdcolor wrong expression token
-**Root cause (v3.4→v3.5):** `saved_attribute_attributes.inactivelcdcolor.expression` was `''` (empty string) in obj-14 of both .maxpat files. An empty expression means Live registers the attribute as managed but WITHOUT a theme token → applies its own dark default. Not the same as having the correct token.
-**Fix:** Set `"inactivelcdcolor": {"expression": "themecolor.live_control_selection"}` — same token as lcdcolor. Now idle color = same theme color as active color, buttons visible in both states.
-**Files changed:** MapCCButtonDF.maxpat (49912→111097 B), MapButtonDF_M.maxpat (17541→32119 B).
+## Patch structure
+- `obj-1` live.thisdevice → `obj-2` js (bang on load)
+- `obj-30/31` midiin/midiout passthrough
+- `obj-32` ctlin → `obj-33` pack i i i → `obj-2[2]`
+- 16 bpatcher rows (bcc0..7 + obj-3..17 for right col) + uk0..15 unpack
+- Page numbox: live.numbox pg_numbox (int 1..32) with +1/-1 offset logic
+- Panels: obj-62 (left), obj-19 (right)
+- openrect: [0, 0, 258, 169]
 
-**Earlier attempt (v3.4, same session):** Key was MISSING entirely → added with expression=''. That's why v3.4 still had dark buttons: key present, expression wrong.
-**Earlier attempt (v3.3):** inactivelcdcolor was hardcoded `[0.098...]` (nearly black) → removed it. But missed the empty expression issue.
+## CRITICAL: live.numbox parameter fields — saved_attribute_attributes vs saved_object_attributes
 
-### BUG 2 FIX: Map CC "not working" — TWO causes
+**`saved_object_attributes`** = correct for `newobj`/`pattr`. Live IGNORES this for live UI objects.
+**`saved_attribute_attributes.valueof`** = correct for live UI objects (`live.numbox`, `live.dial`, etc.). This is what Live reads at runtime to determine min/max/type.
 
-**Cause A: classnamespace reset by Max editor save (v3.5.2 fix).**
-When DF Master.amxd was saved from Max editor, classnamespace reset 'dsp.midieffect'→'box'. With classnamespace=box, ctlin doesn't receive MIDI → Map CC completely dead. Fixed in v3.5.2 by restoring classnamespace=dsp.midieffect and compacting JSON (161071→66188 B). This WILL happen again if user opens+saves in Max editor — ALWAYS check classnamespace first when "Map CC stopped working".
+Proof: runtme LiveAPI `p.get("min")` and `p.get("max")` on a live.numbox always returns 0/127 when fields are in `saved_object_attributes`, regardless of the values written there. After moving to `saved_attribute_attributes.valueof`, Live reads the actual mmax.
 
-**Cause B: track routing — Monitor=In required (NOT a patch bug).**
-ctlin in dsp.midieffect receives MIDI ONLY when track is Record Armed OR Monitor=In. "Works only when armed" = expected Live behavior. Fix: set DF Master MIDI track Monitor=**In** (permanent, no ARM needed). This is the canonical setup for DF Master. Patch wiring is correct: ctlin[0,1,2]→pack i i i→obj-2[2]→handleCC→captureCC.
+**Correct live.numbox box structure (hidden persist parameter):**
+```json
+{
+  "id": "dfp_0_0",
+  "maxclass": "live.numbox",
+  "varname": "df_s0_cc",
+  "numinlets": 1, "numoutlets": 2,
+  "outlettype": ["", "float"],
+  "patching_rect": [10000.0, 10000.0, 50.0, 20.0],
+  "presentation": false,
+  "parameter_enable": 1,
+  "saved_attribute_attributes": {
+    "valueof": {
+      "parameter_longname": "df_s0_cc",
+      "parameter_shortname": "dfs0cc",
+      "parameter_type": 0,
+      "parameter_unitstyle": 0,
+      "parameter_mmin": 0.0,
+      "parameter_mmax": 13000.0,
+      "parameter_initial_enable": 0,
+      "parameter_mappable": 0,
+      "parametervisibility": 2
+    }
+  }
+}
+```
+Note: `parameter_enable: 1` stays at the TOP LEVEL of box (not inside SAA). All other parameter_* go inside `saved_attribute_attributes.valueof`.
 
-### BUG 3 FIX: DF Slot.amxd — parameters not persisting across reloads
-**Root cause:** DF Slot had `pattr learnedCC @default -1` and `pattr learnedChannel @default -1` but NO `pattrstorage`. Without pattrstorage, pattr values are never saved to .als — only the static `restore` field in JSON is used (restore=[0] = CC+1=0 = unmapped). 
-**Fix:** Added `obj-pss1 pattrstorage df_slot_store @greedy 1 @savemode 2` to DF Slot.amxd (boxes: 15→16, md5: old→3f3fc089). @greedy auto-adopts learnedCC and learnedChannel pattrs. Now learned CC numbers persist across .als save/reload.
-**DF Slot.amxd pattr JS round-trip:** outlet(1, learnedCC+1) → pattr learnedCC inlet → pattrstorage saves. On restore: pattrstorage → pattr outlet 0 → js inlet 3 → msg_int(v) → learnedCC = v-1. The +1 offset is by design (pattr 0-default = CC+1=0 = unmapped).
+## CRITICAL: parameter_initial_enable semantics
+- `parameter_initial_enable=0` (explicit) = Live restores the PER-INSTANCE saved value from .als on load. This is what we want.
+- `parameter_initial_enable=1` = Live RESETS the parameter to `parameter_initial_value` on EVERY device load, overwriting the saved per-instance value. This silently kills persistence.
+- `parameter_initial_enable` ABSENT = behaves as 1 for some object types. Must be set EXPLICITLY to 0.
+- `parameter_initial_value` should NOT be set when `parameter_initial_enable=0` — it's unused but may confuse Live's parameter UI. Remove it.
+- Reference: dfs* live.numbox (archive 115025.amxd) had `parameter_initial_enable: 0` and cc PERSISTED correctly. pattr without this flag resets to initial on each load.
 
-### BUG 3 PATTERN NOTE: DF Slot vs DF Master persist
-DF Slot (per-track): pattr + pattrstorage (standard per-device pattern). Each DF Slot has its OWN pattrstorage, saves its own learnedCC independently.
-DF Master: push-pull pattr + pattrstorage via flat atom list (512-slot, push on every change). Different architecture, same principle.
+## Known behaviors / constraints
+- **pattr middle outlet → js non-left inlet: FORBIDDEN.** Causes "pattr can only connect to left inlet" flood. Removed in v5.1 stabilization.
+- **8 slots MVP (PERSIST_SLOTS=8).** Slots 8..511 work in memory but NOT persisted.
+- **pmin/pmax not stored** in 3-field scheme. Read from LiveAPI on `restoreFromParams` Task+200ms → `resolveAll()` → `normValue()`.
+- **encodePath index cap = 125.** Tracks/devices beyond index 125 logged as WARNING and clamped. Real sessions rarely exceed 50 tracks.
+- **Sends path:** `captureParam` accepts sends (`live_set tracks N mixer_device sends M value`) without filter. encodes correctly.
+- **decodePath returns null for f=0** → slot treated as empty (no path). After fix: path param has mmax=2e15, "Invalid value" eliminated → path_f properly stored.
+- **classnamespace:** `dsp.midieffect` — resets to 'box' if user saves in Max editor. Always check if CC stops working.
+- **Monitor=In:** required for ctlin to receive MIDI without arm.
 
-## v3.4 changes (2026-06-29, inactivelcdcolor fix + diagnostic logs)
+## Repack notes (CRITICAL for this device)
+This is UNFROZEN. JSON starts at 0x20 (offset 32), NOT 0x30. Suffix = `\x00` only (1 byte). No dlst.
+Path B is needed when JSON grows: just update `ptch` LE@0x1C = new_filesize-0x20. No dlst patches needed.
 
-**Root cause of dark idle buttons (BUG 1 first attempt):**
-`saved_attribute_attributes` in live.text obj-14 had `inactivelcdcolor: {expression: ''}` added (was MISSING key before). Key present but expression empty → still dark. Full fix in v3.5 above.
+**Previous corruption source:** using `soa = box.get('saved_object_attributes', {})` returns NEW `{}` if key exists (Python's `.get()` with default returns a NEW object, NOT a reference). Fix: use `box['saved_object_attributes']` directly (guaranteed reference to existing dict).
+Wait — actually Python dict.get() DOES return the real object if the key exists (not a new one). The real bug was: the key DID exist (`saved_object_attributes` in box = True), so `.get()` returned the real soa. But the EARLIER repack scripts used `ensure_ascii=False` + `indent=1`, producing a LONGER JSON (dL>0) but the bytearray conversion introduced corruption at byte[47].
 
-**Diagnostic logs added to df_master.js (BUG 2 diagnostics):**
-- `handleCC`: `[DF-Master] handleCC: val=X cc=Y ch=Z learnCCSlot=N`
-- `armCC`: `[DF-Master] armCC: absSlot=N page=M (prev=K) — waiting for CC`
-- `captureCC`: `[DF-Master] captureCC: absSlot=N cc=Y ch=Z`
+**Root cause of byte[47]=0xa2 corruption:** `ensure_ascii=False` + `indent=1` in json.dumps changes the byte layout significantly. When later combined with `struct.pack_into` on a `bytearray` that was constructed via `bytearray(raw[:off]) + new_json_bytes`, the offset calculation was correct but the `bytearray(raw[:off])` converted non-ASCII bytes in the header to wrong values if the underlying data had bytes >127 in the header region. REAL FIX: use `separators=(',',':')` + `ensure_ascii=True`.encode('ascii') — no bytearray conversion needed for prefix (keep as bytes), only convert to bytearray for struct.pack_into.
 
-**classnamespace: dsp.midieffect** — verified in DF Master.amxd. Without this, ctlin doesn't receive MIDI. Resets to 'box' on each user Max-editor save — check this first if CC stops working.
+## CRITICAL: Why max=255 appeared in DIAG (resolved in edf5c84e)
 
-**CRITICAL: `inactivelcdcolor` expression key** — must be present in saved_attribute_attributes with the CORRECT token (not empty string). Without token: dark idle buttons. Pattern: same token as lcdcolor = `themecolor.live_control_selection`.
+The diagnostic `DIAG param: name=df_s0_path pid=324 min=0 max=255` was captured from archive
+`131458.amxd`, which had `saved_object_attributes` (SOA) for path boxes — NOT `saved_attribute_attributes.valueof` (SAA).
+Live **ignores** SOA for live.numbox and applies default range (0..255). The current file (edf5c84e)
+has SAA for all 24 parameters (including 8 path boxes with mmax=2e15). This was NOT tested in Live yet.
 
-## v3.3 changes (2026-06-29, visual regression fix)
+**Expected after reload:** `DIAG param: name=df_s0_path ... max=2000000000000000`
+**If still 255 after reload:** check that the file on disk is edf5c84e (md5), not an older cache version.
 
-**Problem:** All Map buttons appeared dim/dark in idle state. Cause: hardcoded `inactivelcdcolor: [0.098, 0.098, 0.098, 1.0]` in live.text obj-14 of both .maxpat files. In `mode=0 (momentary)` live.text, idle = INACTIVE state → uses `inactivelcdcolor` → very dark. The runtime `lcdcolor` message only affects ACTIVE (pressed) color, not inactive.
+## CRITICAL: float64 decision for path parameters
 
-**Fix (MapCCButtonDF.maxpat):**
-1. Removed hardcoded `inactivelcdcolor` from obj-14 (and saved_attribute_attributes) — let Live theme handle it
-2. Added `msg_inactive_cc` ('inactivelcdcolor $1 $2 $3 1.') wired from `route_rest_cc[0] → msg_inactive_cc[0] → obj-14[0]`
-3. Added `msg_inactive_sub` in obj-39 subpatcher ('inactivelcdcolor $1 $2 $3 1.') wired from `obj-25[0] → msg_inactive_sub[0] → obj-20[1]`
+`parameter_type=1` (Float) chosen deliberately. Justification:
+- JS Number = IEEE 754 double (64-bit) → encodePath/decodePath exact for values < 2^53
+- path_f ≈ 1.8e12 < 2^53 = 9e15 → exact representation, no rounding
+- Live `.als` stores values as XML text strings → exact round-trip
+- LiveAPI C++ API uses double for parameter value transfer (standard for audio software)
+- Evidence CC works: `cc_f=7901` accepted via `set("value")` with mmax=13000 (absolute, not normalized)
+  → same mechanism applies to path with mmax=2e15
 
-**Fix (MapButtonDF_M.maxpat):**
-1. Removed hardcoded `inactivelcdcolor` from obj-14 (and saved_attribute_attributes)
-2. Added `msg_inactive_pa` ('inactivelcdcolor $1 $2 $3 1.') wired from `route_rest_pa[0] → msg_inactive_pa[0] → obj-14[0]`
+Split-field scheme (2-3 sub-parameters in safe range) was considered but NOT implemented.
+Reason: float64 single-parameter is sufficient and simpler. Revisit ONLY if Live empirically
+shows float32 rounding for type=1 parameters (would manifest as path_f decoded to wrong path).
 
-**df_master.js pushState log added:** `[DF-Master] pushState: N non-empty slots → pattr (M atoms)` (symmetric to restoreSlots log)
+## Scale plan (next step — NOT YET IMPLEMENTED)
+- Need empirical test: add 400 pattr with pe=1 and check how many appear in device.parameters
+- If ceiling ≥ 384: implement 128 slots × 3 fields = 384 pattr (dfp_0_0..dfp_127_2)
+- If ceiling < 384: need alternative (e.g. pattr with JSON string for multiple slots per pattr)
+- Current: 8 slots confirmed working after mmin/mmax fix (pending first real test)
 
-**Persist wiring verified (all correct, no breaks):**
-- classnamespace: dsp.midieffect ✓
-- obj-2[3] → obj-300[0] (PUSH) ✓
-- obj-300[0] → obj-2[3] (PULL) ✓
-- pattrstorage @greedy 1 @savemode 2 ✓
-- obj-300 restore: ['empty'] ✓
+## CRITICAL: Live API p.get("name") returns parameter_shortname (NOT longname)
 
-## CRITICAL LESSONS
-1. `classnamespace: dsp.midieffect` must be set explicitly after EVERY file edit — Max editor on save resets it to 'box'. Without dsp.midieffect, ctlin doesn't receive MIDI -> mapping completely broken. Always check this first when diagnosing "mapping not working".
-2. `textbutton` does NOT theme in M4L -> use only `live.text appearance=2`
-3. `p setText` — only reliable mechanism to update label in live.text at runtime
-4. `live.text rounded=0` -> square corners (confirmed Factory Pack)
-5. `live.colors` receives token name directly (symbol), no thisdevice needed for context
-6. **SF-style blink (canonical):** `metro -> toggle -> t b i -> lcd_control_fg -> live.colors -> route lcd_control_fg -> gate 2 (sel=toggle+1) -> lcdcolor $1 $2 $3 0.5/1.` Only one attribute (`lcdcolor`), one token (`lcd_control_fg`), alpha 0.5<->1.0. Stop: `t 0 b` -> stop metro + restore `lcdcolor full` + `bgcolor` via tb_restore. MANDATORY `route lcd_control_fg` between live.colors and gate 2 (strips label symbol, leaves only RGBA args).
-7. Unfrozen `.amxd`: JSON at 0x20, ptch LE@0x1C = filesize-0x20; separators=(',',':') for compact JSON (Path B)
-8. `live.text` does NOT understand `bgfillcolor` — only `bgcolor` (and `textcolor`/`bgoncolor`/`textoncolor`).
-9. **Path B for unfrozen**: no dlst -> just write larger JSON + update ptch LE@0x1C = new_filesize-0x20. Unfrozen suffix = just `\x00` (1 byte).
-10. `unpack s s i i i i i` in JSON may have numoutlets=5 (mismatch) — Max resolves from args. Fix numoutlets and outlettype explicitly when manually repacking.
-11. **hollow/filled btn_pr**: `bgcolor` message to inlet[0] live.text = direct color control. Hollow = alpha=0, filled = alpha=1. Not via toggle-state, via direct bgcolor message driven by mapped flag.
-12. **CRITICAL: message box + live.text momentary**: live.text (appearance=2, mode=0=momentary) sends INT 1 on press, INT 0 on release. Message box ("page N") when receiving INT in LEFT inlet replaces content with that number and outputs it — instead of "page N" it outputs "1"! Always put `t b` (trigger bang) between momentary button and message box when message box has fixed content. Bang -> message box = outputs content without replacement.
-13. **paramArm blink + hollow/filled conflict**: blink via live.colors/bgcolor overwrites button color. On arm-off need retrigger filled/hollow from stored mapped state. Pattern: `int_mapped` (int storage) + `sel_map` -> `msg_pr_hollow/filled` + on arm-off: `tb_restore -> int_mapped` (bang -> outputs stored -> sel_map -> hollow/filled).
-14. **`unpack i i` right-to-left order**: Max unpack always outputs outlets right-to-left. `unpack i i` on list `[a, b]`: out1(=b) fires FIRST, out0(=a) fires SECOND. For gate pattern: put selector signal in out1 (right/second field), data signal in out0 (left/first field) — then gate opens before data arrives.
-15. **`live.numbox` silent set**: when numbox receives number in its inlet (from another object) — sets value SILENTLY, without triggering its outlet. Prevents feedback loop in feedback-update from js.
-16. **`rect` vs `openrect` vs `devicewidth`**: three fields in patcher JSON: `rect`=[x,y,W,H] Max editor window position (NOT device width), `openrect`=[0,0,W,H] device width in Live (W=openrect[2]), `devicewidth`=W (duplicates openrect[2]). When trimming device: change `openrect[2]` AND `devicewidth`, do NOT touch `rect`.
-17. **CRITICAL: named messages vs list in JS**: `message box "page $1"` sends NOT a list, but a **named Max message** with selector `"page"`. In JS this calls `function page()`, NOT `function list()`. `list()` fires only for pure list atoms (no symbolic selector). For each named message: add `function <selector>()` in JS.
-18. **CRITICAL: pattr without pattrstorage does NOT save to Live set**: `pattr @bindto varname` saves values ONLY when `.amxd` file is saved (via `restore` field in JSON). For .als save/load, pattr works ONLY if pattrstorage @savemode 2 is in the patcher. Without it, mappings only live while device is open.
-19. **pattr @bindto + js — UNRELIABLE without explicit wires**: @bindto may call setvalueof internally on js, but this path is unreliable in M4L practice. Confirmed root cause of DF persist failures. ALWAYS add explicit outlet wire from pattr[0] to js inlet for the restore path.
-22. **CRITICAL: live.text mode=0 (momentary) has TWO color states**: `lcdcolor` = color when ACTIVE (pressed), `inactivelcdcolor` = color when INACTIVE (idle, not pressed). Runtime `lcdcolor` message ONLY changes active color. To make idle button visible: must also send `inactivelcdcolor R G B 1.` at runtime (via same live.colors token). Hardcoded `inactivelcdcolor: [0.098...]` in JSON = nearly black idle button regardless of any runtime lcdcolor messages → visual regression. Pattern: at blink-stop + init render, send BOTH `lcdcolor ... 1.` AND `inactivelcdcolor ... 1.` from same live.colors RGB source.
-25. **CRITICAL: `inactivelcdcolor` SAA expression must NOT be empty**: `saved_attribute_attributes.inactivelcdcolor.expression = ''` (empty string) means Live registers the attribute but applies its OWN dark default — NOT the theme. Must set expression to the SAME token as `lcdcolor` (e.g. `'themecolor.live_control_selection'`). Empty expression ≠ 'no override' here; it means 'managed by theme with no token' = dark default. Adding the key with empty expression (v3.4) fixed registration but NOT the dark color. Full fix = correct token (v3.5).
-26. **CRITICAL: DF Slot needs pattrstorage**: Each DF Slot instance has `pattr learnedCC @default -1` + `pattr learnedChannel @default -1`. WITHOUT `pattrstorage @greedy 1 @savemode 2` in the same patcher, learned CC is NEVER saved to .als — resets to -1 (unmapped) on every reload. Symptom: "Map CC stops working after reload" = learnedCC=-1 → routeCC() early-returns. Fix: add pattrstorage @greedy 1 @savemode 2. @greedy auto-adopts both pattr objects (no explicit pattrstorage lines needed).
-23. **pushState log**: `[DF-Master] pushState: N non-empty slots → pattr (M atoms)` printed every time state is pushed to pattr. Symmetric log to `restoreSlots` log. If pushState log appears but restoreSlots log does not on reload → pattrstorage or pattr issue. If neither appears → user is loading stale cached version.
-20. **Push-pull pattr pattern (CANONICAL for js persist in M4L)**: js outlet N -> pattr inlet 0 (push current state on every change); pattr outlet 0 -> js inlet M (pattr feeds back on restore). pattrstorage @greedy reads pattr passively on save. DO NOT rely on @bindto + getvalueof/setvalueof alone.
-24. **CRITICAL: `inactivelcdcolor` MUST be in `saved_attribute_attributes`**: For `live.text appearance=2 mode=0 (momentary)`, the idle state color comes from `inactivelcdcolor`. If `saved_attribute_attributes` does NOT have the key `"inactivelcdcolor": {"expression": ""}`, Live does NOT register it as a managed attribute → Max uses a static dark default → idle button appears dark even after runtime `inactivelcdcolor` messages fire. FIX: add `"inactivelcdcolor": {"expression": ""}` to saved_attribute_attributes in live.text JSON. Empty expression = managed by theme. SF MapButtonDF.maxpat always had this key — copy that pattern exactly.
-21. **Flat atom list vs JSON string for pattr storage**: flat atom list [i, cc, ch, omin, omax, pmin, pmax, name_sym] is MUCH more reliable than JSON-as-single-symbol. pattr stores atoms natively; JSON string risks: very long symbol truncation, special chars, Max tokenization. Spaces in names: encode as `__SP__`.
+`loadDeviceParams()` calls `p.get("name")` on each device parameter. This returns `SAA.valueof.parameter_shortname`, NOT `parameter_longname`. If shortname != longname, JS filter `nm.indexOf("df_s") === 0` will miss parameters that have correct longname but wrong shortname.
+
+**Root cause of `df_s*=0` bug (2026-06-29):** SAA.shortname was `dfs0cc` (no underscores), while JS searched for `df_s0_cc`. Filter failed on ALL 24 params.
+
+**Fix:** Make `parameter_shortname == parameter_longname` for all storage live.numbox. Then `p.get("name")` returns the full `df_sN_field` string that JS expects.
+
+**Implication:** `setParam("df_s0_cc", val)` looks up `_paramCache["df_s0_cc"]` which is keyed by shortname. So shortname must match the key string exactly.
+
+## CRITICAL LESSONS (v5.x specific)
+1. **pattr parameter_enable=1**: appears in device.parameters. live.numbox with parameter_initial_enable=0 does NOT.
+2. **pattr middle outlet → js inlet N≠0: FORBIDDEN.** Max will flood "pattr can only connect to left inlet".
+3. **pattr mmin/mmax required for large floats.** Without them, default range 0..1 → "Invalid value" → value stored as 0 → decodePath(0) = null (path lost on reload).
+4. **pushSlot must be Task(0) deferred** inside notification callback context (onSelectedParam, onSelectedTrack). Otherwise "Changes cannot be triggered by notifications".
+5. **ensureCache() in Task body** (not at global scope) — LiveAPI not available at global init time.
+6. **autowatch=0** — production must. autowatch=1 resets SLOTS mid-session.
+7. **captureParam uses p.unquotedpath** — no path type filter. Accepts sends, mixer, device params.
+8. **Path B for unfrozen amxd**: JSON at 0x20, suffix=\x00. No dlst. Just update ptch LE@0x1C = new_filesize-0x20.
+9. **Python repack**: use `separators=(',',':')` + `ensure_ascii=True` + `.encode('ascii')`. Keep prefix/suffix as bytes, only bytearray for struct.pack_into on ptch field.
+10. **soa modification bug**: `box.get('saved_object_attributes', {})` — if key exists, returns real ref (correct). BUT earlier scripts checked `if 'saved_object_attributes' not in box: box['saved_object_attributes'] = {}` before assignment, which was fine. The REAL root cause was indent=1 + ensure_ascii=False → different encoding → different length + corrupted bytes in header region during bytearray ops.

@@ -3,7 +3,7 @@
 Дайджест. Горячие факты + карта детальных файлов. Детали — в отдельных файлах, читай по ссылке.
 
 ## Карта памяти
-- [df-master.md](df-master.md) — **DF Master.amxd** v3.5.2 + **DF Slot.amxd** v1.1 (2026-06-29): три бага исправлены. BUG1: `inactivelcdcolor.expression` в MapCCButtonDF+MapButtonDF_M → `themecolor.live_control_selection` (было пустым → тёмные кнопки). BUG2: classnamespace сброшен Max-редактором → восстановлен dsp.midieffect; Map CC работает только при ARM = ожидаемое поведение Live, нужно Monitor=In. BUG3: sentinel `"empty"` (символ) в pushState→pattr→js создавал петлю «no function empty»; заменён на `-1` (int). pattr df_data restore=[-1]. DF Slot: добавлен pattrstorage. Archive `2026-06-29-022515`.
+- [df-master.md](df-master.md) — **DF Master.amxd** v5.4-shortname-fix (2026-06-29). md5=`edf5c84ea1b2eb4c7c6ecdc1d1676e07` (77250B). 24 live.numbox SAA.valueof shortname=longname=df_sN_field. ⚠️ Live `p.get("name")` = shortname; JS ищет по shortname. MapButtonDF_M: Min→dfmin, Max→dfmax. Следующий шаг: reload + консоль `df_s*=24`.
 - [feedback-color-transparency-policy.md](feedback-color-transparency-policy.md) — ⚠️ ПОСТОЯННО: цвета M4L трогать ТОЛЬКО по явной просьбе на конкретный элемент (палитра `themecolor.*`, before/after, не перекрашивать user-цвета); alpha<1 = намеренная прозрачность пользователя, НИКОГДА не стирать. Читать перед любой правкой цвета/hex.
 - [amxd-format.md](amxd-format.md) — проверенный рецепт распаковки/пересборки `.amxd`, раскладка байт, модель Max patcher JSON, Live API практики, веб-источники.
 - [xl-performance.md](xl-performance.md) — факты по флагману: пути, объекты секции CC47, карта режимов CC30/CC47, текущее состояние (один срез, без журнала версий).
@@ -32,7 +32,7 @@
 - Wiki проекта (логика, форматы): `~/Brain/Fadercraft/wiki/concepts/` и `…/entities/`.
 
 ## Быстрые факты формата
-- `.amxd` = контейнер `ampf`: бинарный заголовок → JSON-патчер (с офсета **48**, до первого `\x00`) → встроенные JS/файлы → метачанки с checksum (`mdat`, Live её игнорит при загрузке).
+- `.amxd` = контейнер `ampf`: бинарный заголовок → JSON-патчер → встроенные JS/файлы → метачанки. **Frozen**: JSON с офсета **0x30=48** (после mx@c wrapper); **Unfrozen**: JSON с офсета **0x20=32** (прямо в ptch). Live её checksum (`mdat`) игнорит при загрузке.
 - Два поля размера зависят от длины JSON: `ptch` (u32 **LE** @`0x1C`) и `mx@c`-data (u32 **BE** @`0x2C`). При изменении JSON оба += ΔL. Инвариант: `ptch == filesize − 0x20`.
 - Хвост (suffix от `\x00`) при правке сохранять **байт-в-байт**.
 
