@@ -3,7 +3,7 @@
 Дайджест. Горячие факты + карта детальных файлов. Детали — в отдельных файлах, читай по ссылке.
 
 ## Карта памяти
-- [df-master.md](df-master.md) — **DF Master.amxd** v5.4-shortname-fix (2026-06-29). md5=`edf5c84ea1b2eb4c7c6ecdc1d1676e07` (77250B). 24 live.numbox SAA.valueof shortname=longname=df_sN_field. ⚠️ Live `p.get("name")` = shortname; JS ищет по shortname. MapButtonDF_M: Min→dfmin, Max→dfmax. Следующий шаг: reload + консоль `df_s*=24`.
+- [df-master.md](df-master.md) — **DF Master.amxd** v6.0 (2026-06-29). md5=`cdbda1ee` (338892B). 128 слотов, 8 страниц, page notes, Clear Page fixed, placeholder "page name". outlets=4, classnamespace=dsp.midieffect.
 - [feedback-color-transparency-policy.md](feedback-color-transparency-policy.md) — ⚠️ ПОСТОЯННО: цвета M4L трогать ТОЛЬКО по явной просьбе на конкретный элемент (палитра `themecolor.*`, before/after, не перекрашивать user-цвета); alpha<1 = намеренная прозрачность пользователя, НИКОГДА не стирать. Читать перед любой правкой цвета/hex.
 - [amxd-format.md](amxd-format.md) — проверенный рецепт распаковки/пересборки `.amxd`, раскладка байт, модель Max patcher JSON, Live API практики, веб-источники.
 - [xl-performance.md](xl-performance.md) — факты по флагману: пути, объекты секции CC47, карта режимов CC30/CC47, текущее состояние (один срез, без журнала версий).

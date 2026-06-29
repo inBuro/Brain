@@ -1,17 +1,48 @@
 ---
 name: df-master
-description: DF Master.amxd current state v5.4-shortname-fix (2026-06-29). 24 live.numbox df_s* SAA.valueof, shortname=longname. Path params: SAA.mmax=2e15, type=1 (float64). md5=edf5c84ea1b2eb4c7c6ecdc1d1676e07 (77250B). JS v5.4+DIAG. NEXT: reload in Live → DIAG max for df_sN_path should be 2e15 not 255.
+description: DF Master.amxd current state v6.0 (2026-06-29). 128 слотов x4 params, 8 страниц, page notes (textedit+8 Int params/page), Clear Page. md5=cdbda1ee (338892B). JS v6.0 outlets=4.
 metadata:
   type: project
 ---
 
-# DF Master.amxd — current state (2026-06-29, v5.4-shortname-fix)
+# DF Master.amxd — current state (2026-06-29, v6.0)
 
 **Location:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/DF Master.amxd`
-**JS:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/df_master.js` (v5.4+DIAG)
+**JS:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/df_master.js` (v6.0)
 **Type:** MIDI Effect (`classnamespace: dsp.midieffect`)
-**Container:** UNFROZEN. JSON at 0x20, ptch LE@0x1C = filesize-0x20 = 77178. Suffix = `\x00` (1 byte).
-**md5:** `edf5c84ea1b2eb4c7c6ecdc1d1676e07` | 77250 B | boxes=185 | lines=368
+**Container:** UNFROZEN. JSON at 0x20, ptch LE@0x1C = filesize-0x20 = 338860. Suffix = `\x00` (1 byte).
+**md5:** `cdbda1ee435249d1c7515b040691cf50` | 338892 B | boxes=742 | lines=373
+
+## Persistence Architecture (v6.0 — current)
+
+**Slots:** 128 × 4 params = 512 (df_sN_meta + df_sN_p0/p1/p2)
+**Global:** 1 (df_ch)
+**Page notes:** 8 × 8 params = 64 (df_pgN_t0..t7)
+**Total:** 577 live.numbox persist params
+
+**Meta encoding:** `(cc+1) + omin*129 + omax*13029`; max 1315928 < 2^24. mmax=2000000
+**Path encoding:** base-1e7 split into 3 Int params; each chunk mmax=9999999 < 2^24
+**Note encoding:** 3 ASCII chars per Int: `c0 + c1*128 + c2*16384`; mmax=4194304
+
+## JS Object (obj-2) — v6.0
+- `text: "js df_master.js"`, `numinlets: 3`, **`numoutlets: 4`**
+- Outlet 3 → `pg_name_edit` textedit (inlet 0): sends `"set <text>"` via renderNote()
+- `pg_name_edit` outlet 1 (text string) → `pg_name_msg ("pgname $1")` → obj-2 inlet 1
+- **NOTE_PLACEHOLDER = "page name"** — shown when NOTES[page]==''; sentinel: if received == "page name" → store ''
+
+## Clear Page fix (v6.0)
+- "clearpage" arrives as SINGLE-ATOM message (length=1) → old guard `if (a.length < 2) return` blocked it
+- Fix: check `first === "clearpage"` BEFORE the length guard; early return after handling
+- Wire: `pg_clear_btn → pg_clearpage_msg ("clearpage") → obj-2 inlet 1` — already present in patch
+
+## Max-editor clobber prevention
+- NEVER save DF Master from Max editor — resets classnamespace='box', numoutlets to declared count
+- classnamespace must be `dsp.midieffect` for ctlin to receive MIDI
+- After any Max-editor save: run repack script (classnamespace fix + JSON recompact)
+
+## Archive dir
+`~/Brain/Fadercraft/Dynamic Focus/archive/`
+Pre-edit backup: `DF Master.2026-06-29-155036.amxd` (md5 `46e5f27e`, 758452 B = Max-editor-saved indented)
 
 **MapButtonDF_M.maxpat md5:** `bfa2f07fff4590ad0a9d713b8a043f17` (shortname Min->dfmin, Max->dfmax)
 
