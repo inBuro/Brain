@@ -1,19 +1,49 @@
 ---
 name: df-master
-description: DF Master.amxd current state v6.4 (2026-06-29). md5=96a5b24b (339639B). JS v6.4 md5=77bbe340. Bugfixes: pg_numbox pie=0; pgname no cursor-reset; _restoreDone=true after retry exhaustion.
+description: DF Master.amxd current state (2026-06-30). md5=4c18fc6e (340416B). Self-contained in DF Master/ subfolder. patcher.project REMOVED (bpatcher blanking fix). classnamespace=dsp.midieffect. UNFROZEN.
 metadata:
   type: project
 ---
 
-# DF Master.amxd — current state (2026-06-29, v6.4)
+# DF Master.amxd — current state (2026-06-30)
 
-**Location:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/DF Master.amxd`
-**JS:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/df_master.js` (v6.4)
+**Location:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/DF Master/DF Master.amxd`
+**JS:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/DF Master/df_master.js`
 **Type:** MIDI Effect (`classnamespace: dsp.midieffect`)
-**Container:** UNFROZEN. JSON at 0x20, ptch LE@0x1C = filesize-0x20 = 339607. Suffix = `\x00` (1 byte).
-**md5 amxd:** `96a5b24b4f632389a8e9bdc90b24c48e` | 339639 B | boxes=742 | lines=373
-**md5 js:** `77bbe3401dbcd6737aa08a2ff4d39a6a`
-**Archive (pre-edit):** `DF Master.2026-06-29-190540.amxd` (md5 `258065e4`, 759414 B) — was Max-editor indented
+**Container:** UNFROZEN. JSON at 0x20, NO null-terminator (JSON runs to EOF). ptch LE@0x1C = filesize-0x20 = 340384.
+**md5 amxd:** `4c18fc6e2e8bc7b54ed401db7858e77c` | 340416 B | boxes=744 | lines=376
+**Archive (pre-project-removal):** `DF Master.2026-06-30-102313.amxd` (md5 `7623ef9c`, 340791 B)
+
+## Self-contained folder structure (2026-06-30)
+All deps live BESIDE the .amxd in `Max Devices/DF Master/`:
+- `DF Master.amxd` — the device
+- `df_master.js` — JS engine
+- `MapCCButtonDF.maxpat` — Learn CC button (cyan)
+- `MapButtonDF_M.maxpat` — Map Parameter button (orange)
+
+Max searches the device's own folder first → guaranteed isolation from identically-named files in User Library root.
+
+## bpatcher blanking fix (2026-06-30)
+**Root cause:** `patcher.project` with `autoorganize:1` + `contents.patchers:{}` caused Max to re-resolve bpatcher deps on a deferred pass after load. Empty patcher manifest → failed rebind → all 32 bpatcher contents went blank ~1s after render.
+**Fix:** Removed `patcher.project` key entirely from top-level patcher JSON. Normal M4L device without embedded project resolves deps from search path (own folder first, then User Library).
+**Result:** JSON went from 340759 B → 340384 B (−375 B = project object size). ptch updated accordingly.
+
+## IMPORTANT: device MOVED — user must re-add from new location
+The .amxd moved from `Max Devices/DF Master.amxd` to `Max Devices/DF Master/DF Master.amxd`. Existing instances on Live tracks reference the old path. User must:
+1. Remove old DF Master device from track
+2. In Live Browser → User Library → Max Devices → DF Master folder → drag `DF Master` to track
+3. Re-configure mappings (slot data will be lost as it's a fresh instance)
+
+## External DF Master Project DELETED (2026-06-30)
+`~/Documents/Max 9/Max for Live Devices/DF Master Project/` — removed entirely (code/, patchers/, discarded/ subfolders). Device no longer references it.
+`DF Slot Project/` is UNTOUCHED.
+
+## DF Slot / DF Input dep map (DO NOT DELETE root-level copies)
+- `DF Slot.amxd` uses: `MapCCButtonDF.maxpat` (shared), `MapButtonDF.maxpat`, `midi_learn_slot.js` — all in User Library root
+- `DF Input.amxd` has no bpatcher/js deps
+- `MapCCButtonDF.maxpat` in root stays (DF Slot needs it)
+- `MapButtonDF_M.maxpat` in root stays (parallel copy; only DF Master uses it but safe to keep)
+- `df_master.js` in root stays (DF Slot does NOT use it, but safe to keep; DF Master now uses its own copy in DF Master/ folder)
 
 ## v6.4 Bugfixes (2026-06-29)
 
@@ -30,12 +60,33 @@ metadata:
 
 **CRITICAL NOTE on original file:** The archived `258065e4` (759414 B) was saved by Max-editor (indented JSON). The new `96a5b24b` (339639 B) is compact JSON — same content, different whitespace. Both are valid UNFROZEN .amxd.
 
-## Arm blink mechanism (v6.3)
+## Arm blink mechanism (v6.3 + 2026-06-30 visual-state fix)
 - `MapCCButtonDF.maxpat` и `MapButtonDF_M.maxpat` — оба содержат metro+toggle+gate механизм мигания, работающий от `ccArm`/`paramArm` флагов из JS outlet 0
 - **Баг**: при нажатии Map CC кнопки на контроллере — сама кнопка шлёт CC → `handleCC` захватывал его немедленно → `learnCCSlot=-1` → мигание не успевало начаться
 - **Фикс CC**: `_armCCTime = Date.now()` при армировании; в `handleCC` игнорировать CC если `elapsed < 300ms`
 - **Баг Param**: `armParam` вызывал `pollSelectedParam()` синхронно → если параметр уже выбран, захват происходил до отрисовки blink
 - **Фикс Param**: `pollSelectedParam()` отложен через Task(250ms) после renderAbsSlot
+
+### Visual-state bug fix v2 (2026-06-30) — CURRENT
+**Реальная визуальная семантика кнопок**: mapped=1 → lcdcolor alpha=1 (FILLED, solid), mapped=0 → alpha=0 (OUTLINE, border ring). Blink всегда alpha=1. Resting outline (alpha=0) = intentional design.
+
+**MapButtonDF_M.maxpat** (md5=`ff733fb8`, 21672B | boxes=61, lines=71):
+- `gate_map_rest` (gate): arm=0 (sel_pa outlet 1, order=4) → открыт; arm=1 (sel_pa outlet 0) → закрыт
+- `in_mapped` → `gate_map_rest` inlet 1 → `sel_lm` (sel 0 1):
+  - outlet 0 (unmapped) → `msg_tok_otln` ("control_selection") → `lcol_otln` → `route_otln` → `msg_lcd_otln` ("lcdcolor $1 $2 $3 0.") → obj-14
+  - outlet 1 (mapped)   → `msg_tok_fill` ("control_selection") → `lcol_fill`  → `route_fill`  → `msg_lcd_fill` ("lcdcolor $1 $2 $3 1.") → obj-14
+- Удалены `msg_pr_hollow`, `msg_pr_filled` (invisible bgcolor orphans)
+
+**MapCCButtonDF.maxpat** (md5=`b6ac6c5f`, 52869B | boxes=42, lines=52):
+- `gate_cc_rest` (gate): arm=0 (sel_cc_pa outlet 1, order=3) → открыт; arm=1 (sel_cc_pa outlet 0) → закрыт
+- `cc_inlet_xshow` (0=unmapped, 1=mapped) → `gate_cc_rest` → `sel_xshow` (sel 0 1):
+  - outlet 0 (unmapped) → `bl_outline` ("lcdcolor 0.011765 0.764706 0.835294 0.") → obj-14
+  - outlet 1 (mapped)   → `bl_filled`  ("lcdcolor 0.011765 0.764706 0.835294 1.") → obj-14
+- `msg_rst_tog_cc` ("set 0"): bl_rsel outlet 0 → reset bl_tog при blink=0
+
+**Архивы:**
+- Pre v1: `MapButtonDF_M.2026-06-30-093844.maxpat` (md5=`e763d55c`), `MapCCButtonDF.2026-06-30-093844.maxpat` (md5=`42b8ca04`)
+- Pre v2: `MapButtonDF_M.2026-06-30-094557.maxpat` (md5=`aba5c62b`), `MapCCButtonDF.2026-06-30-094557.maxpat` (md5=`42eed075`)
 
 ## Persistence Architecture (v6.0 — current)
 

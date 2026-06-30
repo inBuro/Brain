@@ -1,0 +1,9 @@
+Sends Follower turns track sends and return buses into modulation sources.
+Sends Follower includes two devices.
+Track — follows the send amount of a single track.
+One source can control up to eight parameters, each with its own range and polarity.
+Return — follows the activity of an entire return bus.
+In Peak mode, it follows the highest send value.
+In Total mode, it follows the combined send amount from all tracks.
+Fadercraft Sends Follower.
+Stay in the music.

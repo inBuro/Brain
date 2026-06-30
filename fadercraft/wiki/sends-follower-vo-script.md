@@ -26,7 +26,7 @@ Peak mode follows the highest send.
 
 Total mode follows the combined activity of every track sending to that bus.
 
-Instead of adding more effect, you're shaping its behavior.
+Instead of increasing the send level, you're shaping the effect's behavior.
 
 One source can control up to 8 parameters, each with its own range and polarity.
 

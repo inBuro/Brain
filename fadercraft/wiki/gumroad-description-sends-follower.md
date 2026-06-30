@@ -13,7 +13,11 @@ store: https://fadercraft.com (Gumroad)
 
 > **Status (2026-06-27):** copy locked against the [[sends-follower-vo-script|VO script]] and re-aligned to the voice guide. Decisions in: licensing = one key / 3 activations (mirrors Control XL, unenforced); bundle = two devices + Quick Start Guide, **no demo .als** (Kirill will flag if that changes); WHO IT'S FOR section **cut**; bundled doc renamed Readme → **Quick Start Guide** (setup only — no effects-mapping promise in the listing). Remaining gate before publish: SF demo video + a final Vale/LanguageTool pass.
 
-**Last updated**: 2026-06-27
+> **VERIFIED LIVE 2026-06-30** (Kirill's paste + browse scrape of the published listing): §1 was confirmed to match the live listing verbatim, so this section is the canon for cross-surface consistency (VO ↔ site ↔ Gumroad). **Two pending live edits — the doc is now ahead of the live listing:**
+> 1. **Behavior line updated to new canon** (`Instead of increasing the send level, you're shaping the effect's behavior.`) — the **live listing still shows the old line** (`adding more effect… shaping its behavior`); re-edit on Gumroad. Matches site + VO.
+> 2. **REFUNDS** is NOT in the description body by design — it lives in **Gumroad's separate refund-policy section** (Kirill, 2026-06-30). The block below is kept here as the canonical refund copy for that section. Resolved, no longer a delta.
+
+**Last updated**: 2026-06-30
 
 ---
 
@@ -29,7 +33,7 @@ Sends Follower turns send levels into modulation sources · Max for Live
 ────────────────────────────
 **WHAT IT DOES**
 
-Instead of adding more effect, you're shaping its behavior. Sends Follower turns send levels into modulation sources. One source can control up to 8 parameters, each with its own range and polarity.
+Instead of increasing the send level, you're shaping the effect's behavior. Sends Follower turns send levels into modulation sources. One source can control up to 8 parameters, each with its own range and polarity.
 
 Two devices, two ways to work:
 
@@ -66,7 +70,7 @@ Gumroad emails a new download link whenever a new version ships. No subscription
 Stuck, or found a bug? support@fadercraft.com — replies within 48 hours.
 
 ────────────────────────────
-**REFUNDS**
+**REFUNDS** *(lives in Gumroad's separate refund-policy section, not the description body — canonical copy for that field.)*
 
 Refunds within 14 days if it doesn't work as described. Email support@fadercraft.com with your license key and what went wrong. Full policy: https://fadercraft.com/refund.
 

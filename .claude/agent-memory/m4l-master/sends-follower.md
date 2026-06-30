@@ -7,6 +7,16 @@ metadata:
 
 # Sends Follower — device facts (m4l-master)
 
+## ✅ qmetro 20→33 оптимизация (CPU) — 2026-06-30 (CURRENT)
+Профайлер Live показал `Wires::SendMessage` hot path: `ref.get("value")` × N_треков × 50/сек. Change-gate на `outlet` уже стоял (2026-06-26), но read-поллинг LiveAPI продолжался каждый тик.
+- **Что сделано:** `qmetro 20` (obj-35) → `qmetro 33` в ОБОИХ патчах (Path A, JSON в-байт, sufix идентичен). -40% LiveAPI-вызовов за тик.
+- **Текущее состояние на диске:** оба devайса UNFROZEN в User Library (Return=60099 B, Track=67783 B). dist/build-v1.0/ — старые frozen builds, НЕ обновлены.
+- **CURRENT md5:** Return `e981fc0a`, Track `b503fbc9`; JS-файлы: `sends_follower.js` `f0eb7d86`, `sends_follower_track.js` `46d16424`
+- **Архивы (User Library/Archive/):** `Sends Follower – Return.2026-06-30-150644.amxd`, `Sends Follower – Track.2026-06-30-150644.amxd`, `sends_follower.2026-06-30-150644.js`, `sends_follower_track.2026-06-30-150644.js`
+- **Ограничение:** `ref.get("value")` всё ещё идёт каждый тик (pull-polling). Полная оптимизация требует `live.observer` на send-параметры (архитектурная переделка). qmetro 33 = прагматичный максимум без рефактора.
+- **Поведенческих изменений нет:** задержка follow-response ~33 мс (было ~20 мс) — на слух неотличимо.
+- **Тест:** remove+re-drag оба девайса в Live → sample Process Live → `Wires::SendMessage` должен снизиться (~40% меньше вызовов в простое).
+
 ## ✅ FROZEN RELEASE BUILD — 2026-06-26 (в `dist/build-v1.0/`)
 Оба девайса заморожены пользователем в Max/Live GUI и скопированы в релизную папку. Headless-заморозка через скрипт НЕ потребовалась — файлы в User Library уже содержали корректные frozen контейнеры.
 

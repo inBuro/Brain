@@ -1,0 +1,10 @@
+Sends Follower turns send levels into modulation sources.
+Instead of increasing the send level, you're shaping the effect's behavior.
+One source can control up to 8 parameters, each with its own range and polarity.
+Track follows the send amount of a single track.
+Choose Send A, B, C, or D. Or switch to Manual for mouse or MIDI control.
+Return follows the activity of an entire return bus.
+Peak mode follows the highest send.
+Total mode follows the combined activity of every track sending to that bus.
+Fadercraft Sends Follower.
+Stay in the music.

@@ -21,6 +21,7 @@ Read at the start of every task. One line per memory file.
 - [wow-2026-06-19-25.md](wow-2026-06-19-25.md) — week-over-week 06-19→25 vs 06-12→18: clean external 44 vs 57 sess (−23%; raw 61v59 was TH owner-noise mirage); reddit 30→8 (−73%) is the story; maxforlive 3→8 ↑; NEW threads/youtube/facebook channels; buy_click 1 / purchase 0 this wk; reusable TH-direct owner-noise strip method
 - [day-2026-06-21-22.md](day-2026-06-21-22.md) — full 2-day report 06-21/22 ICT: 12 external sessions, reddit #1 (5 sess), youtube 2, direct 3, maxforlive 1; 3RD-EVER buy_click (06-22 09:08 ICT, US Desktop Safari, reddit introduction_post, entry /free-modes → / → buy, no purchase); owner-noise TH cluster 14:03-14:55 on 06-22 (4 unflagged sessions, orphaned distinct_ids)
 - [day-2026-06-28.md](day-2026-06-28.md) — 06-28: 6 clean sess (4 bot stripped), 2 buy_clicks (FR Mobile/reddit introduction_post, no purchase), NEW utm_campaign=control_xl_presentation via YouTube (IE/Desktop, unknown video), FIRST-EVER Google organic referral (HU/Desktop/Safari)
+- [day-2026-06-29-30.md](day-2026-06-29-30.md) — 06-29: 2 sess, maxforlive TR highly engaged (demo×5, video×2, footer_cta) but no buy_click; 06-30 (partial): reddit burst at 05:00 ICT (NO/US/GB), 3 clean sess, 0 buy_click, faq_open: top Q = existing Live Set compat + MK1/MK2 compat + M4L req; new geo Norway
 
 - [pricing-tiers.md](pricing-tiers.md) — canonical price ladder by product scope: Micro $9 / Utility $14 / Workflow $24 / Flagship $39 / Suite $59–79; reference for revenue/conversion modeling
 

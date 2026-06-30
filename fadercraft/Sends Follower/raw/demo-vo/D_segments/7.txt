@@ -1,1 +1,0 @@
-In Total mode, it follows the combined send amount from all tracks.

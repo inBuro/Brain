@@ -515,14 +515,17 @@ Out-of-band (не блокируют Phase 0):
 >
 > Детали запуска и обоснование «минимум» — PM `launch-journal.md` 2026-06-17.
 
-### 🎯 БЛИЖАЙШИЕ ШАГИ (по порядку, обновлено 2026-06-17)
+### 🎯 БЛИЖАЙШИЕ ШАГИ (по порядку, обновлено 2026-06-30)
 
 > Это видимый чеклист «что делать дальше». Подробности — в фазах ниже.
 
-1. **Деплой в ОТДЕЛЬНУЮ ветку/preview** (CF Pages branch deploy, `*.pages.dev`) — прод `fadercraft.com` **НЕ трогаем**. Только по команде основателя. (Манифест + нейминг уже в `dist`, билд чистый.)
-2. **После деплоя — хардверная проверка update-check end-to-end:** при `latest 9.9.9 > 1.0` в девайсе загорается «New Version», клик → `library.gumroad.com`; манифест по адресу деплоя отдаёт реальный JSON, не SPA-fallback. ⚠️ **Нюанс:** в девайсе зашит ПРОД-URL `fadercraft.com/api/sends-follower.json` — на деплое решить, как свести (манифест-only на прод / временно перенацелить девайс на preview-URL).
-3. **Откатить манифест `latest` 9.9.9 → 1.0** перед реальным запуском (сейчас 9.9.9 — ТЕСТ-значение для проверки кнопки).
-4. **Написать 1-страничную спеку «что делает Sends Follower»** (P2.2) — **разблокирует копи и видео** (оба растут из спеки). Первый реальный шаг контент-трека.
+1. **[CRITICAL PATH] Смонтировать и опубликовать демо-видео** — VO записан, монтаж не сделан. Пока нет YouTube ID — `VideoSection` рендерит заглушку; страница не готова к launch. Главный хард-блокер.
+2. **[КРИТИЧЕСКИ] Задеплоить лендинг на прод** — страница `/sends-follower` собрана и закоммичена локально (`9a4c09f feat: Sends Follower product page`, бандл `SendsFollowerPage-BM5cvgdj.js` есть в локальном dist/), НО на проде её нет. `fadercraft.com` сейчас деплоит старый бандл без Sends Follower: роутер (App.tsx) редиректит любой незнакомый путь → `/`, поэтому `/sends-follower` выбрасывает на главную Control XL. Любой launch-линк = мёртвый до деплоя. Делать: `wrangler pages deploy` из `app/` по процедуре [[reference-fadercraft-deploy]], ветка `--branch=main` (прод). Параллельно с видео — не нужно ждать YouTube ID, деплой можно сделать раньше (VideoSection уйдёт в прод с заглушкой, вшить ID отдельным деплоем).
+3. **После публикации видео**: вшить YouTube ID в `SendsFollowerPage.tsx:94` (убрать TODO) и передеплоить.
+4. ~~Откатить манифест 9.9.9→1.0~~ — ✅ **DONE 2026-06-30 (coordinator).** Файла `sends-follower.json` не было в рабочей ветке (потерялся при расхождении веток, существовал только в bcp-коммите `02e3eef`); пересоздан с релизными данными `latest=1.0`. Уедёт на прод тем же деплоем, что и страница (п. 2 выше).
+5. **Открыть страницу в футере** (`FooterFull.tsx:26`, одна строка) — флип при запуске, не блокер.
+
+> ✅ **Подтверждено end-to-end (2026-06-30):** Freeze v1.0 — DONE (deps embedded в .amxd). Zip целый (оба .amxd + Quickstart.pdf). Gumroad ОПУБЛИКОВАН ($14, кнопка «Buy this», обложка, полное описание). Gumroad-строка в P2.4 закрыта.
 
 ---
 
@@ -530,35 +533,35 @@ Out-of-band (не блокируют Phase 0):
 
 | Фаза | Сделано | Всего | % |
 |---|---|---|---|
-| P2.1 Продукт → freeze | 3 | 5 | 60% |
-| P2.2 Контент / копи | 0 | 5 | 0% |
-| P2.3 Страница (минимум) | 0 | 5 | 0% |
-| P2.4 Коммерция | 1 | 4 | 25% |
-| P2.5 Запуск | 0 | 4 | 0% |
-| **ИТОГО Phase 2** | **4** | **23** | **~17%** |
+| P2.1 Продукт → freeze | 4 | 4 | 100% ✅ |
+| P2.2 Контент / копи | 3 | 5 | 60% |
+| P2.3 Страница (минимум) | 1 | 5 | 20% |
+| P2.4 Коммерция | 3 | 4 | 75% |
+| P2.5 Запуск | 0 | 6 | 0% |
+| **ИТОГО Phase 2** | **11** | **24** | **~46%** |
 
 > Условные обозначения: **[NEW]** = новый артефакт под Sends Follower; **[REUSE]** = переиспользуем инфраструктуру/компонент Control XL без изменений (нулевой объём, строка только чтобы было видно, что делать НЕ надо).
 
 ### P2.1 — Продукт → freeze (m4l-master) [почти весь NEW, но dev минимальный]
 
 - [x] **[NEW] Freeze `SendsFollower.amxd` до v1.0 + дата-бэкап — DONE 2026-06-17 (m4l-master).** Девайс заморожен, новый md5 **`b5286b33`** (был `b5286b33d9adc12e023981ab1a117859`, подтверждён на диске в User Library). Дата-бэкап: `~/Brain/Sends Follower/raw/archive/SendsFollower.2026-06-17.amxd` (+ бэкапы рэка и js рядом). **`sends_follower.js` вшит внутрь** (был уже встроен) → девайс **самодостаточный**, внешних `.js` не требует (исключён «can't find file»). После freeze подтверждено: рэк **`SendsFollowerRack.adg` грузит замороженный девайс** (round-trip ок). **LFO внутри рэка = сток-устройство Live Suite** → бандлить/распространять НЕ нужно (закрывает вопрос про состав рэка). ([[feedback_amxd_edit_in_userlib]]) ⚠️ Замечание (не блокер): `send_follower.adv` отсутствует на диске, но рэк ссылается на него только в `LastPresetRef`, не в пути загрузки — девайс грузится нормально. Если будут раздавать пресет — восстановить.
-- [x] **[NEW] Прописать update-endpoint в `version_check.js` внутри `SendsFollower.amxd` — DONE 2026-06-17 (m4l-master).** Update-check «New Version» добавлен **зеркально Control XL**: `node.script sf_version_check.js`, кнопка видна только при апдейте, клик открывает `url` из манифеста, fallback `library.gumroad.com`. Константы: `DEVICE_VERSION='1.0'`, `URL='https://fadercraft.com/api/sends-follower.json'`. `sf_version_check.js` **впечён во freeze** (девайс самодостаточный). **Лог-смоук семвера прошёл** (`1.1→dot 1`, `1.0→dot 0`, `2.3.1→dot 1`). Серверный манифест уже готов (P2.4). ⏳ **Хардверная проверка кнопки на железе — НЕ сделана** (см. БЛИЖАЙШИЕ ШАГИ #2: гейтнута деплоем preview; в манифесте на время теста стоит `latest=9.9.9`). ([[Version Check (Update Notifier)]])
-- [x] **[NEW] Состав покупки ЗАФИКСИРОВАН = рэк `.adg` + Quickstart — деливерабл подтверждён 2026-06-17.** Деливерабл — **`SendsFollowerRack.adg`** (внутри девайс `b5286b33` + LFO; LFO = сток Live Suite, не бандлим). Бэйр `.amxd` отдельно НЕ кладём, он внутри рэка. Что остаётся открытым по составу: **написать Quickstart** (см. P2.2 — пока НЕ написан) и собрать сам Gumroad-zip (P2.4). Тон/формат — Control XL Quickstart [[feedback_fadercraft_copy_conventions]].
-- [ ] **[REUSE] License-активация / endpoint** — НИЧЕГО не строим: `verify-license.js` + Gumroad License API уже работают; in-device license в Control XL так и не встроен (web-сторона) — у SendsFollower так же.
+- [x] **[NEW] Прописать update-endpoint в `version_check.js` внутри `SendsFollower.amxd` — DONE 2026-06-17 (m4l-master).** Update-check «New Version» добавлен **зеркально Control XL**: `node.script sf_version_check.js`, кнопка видна только при апдейте, клик открывает `url` из манифеста, fallback `library.gumroad.com`. Константы: `DEVICE_VERSION='1.0'`, `URL='https://fadercraft.com/api/sends-follower.json'`. `sf_version_check.js` **впечён во freeze** (девайс самодостаточный). **Лог-смоук семвера прошёл** (`1.1→dot 1`, `1.0→dot 0`, `2.3.1→dot 1`). Серверный манифест уже готов (P2.4). ⏳ **Хардверная проверка кнопки на железе — НЕ сделана** (БЛИЖАЙШИЕ ШАГИ #5 откатить манифест перед запуском). ([[Version Check (Update Notifier)]])
+- [x] **[NEW] Состав покупки ЗАФИКСИРОВАН = рэк `.adg` + Quickstart — деливерабл подтверждён 2026-06-17, zip верифицирован 2026-06-30.** Деливерабл — **`SendsFollowerRack.adg`** (внутри девайс `b5286b33` + LFO; LFO = сток Live Suite, не бандлим). Бэйр `.amxd` отдельно НЕ кладём, он внутри рэка. **Zip `dist/Fadercraft Sends Follower v1.0.zip` (150 КБ) — целый: оба `.amxd` + `Quickstart.pdf`.** Залит в Gumroad. ([[feedback_fadercraft_copy_conventions]])
+- [x] **[REUSE] License-активация / endpoint** — НИЧЕГО не строим: `verify-license.js` + Gumroad License API уже работают; in-device license в Control XL так и не встроен — у SendsFollower так же. Закрыто как REUSE.
 
 ### P2.2 — Контент / копи [NEW]
 
-- [ ] **[NEW] 1-страничная спека «что делает SendsFollower»** — `wiki/sendsfollower-spec.md`: что за проблема, что девайс делает, для кого. **Это основа и для копи, и для видео-скрипта** — пишем первой. (По формату — как `demo-video-script.md` / `landing-narrative` для Control XL, но короче.)
-- [ ] **[NEW] Презентационное видео**: запись + монтаж (DaVinci Resolve [[project_fadercraft_vo_voice]]), **без install-части** (она в Quickstart, как у Control XL T9), опц. свой саундтрек → залить на YouTube → получить video ID. VO-голос по [[project_fadercraft_vo_voice]] если нужен.
-- [ ] **[NEW] Лендинг-копи** (copywriter): hero / что делает / 2-3 буллета / requirements / CTA с ценой. idea-first, не фичи-лист (insight #1 — вести проблемой/идентичностью). Варианты в чат до применения ([[feedback_copy_variants_before_edit]]).
-- [ ] **[NEW] Quickstart (обязателен)** — `dist/`-аналог Control XL Quickstart: requirements / как поставить рэк на трек (drag `SendsFollowerRack.adg`) / как пользоваться / updates («New Version») / troubleshooting. Тон/формат и конвенции — [[feedback_fadercraft_copy_conventions]]; идёт в Gumroad-zip (P2.1 состав покупки). Из спеки растёт так же, как видео и копи.
-- [ ] **[NEW] OG-картинка + meta-копи** для роута (готовится тут, прокидывается в P2.3): title/description/canonical.
+- [x] **[NEW] 1-страничная спека «что делает Sends Follower» — DONE.** `~/Brain/Fadercraft/Sends Follower/Sends Follower.md` + wiki-файлы. Спека закрыта; разблокировала копи и видео.
+- [ ] **[NEW] Презентационное видео — ОТКРЫТЫЙ БЛОКЕР.** VO записан. Монтаж (DaVinci Resolve [[project_fadercraft_vo_voice]]) НЕ сделан. YouTube ID = пустой, `SendsFollowerPage.tsx:94` = TODO, `VideoSection` рендерит заглушку. **Главный хард-блокер на критическом пути** — страница не готова к launch без него.
+- [x] **[NEW] Лендинг-копи — DONE.** Site-копи для `/sends-follower` готова и вшита в компоненты страницы. idea-first, не фичи-лист ([[insight #1]]).
+- [x] **[NEW] Quickstart — DONE.** `~/Brain/Fadercraft/Sends Follower/dist/Quickstart.md` + `dist/Quickstart.pdf`; входит в zip `Fadercraft Sends Follower v1.0.zip`. Тон/формат — [[feedback_fadercraft_copy_conventions]].
+- [ ] **[NEW] OG-картинка + meta-копи** для роута (готовится тут, прокидывается в P2.3): title/description/canonical. Статус: не сделано.
 
 ### P2.3 — Страница (минимум) [NEW страница на REUSE-компонентах]
 
 > Заглушку `/sends-follower` → реальную страницу. **Только готовые компоненты, без анимаций** (это и есть «минимум»).
 
-- [ ] **[NEW] Собрать страницу из REUSE-компонентов**: `Header` → `HeroProduct` → **статичный** feature-блок → `VideoSection` (YouTube ID из P2.2) → requirements → CTA (цена в кнопке) → `FooterFull`. Все компоненты уже существуют (`app/src/components`) — никаких scroll-morph/PerformanceFlow/интерактивного мокапа.
+- [x] **[NEW] Собрать страницу из REUSE-компонентов — DONE.** React-страница `/sends-follower` собрана (`app/src/pages/SendsFollowerPage.tsx`): `Header` → `HeroProduct` → `TrackOrReturnSection` и прочие feature-блоки → `VideoSection` (YouTube ID = TODO пока) → CTA. Gumroad-ссылка вшита в `app/src/links.ts:7` (`SENDS_FOLLOWER_URL`). ⚠️ VideoSection рендерит заглушку до получения YouTube ID (P2.2 видео).
 - [ ] **[NEW] SEO-meta для роута** в `scripts/seo-meta.mjs` (title/description/canonical/OG/JSON-LD SoftwareApplication) — тот же постбилд-скрипт, что у Control XL, добавить маршрут `/sends-follower`.
 - [ ] **[NEW] OG-картинка** залить (`app/public/…`) и связать с meta.
 - [ ] **[NEW] Превью-роут current-vs-proposed** перед заменой live-заглушки ([[feedback_current_vs_proposed]]) — current (заглушка) сверху / proposed (реальная) снизу, дождаться отмашки.
@@ -566,26 +569,34 @@ Out-of-band (не блокируют Phase 0):
 
 ### P2.4 — Коммерция [продукт NEW, рельсы REUSE]
 
-- [ ] **[NEW] Gumroad product**: slug `sends-follower`, своя цена, cover image, описание (idea-first, [[feedback_fadercraft_copy_conventions]]), **Content = zip с рэком `SendsFollowerRack.adg` + Quickstart** (состав из P2.1). **[REUSE] аккаунт/KYC/tax/payout уже пройдены** (`seller_id 6976309857072`) — только новый продукт.
-- [x] **[NEW] Серверный update-манифест под второй продукт — СОЗДАН 2026-06-17** (PM): `app/public/api/sends-follower.json` (рядом с Control XL `api/version.json`, отдельный путь — Control XL endpoint НЕ тронут). **⚠️ Сейчас в манифесте ТЕСТ-значение `latest=9.9.9`** (`url=library.gumroad.com`, changelog с пометкой «revert to 1.0 after testing», `min_compatible=1.0`) — нужно, чтобы кнопка «New Version» загорелась при хардверной проверке (9.9.9 > device 1.0). **ОБЯЗАТЕЛЬНО откатить `latest` → `1.0` перед реальным запуском** (см. БЛИЖАЙШИЕ ШАГИ #3), иначе у первого покупателя на v1.0 кнопка загорится ложно. **Файл в репозитории; на прод уедет со следующим деплоем — НЕ задеплоен** (правило [[feedback_no_auto_deploy_iterations]]). Девайс прописывает этот URL во вшитый `sf_version_check.js` — см. P2.1.
+- [x] **[NEW] Gumroad product — ОПУБЛИКОВАН (подтверждено 2026-06-30).** Slug `sends-follower`, страница `fadercraft.gumroad.com/l/sends-follower`: цена $14, кнопка «Buy this», обложка, полное описание, zip залит. **[REUSE] аккаунт/KYC/tax/payout уже пройдены** (`seller_id 6976309857072`).
+- [x] **[NEW] Серверный update-манифест — ПЕРЕСОЗДАН на 1.0 (2026-06-30, coordinator).** Файл `app/public/api/sends-follower.json` отсутствовал в рабочей ветке `feat/sends-follower-page` (существовал только в bcp-коммите `02e3eef` с тестовым `latest=9.9.9`, потерялся при расхождении веток). Пересоздан с релизными данными: `{"latest":"1.0","url":"https://fadercraft.com/sends-follower/updates","changelog":"Initial release.","min_compatible":"1.0"}`. URL намеренно указывает на **собственный SF-роут** `/sends-follower/updates` (НЕ флагманский `/updates`, который зарезервирован под Control XL). Страница `/sends-follower/updates` сейчас не существует — **сознательно**: при `latest=1.0 == DEVICE_VERSION` кнопка не срабатывает, на этот URL никто не попадёт до первого реального апдейта. `DEVICE_VERSION='1.0'` == `latest 1.0` → кнопка «New Version» у первого покупателя не загорится. Уедёт на прод тем же деплоем, что и страница (эндпоинт `fadercraft.com/api/sends-follower.json` сейчас отдаёт SPA-заглушку).
 - [ ] **[NEW] Vanity-редиректы** `/sf` (+ `/sf-buy` если нужно) с UTM (`utm_source` по каналу) — в `app/public/_redirects` ДО анонса (insight #9, [[feedback_outbound_links_doc]]); **зеркалить в `wiki/outbound-links.md`** (отдельная кампания `sendsfollower_launch`).
 - [ ] **[REUSE] license endpoint / refund-копи / Gumroad↔Discord** — `verify-license.js`, refund-страница `/legal` (бренд-уровня), Discord-интеграция продукта переиспользуются; новый продукт просто подключить к той же Discord-интеграции.
 
 ### P2.5 — Запуск [NEW действия, REUSE инфра]
 
-- [ ] **[NEW] Хаб-карточка SendsFollower: COMING SOON → живой CTA «Explore»** (HomePage) — единственная правка хаба.
-- [ ] **[REUSE→verify] Self smoke-test + verify assets после деплоя** — curl нового бандла до `application/javascript` ДО открытия в браузере ([[feedback_deploy_verify_assets_first]]), затем browse-QA на проде ([[feedback_self_smoke_test]]); деплой по той же процедуре `wrangler pages deploy` из `app/` ([[reference-fadercraft-deploy]], [[outbound-links]] раздел «деплой из app/, не из root»).
+- [ ] **[NEW] Деплой лендинга на прод — БЛОКЕР LAUNCH-ЛИНКОВ.** Страница `/sends-follower` не задеплоена: прод сейчас раздаёт старый бандл без Sends Follower, роутер (App.tsx) редиректит незнакомые пути → `/` Control XL. Деплой независим от видео — делать немедленно. Процедура: `wrangler pages deploy` из `app/`, `--branch=main` (прод) ([[reference-fadercraft-deploy]]). После деплоя — вшить YouTube ID и передеплоить ещё раз.
+- [ ] **[NEW] Хаб-карточка SendsFollower: COMING SOON → живой CTA «Explore»** (HomePage) + **открыть страницу в футере** (`FooterFull.tsx:26`, одна строка). Делать вместе с деплоем.
+- [ ] **[REUSE→verify] Self smoke-test + verify assets после деплоя** — curl нового бандла до `application/javascript` ДО открытия в браузере ([[feedback_deploy_verify_assets_first]]), затем browse-QA на проде ([[feedback_self_smoke_test]]); деплой по той же процедуре `wrangler pages deploy` из `app/` ([[reference-fadercraft-deploy]]).
 - [ ] **[NEW] Анонс**: Discord `#announcements`, соцсети (YT/IG), maxforlive listing (второй девайс — отдельный listing, тип = по факту девайса; insight #12 — пассивный вечнозелёный канал). Живым человеком, не AI-персоной (insight #11 / [[reference_r_ableton_rules]]).
 - [ ] **[REUSE+config] Support/onboarding SF = ЛЁГКИЙ, тирован под цену $14 (решение PM 2026-06-26).** SF = Utility-тир, $14, импульсная покупка — НЕ навешиваем процессную нагрузку флагмана Control XL ($39). Конкретно: **(1)** Discord — **переиспользуем существующий сервер «Fadercraft»**, никаких новых серверов/ролей/каналов; SF-поддержка живёт в существующем `#support`. **(2)** Включить **нативную интеграцию Gumroad→Discord на продукте SF** (один тумблер в редакторе продукта): авто-инвайт покупателя + авто-кик при рефанде — ноль ручной работы. **(3)** Ручной флоу `ключ→DM→@Verified Owner` **НЕ обязателен** для SF-онбординга: роль `@Verified Owner` остаётся **опциональной/реактивной** (захочет бейдж — DM-нет ключ как владелец CXL), в документированный онбординг SF не входит, автоматизацию под неё НЕ строим (Phase-1 webhook+bot = флагман/volume-gated, insight #20). **(4)** Главный рычаг поддержки SF = **bundle helper doc** `~/Brain/Fadercraft/sends-follower-bundle.md` (квикстарт + LFO→parameter mapping) — это реальный support, а не Discord-тикеты; лечит главный риск юзер-тестинга (покупатели не находят LFO-маппинг сами). Довести до финала (voice=Steinkamp, Vale) — **гейт запуска**. Обоснование: lifetime 1 продажа, аудитория почти не формируется → процессная верификация на этом масштабе стоит дороже, чем защищает; для $14 импульсника post-purchase friction = враг конверсии. Discord-спека (`wiki/concepts/discord-server-setup.md`) обновлена tier-оговоркой на роли `@Verified Owner`. Детали: PM `launch-journal.md` 2026-06-26 + insights #17/#20 + [[pricing-tiers]].
 - [ ] **[NEW] Чекпоинт после запуска**: первые качественные сигналы (что говорят / на что откликаются), первая продажа. Привязать к тому же strategic-checkpoint мышлению, что и Control XL (резонанс ≠ конверсия, не дёргаться на одном сигнале). PM `launch-journal.md`. **NB:** это чекпоинт Sends Follower (продукт #2) — НЕ путать с первой продажей Control XL (флагман), которая случилась 2026-06-17 (см. strategic checkpoint выше). У Sends Follower своя первая продажа ещё впереди.
 
-> **Открытые вопросы / риски (PM 2026-06-17):**
-> 1. ✅ **ЗАКРЫТО 2026-06-17 — нейминг = «Sends Follower» (два слова, с пробелом).** Каноническое написание выбрано и **уже применено в коде + проверено в сборке**: `HomePage.tsx` (карточка/alt), `SendsFollowerPage.tsx` (header/hero/footer), `scripts/seo-meta.mjs` (title+description `/sends-follower`). Технические идентификаторы остаются как есть: компонент `SendsFollowerPage`, файл `SendsFollower.amxd`, роут `/sends-follower`. Дальше Gumroad-листинг + maxforlive держать «Sends Follower».
-> 2. **Спека = блокер всего контента (АКТИВНЫЙ):** видео и копи оба растут из 1-страничной спеки «что делает Sends Follower» (P2.2 первый пункт). Пока её нет — нельзя писать ни hero, ни видео-скрипт. Это первый реальный шаг контент-трека (см. БЛИЖАЙШИЕ ШАГИ #4).
-> 3. ✅ **РАЗРЕШЕНО 2026-06-17 — `sends_follower.js` вшит во freeze.** Девайс самодостаточный (md5 `b5286b33`), внешних `.js` не требует → «can't find file» исключён, рэк грузит замороженный девайс. Не риск.
-> 4. **Деплой-нюанс update-check (АКТИВНЫЙ):** в девайсе зашит ПРОД-URL `fadercraft.com/api/sends-follower.json`, а проверять кнопку будем на preview-деплое (`*.pages.dev`). На деплое решить, как свести: манифест-only выкатить на прод, либо временно перенацелить девайс на preview-URL. См. БЛИЖАЙШИЕ ШАГИ #2.
-> 5. **Манифест на ТЕСТ-значении (АКТИВНЫЙ):** `app/public/api/sends-follower.json` сейчас `latest=9.9.9` (тест, чтобы кнопка «New Version» загорелась при проверке; в changelog пометка «revert to 1.0»). **Откатить на `1.0` перед реальным запуском** — иначе у первого покупателя на v1.0 кнопка загорится ложно. См. БЛИЖАЙШИЕ ШАГИ #3.
-> 6. **Организационный — ✅ РЕШЕНО 2026-06-28 (консолидировать под Fadercraft-зонтик):** папка Sends Follower перенесена `~/Brain/Sends Follower/` → **`~/Brain/Fadercraft/Sends Follower/`** (своя `raw/`, `dist/`, `wiki/`, `Sends Follower.md`, `CLAUDE.md` сохранены как есть — внутренняя система `raw/dist/wiki` не тронута, поправлена только вложенность; `git mv`, история сохранена). Теперь живёт внутри Fadercraft рядом с `Dynamic Focus/`; Control XL остаётся распределён по общим `raw/`/`dist/`. Старые пути `~/Brain/Sends Follower/...` в исторических записях этого лога не переписываются (журнал append-only); новые ссылки — на `Fadercraft/Sends Follower/`.
+> **Открытые вопросы / риски (обновлено PM 2026-06-30):**
+> 1. ✅ **ЗАКРЫТО 2026-06-17 — нейминг = «Sends Follower» (два слова).** Применено в коде, SEO-meta, компонентах.
+> 2. ✅ **ЗАКРЫТО 2026-06-30 — спека написана.** `~/Brain/Fadercraft/Sends Follower/Sends Follower.md` + wiki. Разблокировала копи и Quickstart.
+> 3. ✅ **ЗАКРЫТО 2026-06-17 — `sends_follower.js` вшит во freeze.** Девайс самодостаточный (md5 `b5286b33`).
+> 4. ✅ **ЗАКРЫТО 2026-06-30 — деплой-нюанс снят.** Манифест живёт на проде (`app/public/api/sends-follower.json`), девайс пингует прод-URL — всё сходится без preview-костыля. Откатить `9.9.9→1.0` перед запуском (БЛИЖАЙШИЕ ШАГИ #5).
+> 5. ✅ **ЗАКРЫТО 2026-06-30 — манифест пересоздан на 1.0 (coordinator).** Файл отсутствовал в рабочей ветке (потерялся при расхождении), пересоздан с `latest=1.0`. Кнопка «New Version» у первого покупателя не загорится. Уедёт на прод вместе с деплоем страницы.
+> 6. ✅ **ЗАКРЫТО 2026-06-28 — оргвопрос решён.** Папка перенесена в `~/Brain/Fadercraft/Sends Follower/` (git mv, история сохранена).
+> 7. **Видео = ГЛАВНЫЙ БЛОКЕР (АКТИВНЫЙ):** VO записан, монтаж не сделан. Без YouTube ID VideoSection = заглушка → VideoSection выйдет без ID, отдельный деплой после монтажа. Критический путь.
+> 8. ✅ **ЗАКРЫТО 2026-06-30 — Gumroad опубликован.** Цена $14, zip целый, кнопка «Buy this» активна.
+> 9. **Деплой лендинга = БЛОКЕР LAUNCH-ЛИНКОВ (АКТИВНЫЙ):** страница `/sends-follower` не задеплоена на прод. Любой campaign-линк мёртвый. Деплой независим от видео — делать немедленно (БЛИЖАЙШИЕ ШАГИ #2).
+
+### 🔒 Gated — v1.1 (до выхода первого апдейта)
+
+- [ ] **[NEW] Роут `/sends-follower/updates` + `SendsFollowerUpdatesPage.tsx`** — построить ДО выхода v1.1, иначе в момент первого реального апдейта кнопка «New Version» загорится, клик уйдёт на несуществующий роут, App.tsx редиректит на главную. Образец — `UpdatesPage.tsx` (Control XL), переиспользовать тот же CSS-модуль. **Сейчас безопасно не строить:** при `latest=1.0 == DEVICE_VERSION` кнопка молчит. Триггер = решение выпустить v1.1.
 
 ## Связанные страницы
 

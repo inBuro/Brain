@@ -3,7 +3,7 @@
 Дайджест. Горячие факты + карта детальных файлов. Детали — в отдельных файлах, читай по ссылке.
 
 ## Карта памяти
-- [df-master.md](df-master.md) — **DF Master.amxd** v6.4 (2026-06-29). md5=`5d0cb436` (339480B). Clear Page fixed (function clearpage()), blink lcdcolor, "Mapping name" placeholder, mapped=жёлтый+чёрный. outlets=4, classnamespace=dsp.midieffect.
+- [df-master.md](df-master.md) — **DF Master.amxd** (2026-06-30). md5=`4c18fc6e` (340416B). SELF-CONTAINED в `Max Devices/DF Master/` + 3 dep рядом. `patcher.project` УДАЛЁН (bpatcher-blanking fix). classnamespace=dsp.midieffect. UNFROZEN. JSON без null-терминатора (до EOF). Внешний DF Master Project удалён.
 - [feedback-color-transparency-policy.md](feedback-color-transparency-policy.md) — ⚠️ ПОСТОЯННО: цвета M4L трогать ТОЛЬКО по явной просьбе на конкретный элемент (палитра `themecolor.*`, before/after, не перекрашивать user-цвета); alpha<1 = намеренная прозрачность пользователя, НИКОГДА не стирать. Читать перед любой правкой цвета/hex.
 - [amxd-format.md](amxd-format.md) — проверенный рецепт распаковки/пересборки `.amxd`, раскладка байт, модель Max patcher JSON, Live API практики, веб-источники.
 - [xl-performance.md](xl-performance.md) — факты по флагману: пути, объекты секции CC47, карта режимов CC30/CC47, текущее состояние (один срез, без журнала версий).
