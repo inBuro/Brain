@@ -45,6 +45,45 @@ The .amxd moved from `Max Devices/DF Master.amxd` to `Max Devices/DF Master/DF M
 - `MapButtonDF_M.maxpat` in root stays (parallel copy; only DF Master uses it but safe to keep)
 - `df_master.js` in root stays (DF Slot does NOT use it, but safe to keep; DF Master now uses its own copy in DF Master/ folder)
 
+## v6.4-perf Performance Optimizations (2026-06-30)
+
+**JS md5 before:** `453ad52bc1f3880745e4065de59d6c62` (997 lines)
+**JS md5 after:**  `9d14af051b1bcd32048106acb93a04ae` (1075 lines)
+**Archive:** `df_master.2026-06-30.js` in `~/Brain/Fadercraft/Dynamic Focus/archive/`
+
+Four optimizations applied to `df_master.js` only (`.amxd` NOT repacked — unfrozen, JS external):
+
+**A. _apiCache — LiveAPI objects reused.**
+Added `_apiCache[name] = p` alongside `_paramCache[name] = pid` in `_loadBatch`.
+`getParam`/`setParam` now do `_apiCache[name].get/set(...)` — zero `new LiveAPI` per call.
+Eliminates ~1150 LiveAPI constructions on startup + speeds every runtime push.
+
+**B. Lazy slot restore in restoreFromParams.**
+Loop now reads `df_sN_meta` first; if `meta===0`, reads only `p0_check = getParam("df_sN_p0")`.
+If `p0_check===0` too → slot definitely empty, skip entirely (saves 3 reads per empty slot).
+Edge case handled: `meta=0` but `p0!=0` (path-only with omax=0) → full read proceeds.
+Notes: peek `t0` and `t4` first per page; if both 0 → skip remaining 6 reads for that page.
+**Safety analysis:** `encodeMeta(cc=null, omin=0, omax=100)` = 100*13029 = 1302900 ≠ 0.
+Only `omax=0 AND cc=null AND omin=0` gives meta=0 with possible non-empty slot.
+This edge case is caught by the `p0_check` guard. All valid "default omax=100" slots have meta≠0.
+
+**C. Batched loadDeviceParams (16 params/tick).**
+`loadDeviceParams` split into `_loadBatch(params, i0, ...)` called recursively via `Task.schedule(0)`.
+Each batch processes 16 param-pairs; yields to Max UI thread between batches.
+`bang()` now passes `onDone` callback; `setupFocus + _armRestoreObserver + _scheduleRetry`
+run AFTER cache fully built (inside callback), not sequentially after synchronous load.
+
+**D. Removed premature resolveAll in setupFocus.**
+`setupFocus()` no longer calls `resolveAll()` (slots empty at that point → wasted work).
+The single authoritative `resolveAll()` is in `restoreFromParams`'s `Task(200ms)` (t2), after slots populated.
+`setupFocus` still calls `renderCurrentPage + renderPageSel + renderNote` for UI frame.
+
+**LiveAPI budget on startup (before → after):**
+- loadDeviceParams scan: ~600 `new LiveAPI` + 600 `get("name")` → same count, but objects NOW CACHED (A)
+- restoreFromParams: ~512 `getParam` (128×4) → now ~128 + N×3 where N=populated slots (B, typically 10-30)
+- resolveAll: was called TWICE (setupFocus + t2) → now ONCE (D)
+- getParam/setParam runtime: `new LiveAPI` per call → `_apiCache` lookup (A, constant speedup)
+
 ## v6.4 Bugfixes (2026-06-29)
 
 **Bug 1 — pgname text immediately erased:**
