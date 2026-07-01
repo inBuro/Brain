@@ -7,6 +7,25 @@ metadata:
 
 # Sends Follower — device facts (m4l-master)
 
+## ✅ MAP ALL / программный маппинг без GUI (Return ТОЛЬКО) — 2026-07-01 (CURRENT)
+Фича: внешний агент (Claude/Ableton MCP) маппит 8 слотов мультимаппера БЕЗ кликов Map+param.
+- **МЕХАНИЗМ live.remote~ (ПОДТВЕРЖДЁН, docs cycling74 + реверс):** `live.remote~` целится сообщением **`id <N>` в ПРАВЫЙ вход**, где N = числовой Live-object-id параметра (из `live.path/live.object` → getid). `id 0` = отключить. Это ТОТ ЖЕ путь, что ручной Map-клик (в MapButton.maxpat `p mapping` ловит selected_parameter → id → fan на `RangeAndName in3` (object ID, наблюдатель+range+name+visual) И `live.remote~ in1`). НЕ blocked.
+- **Проводка (shared-компоненты, влияют и на Track при будущем порте):**
+  - `MapButton.maxpat` (+1 inlet, +1 msg, +3 line): новый ПРАВЫЙ inlet `mb_ididin` (x=500, visual inlet 1) → `[message "id $1"]` (`mb_ididmsg`) → fan на `obj-16 in3` (RangeAndName objectID) + `obj-5 in1` (live.remote~). Зеркалит существующий `id 0` fan. Inlet 0 (signal) не сдвинут.
+  - `multimap.maxpat` (+2 box, +9 line): новый inlet `mm_ididin` (x=430, visual inlet 1) → `route 0..7` (`mm_idroute`) → out K → MapButton[slot K] inlet 1. Каждому из 8 MapButton-bpatcher выставлен `numinlets:2`. slot→bpatcher: {0:obj-1,1:obj-3,2:obj-4,3:obj-5,4:obj-6,5:obj-8,6:obj-9,7:obj-7}.
+- **Return.amxd (UNFROZEN, JSON @0x20, Path B — файл вырос):** 73→124 box, 76→128 line.
+  - `multimap_panel` numinlets 1→2; `obj-46` (js) numoutlets 2→3, новый outlet2 → `multimap_panel in1`.
+  - 24 скрытых Live-param `live.numbox` (Int, `parameter_enable:1`, `parameter_invisible:2`=Stored Only, initial -1): `SF_TIdx1..8` (mmin -64), `SF_DIdx1..8` (mmin -1), `SF_PIdx1..8` (mmin -1). varname `sf_tidx0..7`/`sf_didx*`/`sf_pidx*`.
+  - `SF_MapAll` live.text (`sf_mapall`, param type0 0..1, invisible2, momentary mode1) → `sel 1` → msg `mapall` → js.
+  - 24 `prepend tidx/didx/pidx <slot>` эхо-роутят numbox-значения в js in0.
+- **JS `sends_follower.js`:** outlets 2→3. Массивы `tIdx/dIdx/pIdx[8]`. Функции: `tidx/didx/pidx(slot,v)` кэшируют; `slotPathFromIdx(slot)` строит путь (`t>=0`→`tracks t`; `t<0`→`return_tracks (-t-1)`; валиден если d>=0 && p>=0); `mapall()` — по каждому валидному слоту резолвит путь в id через LiveAPI, `outlet(2, slot, id)`, обновляет slotPath/mapTargetIds/label/warn. Пустые слоты НЕ трогает (Map All только доустанавливает заданные).
+- **Learn (per-slot) уже был:** arm/targetmap/captureTarget/slotPath — «запись цели» отдельно от «установки remote». Map All = батч-установка из индексов. Ручной Map-клик НЕ сломан (независимый путь внутри MapButton).
+- **CURRENT md5 (2026-07-01 MapAll):** Return.amxd `af8bd255` (80081B), sends_follower.js `1e2bba6b`, multimap.maxpat `e63ee426`, MapButton.maxpat `7e6a739c`.
+- **⚠️ IMPORTANT — Stored Only trap (2026-07-01):** `parameter_invisible=2` (Stored Only) у SF_TIdx/DIdx/PIdx/MapAll параметров — ОБЯЗАТЕЛЬНЫЙ инвариант. Max Editor при сохранении СБРАСЫВАЕТ его на `1` (скрыто, но НЕ Stored Only) — из-за этого параметры видны для Live API но не персистят в .als. После любого Editor-save — проверять и восстанавливать `parameter_invisible=2` у всех 25 sf_* боксов. md5 после fix `7a2ba43c` (52656B, unfrozen). Архив pre-fix: `_device-backups/Sends Follower – Return.2026-07-01-144752.preClassnameFix.amxd`.
+- **Архивы:** `~/Brain/Fadercraft/_device-backups/*.2026-07-01-141110.preMapAll.{amxd,js,maxpat×2}`.
+- **Live-API последовательность для Claude (per slot N, 0-based):** set param `SF_TIdx<N+1>` = track index (или -(rt+1) для return-трека-источника), `SF_DIdx<N+1>` = device index, `SF_PIdx<N+1>` = parameter index; повторить для нужных слотов; затем set `SF_MapAll` = 1 (momentary — сбросится). JS соберёт пути и замапит все заданные слоты.
+- **⚠️ NEEDS LIVE TEST:** (a) записать индексы + Map All → слоты замаплены (кнопки filled, remote~ модулирует); (b) невалидные индексы → слот пропущен без ошибок; (c) return-track источник через t<0; (d) ручной Map-клик по-прежнему работает; (e) save/reload → remote~ `_persistence:1` восстанавливает цели (индекс-параметры Stored Only тоже персистят). ПОРТ на Track — ПОСЛЕ верификации (shared multimap/MapButton уже готовы, нужен только JS+.amxd Track).
+
 ## ✅ PER-INSTANCE PERSISTENCE FIX (Track Source/Manual) — 2026-06-30 (CURRENT, поверх qmetro-33)
 Founder: «вообще неприемлемо» — на reload все dial=0, Source=A везде (даже где был Manual); свежий/перенесённый инстанс наследует чужой стейт.
 - **ROOT CAUSE Source/Manual (ТОЛЬКО Track-девайс):**
