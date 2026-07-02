@@ -7,6 +7,21 @@ metadata:
 
 # Sends Follower — device facts (m4l-master)
 
+## ✅ UDP COMMAND INTERFACE — 2026-07-02 (CURRENT)
+**Порт 7400. Оба девайса (Return + Track).**
+Протокол (текстовые строки через UDP):
+- `sf set <slot> <ti> <di> <pi> <min> <max>` — слот 1-based, ti/di/pi = индексы
+- `sf min <slot> <value>` / `sf max <slot> <value>` — только min или max слота
+- `sf ti <slot> <v>` / `sf di <slot> <v>` / `sf pi <slot> <v>` — только индексы
+- `sf mapall` — триггерит Map All (замапить все заданные слоты)
+
+**Реализация:** 4 Max-объекта в top-level патчере: `udpreceive 7400` → `fromsymbol` → `route sf` → `js sf_udp.js`. Внешний файл `sf_udp.js` лежит рядом в `User Library/Max Devices/`. JS пишет в numbox через `this.patcher.getnamed("sf_tidxN")` и в TargetMin/Max через subpatcher navigation: `getnamed("multimap_panel").subpatcher().getnamed("bpslot"+N).subpatcher().getnamed("TargetMin[7]")`.
+
+**CURRENT md5:** Return `ca65c718` (82144B), Track `7d385cc8` (102267B). sf_udp.js — внешний, embed:0.
+**Архивы:** `_device-backups/Sends Follower – {Return,Track}.2026-07-02-115235.preUDP.amxd`; pre-sfcmd-fix: `*.2026-07-02-124203.preSFcmd.amxd`
+**⚠️ NEEDS LIVE TEST:** (a) `echo "sf ti 1 0" | nc -u 127.0.0.1 7400` → sf_tidx0 обновился; (b) `sf min 1 20` → TargetMin слота 1 = 20; (c) `sf set 1 0 0 0 0 100` → все поля + Map All.
+**⚠️ sf_udp.js НЕ вшит во freeze** — при релизе вшивать в freeze как остальные js-файлы.
+
 ## ✅ MAP ALL / программный маппинг без GUI (Return ТОЛЬКО) — 2026-07-01 (CURRENT)
 Фича: внешний агент (Claude/Ableton MCP) маппит 8 слотов мультимаппера БЕЗ кликов Map+param.
 - **МЕХАНИЗМ live.remote~ (ПОДТВЕРЖДЁН, docs cycling74 + реверс):** `live.remote~` целится сообщением **`id <N>` в ПРАВЫЙ вход**, где N = числовой Live-object-id параметра (из `live.path/live.object` → getid). `id 0` = отключить. Это ТОТ ЖЕ путь, что ручной Map-клик (в MapButton.maxpat `p mapping` ловит selected_parameter → id → fan на `RangeAndName in3` (object ID, наблюдатель+range+name+visual) И `live.remote~ in1`). НЕ blocked.
