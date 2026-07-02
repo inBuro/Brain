@@ -193,6 +193,75 @@ def write_trk_slots(s, ti, sf_di, slots):
 | O Hhat | 6 | AutoFilter(45, di=0) + Saturator(19, di=1) + Corpus(39, di=2) | di=4 |
 | Melody 1 | 11 | Phaser-Flanger(31, di=0) + SpectralRes(20, di=1) | di=3 |
 
+## Post-Mapping Verification — MANDATORY
+
+**Why:** `write_slots` writes DI/PI/TI to SF params and fires MapAll. Readback of those SF params shows what *you wrote*, not what Live actually resolved. If a PI index is wrong or the parameter is non-mappable, SF JS silently skips it — the SF panel shows the wrong name but readback looks fine. This is a silent false positive.
+
+**Rule:** Always call `verify_slots()` after every `write_slots()` call. Never report mapping as complete without it.
+
+```python
+def verify_slots(s, ti, sf_di, expected_slots):
+    """
+    Cross-check actual Live parameter names against expected.
+    expected_slots: list of (tidx, didx, pidx, param_name_substring) — 8 entries, use None for empty slots.
+    Returns list of (slot_1based, expected_name, actual_name, ok).
+    """
+    DI_BASE, PI_BASE, TI_BASE = 1, 10, 18
+    sf_params = talk(s, "get_device_parameters", {"track_index": ti, "device_index": sf_di})
+    if not sf_params or "parameters" not in sf_params:
+        print("verify_slots: could not read SF params")
+        return []
+
+    results = []
+    for i, expected in enumerate(expected_slots):
+        slot = i + 1
+        di_val = int(sf_params["parameters"][DI_BASE + i]["value"])
+        pi_val = int(sf_params["parameters"][PI_BASE + i]["value"])
+        ti_val = int(sf_params["parameters"][TI_BASE + i]["value"])
+
+        if expected is None or di_val == -1:
+            results.append((slot, None, None, True))  # empty slot — OK
+            continue
+
+        _, exp_di, exp_pi, exp_name = expected
+        # resolve actual param name from the target device
+        target_ti = ti_val
+        dev_params = talk(s, "get_device_parameters", {"track_index": target_ti, "device_index": di_val})
+        if not dev_params or "parameters" not in dev_params:
+            results.append((slot, exp_name, "UNRESOLVABLE", False))
+            continue
+
+        params = dev_params["parameters"]
+        if pi_val < 0 or pi_val >= len(params):
+            results.append((slot, exp_name, f"PI={pi_val} OUT OF RANGE", False))
+            continue
+
+        actual_name = params[pi_val]["name"]
+        ok = exp_name.lower() in actual_name.lower()
+        results.append((slot, exp_name, actual_name, ok))
+
+    # print summary
+    print("\n=== VERIFY SLOTS ===")
+    for slot, exp, actual, ok in results:
+        if exp is None: continue
+        status = "OK" if ok else "MISMATCH"
+        print(f"  Slot {slot}: [{status}] expected={exp!r} actual={actual!r}")
+    mismatches = [r for r in results if not r[3] and r[1] is not None]
+    if mismatches:
+        print(f"  !! {len(mismatches)} MISMATCH(ES) — fix PI indices before reporting done")
+    else:
+        print("  All slots verified OK")
+    return results
+```
+
+**Usage pattern:**
+```python
+slots = [(ti, di, pi, mn, mx), ...]
+expected = [(ti, di, pi, "Decay Time"), (ti, di, pi, "Room Size"), ...]  # name substring
+write_ret_slots(s, ti, sf_di, slots)
+verify_slots(s, ti, sf_di, expected)  # ALWAYS
+```
+
 ## How MapAll Label Update Works (sends_follower.js)
 
 After setting TI/DI/PI and firing MapAll, the JS:

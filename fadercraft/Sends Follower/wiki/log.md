@@ -2,6 +2,12 @@
 
 Append-only. Newest first.
 
+## 2026-07-02 — Roadmap created; Random button added to backlog
+
+Created `wiki/roadmap.md`. Logged v1.0 shipped features. Added "Random button" to backlog:
+randomise Max% of all 8 mapper slots (multiples of 5, range 5–100), visible only when no update
+or feedback-loop notification is active.
+
 ## 2026-06-25 — Feedback-loop warning now works via real-target detection; CANON snapshot
 
 Replaced the best-effort `selected_parameter` warning (which missed mapping done through the Map

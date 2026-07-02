@@ -41,6 +41,10 @@ technical reference. It is a separate project, unrelated to the Instrument Follo
   bottleneck (idle floor is Live's own GUI/FramePacing); the 50 Hz `outlet("max")` poll was
   change-gated; Live-side levers for the idle floor.
 
+## Planning
+
+- [[roadmap|Roadmap]] — released features and backlog.
+
 ## Logs
 
 - [[log|Change log]]

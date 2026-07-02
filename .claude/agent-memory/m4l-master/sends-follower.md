@@ -7,7 +7,100 @@ metadata:
 
 # Sends Follower — device facts (m4l-master)
 
-## ✅ mode_tab: tablist → tabs (лейблы Peak/Total) — 2026-07-02 (CURRENT)
+## ✅ Push model: qmetro polling removed — 2026-07-02 (CURRENT)
+**Return.amxd** 47067B, unfrozen. **Track.amxd** 44942B, unfrozen.
+- **Удалены из обоих .amxd (Chain 1, qmetro 500):** `obj-33` (qmetro 500), `obj-29` (getpath), `obj-31` (live.object), `obj-36..obj-45` (route path / zl.slice / route return_tracks / unpack / int / change / prepend build / t l b b / msg "1" / msg "0"). Итого 13 boxes + цепочка связей.
+- **Удалён из обоих .amxd (Chain 2):** `obj-35` (qmetro 2000) + все его связи (SF-Return: 1 связь; SF-Track: 2 связи — включая доп. `obj-57→obj-35`).
+- **Return.amxd:** 127→113 boxes, 130→110 lines. ptch=47035, инвариант OK.
+- **Track.amxd:** 118→104 boxes, 103→82 lines. ptch=44910, инвариант OK.
+- **sends_follower.js:** `bang()` → no-op; `loadbang()` + safety Task(resync(false), 1000ms).
+- **sends_follower_track.js:** `bang()` → no-op; `userval` Manual-block: немедленный output+syncControls вместо defer-to-bang; `init()` + safety Task(resync(true), 1000ms) перед copy-detect block.
+- **Бэкапы (4 файла):** `~/Brain/Fadercraft/_device-backups/*2026-07-02-232809*`
+
+## ✅ MapButton swap-btn refactor (pattr-bang + pure-icon) — 2026-07-02 (CURRENT)
+**MapButton.maxpat** 35 boxes, 51 lines:
+- **Архив:** `~/Brain/Fadercraft/_device-backups/MapButton_20260702_211950.maxpat` (до рефактора, 57 lines)
+- **Удалены объекты:** `obj-swap-fmax`, `obj-swap-fmin` (tracking-буферы = 0 до первого cold-inlet)
+- **Удалены 10 patchlines:** все шнуры к/от fmax/fmin + init-шнуры obj-6→pattr
+- **Добавлены 4 patchlines (pattr-bang схема):** `trig[3]→pattr-max[0]`, `pattr-max[0]→cmax[1]` (order=0), `trig[2]→pattr-min[0]`, `pattr-min[0]→cmin[1]` (order=0)
+- **obj-swap-btn:** `mode=1` (momentary), `bgcolor/activebgcolor/bordercolor/activebordercolor=[0,0,0,0]` (pure-icon)
+- **Swap sequence (trig 3→0):** bang pattr-max→cmax cold | bang pattr-min→cmin cold | bang cmax→obj-8[0] (new TargetMin) | bang cmin→obj-3[0] (new TargetMax)
+- **ПАТТЕРН:** читать live-параметр в swap — bang на pattr @autorestore (всегда актуально). f-буфер ненадёжен (0 до первого update). live.text mode=0=toggle, mode=1=momentary; action-кнопки всегда mode=1.
+
+## ✅ live.tab parameter_type=2 Enum fix — 2026-07-02 (CURRENT)
+**Return.amxd** `f2fdb63140428c5ea5e151721248a682` (112124B, unfrozen, Path A, pad=29430):
+- **Причина:** `mode_tab` имел `parameter_type:1` (Int) + нестандартные атрибуты `tabs`/`size` → Live показывал "one two three" вместо "Peak"/"Total"
+- **Фикс:** убраны `tabs`/`size`; `parameter_type:1→2` (Enum); добавлен `parameter_enum:["Peak","Total"]`; `parameter_initial:[0.0]→[0]` (int, как у нативного live.tab Enum)
+- **Формат по образцу:** рабочий `follow_mode` из бэкапа 2026-07-02.amxd с `parameter_type:2`, `parameter_enum`, без `tabs`/`size`
+- **Итог:** 127 boxes, 130 lines (без изменений)
+- **Архив pre-edit:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.liveTabLabels.amxd` (md5 `7052b05f0f6bb42df7c0b59bd6e9eee4`)
+
+## ✅ live.tab restored (replaces two-button radio) — 2026-07-02 (SUPERSEDED by Enum fix above)
+**Return.amxd** `7052b05f0f6bb42df7c0b59bd6e9eee4` (112124B, unfrozen, Path A, pad=29430):
+- **Удалены 9 boxes:** `mode_btn_peak`, `mode_btn_total`, `mode_sel_peak`, `mode_sel_total`, `mode_zero_a`, `mode_zero_b`, `mode_msg0`, `mode_msg1`, `mode_init_peak`
+- **Удалены 11 patchlines** — вся radio-логика эксклюзивности
+- **Добавлен `mode_tab`** (live.tab, ПОСЛЕДНИЙ в boxes[126]) — параметр Mode (Stored Only, invisible=2), tabs=["Peak","Total"], parameter_initial=[0.0]
+- **Добавлены 2 patchlines:** `mode_loadbang[0]→mode_tab[0]`, `mode_tab[0]→mode_prepend[0]`
+- **Сохранены:** `mode_loadbang`, `mode_label`, `mode_prepend` (→obj-46 js, без изменений)
+- **Live-параметр mode_tab:** последний pe=1 объект → index=43 (sf_cmd_numbox=42, sfcmd)
+- **Итог:** 127 boxes, 130 lines
+- **Архив pre-edit:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.liveTabFinal.amxd` (md5 `601b4c543624f45fc1d89772a236f1cc`)
+
+## ✅ parameter_initial defval fix (Peak=1) — 2026-07-02 (SUPERSEDED by live.tab restore)
+**Return.amxd** `601b4c543624f45fc1d89772a236f1cc` (112124B, unfrozen, Path A, pad=25153):
+- **Причина:** `live.thisdevice` (obj-21) и `mode_loadbang` оба срабатывают ДО того как `devicestoredonly` параметры восстанавливают значения → init Peak=1 перетирался restore=0.
+- **Фикс:** добавлен `parameter_initial:[1.0]` + `parameter_initial_enable:1` в `mode_btn_peak.saved_attribute_attributes.valueof`. Это стандартный Max-способ задать начальное значение — при загрузке Live Set без сохранённого значения параметр инициализируется в 1.0.
+- **Удалены 6 patchlines** (все init-шнуры, которые вызывали флаш до restore):
+  - `obj-21[0]→mode_msg0[0]`, `obj-21[0]→mode_zero_b[0]`, `obj-21[0]→mode_init_peak[0]`
+  - `mode_loadbang[0]→mode_msg0[0]`, `mode_loadbang[0]→mode_zero_b[0]`, `mode_loadbang[0]→mode_init_peak[0]`
+- **Оставшиеся шнуры obj-21:** только `obj-21[0]→obj-23[0]` (штатный, не тронут). `mode_loadbang` теперь висит без соединений.
+- **mode_btn_total:** `parameter_initial` не добавлен (дефолт 0 правильный).
+- **Архив pre-fix:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeDefval.amxd` (md5 `37035d6aff7886fdd3707f0f7d9961cd`)
+
+## ✅ loadbang→live.thisdevice mode init fix — 2026-07-02 (SUPERSEDED by defval fix above)
+**Return.amxd** `37035d6aff7886fdd3707f0f7d9961cd` (112124B, unfrozen, Path A, pad=24362):
+- **Причина:** `mode_loadbang` срабатывал ДО restore `devicestoredonly=1` параметров → init Peak=1 перетирался restore=0. Кнопки нажимались, но при загрузке ни одна не светилась.
+- **Фикс:** добавлены 3 patchline от `obj-21` (live.thisdevice, outlet 0) к `mode_msg0[0]`, `mode_zero_b[0]`, `mode_init_peak[0]`. `mode_loadbang`-шнуры оставлены (не удалены). `live.thisdevice` срабатывает ПОСЛЕ restore параметров и перезаписывает loadbang-инит.
+- **live.thisdevice в патче:** уже был (`obj-4` и `obj-21`); использован `obj-21` (y≈207, ближайший по секции).
+- **Архив pre-fix:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeDefaultFix.amxd` (md5 `1f4136762ef0344a7c9cf4dd8d32efb7`)
+
+## ✅ mode_btn_peak/total click fix — 2026-07-02
+**Return.amxd** `1f4136762ef0344a7c9cf4dd8d32efb7` (112124B, unfrozen, Path A, pad=24792):
+- **Причина нерабочего клика:** `parameter_enable=0` на `live.text` → объект работает как пассивный дисплей, mouse interaction не обрабатывается.
+- **Фикс:** `mode_btn_peak` и `mode_btn_total`: `parameter_enable: 0 → 1`, добавлен `devicestoredonly: 1` (не засоряет automation lanes), `numoutlets: 1 → 2`, добавлен `saved_attribute_attributes.valueof` (parameter_type=2 enum/int, parameter_mmax=1, parameter_invisible=2 Stored Only).
+- **Связи не изменились:** outlet 0 → `mode_sel_peak/total[0]` (как и было). Outlet 1 не используется.
+- **Архив pre-fix:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeClickFix.amxd` (md5 `7e3871e4`)
+
+## ✅ mode_tab → live.text radio buttons (Peak/Total) — 2026-07-02
+**Return.amxd** `7e3871e4` (112124B, unfrozen, Path A, pad=25538):
+- **Удалены:** `mode_tab` (tab), `mode_init_val` (message "0") + 3 patchlines.
+- **Добавлены (9 boxes):** `mode_btn_peak` (live.text, appearance=2, mode=0/toggle, pres=[5,147,56,16]), `mode_btn_total` (live.text, appearance=2, mode=0/toggle, pres=[63,147,57,16]), `mode_sel_peak` (sel 1), `mode_sel_total` (sel 1), `mode_zero_a` (msg "0"→Total), `mode_zero_b` (msg "0"→Peak), `mode_msg0` (msg "mode 0"), `mode_msg1` (msg "mode 1"), `mode_init_peak` (msg "1").
+- **Добавлены (14 patchlines):** полная radio-логика (эксклюзивность) + инит loadbang→Peak active.
+- **mode=0 (toggle):** кнопки переключаются кликом, управляются программно через int в inlet.
+- **Radio-схема:** Peak click → sel 1 → zero_a→Total(off) + msg0→prepend→JS. Total click → sel 1 → zero_b→Peak(off) + msg1→prepend→JS.
+- **Init:** mode_loadbang → msg0(mode 0)→prepend→JS + zero_b→Total(0) + init_peak(1)→Peak(1).
+- **Архив:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeButtons.amxd` (md5 `550641d6`)
+- JS target: `mode_prepend` → `obj-46` (js sends_follower.js, inlet 0) — не изменился.
+
+## ✅ Map button style + numbox right-align — 2026-07-02
+**MapButton.maxpat** `c8d18bd3` (модифицирован, все 8 слотов используют один файл):
+- `obj-14` (Map live.text, appearance=2): `bgcolor` `[orange,0.0]` → `[0,0,0,1]` (явный чёрный фон в unmapped state). `bordercolor`=orange уже был `[1.0,0.709804,0.196078,1.0]`. `textoffcolor`=orange — без изменений.
+- `obj-8` (TargetMin live.numbox): `textjustification` 0 → 2 (right).
+- `obj-3` (TargetMax live.numbox): `textjustification` 0 → 2 (right).
+- `bgoncolor` в mapped state — не тронут (orange solid, как было).
+- Архив pre-edit: `~/Brain/Fadercraft/_device-backups/MapButton.2026-07-02.mapStyle.maxpat` (md5 `85a641c9`)
+- Архив Return.amxd: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.mapStyle.amxd` (md5 `ce3d22b9`)
+- ARCHITECTURE: `bordercolor` в `obj-14` статический (выражение = пустое). `p colors` субпатчер шлёт `focusbordercolor` (не `bordercolor`) в `obj-14`; `bordercolor` от темы идёт только в `obj-9` (border overlay). `p setButtonColor` управляет `lcdcolor`/`lcdbgcolor` только в armed state.
+
+## ✅ mode_loadbang подключён: Peak-init при загрузке — 2026-07-02
+**Return.amxd** `ce3d22b9` (111326B, unfrozen):
+- Добавлен box `mode_init_val` (message "0", rect=[120,537,29.5,20]), 2 новых line: `mode_loadbang[0]→mode_init_val[0]` и `mode_init_val[0]→mode_tab[0]`.
+- До правки: `mode_loadbang` висел в воздухе, ни одного соединения. `mode_tab` получал значение только от пользователя, при загрузке не инициализировался.
+- Path A (pad=27962, длина файла не изменилась 111326B). boxes 127→128, lines 129→131.
+- Архив pre-edit: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.peakDefault.amxd` (md5 `869b201292c50aa206f694256efccd32`)
+- Цепочка инициализации: `mode_loadbang → mode_init_val(msg "0") → mode_tab → mode_prepend(prepend mode) → obj-46(js)`
+
+## ✅ mode_tab: tablist → tabs (лейблы Peak/Total) — 2026-07-02
 **Return.amxd** `74c1a84e` (82677B, unfrozen):
 - `mode_tab` (maxclass=tab): атрибут `tablist` переименован в `tabs` (правильный атрибут для стандартного Max tab). Было: `tablist: ["Peak","Total"]` → показывало "one two three" (дефолт). Стало: `tabs: ["Peak","Total"]`. `size:2` сохранён.
 - Path A (pad=3, длина файла не изменилась 82677B). ptch_size 82645 — без изменений.
