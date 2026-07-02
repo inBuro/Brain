@@ -7,15 +7,53 @@ metadata:
 
 # Sends Follower — device facts (m4l-master)
 
-## ✅ PARAMETER API INDEX ALIGNMENT — 2026-07-02
-**Return.amxd**: `follow_mode` (Live API idx) перемещён с позиции 1 (первый параметр) на позицию 26 (предпоследний, перед sfcmd).
-**Новый порядок (оба девайса совпадают):**
-- idx 1-24: sf_tidx0/sf_didx0/sf_pidx0 ... sf_tidx7/sf_didx7/sf_pidx7 (8×3=24)
-- idx 25: sf_mapall
-- idx 26: follow_mode (Return) / — (Track не имеет)
-- idx 27: sf_cmd_minmax (sfcmd)
-**Track.amxd**: не тронут, там follow_mode не существует (enum-source — другой механизм).
-**Техника**: Path A, padding 38 bytes, L0=82074, file size 82144 (неизменен).
+## ✅ mode_tab: tablist → tabs (лейблы Peak/Total) — 2026-07-02 (CURRENT)
+**Return.amxd** `74c1a84e` (82677B, unfrozen):
+- `mode_tab` (maxclass=tab): атрибут `tablist` переименован в `tabs` (правильный атрибут для стандартного Max tab). Было: `tablist: ["Peak","Total"]` → показывало "one two three" (дефолт). Стало: `tabs: ["Peak","Total"]`. `size:2` сохранён.
+- Path A (pad=3, длина файла не изменилась 82677B). ptch_size 82645 — без изменений.
+- Архив: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.tabFix.amxd` (md5 `d7b868f9`)
+
+## ✅ Mode-селектор (tab+pattr) возвращён — 2026-07-02
+**Return.amxd** `d7b868f9` (82677B, unfrozen):
+- Добавлены 5 объектов: `mode_loadbang` (loadbang), `mode_label` (comment "Mode"), `mode_tab` (tab, tablist=["Peak","Total"], presentation), `mode_pattr` (pattr, varname=follow_mode_val, parameter_enable:0), `mode_prepend` (prepend mode).
+- Добавлены 4 patchline: mode_loadbang→mode_pattr[0], mode_pattr[0]→mode_tab[0], mode_tab[0]→mode_prepend[0], mode_prepend[0]→obj-46[0].
+- boxes: 123→128, lines: 127→131. JS id = `obj-46`.
+- `tab` (НЕ live.tab) — НЕ создаёт Live-параметр. `pattr` с `varname=follow_mode_val` сохраняет значение с проектом. Presentation: label y=131, tab y=147.
+- Path B (unfrozen, нет dlst) — ptch_size обновлён LE@0x1C (80391→82645).
+- ⚠️ АТРИБУТ: правильный атрибут для Max tab — `tabs`, НЕ `tablist`. `tablist` даёт дефолтный "one two three".
+- Архив: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02-withMode.amxd` (md5 `508b6426`)
+
+## ✅ Mode-блок ПОЛНОСТЬЮ УДАЛЁН (follow_mode + вся цепочка) — 2026-07-02
+**Return.amxd** `508b6426` (80423B, unfrozen):
+- Удалены 5 объектов: `follow_mode` (tab), `mode_prepend` (prepend mode), `mode_delay` (delay 300), `mode_loadbang` (loadbang), `mode_label` (comment "Mode").
+- Удалены 4 patchline: mode_loadbang→mode_delay, mode_delay→follow_mode[0], follow_mode[0]→mode_prepend[0], mode_prepend[0]→obj-46[0].
+- boxes: 128→123, lines: 131→127.
+- Архив: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02-174212.noMode.amxd` (md5 `ca30266200cb25696a54850c314171a8`)
+
+## ✅ follow_mode live.tab → tab (стандартный Max, всегда виден) — 2026-07-02
+**Return.amxd** (предыдущая версия, `ca30266200cb25696a54850c314171a8`, 112284B):
+- `follow_mode` заменён: `maxclass: live.tab` → `maxclass: tab`. Атрибуты `parameter_enable`, `parameter_mappable`, `saved_attribute_attributes` (themecolor), `activebgcolor`, `bgcolor` — удалены. Добавлен `tablist: ["Peak","Total"]`. `numoutlets: 3 → 2`, `outlettype: ["",""]`. Позиции (`patching_rect`, `presentation_rect`), `presentation:1`, `varname:follow_mode`, `fontname/fontsize` — сохранены. Связи (in: mode_delay→follow_mode[0]; out: follow_mode[0]→mode_prepend[0]) — нетронуты.
+- Результат: tab всегда виден в locked/presentation view, НЕ создаёт Live-параметр, работает как стандартный Max-объект.
+- Архив: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.livetabFix.amxd` (md5 `5c5473ca56ded6f4e200a2307f9720f0`)
+
+## ✅ follow_mode PARAMETER_ENABLE=0 (UI-only, не Live-параметр) — 2026-07-02
+**Return.amxd** `575a496e` (82144B, unfrozen):
+- `follow_mode` (live.tab, id=follow_mode): `parameter_enable: 1` → `0`, `parameter_visibility` удалён. Mode (Peak/Total) больше НЕ создаёт Live-параметр. Индексы DI/PI/TI/Max/Min/sfcmd выровнены с SF-Track (больше нет смещения +1).
+- Архив: `_device-backups/Sends Follower – Return.2026-07-02-<auto>.preParamEnable0.amxd` (md5 `60e251c1`)
+
+## ✅ QMETRO 100 → 2000 (polling interval) — 2026-07-02
+**Return.amxd** `60e251c1` (82144B, unfrozen):
+- `obj-35` (qmetro): `qmetro 100` → `qmetro 2000`. bang() JS больше не делает polling loop — только дешёвый resync. 2000ms достаточно. `obj-33` (qmetro 500, цепь getpath) — не тронут.
+- Архив: `_device-backups/Sends Follower – Return.2026-07-02-171756.amxd` (md5 `99475a33`)
+
+## ✅ FOLLOW_MODE → STORED ONLY + EMPTY SLOT OUTLINE + CPU FIX — 2026-07-02
+**Return.amxd** `99475a33` (82144B, unfrozen):
+- `follow_mode` (live.tab): добавлен `parameter_visibility: 1` (Stored Only) — убирает Mode из Live API param list. Было 27 exposed → стало 26 exposed. param_count=43 (как было, по JS-комментарию).
+- `obj-35` (qmetro): `qmetro 33` → `qmetro 100` (CPU: 30fps→10fps).
+**Track.amxd** `a7a82994` (без изменений — ждёт подтверждения qmetro 33→100 от пользователя):
+**sends_follower.js** `418a181f`:
+- `mapall()`: пустые слоты теперь явно посылают `outlet(2, s, 0)` → MapButton кнопка = outline (set 0). Раньше пустые слоты `continue` без очистки → кнопка оставалась filled.
+- Обновлён @llm-api комментарий: Mode убран из раскладки, примечание о Stored Only.
 
 ## ✅ UDP COMMAND INTERFACE — 2026-07-02 (CURRENT)
 **Порт 7400. Оба девайса (Return + Track).**

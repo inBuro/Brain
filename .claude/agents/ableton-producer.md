@@ -38,15 +38,23 @@ def talk(s, cmd, params):
 
 **Known working commands:**
 - `get_session_info` → `{tempo, signature_numerator, signature_denominator, track_count}`
+- `get_track_info` params: `{track_index}` → `{name, ...}`
 - `get_device_parameters` params: `{track_index, device_index}` → `{parameters: [{index, name, value}]}`
 - `set_device_parameter` params: `{track_index, device_index, parameter_index, value}` → `{parameter_name, value_set}`
+- `load_browser_item` params: `{"track_index": TI, "item_uri": URI}` → loads device onto track
+
+**load_browser_item URI formats:**
+- SF-Return: `"query:UserLibrary#Max%20Devices:Sends%20Follower%20%E2%80%93%20Return.amxd"`
+- SF-Track:  `"query:UserLibrary#Max%20Devices:Sends%20Follower%20%E2%80%93%20Track.amxd"`
+- Built-in effect: `"query:AudioFx#DeviceName"` (e.g. `"query:AudioFx#Corpus"`)
+- CRITICAL: parameter is `"item_uri"` — using `"uri"` silently drops the URI and loads nothing
 
 **Track index encoding:**
 - Normal tracks: `0, 1, 2, ...` (0-based)
 - Return tracks: `-1` = Return A, `-2` = Return B, `-3` = Return C, `-4` = Return D
 - Master track: not accessible via these commands
 
-**CRITICAL:** Device-loading commands (`add_device`, `load_browser_item`, `add_audio_effect` etc.) are **NOT supported** — all return `Unknown command`. Only parameter read/write works.
+**NOT supported:** `add_device`, `add_audio_effect`, `execute_python` — return Unknown command.
 
 ## Device Discovery (Always Probe, Never Hardcode)
 
@@ -73,7 +81,7 @@ def find_device(layout, count):
 | Device | Param count |
 |--------|-------------|
 | SF-Return | **43** |
-| SF-Track | **44** |
+| SF-Track | **45** |
 | Reverb | 33 |
 | Chorus | 16 |
 | Echo | 53 |
@@ -93,27 +101,30 @@ def find_device(layout, count):
 
 ### SF-Return (43 params) — on return tracks
 ```
-[0]  Device On
-[1]  Mode
-[2-9]  DI1–DI8   (device index for each slot, default=-1)
-[10]  MapAll
-[11-18]  PI1–PI8  (parameter index for each slot, default=-1)
-[19-26]  TI1–TI8  (track index for each slot, default=-1)
-[27-34]  Max0–Max7 (0-100, default=100)
-[35-42]  Min0–Min7 (0-100, default=0)
+[0]     Device On
+[1-8]   DI1–DI8   (device index for each slot, default=-1)
+[9]     MapAll
+[10-17] PI1–PI8   (parameter index for each slot, default=-1)
+[18-25] TI1–TI8   (track index for each slot, default=-1)
+[26-33] Max0–Max7 (0-100, default=100)
+[34-41] Min0–Min7 (0-100, default=0)
+[42]    sfcmd     (encoded write: slot_1based*1000000 + min*1000 + max)
 ```
+Mode (Peak/Total) is a UI-only button — NOT a Live param. DI starts at [1], identical to SF-Track.
+SLOT INDEX PARITY: SF-Return and SF-Track share identical DI/PI/TI/Max/Min indices. Never add a Live param before DI in either device.
 
-### SF-Track (44 params) — on audio tracks
+### SF-Track (45 params) — on audio/MIDI tracks
 ```
-[0]  Device On
-[1-8]  DI1–DI8
-[9]  MapAll
-[10-17]  PI1–PI8
-[18-25]  TI1–TI8
-[26-33]  Max0–Max7
-[34-41]  Min0–Min7
-[42]  MIDI Source
-[43]  send_menu
+[0]     Device On
+[1-8]   DI1–DI8
+[9]     MapAll
+[10-17] PI1–PI8
+[18-25] TI1–TI8
+[26-33] Max0–Max7
+[34-41] Min0–Min7
+[42]    MIDI Source
+[43]    send_menu  (which return to follow: 0=None, 1=RetA, 2=RetB…)
+[44]    sfcmd      (encoded write: slot_1based*1000000 + min*1000 + max)
 ```
 
 ### TIdx encoding for target track:
@@ -134,56 +145,53 @@ def fire_mapall(s, ti, sf_di, ma_idx):
 ## Full Mapping Helpers
 
 ```python
-def write_ret_slots(s, ti, sf_di, slots):
-    """slots: list of (tidx, didx, pidx, min, max) × 8"""
-    DI, PI, TI, MX, MN = 2, 11, 19, 27, 35
+# SF-Return and SF-Track share identical DI/PI/TI/MapAll indices (index parity).
+# Only sfcmd index differs: SF-Return=[42], SF-Track=[44].
+
+def write_slots(s, ti, sf_di, slots, sfcmd_idx, mapall_idx=9):
+    """Write 8 slots and fire MapAll. slots: list of (tidx, didx, pidx, min, max)"""
+    DI, PI, TI = 1, 10, 18
+    # Step 1: write all TI/DI/PI
     for i, (tidx, didx, pidx, mn, mx) in enumerate(slots):
-        set_p(s, ti, sf_di, TI+i, tidx)
-        set_p(s, ti, sf_di, DI+i, didx)
-        set_p(s, ti, sf_di, PI+i, pidx)
-        set_p(s, ti, sf_di, MX+i, mx)
-        set_p(s, ti, sf_di, MN+i, mn)
-    time.sleep(0.12)
-    fire_mapall(s, ti, sf_di, 10)
+        set_p(s, ti, sf_di, DI+i, float(didx))
+        set_p(s, ti, sf_di, PI+i, float(pidx))
+        set_p(s, ti, sf_di, TI+i, float(tidx))
+        time.sleep(0.05)
+    # Step 2: MapAll 0→1
+    fire_mapall(s, ti, sf_di, mapall_idx)
+    # Step 3: wait for JS + live.dial write-back
+    time.sleep(2.0)
+    # Step 4: write sfcmd per slot (slot is 1-based in encoding)
+    for i, (_, _, _, mn, mx) in enumerate(slots):
+        cmd = float((i+1)*1000000 + int(mn)*1000 + int(mx))
+        set_p(s, ti, sf_di, sfcmd_idx, cmd)
+        time.sleep(0.15)
+
+def write_ret_slots(s, ti, sf_di, slots):
+    """SF-Return: sfcmd at [42], MapAll at [9]"""
+    write_slots(s, ti, sf_di, slots, sfcmd_idx=42, mapall_idx=9)
 
 def write_trk_slots(s, ti, sf_di, slots):
-    DI, PI, TI, MX, MN = 1, 10, 18, 26, 34
-    for i, (tidx, didx, pidx, mn, mx) in enumerate(slots):
-        set_p(s, ti, sf_di, TI+i, tidx)
-        set_p(s, ti, sf_di, DI+i, didx)
-        set_p(s, ti, sf_di, PI+i, pidx)
-        set_p(s, ti, sf_di, MX+i, mx)
-        set_p(s, ti, sf_di, MN+i, mn)
-    time.sleep(0.12)
-    fire_mapall(s, ti, sf_di, 9)
+    """SF-Track: sfcmd at [44], MapAll at [9]"""
+    write_slots(s, ti, sf_di, slots, sfcmd_idx=44, mapall_idx=9)
 ```
 
 ## Demo Set Layout (Fadercraft Sends Follower demo)
 
-**Return tracks:**
-| Return | ti | Effects (in order) | SF-Return |
-|--------|----|--------------------|-----------|
-| A | -1 | Reverb(33) + Chorus(16) + Utility(13) | last |
-| B | -2 | Echo(53) + Phaser(31) + Utility(13) | last |
-| C | -3 | Roar(91) + EQ Eight(84) + Utility(13) | last |
-| D | -4 | Reverb(33) + Shifter(36) + Utility(13) | last |
+**Return tracks (SF-Return always last di):**
+| Return | ti | Effects (in order) | SF-Return di |
+|--------|----|--------------------|-------------|
+| A | -1 | Reverb(33, di=0) + Chorus(16, di=1) | di=2 |
+| B | -2 | Echo(53, di=0) + Phaser-Flanger(31, di=1) | di=2 |
+| C | -3 | Roar(91, di=0) + EQ Eight(84, di=1) | di=2 |
+| D | -4 | Reverb(33, di=0) + Shifter(36, di=1) | di=2 |
 
-**Audio tracks:**
-| Track | ti | Effects | SF-Track |
-|-------|----|---------|----------|
-| C Hhat | 2 | Re-Env(19) + Erosion(6) + AF(45) | first (dev0) |
-| O Hhat | 6 | AF(45) + Saturator(19) + Corpus(39) | first (dev0) |
-| Melody 1 | 11 | Phaser(31) + Spectral(20) | last (dev3) |
-
-**Desired mappings (confirmed param indices):**
-
-Return A slots: Reverb pi=20/21/26/32, Chorus pi=3/4/12/15 — all 0-100
-Return B slots: Echo pi=16/42/51/52, Phaser pi=1/7/25/30 — all 0-100
-Return C slots: Roar pi=1/2/83/87, EQ Eight pi=26/27/56/57 — all 0-100
-Return D slots: Reverb pi=20/21/26/32, Shifter pi=17/1/34/35 — all 0-100
-C Hhat slots: Re-Env pi=16/17/7 min=5/5/30 max=70/70/100; Erosion pi=1/2 min=0/20 max=80/70; AF pi=1/12/36 min=20/0/0 max=80/60/70
-O Hhat slots: AF pi=1/2/36, Sat pi=1/11, Corpus pi=7/10/38 — all 0-100
-Melody 1 slots: Phaser pi=1/3/25/30, Spectral pi=9/10/17/18 — all 0-100
+**Audio tracks (SF-Track always last di):**
+| Track | ti | Effects | SF-Track di |
+|-------|----|---------|------------|
+| C Hhat | 2 | Re-Envelope(19, di=0) + Erosion(6, di=1) + AutoFilter(45, di=2) | di=3 |
+| O Hhat | 6 | AutoFilter(45, di=0) + Saturator(19, di=1) + Corpus(39, di=2) | di=4 |
+| Melody 1 | 11 | Phaser-Flanger(31, di=0) + SpectralRes(20, di=1) | di=3 |
 
 ## How MapAll Label Update Works (sends_follower.js)
 
