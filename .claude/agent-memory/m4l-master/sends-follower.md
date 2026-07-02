@@ -7,6 +7,16 @@ metadata:
 
 # Sends Follower — device facts (m4l-master)
 
+## ✅ PARAMETER API INDEX ALIGNMENT — 2026-07-02
+**Return.amxd**: `follow_mode` (Live API idx) перемещён с позиции 1 (первый параметр) на позицию 26 (предпоследний, перед sfcmd).
+**Новый порядок (оба девайса совпадают):**
+- idx 1-24: sf_tidx0/sf_didx0/sf_pidx0 ... sf_tidx7/sf_didx7/sf_pidx7 (8×3=24)
+- idx 25: sf_mapall
+- idx 26: follow_mode (Return) / — (Track не имеет)
+- idx 27: sf_cmd_minmax (sfcmd)
+**Track.amxd**: не тронут, там follow_mode не существует (enum-source — другой механизм).
+**Техника**: Path A, padding 38 bytes, L0=82074, file size 82144 (неизменен).
+
 ## ✅ UDP COMMAND INTERFACE — 2026-07-02 (CURRENT)
 **Порт 7400. Оба девайса (Return + Track).**
 Протокол (текстовые строки через UDP):
@@ -17,8 +27,8 @@ metadata:
 
 **Реализация:** 4 Max-объекта в top-level патчере: `udpreceive 7400` → `fromsymbol` → `route sf` → `js sf_udp.js`. Внешний файл `sf_udp.js` лежит рядом в `User Library/Max Devices/`. JS пишет в numbox через `this.patcher.getnamed("sf_tidxN")` и в TargetMin/Max через subpatcher navigation: `getnamed("multimap_panel").subpatcher().getnamed("bpslot"+N).subpatcher().getnamed("TargetMin[7]")`.
 
-**CURRENT md5:** Return `ca65c718` (82144B), Track `7d385cc8` (102267B). sf_udp.js — внешний, embed:0.
-**Архивы:** `_device-backups/Sends Follower – {Return,Track}.2026-07-02-115235.preUDP.amxd`; pre-sfcmd-fix: `*.2026-07-02-124203.preSFcmd.amxd`
+**CURRENT md5:** Return `62588b42` (82144B), Track `7d385cc8` (102267B). sf_udp.js — внешний, embed:0.
+**Архивы:** `_device-backups/Sends Follower – {Return,Track}.2026-07-02-115235.preUDP.amxd`; pre-sfcmd-fix: `*.2026-07-02-124203.preSFcmd.amxd`; pre-mode-reorder: `Sends Follower – Return.2026-07-02.amxd`
 **⚠️ NEEDS LIVE TEST:** (a) `echo "sf ti 1 0" | nc -u 127.0.0.1 7400` → sf_tidx0 обновился; (b) `sf min 1 20` → TargetMin слота 1 = 20; (c) `sf set 1 0 0 0 0 100` → все поля + Map All.
 **⚠️ sf_udp.js НЕ вшит во freeze** — при релизе вшивать в freeze как остальные js-файлы.
 
