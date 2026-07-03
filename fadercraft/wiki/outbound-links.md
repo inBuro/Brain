@@ -24,9 +24,11 @@ updated: 2026-06-24
 
 ## YouTube — campaign `control_xl_presentation`
 
+> `/yt` points at the **permanent** `/control-xl` path (not `/`), so when `/` becomes the umbrella brand page the YouTube-description link never needs re-pointing and the video description is never re-edited. `/control-xl` is a real route today (renders the Control XL ProductPage) — see [App.tsx](../../Projects/Claude/Fadercraft/app/src/App.tsx). Not in `sitemap.xml` on purpose (temporary dupe of home until the restructure).
+
 | Short link | → Target | utm_source / medium / campaign | Use for |
 |---|---|---|---|
-| `https://fadercraft.com/yt` | home `/` | youtube / video / control_xl_presentation | "site" link in YT description |
+| `https://fadercraft.com/yt` | `/control-xl` | youtube / video / control_xl_presentation | "site" link in YT description |
 | `https://fadercraft.com/yt-modes` | `/free-custom-modes` | youtube / video / control_xl_presentation | free modes link in YT description |
 | `https://fadercraft.com/yt-buy` | gumroad `l/control-xl` | youtube / video / control_xl_presentation | buy link in YT description |
 

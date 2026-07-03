@@ -6,6 +6,7 @@ Read at the start of every task. One line per memory file.
 - [insights.md](insights.md) — distilled product/marketing insights that outlive individual experiments
 - [reference_r_ableton_rules.md](reference_r_ableton_rules.md) — verbatim r/ableton rules (channel ref for future posts); Rules 12/5/7/9/2/3 gate our repeat strategy
 - [pricing-tiers.md](pricing-tiers.md) — canonical price ladder by product scope: Micro $9 / Utility $14 / Workflow $24 / Flagship $39 / Suite $59–79; quote devices by tier
+- [content-assets.md](content-assets.md) — registry of owned SEO articles/guides usable as reply "closers"; STANDING DIRECTIVE: after comment/thread analysis (incl. YouTube n8n pipeline), proactively offer owner to link/publish/edit/create-similar. Asset #1 = PLANNED JTBD guide on LCXL MK3 mapping persistence
 - [Reddit watchlist](../analyst/reddit-threads-tracking.md) — analyst-owned registry of which Fadercraft Reddit posts we monitor (URLs, UTM campaign, PostHog status). The canonical watchlist of WHAT we're tracking — distinct from this journal's narrative read. Read-only; owner is the analyst.
 
 ## Standing context

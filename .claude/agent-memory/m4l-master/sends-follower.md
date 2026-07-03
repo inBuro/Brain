@@ -7,6 +7,12 @@ metadata:
 
 # Sends Follower — device facts (m4l-master)
 
+## ✅ SF-Track send_menu load-default → Manual — 2026-07-03 (CURRENT)
+`send_menu` = `umenu` (id/varname `send_menu`), Live-параметр `parameter_type:2` (enum), в `saved_attribute_attributes.valueof`. Дефолт свежей вставки задаётся ТОЛЬКО `parameter_initial` этого параметра (+`parameter_initial_enable:1`); JS на это явно полагается (sends_follower_track.js ~601-605, boot-redirect Manual→A удалён). Правка: `parameter_initial:[1]`→`[0]` (Manual). Байт-в-байт: 1 байт @ file-offset 10467 (`'1'`→`'0'`), размер 44942 неизменен, суффикс/ptch целы. Old md5 `e453ebb7…` → new `85504b60…`. Бэкап `~/Brain/Fadercraft/_device-backups/Sends Follower – Track.2026-07-03-162620.amxd`.
+- **Enum indices:** `["Manual","B","C","D"]` → **Manual = index 0** (JS-маркер selectedSend=-1). Item i>=1 = i-1-й доступный return.
+- **Меню ДИНАМИЧЕСКОЕ:** JS `rebuildMenu()` `menu clear`→`append "Manual"`→`append` буква на каждый return (`getcount("return_tracks")`). Item0 всегда Manual.
+- **✅ БАГ ИСПРАВЛЕН — 2026-07-03: parameter range теперь синхронизируется в рантайме.** В `rebuildMenu()` (sends_follower_track.js) после append-цикла собирается массив `enumLabels=["Manual",A,B,…N]` и шлётся `outlet(1,"menu","_parameter_range",…labels)` (через `outlet.apply`). Механизм: для Enum-umenu сообщение **`_parameter_range <label label …>`** (space-delimited enum-список) переустанавливает mmax = labelCount−1 = число returns. Роутинг: js outlet1 → `route menu` → `route show hide` (pass-through outlet2) → `send_menu` umenu inlet0. Гонится на КАЖДЫЙ rebuildMenu → add/remove return ре-синкает mmax динамически. Ставится ДО финального `menu set`, selectedSend save/restore/clamp уже покрывал reset. **JS-only** (unfrozen, .amxd не трогался). Old js md5 `98a051c2…` → new `8e1e1b11…`. node --check OK, Cyrillic-free. Бэкап `~/Brain/Fadercraft/_device-backups/sends_follower_track.2026-07-03-164420.js`. Требует полного Cmd+Q Live (не hot-reload). Каветы Push-refresh из forum-thread к нам не относятся (Push не используется, индекс всегда валиден).
+
 ## ✅ Y-sort fix перенесён на SF-Track — 2026-07-03 (CURRENT)
 Тот же range-scramble-фикс, что был в `sends_follower.js` (SF-Return), применён к `sends_follower_track.js` (SF-Track). У SF-Track было ДВА наивных пути `getnamed("bpslot"+s)`:
 - **`applySlotRanges()`** — range push (Min/Max → TargetMin/TargetMax[7]).

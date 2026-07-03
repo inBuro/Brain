@@ -24,6 +24,7 @@ Read at the start of every task. One line per memory file.
 - [day-2026-06-29-30.md](day-2026-06-29-30.md) — 06-29: 2 sess, maxforlive TR highly engaged (demo×5, video×2, footer_cta) but no buy_click; 06-30 (partial): reddit burst at 05:00 ICT (NO/US/GB), 3 clean sess, 0 buy_click, faq_open: top Q = existing Live Set compat + MK1/MK2 compat + M4L req; new geo Norway
 
 - [pricing-tiers.md](pricing-tiers.md) — canonical price ladder by product scope: Micro $9 / Utility $14 / Workflow $24 / Flagship $39 / Suite $59–79; reference for revenue/conversion modeling
+- [Content assets registry](../project-manager/content-assets.md) — PM-owned registry of owned SEO articles/guides usable as reply "closers"; STANDING DIRECTIVE: after comment/thread analysis (incl. YouTube n8n comment pipeline) proactively offer owner to link/publish/edit/create-similar. Asset #1 = PLANNED JTBD guide on LCXL MK3 mapping persistence. Read-only; owner is PM
 
 ## Standing context
 - Reports in Russian (chat), artifacts/docs in English. Clock times in Thai time (UTC+7).
