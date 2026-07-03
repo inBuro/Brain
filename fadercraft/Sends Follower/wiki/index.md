@@ -45,6 +45,11 @@ technical reference. It is a separate project, unrelated to the Instrument Follo
 
 - [[roadmap|Roadmap]] — released features and backlog.
 
+## FAQ
+
+- [[faq|FAQ]] — mapping persistence (save before restart), undo behaviour (one Cmd+Z per change),
+  why device `.maxpat`/`.js` edits need a full Live restart, send-menu return coverage.
+
 ## Logs
 
 - [[log|Change log]]

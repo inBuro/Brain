@@ -1,0 +1,153 @@
+{
+  "name": "PM Digest (Fadercraft)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [ { "field": "cronExpression", "expression": "0 11 * * 2,4,0" } ] }
+      },
+      "id": "sched",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Watermark: only comments added since the last successful digest\nconst store = $getWorkflowStaticData('global');\nconst since = store.lastDigest || new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();\nreturn [{ json: { since } }];"
+      },
+      "id": "window",
+      "name": "Window",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/databases/39255889-1bb0-818f-ae1c-cd5d93a94041/query",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            { "name": "Notion-Version", "value": "2022-06-28" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ filter: { timestamp: \"created_time\", created_time: { on_or_after: $json.since } }, sorts: [ { timestamp: \"created_time\", direction: \"ascending\" } ], page_size: 100 }) }}",
+        "options": {}
+      },
+      "id": "notionquery",
+      "name": "Notion Query New",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [600, 300],
+      "credentials": { "httpHeaderAuth": { "id": "odLkEsmGsjki1Lt8", "name": "Header Auth account 2" } }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const body = $input.all()[0]?.json || {};\nconst results = body.results || [];\nconst txt = (p, prop) => { const v = p[prop] || {}; const a = v.title || v.rich_text || []; return a[0]?.plain_text || ''; };\nconst rows = [];\nfor (const r of results) {\n  const p = r.properties || {};\n  rows.push({\n    text: txt(p, 'Comment'),\n    category: (p.Category?.select || {}).name || '',\n    reason: txt(p, 'Reason'),\n    likes: p.Likes?.number ?? 0,\n    url: p.URL?.url || ''\n  });\n}\nconst block = rows.map((r, i) => `${i + 1}. [${r.category}] лайков:${r.likes}\\n\"${r.text}\"\\nПричина: ${r.reason}\\nСсылка: ${r.url}`).join('\\n\\n');\nreturn [{ json: { count: rows.length, block } }];"
+      },
+      "id": "extract",
+      "name": "Extract New",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            { "id": "c1", "leftValue": "={{ $json.count }}", "rightValue": 0, "operator": { "type": "number", "operation": "gt" } }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "hasnew",
+      "name": "Has New?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: \"claude-haiku-4-5\", max_tokens: 1500, messages: [ { role: \"user\", content: \"Ты продуктовый менеджер Fadercraft (утилиты Max for Live для Ableton, флагман — контроллер Launch Control XL MK3). Ниже НОВЫЕ комментарии с YouTube из ресёрча аудитории. Сделай короткий дайджест на русском для письма владельцу:\\n1) «На что ответить» — топ приоритетов: краткая цитата, прямая ссылка, и в 1 строку угол ответа (maker-to-maker, без впаривания; Solo Follower не упоминать).\\n2) «Сигналы роадмапа» — 1-3 повторяющихся паттерна, если есть.\\nПиши сжато, готово к отправке как есть.\\n\\nКОММЕНТАРИИ:\\n\" + $json.block } ] }) }}",
+        "options": {}
+      },
+      "id": "digest",
+      "name": "Anthropic Digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1200, 300],
+      "credentials": { "httpHeaderAuth": { "id": "X5BUG3yyzGHppBJw", "name": "Header Auth account" } }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sendgrid.com/v3/mail/send",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ personalizations: [ { to: [ { email: \"hellokbbureau@gmail.com\" } ] } ], from: { email: \"hello@fadercraft.com\", name: \"Fadercraft PM\" }, subject: \"Fadercraft — новые комменты для ответа (\" + $('Extract New').item.json.count + \")\", content: [ { type: \"text/plain\", value: $json.content[0].text } ] }) }}",
+        "options": {}
+      },
+      "id": "sendmail",
+      "name": "SendGrid Send",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1400, 300],
+      "credentials": { "httpHeaderAuth": { "id": "", "name": "SendGrid API" } }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Advance the watermark only after a successful send\nconst store = $getWorkflowStaticData('global');\nstore.lastDigest = new Date().toISOString();\nreturn $input.all();"
+      },
+      "id": "watermark",
+      "name": "Save Watermark",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1600, 300]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": { "main": [[{ "node": "Window", "type": "main", "index": 0 }]] },
+    "Window": { "main": [[{ "node": "Notion Query New", "type": "main", "index": 0 }]] },
+    "Notion Query New": { "main": [[{ "node": "Extract New", "type": "main", "index": 0 }]] },
+    "Extract New": { "main": [[{ "node": "Has New?", "type": "main", "index": 0 }]] },
+    "Has New?": { "main": [[{ "node": "Anthropic Digest", "type": "main", "index": 0 }]] },
+    "Anthropic Digest": { "main": [[{ "node": "SendGrid Send", "type": "main", "index": 0 }]] },
+    "SendGrid Send": { "main": [[{ "node": "Save Watermark", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false
+}

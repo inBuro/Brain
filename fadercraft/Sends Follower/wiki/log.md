@@ -638,3 +638,12 @@ buildRefs/buildRef so a target change always passes. Pre-edit archives `…-2009
 node --check OK. Note: this removes downstream churn only — `js` is still banged 50×/s to sample state,
 so `js_messagehandler` stays nonzero even when working; measure `defer`/`gensym` instead. Activating the
 new JS needs a full device reload (Live caches JS by path). Full write-up: wiki/concepts/performance.md.
+
+## 2026-07-03 — Added FAQ page
+
+Created `wiki/faq.md` and linked it from `wiki/index.md`. Seeded from operational lessons of the
+2026-07-03 mapping marathon: (1) mappings live in the Set and must be Cmd+S'd before any Cmd+Q or
+they revert; (2) each AbletonMCP/panel change is its own Cmd+Z step (not grouped) — one undo is
+surgical, repeated undo unwinds a whole session, save decouples from the undo stack; (3) `.maxpat`/`.js`
+edits are process-cached and need a full Live restart (remove+re-add is insufficient); (4) SF-Track
+`send_menu` now pushes its parameter range so all returns (incl. later-added ones) are selectable.
