@@ -2,6 +2,7 @@
 name: ableton-producer
 description: Ableton Live session controller via AbletonMCP socket API. Manages device parameters, maps Sends Follower slots, probes track layouts, and runs dynamic mapping scripts. Use proactively for any task involving Live session state: reading/writing device parameters, mapping SF-Return or SF-Track slots, probing what devices are on which tracks, triggering MapAll. Knows the full AbletonMCP protocol and Sends Follower parameter layout. Communicates with Live at 127.0.0.1:9877 via Python socket scripts.
 tools: Bash, Read, Write
+model: opus
 ---
 
 # Ableton Producer Agent

@@ -1,0 +1,224 @@
+{
+  "name": "YouTube Comment Miner (Fadercraft)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "a1", "name": "keywords", "value": "ableton fat sound, launch control xl mapping, max for live performance", "type": "string" },
+            { "id": "a2", "name": "ruleKeywords", "value": "how,wish,problem,doesn't,dont,can you,is there,anyone,help,crash,bug,how do i,any way", "type": "string" },
+            { "id": "a3", "name": "aiCriteria", "value": "The comment expresses a pain point, a question, a feature request, or frustration about controlling Ableton Live with a MIDI controller, mapping macros, or a live-performance workflow.", "type": "string" },
+            { "id": "a4", "name": "minLikes", "value": 2, "type": "number" },
+            { "id": "a5", "name": "maxVideos", "value": 8, "type": "number" },
+            { "id": "a6", "name": "publishedAfter", "value": "2025-01-01T00:00:00Z", "type": "string" },
+            { "id": "a7", "name": "notionDbId", "value": "39255889-1bb0-818f-ae1c-cd5d93a94041", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "config",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const cfg = $input.first().json;\nreturn (cfg.keywords || '')\n  .split(',')\n  .map(k => k.trim())\n  .filter(Boolean)\n  .map(q => ({ json: { query: q } }));"
+      },
+      "id": "splitkw",
+      "name": "Split Keywords",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            { "name": "part", "value": "snippet" },
+            { "name": "q", "value": "={{ $json.query }}" },
+            { "name": "type", "value": "video" },
+            { "name": "maxResults", "value": "={{ $('Config').first().json.maxVideos }}" },
+            { "name": "order", "value": "relevance" },
+            { "name": "publishedAfter", "value": "={{ $('Config').first().json.publishedAfter }}" },
+            { "name": "relevanceLanguage", "value": "en" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ytsearch",
+      "name": "YouTube Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const out = [];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const body = items[i].json || {};\n  const query = $('Split Keywords').all()[i]?.json?.query || '';\n  for (const v of (body.items || [])) {\n    if (v.id && v.id.videoId) {\n      out.push({ json: {\n        query,\n        videoId: v.id.videoId,\n        videoTitle: v.snippet?.title || '',\n        channelTitle: v.snippet?.channelTitle || ''\n      }});\n    }\n  }\n}\nreturn out;"
+      },
+      "id": "extractvids",
+      "name": "Extract Videos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/commentThreads",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            { "name": "part", "value": "snippet" },
+            { "name": "videoId", "value": "={{ $json.videoId }}" },
+            { "name": "maxResults", "value": "100" },
+            { "name": "order", "value": "relevance" },
+            { "name": "textFormat", "value": "plainText" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "getcomments",
+      "name": "Get Comments",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1200, 300],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const out = [];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const body = items[i].json || {};\n  const meta = $('Extract Videos').all()[i]?.json || {};\n  for (const t of (body.items || [])) {\n    const s = t.snippet?.topLevelComment?.snippet;\n    if (!s) continue;\n    out.push({ json: {\n      query: meta.query || '',\n      videoId: meta.videoId || '',\n      videoTitle: meta.videoTitle || '',\n      url: 'https://www.youtube.com/watch?v=' + (meta.videoId || '') + '&lc=' + (t.snippet.topLevelComment.id || ''),\n      author: s.authorDisplayName || '',\n      text: s.textDisplay || '',\n      likeCount: s.likeCount || 0,\n      publishedAt: s.publishedAt || '',\n      replyCount: t.snippet.totalReplyCount || 0\n    }});\n  }\n}\nreturn out;"
+      },
+      "id": "flatten",
+      "name": "Flatten Comments",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1400, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const cfg = $('Config').first().json;\nconst minLikes = Number(cfg.minLikes) || 0;\nconst rules = (cfg.ruleKeywords || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);\nconst out = [];\nfor (const item of $input.all()) {\n  const t = (item.json.text || '').toLowerCase();\n  const hit = (item.json.likeCount >= minLikes) || rules.some(r => t.includes(r));\n  if (hit) out.push(item);\n}\nreturn out;"
+      },
+      "id": "rulefilter",
+      "name": "Rule Pre-filter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1600, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: \"claude-haiku-4-5\", max_tokens: 200, messages: [ { role: \"user\", content: \"You screen YouTube comments for audience research.\\n\\nCRITERION: \" + $('Config').first().json.aiCriteria + \"\\n\\nCOMMENT: \\\"\" + ($json.text || '') + \"\\\"\\n\\nReturn ONLY compact JSON, no prose: {\\\"match\\\": true|false, \\\"category\\\": \\\"pain|question|feature_request|competitor|other\\\", \\\"reason\\\": \\\"<=12 words\\\"}\" } ] }) }}",
+        "options": {}
+      },
+      "id": "classify",
+      "name": "Classify",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1800, 300],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const out = [];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const resp = items[i].json || {};\n  const base = $('Rule Pre-filter').all()[i]?.json || {};\n  let verdict = { match: false, category: 'other', reason: 'parse_error' };\n  try {\n    const txt = resp.content?.[0]?.text;\n    if (txt) {\n      const m = txt.match(/\\{[\\s\\S]*\\}/);\n      if (m) verdict = JSON.parse(m[0]);\n    }\n  } catch (e) {}\n  out.push({ json: { ...base, aiMatch: !!verdict.match, category: verdict.category || 'other', reason: verdict.reason || '' } });\n}\nreturn out;"
+      },
+      "id": "parseverdict",
+      "name": "Parse Verdict",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            { "id": "c1", "leftValue": "={{ $json.aiMatch }}", "rightValue": true, "operator": { "type": "boolean", "operation": "true", "singleValue": true } }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "keepmatches",
+      "name": "Keep Matches",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [2200, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/pages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            { "name": "Notion-Version", "value": "2022-06-28" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ parent: { database_id: $('Config').first().json.notionDbId }, properties: { \"Comment\": { title: [ { text: { content: ($json.text || '').slice(0, 1900) } } ] }, \"Author\": { rich_text: [ { text: { content: $json.author || '' } } ] }, \"Category\": { select: { name: $json.category || 'other' } }, \"Reason\": { rich_text: [ { text: { content: $json.reason || '' } } ] }, \"Likes\": { number: $json.likeCount || 0 }, \"Replies\": { number: $json.replyCount || 0 }, \"Video\": { rich_text: [ { text: { content: $json.videoTitle || '' } } ] }, \"URL\": { url: $json.url || null }, \"Query\": { rich_text: [ { text: { content: $json.query || '' } } ] }, \"Published\": { date: { start: $json.publishedAt || null } } } }) }}",
+        "options": {}
+      },
+      "id": "notioncreate",
+      "name": "Notion Create",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2400, 300],
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Manual Trigger": { "main": [[{ "node": "Config", "type": "main", "index": 0 }]] },
+    "Config": { "main": [[{ "node": "Split Keywords", "type": "main", "index": 0 }]] },
+    "Split Keywords": { "main": [[{ "node": "YouTube Search", "type": "main", "index": 0 }]] },
+    "YouTube Search": { "main": [[{ "node": "Extract Videos", "type": "main", "index": 0 }]] },
+    "Extract Videos": { "main": [[{ "node": "Get Comments", "type": "main", "index": 0 }]] },
+    "Get Comments": { "main": [[{ "node": "Flatten Comments", "type": "main", "index": 0 }]] },
+    "Flatten Comments": { "main": [[{ "node": "Rule Pre-filter", "type": "main", "index": 0 }]] },
+    "Rule Pre-filter": { "main": [[{ "node": "Classify", "type": "main", "index": 0 }]] },
+    "Classify": { "main": [[{ "node": "Parse Verdict", "type": "main", "index": 0 }]] },
+    "Parse Verdict": { "main": [[{ "node": "Keep Matches", "type": "main", "index": 0 }]] },
+    "Keep Matches": { "main": [[{ "node": "Notion Create", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false
+}

@@ -7,6 +7,21 @@ metadata:
 
 # Sends Follower — device facts (m4l-master)
 
+## ✅ Y-sort fix перенесён на SF-Track — 2026-07-03 (CURRENT)
+Тот же range-scramble-фикс, что был в `sends_follower.js` (SF-Return), применён к `sends_follower_track.js` (SF-Track). У SF-Track было ДВА наивных пути `getnamed("bpslot"+s)`:
+- **`applySlotRanges()`** — range push (Min/Max → TargetMin/TargetMax[7]).
+- **`mapall()`** — binding push: SF-Track биндит ПО ИМЕНИ (`bp.subpatcher().getnamed("mb_map_id").message(id)`), обходя mm_idroute — НЕ через outlet-роутинг. Значит binding-канал тоже был уязвим к scramble (не был safe).
+Оба переведены на общий helper **`orderedSlotBoxes(mmSub)`** (собирает 8 bpslot, читает Y через `bpatcherRowY()` = presentation_rect→patching_rect→bp.rect, сорт top→bottom, возвращает боксы[r]=строка r). `applySlotRanges`: Min+Max одним проходом в boxes[r]. `mapall`: сначала резолвит id[s] для всех 8 слотов (по param-индексу, независимо от порядка панели), ПОТОМ пишет id[r] в boxes[r]. Оба канала теперь identity и взаимно согласованы (один и тот же ordered-список). Диагностик-дампы SF-Return (sfWriteDiag/File/sfGeomDump) НЕ портировались — не нужны.
+Офсеты SF-Track подтверждены: DI_START=1, MAPALL=9, PI_START=10, TI_START=18, MAX_START=26, MIN_START=34 (= SF-Return, без +1-сдвига — Mode/Source = pe=0 UI-таб).
+- **Бэкап pre-edit:** `~/Brain/Fadercraft/_device-backups/sends_follower_track.2026-07-03-145424.js` (md5 `6ccbd1bc…`).
+- **CURRENT `sends_follower_track.js`** md5 `98a051c2…`, node --check clean, Cyrillic-free. multimap.maxpat НЕ трогался (уже пофикшен и расшарен).
+- ⚠️ Загрузка изменённого JS требует полного перезапуска Live (Cmd+Q) — не hot-reload.
+
+## ⚠️ ГРАБЛЬ: multimap range-канал — адресуй bpslot по визуальному Y, НЕ по varname
+`applySlotRanges()` в `sends_follower.js` раньше слал maxV[s]/minV[s] в `getnamed("bpslot"+s)`, полагая «bpslot{s} = физ.строка s+1». **В рантайме M4L это НЕ гарантировано:** live-тест с уникальными маркерами (slot N→Max=N*10, binding=Macro N как линейка строк) показал scrambled range (row→slot Max=[8,6,1,2,3,4,5,7]) при статически-identity varname'ах — файловая геометрия НЕ предсказывает рантайм-резолв. Min и Max расходились независимо (Min низ повёрнут на 1) — признак, что доверять varname→row нельзя.
+**Приём (устойчивый):** собери все 8 bpslot-боксов (getnamed по 8 уникальным именам → 8 разных боксов = все строки), прочитай визуальный Y каждого (`bp.getboxattr("presentation_rect")`, fallback patching_rect / `bp.rect`), отсортируй top→bottom, пушь maxV[r]+minV[r] в r-й по Y бокс — Min и Max ОДНИМ проходом в ОДИН subpatcher (убирает Min/Max-расхождение). Так range садится на ту же физ.строку, что binding (Macro N), независимо от порядка, в котором getnamed отдаёт боксы. helper `bpatcherRowY(bp)`.
+Панель открывается в presentation (`openinpresentation:1`) — визуальный порядок = presentation-Y. Binding-линейка (Macro-лейблы) = ground truth строк; range обязан совпасть с ней.
+
 ## ✅ Push model: qmetro polling removed — 2026-07-02 (CURRENT)
 **Return.amxd** 47067B, unfrozen. **Track.amxd** 44942B, unfrozen.
 - **Удалены из обоих .amxd (Chain 1, qmetro 500):** `obj-33` (qmetro 500), `obj-29` (getpath), `obj-31` (live.object), `obj-36..obj-45` (route path / zl.slice / route return_tracks / unpack / int / change / prepend build / t l b b / msg "1" / msg "0"). Итого 13 boxes + цепочка связей.
@@ -17,7 +32,14 @@ metadata:
 - **sends_follower_track.js:** `bang()` → no-op; `userval` Manual-block: немедленный output+syncControls вместо defer-to-bang; `init()` + safety Task(resync(true), 1000ms) перед copy-detect block.
 - **Бэкапы (4 файла):** `~/Brain/Fadercraft/_device-backups/*2026-07-02-232809*`
 
-## ✅ MapButton swap-btn refactor (pattr-bang + pure-icon) — 2026-07-02 (CURRENT)
+## ✅ MapButton border-fix + multimap spacing — 2026-07-03 (CURRENT on-disk)
+⚠️ **On-disk MapButton != секция ниже (2026-07-02 рефактор, 35 boxes/51 lines).** Реальный файл на диске 2026-07-03 был **38 boxes / 57 lines** и содержит `obj-swap-fmax/fmin/init/cmax/cmin` (которые тот рефактор якобы удалял) — значит founder/Max-editor перезаписал файл после той сборки. ВСЕГДА базировать правки на текущем on-disk, не на памяти.
+- **Бэкапы pre-edit:** `~/Brain/Fadercraft/_device-backups/MapButton.2026-07-03-144459.maxpat` (38 boxes/57 lines), `multimap.2026-07-03-144459.maxpat`.
+- **Fix 1 (border на filled state):** `obj-14` (Map live.text, appearance=2, varname `live.text`) — `bgoncolor` и `bordercolor` = один оранжевый `[1.0,0.709804,0.196078,1.0]` → fill+border двоятся в mapped state. live.text не имеет `borderoncolor`, bordercolor статичен (expression пустой, colorlogic его не шлёт). Решение: новая ветка от `obj-14` outlet0 (value 0/1) → `sel 0 1` (`obj-border-sel`) → 2 message (`obj-border-off`=orange a1 при value0/unmapped-outline, `obj-border-on`=orange a0 при value1/filled-clean) → обратно в `obj-14` inlet0. +3 boxes/+5 lines → **41 boxes/62 lines**. Fill/text не тронуты.
+- **Fix 2 (multimap равномерные gaps):** 8 bpslot bpatcher, presentation Y-шаги были 15.862×5 + 16.552×2 (аномалии bpslot1→2, bpslot6→7); patching Y-шаги 32×6 + 34.71/38.53. Применён самый частый шаг: pres=15.862069, patch=32.0. Высоты (pres 21, patch 20.8482) НЕ менялись, порядок bpslot0..7 top→bottom сохранён, все mm_idroute patchlines/varname/id байт-в-байт идентичны бэкапу.
+- **Swap default (3-я правка от coordinator, НЕ применена):** `obj-swap-init` on-disk уже = `"set 1"` (кнопка стартует filled; `live.thisdevice` obj-6 бэнгает init→swap_btn `set 1` без вывода). Это ЕДИНСТВЕННЫЙ источник дефолта swap-btn — второго определителя нет. Откат на `set 0` = откат уже присутствующего состояния по неавторитетному coordinator-релею (не user) → оставлено пользователю на решение. Swap-логика (`t b` swap-on-click) не трогалась.
+
+## ✅ MapButton swap-btn refactor (pattr-bang + pure-icon) — 2026-07-02 (устарело on-disk, см. выше)
 **MapButton.maxpat** 35 boxes, 51 lines:
 - **Архив:** `~/Brain/Fadercraft/_device-backups/MapButton_20260702_211950.maxpat` (до рефактора, 57 lines)
 - **Удалены объекты:** `obj-swap-fmax`, `obj-swap-fmin` (tracking-буферы = 0 до первого cold-inlet)
