@@ -621,3 +621,21 @@ Append-only журнал операций над вики.
 - **Code cleanup**: удалены 13 неиспользуемых компонентов — `Avatar`, `Badge`, `Input`, `AccordionItem` (atoms); `ProductCard` (molecules); `CatalogSection`, `ExplainerSection`, `FAQAccordion`, `Hero`, `MechanismDiagram`, `ModeGrid`, `ProductGallery`, `RequirementsList` (organisms). `components/index.ts` перетряхнут. Билд: **171 → 133 модулей**, **CSS 73.83 → 71.61 KB**, ts-check чисто.
 - **Прогресс**: T7-real 5/7 → 10/12 (83%). T11 переведена с Buttondown на Gumroad-follow → 1/1 (100%, остальное → Phase 1). T12 6/14 → 7/15 (47%). **Phase 0 итого: 69/114 → 75/108 (~69%).** Общее total опустилось до 108, потому что 6 Buttondown-пунктов уехали из Phase 0 в Phase 1.
 - Деплоя не делал — изменения сидят локально на `deploy/fadercraft-landing-2026-05-25`. Жду явное «деплой».
+
+## 2026-07-08 — Audience/Reddit research + copywriter agent-memory
+
+Пользователь попросил «позвать копирайтера» и разобрать аудиторию проекта + что происходило на Reddit за последнее время. Запустил копирайтер-агента (general-purpose) с brand voice + ICP из [[../brand/brief]].
+
+**Честная оговорка о данных:** прямого доступа к Reddit из окружения нет — сеть режет `reddit.com` (включая `.json`), поиск по `site:reddit.com` тредов не отдавал; профильные медиа (synthtopia, gearnews, gearspace) часто 403 на WebFetch. Поэтому **ни одной верифицированной Reddit-ссылки собрать не удалось** — материал из обзоров/форумных сниппетов, помечен `[косвенная]`. Reddit добирать вручную.
+
+**Ключевые находки:**
+- **Firmware V1.1 (29 янв 2026)** — главное событие периода. Добавил fader pickup, кривые энкодеров, выбор Custom Mode удержанием Mode. → задаёт **главное возражение лендинга**: «зачем Fadercraft, если V1.1 это уже дал?». Ответ: firmware = сырые примитивы, Fadercraft = готовая сет-архитектура (слои + Solo Follower + без MIDI-конфликтов).
+- Подтверждённые боли MK3: OLED «shows nothing», энкодеры «too stiff» для сцены, Custom Modes только через Components («not very friendly»).
+- Сильнейшая копи-зацепка: «Custom Modes без Components».
+- Язык аудитории собран как сырьё; «Solo Follower / два слоя / один жест» — наш нарратив, НЕ речь пользователей (не выдавать за цитаты).
+
+**Создано:**
+- [[audience-reddit]] — страница с событиями, болями, языком аудитории, инсайтами и источниками. Указатель добавлен в [[index]] (раздел Reference).
+- `.claude/agent-memory/copywriter/MEMORY.md` — память копирайтер-агента по образцу `ux-ui-designer` (voice, ICP, market signal, доступ к данным).
+
+**Roadmap:** без изменений — это research, не закрытие пункта Phase 0.

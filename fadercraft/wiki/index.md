@@ -24,6 +24,7 @@ updated: 2026-05-06
 
 - [[payment-rails]] — матрица платёжных рельсов (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) с вердиктами под профиль «русский паспорт + Таиланд», расшифровка какие тайские документы что разблокируют.
 - [[external-links]] — единая таблица всех внешних ссылок Fadercraft (соцсети, Gumroad, support, лендинг); single source of truth для футера и outreach.
+- [[audience-reddit]] — разбор аудитории и рыночного сигнала вокруг LCXL MK3 (firmware V1.1, боли MK3, язык аудитории, инсайты для копирайтинга). Оговорка: прямого доступа к Reddit не было, материал из обзоров/форумов — Reddit добирать вручную.
 
 ## Synthesis
 
