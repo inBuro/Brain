@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "Кликните где угодно на панели, чтобы она получила фокус — тогда заработают хоткеи"
+  },
+  "deckEmptyHintB": {
+    "message": "Добавьте второй трек, чтобы начать сведение"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (или клик по ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "Любая пара"
+  },
+  "hintLeftRightDesc": {
+    "message": "левая клавиша убавляет, правая прибавляет — один и тот же порядок для каждой пары выше"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "ставит в нейтральное положение (0 dB / unity gain)"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "убавляет до минимума, если уже в нейтрали"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "мышью вверх/вниз, или двумя пальцами по трекпаду — регулирует параметр"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "подвинуть влево/вправо или зажать левый/правый"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "перетащить полосу мышью, или свайпом двумя пальцами по трекпаду"
+  },
+  "hintTabDesc": {
+    "message": "поменять местами треки A/B (или большая кнопка в шапке, если подключено)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "общий для обеих дек, не отдельная настройка для каждой деки"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "или перетащить полосу между значениями BPM — смешивает темп и автоматически выравнивает фазу бита, отдельного действия для синка не нужно"
+  },
+  "trialBannerText": {
+    "message": "Бесплатное время закончилось — GrooveMix продолжает работать, но подумайте о покупке лицензии."
+  },
+  "trialBuyLink": {
+    "message": "Купить лицензию"
+  },
+  "licenseActivateBtn": {
+    "message": "Активировать"
+  },
+  "licenseChecking": {
+    "message": "Проверка…"
+  },
+  "licenseActivated": {
+    "message": "Лицензия активна — спасибо!"
+  },
+  "licenseInvalid": {
+    "message": "Неверный ключ лицензии."
+  },
+  "feedbackPrompt": {
+    "message": "Что бы вы улучшили в приложении?"
+  },
+  "feedbackSubmit": {
+    "message": "Отправить"
+  },
+  "feedbackSent": {
+    "message": "Спасибо, получили!"
+  },
+  "feedbackPlaceholder": {
+    "message": "Опишите идею, проблему или недостающую функцию"
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "Klikněte kamkoli do panelu pro jeho aktivaci – tím se zapnou klávesové zkratky"
+  },
+  "deckEmptyHintB": {
+    "message": "Přidejte druhou skladbu a začněte mixovat"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (nebo klikněte na ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "Jakýkoli pár"
+  },
+  "hintLeftRightDesc": {
+    "message": "levá klávesa snižuje, pravá zvyšuje – stejné pořadí pro každý pár ovladačů výše"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "skočí na neutrální pozici (0dB / jednotný zisk)"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "sníží na minimum, pokud je již v neutrální pozici"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "myší nahoru/dolů, nebo dvěma prsty na trackpadu, nastavíte parametr"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "poposunout nebo podržte levou/pravou"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "klikněte a táhněte stopu, nebo přejeďte dvěma prsty na trackpadu"
+  },
+  "hintTabDesc": {
+    "message": "prohodit, která stopa je A/B (nebo velké tlačítko v záhlaví, po připojení)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "sdílené mezi decky, ne nastavení pro jednotlivý deck"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "nebo táhněte lištu mezi údaji BPM – mísí tempo a automaticky zarovnává i fázi beatu, není potřeba žádná samostatná akce synchronizace"
+  },
+  "trialBannerText": {
+    "message": "Bezplatná zkušební doba vypršela – GrooveMix stále funguje, ale zvažte pořízení licence."
+  },
+  "trialBuyLink": {
+    "message": "Koupit licenci"
+  },
+  "licenseActivateBtn": {
+    "message": "Aktivovat"
+  },
+  "licenseChecking": {
+    "message": "Kontroluji…"
+  },
+  "licenseActivated": {
+    "message": "Licencováno – děkujeme!"
+  },
+  "licenseInvalid": {
+    "message": "Neplatný licenční klíč."
+  },
+  "feedbackPrompt": {
+    "message": "Co byste vylepšili?"
+  },
+  "feedbackSubmit": {
+    "message": "Odeslat"
+  },
+  "feedbackSent": {
+    "message": "Děkujeme – přijato!"
+  },
+  "feedbackPlaceholder": {
+    "message": "Popište nápad, problém nebo chybějící funkci."
+  }
+}

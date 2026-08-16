@@ -13,7 +13,7 @@
       "parameters": {
         "assignments": {
           "assignments": [
-            { "id": "a1", "name": "keywords", "value": "ableton fat sound, launch control xl mapping, max for live performance", "type": "string" },
+            { "id": "a1", "name": "keywords", "value": "ableton fat sound, launch control xl mapping, max for live performance, ableton show midi mapping on screen, midi controller see knob values ableton, launch control xl mk3 ableton, ableton control selected track midi controller, launch control xl mixing, roto control ableton, knobbler ableton live, faderfox ableton live, ableton midi controller banking, ableton controller follow selected track", "type": "string" },
             { "id": "a2", "name": "ruleKeywords", "value": "how,wish,problem,doesn't,dont,can you,is there,anyone,help,crash,bug,how do i,any way", "type": "string" },
             { "id": "a3", "name": "aiCriteria", "value": "The comment expresses a pain point, a question, a feature request, or frustration about controlling Ableton Live with a MIDI controller, mapping macros, or a live-performance workflow.", "type": "string" },
             { "id": "a4", "name": "minLikes", "value": 2, "type": "number" },
@@ -39,7 +39,7 @@
       "name": "Split Keywords",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [600, 300]
+      "position": [600, 200]
     },
     {
       "parameters": {
@@ -65,6 +65,33 @@
       "name": "YouTube Search",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
+      "position": [800, 100]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            { "name": "part", "value": "snippet" },
+            { "name": "q", "value": "={{ $json.query }}" },
+            { "name": "type", "value": "video" },
+            { "name": "videoDuration", "value": "short" },
+            { "name": "maxResults", "value": "={{ $('Config').first().json.maxVideos }}" },
+            { "name": "order", "value": "relevance" },
+            { "name": "publishedAfter", "value": "={{ $('Config').first().json.publishedAfter }}" },
+            { "name": "relevanceLanguage", "value": "en" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ytsearch_shorts",
+      "name": "YouTube Search Shorts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [800, 300]
     },
     {
@@ -76,7 +103,39 @@
       "name": "Extract Videos",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
+      "position": [1000, 100]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const out = [];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const body = items[i].json || {};\n  const query = $('Split Keywords').all()[i]?.json?.query || '';\n  for (const v of (body.items || [])) {\n    if (v.id && v.id.videoId) {\n      out.push({ json: {\n        query: query + ' [shorts]',\n        videoId: v.id.videoId,\n        videoTitle: v.snippet?.title || '',\n        channelTitle: v.snippet?.channelTitle || ''\n      }});\n    }\n  }\n}\nreturn out;"
+      },
+      "id": "extractvids_shorts",
+      "name": "Extract Videos Shorts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "return [\n  { json: { query: 'evergreen', videoId: 'GBlMrDVWzDo', videoTitle: 'How to set up Global MIDI Mappings in Ableton Live', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'NcfVQYjq41s', videoTitle: 'Do motorized knobs make MIDI controllers better? ROTO CONTROL', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: '0j4hQxlQCG0', videoTitle: 'How well does the new Launch Control XL work with Ableton Live', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'yKQw86RI-QA', videoTitle: 'Launch Control XL 3 vs MK2 // Live set ideas // Review', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'fcglz81PLxA', videoTitle: 'Novation Launch Control MK3 // and how to add any features', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'h7LXieS-UbM', videoTitle: 'Controlling Ableton Live with Launch Control XL 3', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'tCwBxW-p0Uo', videoTitle: 'How To Set Up Your MIDI Controller In Ableton Live', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'iTpKXWvw-8k', videoTitle: 'Using Launch Control XL 3 Custom Modes with Ableton Live', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'GopTwX6lFPI', videoTitle: 'MIDI Mapping and Key Mapping in Ableton Live 11', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: '163bfqHUEqk', videoTitle: 'The Launch Control XL by Novation - Deep Dive tutorial', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'Be4O1vaxjxU', videoTitle: 'Knobbler Feature Walkthru - Ableton Live Control and Navigation', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 't_Ii5rTT6L4', videoTitle: 'How I use the Melbourne Instruments Roto-Control with Ableton', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'nYHkMfo4uLU', videoTitle: 'Before You Buy The Launch Control XL3, You Need To Know This', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'AG0p6yo4KPs', videoTitle: 'Auto arm track on selection and other Ableton tips', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'ItYFX91KepM', videoTitle: 'Why the LAUNCH CONTROL by Novation is AMAZING', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'm3h8QtVeWb8', videoTitle: 'Knobbler Installation and Feature Walkthrough - 2026!', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'F5oyFxfwaTY', videoTitle: 'How to Use Macro Mapping in Ableton Live 10', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'luZWMJyKrD8', videoTitle: 'Ableton Live 12 Settings To Turn OFF Now!', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: '_9R3Qqd7a2s', videoTitle: 'How to save midi mappings to your instrument racks in Ableton', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'lipFb4ZBawA', videoTitle: 'How To Save MIDI Mappings In Ableton Live', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: '83ENrGneer4', videoTitle: 'How to Make a Reverb Throw Rack | Ableton Effects Only', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: '5Bmnm5uOOvU', videoTitle: 'Ableton Delay Trick', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'ONYK7Gq_nUk', videoTitle: 'Ableton Live Sends & Returns EXPLAINED!', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'obrV3MuWcwU', videoTitle: 'How to remotely change between instrument tracks in Ableton', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: '5bYM6jN52to', videoTitle: 'Ableton Quick Tip: Midi Mapping Tricks pt 2', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'pyl8DphhhqU', videoTitle: 'Understand Sends & Returns - Ableton Live Tutorial', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'OjxzHr6NiKo', videoTitle: 'Did Novation Just Beat Ableton? (Launch Control 3 Review)', channelTitle: '' } },\n  { json: { query: 'evergreen', videoId: 'e-5EEVff2Hw', videoTitle: 'Novation Launch Control XL 3 MIDI Control Surface Overview', channelTitle: '' } }\n];"
+      },
+      "id": "evergreen",
+      "name": "Evergreen Video IDs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [600, 500]
+    },
+    {
+      "parameters": {
+        "mode": "append"
+      },
+      "id": "mergevideos",
+      "name": "Merge Videos",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1200, 300]
     },
     {
       "parameters": {
@@ -100,67 +159,66 @@
       "name": "Get Comments",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1200, 300],
+      "position": [1400, 300],
       "onError": "continueRegularOutput"
     },
     {
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "const out = [];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const body = items[i].json || {};\n  const meta = $('Extract Videos').all()[i]?.json || {};\n  for (const t of (body.items || [])) {\n    const s = t.snippet?.topLevelComment?.snippet;\n    if (!s) continue;\n    out.push({ json: {\n      query: meta.query || '',\n      videoId: meta.videoId || '',\n      videoTitle: meta.videoTitle || '',\n      url: 'https://www.youtube.com/watch?v=' + (meta.videoId || '') + '&lc=' + (t.snippet.topLevelComment.id || ''),\n      author: s.authorDisplayName || '',\n      text: s.textDisplay || '',\n      likeCount: s.likeCount || 0,\n      publishedAt: s.publishedAt || '',\n      replyCount: t.snippet.totalReplyCount || 0\n    }});\n  }\n}\nreturn out;"
+        "jsCode": "const out = [];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const body = items[i].json || {};\n  const meta = $('Merge Videos').all()[i]?.json || {};\n  for (const t of (body.items || [])) {\n    const s = t.snippet?.topLevelComment?.snippet;\n    if (!s) continue;\n    out.push({ json: {\n      query: meta.query || '',\n      videoId: meta.videoId || '',\n      videoTitle: meta.videoTitle || '',\n      url: 'https://www.youtube.com/watch?v=' + (meta.videoId || '') + '&lc=' + (t.snippet.topLevelComment.id || ''),\n      author: s.authorDisplayName || '',\n      text: s.textDisplay || '',\n      likeCount: s.likeCount || 0,\n      publishedAt: s.publishedAt || '',\n      replyCount: t.snippet.totalReplyCount || 0\n    }});\n  }\n}\nreturn out;"
       },
       "id": "flatten",
       "name": "Flatten Comments",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [1400, 300]
-    },
-    {
-      "parameters": {
-        "mode": "runOnceForAllItems",
-        "jsCode": "const cfg = $('Config').first().json;\nconst minLikes = Number(cfg.minLikes) || 0;\nconst rules = (cfg.ruleKeywords || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);\nconst out = [];\nfor (const item of $input.all()) {\n  const t = (item.json.text || '').toLowerCase();\n  const hit = (item.json.likeCount >= minLikes) || rules.some(r => t.includes(r));\n  if (hit) out.push(item);\n}\nreturn out;"
-      },
-      "id": "rulefilter",
-      "name": "Rule Pre-filter",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [1600, 300]
     },
     {
       "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const cfg = $('Config').first().json;\nconst minLikes = Number(cfg.minLikes) || 0;\nconst rules = (cfg.ruleKeywords || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);\nconst out = [];\nfor (const item of $input.all()) {\n  const t = (item.json.text || '').toLowerCase();\n  const hit = (item.json.likeCount >= minLikes) && rules.some(r => t.includes(r));\n  if (hit) out.push(item);\n}\nreturn out;"
+      },
+      "id": "rulefilter",
+      "name": "Rule Pre-filter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1800, 300]
+    },
+    {
+      "parameters": {
         "method": "POST",
-        "url": "https://api.anthropic.com/v1/messages",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
         "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendHeaders": true,
-        "specifyHeaders": "keypair",
-        "headerParameters": {
-          "parameters": [
-            { "name": "anthropic-version", "value": "2023-06-01" },
-            { "name": "content-type", "value": "application/json" }
-          ]
-        },
+        "genericAuthType": "httpQueryAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ model: \"claude-haiku-4-5\", max_tokens: 200, messages: [ { role: \"user\", content: \"You screen YouTube comments for audience research.\\n\\nCRITERION: \" + $('Config').first().json.aiCriteria + \"\\n\\nCOMMENT: \\\"\" + ($json.text || '') + \"\\\"\\n\\nReturn ONLY compact JSON, no prose: {\\\"match\\\": true|false, \\\"category\\\": \\\"pain|question|feature_request|competitor|other\\\", \\\"reason\\\": \\\"<=12 words\\\"}\" } ] }) }}",
-        "options": {}
+        "jsonBody": "={{ JSON.stringify({ contents: [ { parts: [ { text: \"You screen YouTube comments for audience research.\\n\\nCRITERION: \" + $('Config').first().json.aiCriteria + \"\\n\\nCOMMENT: \\\"\" + ($json.text || '') + \"\\\"\\n\\nReturn ONLY compact JSON, no prose: {\\\"match\\\": true|false, \\\"category\\\": \\\"pain|question|feature_request|competitor|other\\\", \\\"reason\\\": \\\"<=12 words\\\"}\" } ] } ], generationConfig: { maxOutputTokens: 200, temperature: 0 } }) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 4500
+            }
+          }
+        }
       },
       "id": "classify",
       "name": "Classify",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1800, 300],
+      "position": [2000, 300],
       "onError": "continueRegularOutput"
     },
     {
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "const out = [];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const resp = items[i].json || {};\n  const base = $('Rule Pre-filter').all()[i]?.json || {};\n  let verdict = { match: false, category: 'other', reason: 'parse_error' };\n  try {\n    const txt = resp.content?.[0]?.text;\n    if (txt) {\n      const m = txt.match(/\\{[\\s\\S]*\\}/);\n      if (m) verdict = JSON.parse(m[0]);\n    }\n  } catch (e) {}\n  out.push({ json: { ...base, aiMatch: !!verdict.match, category: verdict.category || 'other', reason: verdict.reason || '' } });\n}\nreturn out;"
+        "jsCode": "const out = [];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const resp = items[i].json || {};\n  const base = $('Rule Pre-filter').all()[i]?.json || {};\n  let verdict = { match: false, category: 'other', reason: 'parse_error' };\n  try {\n    const txt = resp.candidates?.[0]?.content?.parts?.[0]?.text;\n    if (txt) {\n      const m = txt.match(/\\{[\\s\\S]*\\}/);\n      if (m) verdict = JSON.parse(m[0]);\n    }\n  } catch (e) {}\n  out.push({ json: { ...base, aiMatch: !!verdict.match, category: verdict.category || 'other', reason: verdict.reason || '' } });\n}\nreturn out;"
       },
       "id": "parseverdict",
       "name": "Parse Verdict",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2000, 300]
+      "position": [2200, 300]
     },
     {
       "parameters": {
@@ -177,7 +235,84 @@
       "name": "Keep Matches",
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2,
-      "position": [2200, 300]
+      "position": [2400, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/databases/39255889-1bb0-818f-ae1c-cd5d93a94041/query",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            { "name": "Notion-Version", "value": "2022-06-28" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"page_size\":100}",
+        "options": {
+          "pagination": {
+            "paginate": true,
+            "paginationMode": "updateAParameterInEachRequest",
+            "parameters": {
+              "parameters": [
+                {
+                  "type": "body",
+                  "name": "start_cursor",
+                  "value": "={{ $response.body.next_cursor }}"
+                }
+              ]
+            },
+            "paginationCompleteWhen": "customExpression",
+            "completeExpression": "={{ $response.body.has_more === false }}",
+            "limitPagesFetched": true,
+            "maxRequests": 50,
+            "requestInterval": 250
+          }
+        }
+      },
+      "id": "querynotiondb",
+      "name": "Query Notion DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [600, 700],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Each input item is one paginated Notion query API response.\n// item.json.results is the array of Notion page objects for that batch.\n// There is no separate URL property in this DB — the comment permalink\n// lives as an href annotation on the Comment title's rich-text run.\nconst knownIds = [];\nconst seen = new Set();\n\nfor (const item of $input.all()) {\n  const results = item.json.results || [];\n  for (const page of results) {\n    const runs = page.properties?.Comment?.title || [];\n    const href = runs.find(r => r.href)?.href;\n    if (href) {\n      try {\n        const lc = new URL(href).searchParams.get('lc');\n        if (lc && !seen.has(lc)) {\n          seen.add(lc);\n          knownIds.push(lc);\n        }\n      } catch (e) {}\n    }\n  }\n}\n\nreturn [{ json: { knownIds } }];"
+      },
+      "id": "extractknownids",
+      "name": "Extract Known IDs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 700]
+    },
+    {
+      "parameters": {
+        "mode": "append"
+      },
+      "id": "syncdedup",
+      "name": "Sync Dedup",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [2600, 450]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Items arriving here are from two branches merged by Sync Dedup:\n//   - Comment items from Keep Matches: have .text, .url, .videoId, etc.\n//   - One knownIds item from Extract Known IDs: has .knownIds (array of lc strings).\n// Separate them by shape, build the known-id set, then drop already-stored comments.\nconst items = $input.all();\n\nconst knownIdsItem = items.find(i => Array.isArray(i.json.knownIds));\nconst commentItems = items.filter(i => !Array.isArray(i.json.knownIds));\n\nconst knownIds = new Set(knownIdsItem?.json?.knownIds || []);\n\nconst out = [];\nfor (const item of commentItems) {\n  const url = item.json.url || '';\n  let lc = '';\n  try { lc = new URL(url).searchParams.get('lc') || ''; } catch (e) {}\n  // If lc can't be parsed (safety), let it through.\n  if (!lc || !knownIds.has(lc)) {\n    out.push(item);\n  }\n}\nreturn out;"
+      },
+      "id": "filterduplicates",
+      "name": "Filter Duplicates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2800, 300]
     },
     {
       "parameters": {
@@ -195,29 +330,52 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ parent: { database_id: $('Config').first().json.notionDbId }, properties: { \"Comment\": { title: [ { text: { content: ($json.text || '').slice(0, 1900) } } ] }, \"Author\": { rich_text: [ { text: { content: $json.author || '' } } ] }, \"Category\": { select: { name: $json.category || 'other' } }, \"Reason\": { rich_text: [ { text: { content: $json.reason || '' } } ] }, \"Likes\": { number: $json.likeCount || 0 }, \"Replies\": { number: $json.replyCount || 0 }, \"Video\": { rich_text: [ { text: { content: $json.videoTitle || '' } } ] }, \"URL\": { url: $json.url || null }, \"Query\": { rich_text: [ { text: { content: $json.query || '' } } ] }, \"Published\": { date: { start: $json.publishedAt || null } } } }) }}",
+        "jsonBody": "={{ JSON.stringify({ parent: { database_id: $('Config').first().json.notionDbId }, properties: { \"Comment\": { title: [ { text: { content: ($json.text || '').slice(0, 1900), link: $json.url ? { url: $json.url } : null } } ] }, \"Author\": { rich_text: [ { text: { content: $json.author || '' } } ] }, \"Category\": { select: { name: $json.category || 'other' } }, \"Reason\": { rich_text: [ { text: { content: $json.reason || '' } } ] }, \"Status\": { multi_select: [ { name: \"New\" } ] }, \"Likes\": { number: $json.likeCount || 0 }, \"Replies\": { number: $json.replyCount || 0 }, \"Video\": { rich_text: [ { text: { content: $json.videoTitle || '' } } ] }, \"Query\": { rich_text: [ { text: { content: $json.query || '' } } ] }, \"Published\": { date: { start: $json.publishedAt || null } } } }) }}",
         "options": {}
       },
       "id": "notioncreate",
       "name": "Notion Create",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2400, 300],
+      "position": [3000, 300],
       "onError": "continueRegularOutput"
     }
   ],
   "connections": {
     "Manual Trigger": { "main": [[{ "node": "Config", "type": "main", "index": 0 }]] },
-    "Config": { "main": [[{ "node": "Split Keywords", "type": "main", "index": 0 }]] },
-    "Split Keywords": { "main": [[{ "node": "YouTube Search", "type": "main", "index": 0 }]] },
+    "Config": {
+      "main": [
+        [
+          { "node": "Split Keywords", "type": "main", "index": 0 },
+          { "node": "Evergreen Video IDs", "type": "main", "index": 0 },
+          { "node": "Query Notion DB", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Split Keywords": {
+      "main": [
+        [
+          { "node": "YouTube Search", "type": "main", "index": 0 },
+          { "node": "YouTube Search Shorts", "type": "main", "index": 0 }
+        ]
+      ]
+    },
     "YouTube Search": { "main": [[{ "node": "Extract Videos", "type": "main", "index": 0 }]] },
-    "Extract Videos": { "main": [[{ "node": "Get Comments", "type": "main", "index": 0 }]] },
+    "YouTube Search Shorts": { "main": [[{ "node": "Extract Videos Shorts", "type": "main", "index": 0 }]] },
+    "Extract Videos": { "main": [[{ "node": "Merge Videos", "type": "main", "index": 0 }]] },
+    "Extract Videos Shorts": { "main": [[{ "node": "Merge Videos", "type": "main", "index": 1 }]] },
+    "Evergreen Video IDs": { "main": [[{ "node": "Merge Videos", "type": "main", "index": 2 }]] },
+    "Merge Videos": { "main": [[{ "node": "Get Comments", "type": "main", "index": 0 }]] },
     "Get Comments": { "main": [[{ "node": "Flatten Comments", "type": "main", "index": 0 }]] },
     "Flatten Comments": { "main": [[{ "node": "Rule Pre-filter", "type": "main", "index": 0 }]] },
     "Rule Pre-filter": { "main": [[{ "node": "Classify", "type": "main", "index": 0 }]] },
     "Classify": { "main": [[{ "node": "Parse Verdict", "type": "main", "index": 0 }]] },
     "Parse Verdict": { "main": [[{ "node": "Keep Matches", "type": "main", "index": 0 }]] },
-    "Keep Matches": { "main": [[{ "node": "Notion Create", "type": "main", "index": 0 }]] }
+    "Keep Matches": { "main": [[{ "node": "Sync Dedup", "type": "main", "index": 0 }]] },
+    "Query Notion DB": { "main": [[{ "node": "Extract Known IDs", "type": "main", "index": 0 }]] },
+    "Extract Known IDs": { "main": [[{ "node": "Sync Dedup", "type": "main", "index": 1 }]] },
+    "Sync Dedup": { "main": [[{ "node": "Filter Duplicates", "type": "main", "index": 0 }]] },
+    "Filter Duplicates": { "main": [[{ "node": "Notion Create", "type": "main", "index": 0 }]] }
   },
   "settings": { "executionOrder": "v1" },
   "active": false

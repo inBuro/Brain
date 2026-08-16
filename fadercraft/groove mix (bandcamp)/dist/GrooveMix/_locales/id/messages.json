@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "Klik di mana saja di panel untuk memfokuskannya — itu yang mengaktifkan pintasan keyboard"
+  },
+  "deckEmptyHintB": {
+    "message": "Tambahkan trek kedua untuk mulai mixing"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (atau klik ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "Pasangan mana pun"
+  },
+  "hintLeftRightDesc": {
+    "message": "tombol kiri menurunkan, tombol kanan menaikkan — urutan yang sama untuk setiap pasangan kenop di atas"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "kembali ke posisi netral (0dB / unity gain)"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "memotong ke minimum, jika sudah di posisi netral"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "mouse atas/bawah, atau trackpad dua jari, menyesuaikan parameter"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "geser sedikit atau tahan kiri/kanan"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "klik-seret trek, atau usap trackpad dua jari"
+  },
+  "hintTabDesc": {
+    "message": "tukar trek mana yang A/B (atau tombol header besar, setelah terhubung)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "dibagikan antar dek, bukan pengaturan per dek"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "atau seret bilah di antara pembacaan BPM — memadukan tempo dan secara otomatis menyelaraskan ulang fase ketukan juga, tidak perlu tindakan sinkronisasi terpisah"
+  },
+  "trialBannerText": {
+    "message": "Waktu uji coba gratis habis — GrooveMix tetap berfungsi, tetapi pertimbangkan untuk mendapatkan lisensi."
+  },
+  "trialBuyLink": {
+    "message": "Beli lisensi"
+  },
+  "licenseActivateBtn": {
+    "message": "Aktifkan"
+  },
+  "licenseChecking": {
+    "message": "Memeriksa…"
+  },
+  "licenseActivated": {
+    "message": "Berlisensi — terima kasih!"
+  },
+  "licenseInvalid": {
+    "message": "Kunci lisensi tidak valid."
+  },
+  "feedbackPrompt": {
+    "message": "Apa masukan Anda?"
+  },
+  "feedbackSubmit": {
+    "message": "Kirim"
+  },
+  "feedbackSent": {
+    "message": "Terima kasih — diterima!"
+  },
+  "feedbackPlaceholder": {
+    "message": "Jelaskan ide, masalah, atau fitur yang kurang."
+  }
+}

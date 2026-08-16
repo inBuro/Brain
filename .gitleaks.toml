@@ -12,3 +12,11 @@ description = "Built Vite/React bundles — minified JS, no secrets"
 paths = [
     '''fadercraft/web/assets/index-[A-Za-z0-9_-]+\.js''',
 ]
+
+# PostHog "project API key" (phc_ prefix) is the public, client-embeddable key by
+# design — distinct from the secret "personal API key". Used across every product's
+# analytics snippet (Fadercraft, GrooveMix, portfolio); false-positives the generic
+# secret rule on every commit that touches one.
+regexes = [
+    '''phc_[A-Za-z0-9]{40,50}''',
+]

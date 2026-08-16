@@ -1,0 +1,125 @@
+{
+  "hintNote": {
+    "message": "Click anywhere in the panel to give it focus — that's what turns the hotkeys on"
+  },
+  "deckEmptyHintB": {
+    "message": "Open a YouTube tab with a track to start mixing"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play / pause (or click ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "Any pair"
+  },
+  "hintLeftRightDesc": {
+    "message": "left key lowers, right key raises — same order for every knob pair above"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "snaps to neutral (0dB / unity gain)"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "cuts to minimum, once already at neutral"
+  },
+  "hintDragScroll": {
+    "message": "Drag / Scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "mouse up/down, or "
+  },
+  "hintDragScrollDescSuffix": {
+    "message": ", adjusts the parameter"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "nudge or hold left / right"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / Swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "click-drag the track, or "
+  },
+  "hintCrossDragDescSuffix": {
+    "message": " swipe"
+  },
+  "hintTabDesc": {
+    "message": "swap which track is A / B (or the big header button, once connected)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "shared between decks, not a per-deck setting"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "or drag the bar between the BPM readouts — blends tempo and automatically re-aligns beat phase too, no separate sync action needed"
+  },
+  "trialBannerText": {
+    "message": "Free trial time used up — GrooveMix keeps working, but consider grabbing a license."
+  },
+  "trialBuyLink": {
+    "message": "Buy license"
+  },
+  "licenseActivateBtn": {
+    "message": "Activate"
+  },
+  "licenseChecking": {
+    "message": "Checking…"
+  },
+  "licenseActivated": {
+    "message": "Licensed — thanks!"
+  },
+  "licenseInvalid": {
+    "message": "Invalid license key."
+  },
+  "feedbackPrompt": {
+    "message": "What would you improve?"
+  },
+  "feedbackSubmit": {
+    "message": "Send"
+  },
+  "feedbackSent": {
+    "message": "Thanks — got it!"
+  },
+  "feedbackPlaceholder": {
+    "message": "Describe an idea, problem, or missing feature."
+  }
+}

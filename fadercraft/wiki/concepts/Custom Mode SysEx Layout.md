@@ -11,7 +11,7 @@ tags: [lcxl, sysex, midi, format]
 
 **Summary**: Reverse-engineered формат `.syx`-файлов Components-export для Novation Launch Control XL MK3. Достаточно для программной генерации/правки custom-modes без открытия Components.
 
-**Sources**: byte-diff экспериментов 2026-05-26 над инструмент-модами 1/2/3 и mixer-модами 11/12/13/14 (экспорт из Components, исходники удалены после извлечения знаний; канонические файлы — в `~/Projects/Claude/Fadercraft/custom-modes/`, перенесены из Brain `dist/custom-modes/` 2026-06-01).
+**Sources**: byte-diff экспериментов 2026-05-26 над инструмент-модами 1/2/3 и mixer-модами 11/12/13/14 (экспорт из Components, исходники удалены после извлечения знаний; канонические файлы — в `~/Projects/Projects/fadercraft/custom-modes/`, перенесены из Brain `dist/custom-modes/` 2026-06-01).
 
 **Last updated**: 2026-06-01
 
@@ -165,7 +165,7 @@ Per [[Mixer Layer]]: переключение по CC30 ch7 (native LCXL mode-se
 | Спец-метка | `6a` (j) `"Cue Volume"` — единственная функциональная подпись |
 | UNDO/REDO | на месте, как у всех модов |
 
-**Distribution**: mode 15 кладётся **и в free funnel, и в архив** — наравне с 1–14 (в Demo/Starter bundle'ах `.syx` НЕ лежат — раздаются только через free funnel). Канонический файл: `~/Projects/Claude/Fadercraft/custom-modes/15.syx` (md5 `e1e00f165e1a4ce330201dd0bae578b0`). Published-копии: `app/public/free-custom-modes/15.syx`, `app/dist/free-custom-modes/15.syx` + обе `free-custom-modes.zip` (раздаётся лендингом `fadercraft.com`). Все копии **должны быть byte-identical канону** — синхронизированы 2026-06-10.
+**Distribution**: mode 15 кладётся **и в free funnel, и в архив** — наравне с 1–14 (в Demo/Starter bundle'ах `.syx` НЕ лежат — раздаются только через free funnel). Канонический файл: `~/Projects/Projects/fadercraft/custom-modes/15.syx` (md5 `e1e00f165e1a4ce330201dd0bae578b0`). Published-копии: `app/public/free-custom-modes/15.syx`, `app/dist/free-custom-modes/15.syx` + обе `free-custom-modes.zip` (раздаётся лендингом `fadercraft.com`). Все копии **должны быть byte-identical канону** — синхронизированы 2026-06-10.
 
 ### Mode-self-report byte (offset 574, listen-CC=47) — критично, НЕ 30
 
@@ -191,7 +191,7 @@ Per [[Mixer Layer]]: переключение по CC30 ch7 (native LCXL mode-se
 - Переключается **per row** (по ряду), не по отдельному энкодеру и не по моду.
 - Кодировка: **pivot = `0x40` (64)** = нет движения; `> 64` = по часовой, `< 64` = против. `0x41` (65) = +1 шаг CW, `0x3F` (63) = −1 CCW. CC-номера ряда сдвигаются на +`0x40`.
 - Смена режима репортится/задаётся MIDI-событием **Channel 7, CC `0x1E` (30)** — тот же CC30/ch7, что и native mode-select (см. [[Mode Encoding]]).
-- Точный SysEx-байт команды переключения ряда **не извлечён** — страницы programmer's reference Novation отдают 403 на машинное чтение, PDF под XL3 — 404. Достоверны: факт per-row relative, кодировка pivot-64, канал CC30/ch7.
+- Точная команда переключения ряда **извлечена 2026-07-13** из декомпилированного Live 12 remote-script (`Launch_Control_XL_3/midi.py`, github.com/gluon/AbletonLive12_MIDIRemoteScripts): `SET_RELATIVE_ENCODER_MODES = ((182,69,127),(182,72,127),(182,73,127))` — CC69/72/73, channel 7, value 127, по одному на ряд. Отправляется скриптом после connect-handshake `F0 00 20 29 02 15 02 7F F7` (уже в DAW mode). Действие этих CC в Custom Mode — открытый вопрос (hardware-тест, см. память m4l-master `encoder-relative-research.md`).
 
 **Следствие для Fadercraft:** `XL_Performance` построен на custom-mode'ах → endless-ряд внутри него **недостижим**, пока Novation не добавит фичу. Единственный путь к relative — уводить поверхность в DAW mode (другая модель интеграции, не custom-mode `.syx`). См. также [[Custom Modes Model]].
 

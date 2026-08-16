@@ -647,3 +647,44 @@ they revert; (2) each AbletonMCP/panel change is its own Cmd+Z step (not grouped
 surgical, repeated undo unwinds a whole session, save decouples from the undo stack; (3) `.maxpat`/`.js`
 edits are process-cached and need a full Live restart (remove+re-add is insufficient); (4) SF-Track
 `send_menu` now pushes its parameter range so all returns (incl. later-added ones) are selectable.
+
+## 2026-07-03 — MapButton visual: no border on the filled (mapped) slot button + uniform slot spacing + swap default flip
+
+Three panel-polish edits (both files in User Library; multimap.maxpat also symlink-reached by SF-Track project).
+
+- **Filled button = no outline (dithering fix).** In `MapButton.maxpat` the mapped/filled slot button
+  (`obj-14` live.text, appearance=2) had `bgoncolor` and `bordercolor` set to the SAME orange
+  `[1, 0.709804, 0.196078, 1]`, so fill + 1px border aliased/dithered along the edge. live.text has no
+  separate `borderoncolor`, so the border was driven by VALUE: added `obj-14 out0 → sel 0 1` →
+  value 0 (unmapped) sets `bordercolor` orange a1 (outline kept), value 1 (mapped/filled) sets
+  `bordercolor` orange **alpha 0** (border invisible, clean fill). Fill and text unchanged.
+- **Uniform slot spacing.** `multimap.maxpat` bpslot Y-gaps were uneven (bpslot1→2 and 6→7 tighter);
+  repositioned to a single uniform step (presentation 15.862069 / patching 32.0). Buttons not resized,
+  order and mm_idroute untouched.
+- **Swap default flipped.** `obj-swap-init` already read `set 1` on disk (starts filled; first click
+  shows outline) — confirmed present, not regressed.
+
+NOTE: `concepts/map-button.md` line ~186 still describes the OLD "orange border" on the armed/mapped
+look — STALE vs this edit; review on next docs pass. Requires full Live Cmd+Q to load .maxpat.
+
+## 2026-07-03/04 — Marathon: persistence, orphan-reset, menu, panel routing, project-shadow
+
+Long debugging session. Key fixes (all in User Library; SF-Track js is symlink-reached via its Max Project folder — see below):
+
+- **PROJECT-SHADOW (root of hours of confusion).** SF-Track has a Max Project (`~/Documents/Max 9/Max for Live Devices/Sends Follower – Track Project/code/sends_follower_track.js`); the device loads its js from THERE, not User Library. All our UL edits were silently ignored until we synced + symlinked the project copy → UL. SF-Return has no project (loads UL directly). Control XL / XL_Performance also have project shadows — documented, not yet hardened. Rule now in [[faq]] + memory.
+- **Panel routing (both channels).** `applySlotRanges()` rewritten to sort bpslot bpatchers by runtime visual Y (`bpatcherRowY`/`orderedSlotBoxes`) so ranges land on the right rows; `mm_idroute` in `multimap.maxpat` rewired to identity (outlet s → bpslot s; reject outlet unconnected) — fixed the label/range scramble + the Macro-N-off-by-one. Uniform bpslot spacing.
+- **Modulation drive (qmetro-removal completion).** `mm_sig` (sig~) only updates when a value is pushed; qmetro used to push it. Added `pushValue()` (event-driven re-assert at end of mapall / on mode change / load-prime) — no polling. Fixed "bindings show but targets don't move."
+- **send_menu.** Now lists Manual + ALL returns (rebuildMenu pushes `_parameter_range`); default flipped to Manual (`parameter_initial=[0]`).
+- **MapButton.** Filled/mapped state = no border (killed edge dithering, value-driven `sel 0 1`); unmapped restored to yellow "Map" + outline (obj-14 bgcolor back to transparent, obj-33 border back to orange — a daytime manual edit had set opaque black); swap default flip confirmed.
+- **Orphaned-slot reset (event-driven, crash-safe).** devices-list observer → on device delete, orphaned slot returns to outline; Task-deferred + stored-id detection + re-entrancy guard to avoid the 2026-06-26 "outlets disabled" crash latch. **Then caused a persistence regression** (fired too early on async load, wiped slots) → fixed with a 6s grace-window + 3-miss confirm; automated instances had masked it.
+- **Manual-value persistence.** SF-Track manual knob reset to 0 on load: Live restored the dial param but its outlet never fired on load, so JS never learned the restored value (`manualVal` stayed 0). Added a load-time `t b b` trigger (bang dial → cache, then bang send_menu → select restores manualVal), reusing the 400ms menu-restore timing. Patcher-only.
+
+NOTE: the SF-Track `.amxd` on disk was overwritten by a founder manual save mid-session — reload without saving from Max editor to avoid clobbering fixes. Diagnostic probes were added then stripped from both js. Full Live Cmd+Q required to load .maxpat/.js changes (process-cached).
+
+## 2026-07-04 — Manual-value restore v2 (event-driven; v1 fixed-delay failed on full sets)
+
+The v1 manual-value restore (fixed 400ms `t b b` trigger) worked in an empty set but FAILED in a full set (32 tracks): Live's async load takes >400ms, so the trigger banged the dial before its value restored → 0. Replaced with a **LiveAPI value-observer on the `midi_dial` param** (`installMidiDialObserver()` in `installObservers()`, alongside sendValueObs/selParamObs/devicesObs): fires exactly when Live restores the value → sets `lastSliderVal`/`manualVal` + pushValue + syncControls. Load-time-independent. Removed the `dial_restore_trig` box (restored direct `menu_restore_del → send_menu`). Observer only reads the param (no write) → no feedback loop; Follow mode untouched (manualVal only set when selectedSend<0). Files: `sends_follower_track.js` (md5 →ed1d2998) + `Sends Follower – Track.amxd` (→b841caf6). Backups `*.2026-07-04-manualObserver.*`. Needs full Cmd+Q. Verify on FULL set: knob near max → save → Cmd+Q → reopen → holds position.
+
+## 2026-07-04 — Ring-fill fix REVERTED (regressed both sets)
+
+The event-driven ring-fill fix (Variant B: ringSet before restore-gate in onSendValueChange + onMidiDialValue; Variant A: primeRing bounded-retry) made it WORSE — ring stopped filling in BOTH small and big sets (before: small OK, big empty). Reverted `sends_follower_track.js` to the pre-ring-fix state (md5 ed1d2998 = manual-observer v2, bar/value persistence intact). Ring-fix attempt preserved at `_device-backups/sends_follower_track.2026-07-04-RINGFIX-reverted.js` (md5 ad03798c) for fresh-eyes analysis. OPEN: ring (obj-3 send_dial, parameter_enable:0, JS-push-only) doesn't fill on load in large sets — cosmetic only, device functions. Root = qmetro removal left the ring without a continuous refresh; needs a correct event-driven re-assert (the reverted attempt likely broke bigShown/val flow — re-diagnose before retrying).

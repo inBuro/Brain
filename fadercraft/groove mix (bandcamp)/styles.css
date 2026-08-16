@@ -1,0 +1,464 @@
+* { box-sizing: border-box; }
+/* Transport/cue glyphs below (▶ ⏮ ⏭ 🎧 ♪ ◀ ⇄) are plain Unicode characters that also have a
+   color emoji form — iOS Safari renders them as full-color cartoon icons instead of the flat
+   monochrome glyph desktop shows (direct report + screenshot: blue emoji skip buttons on iPhone).
+   Was set on `body` first, but the landing page injects this same stylesheet into a shadow root
+   that has no <body> element, so that selector matched nothing there — `*` guarantees it applies
+   in both the real extension (has a body) and the shadow-DOM deck showcase (doesn't). */
+* { font-variant-emoji: text; }
+/* Author `display` declarations (e.g. `.tempoStatus { display: grid }`) always beat the
+   user-agent's `[hidden] { display: none }` rule regardless of specificity — origin outranks
+   specificity in the cascade. Without this override, `el.hidden = true` on anything with its
+   own display rule (tempoStatus, trialBanner, deckEmptyHint, feedbackPopover, ...) silently
+   does nothing visually (2026-08-07, direct report — tempo readouts vanished but the track/
+   slider stayed on screen with one deck connected). */
+[hidden] { display: none !important; }
+html { font-size: 16px; } /* single knob to scale the whole UI — everything below is rem */
+html, body { width: 100%; height: 100%; }
+body {
+  /* px not rem for min-width: applyZoom() scales ROOT font-size, so rem min-width grows
+     with zoom — at default zoom 1.375, 17.5rem resolved to 385px, clipping the panel.
+     px keeps the floor fixed regardless of zoom. */
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  font: var(--text-base)/1.4 var(--font-family-ui);
+  background: var(--color-bg-app); /* a couple tones up from #111 — too close to YouTube's own dark bg */
+  color: var(--color-text-primary);
+  margin: 0;
+  padding: var(--space-10) var(--space-6);
+  -webkit-user-select: none;
+  user-select: none; /* dragging a knob shouldn't box-select surrounding text */
+  /* body scrolls (not .container/#mixer): knobs/labels aren't flexible, so when mixer+legend
+     exceeded the viewport the box overflowed without a scrollbar, painting over DOM content
+     below. Natural child height + body scroll fixes this. See .container and #mixer. */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+/* Horizontal inset matches #mixer's padding — keeps "GrooveMix" title aligned with deck boxes. */
+/* max-width/margin match .container below — .headerRow is a sibling, not a child, of .container,
+   so without this it stretched to the full body width while .container (and the deck boxes
+   inside it) stayed capped at 28rem, pushing the header buttons out past the mixer's own right
+   edge whenever the panel is wider than 28rem (direct report). */
+.headerRow { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 28rem; margin: 0 auto var(--space-8); padding: 0 var(--space-8); }
+.headerTitle { display: flex; align-items: center; gap: var(--space-6); }
+h1 { font-size: var(--text-md); margin: 0; color: var(--color-text-heading); }
+/* Square glyph-button family shared by zoom (+/−) and connect/swap (⏻/⇄) — any new header
+   action has a home here. Zoom buttons are ghost/borderless, no backing plate. */
+.headerBtns { display: flex; align-items: center; gap: var(--space-6); }
+/* #connect targeted by id (not container) because it lives on .levelMetersCol, not .headerBtns,
+   but keeps the same glyph size. */
+.headerBtns button, #connect { width: 1.5rem; height: 1.5rem; line-height: 1; font-size: var(--text-lg); border-radius: var(--radius-md); cursor: pointer; }
+.headerBtns .ghostBtn { background: none; border: none; color: var(--color-800); font-weight: 400; }
+.headerBtns .ghostBtn:active { color: var(--color-text-primary); }
+/* No power-on CTA state — decks connect themselves, so #connect is only ever the swap control.
+   Ghost/borderless, same look as zoom buttons; dimmed further while disabled (pre-connect). */
+#connect { background: none; border: none; color: color-mix(in srgb, var(--color-850) 25%, transparent); font-weight: 400; }
+#connect:active { color: var(--color-text-primary); }
+#connect:disabled { opacity: 0.4; cursor: default; }
+#connect:disabled:active { color: color-mix(in srgb, var(--color-850) 25%, transparent); }
+/* flex-shrink:0 not flex:1/min-height:0 — body scrolls; see body. */
+.container { width: 100%; max-width: 28rem; margin: 0 auto; flex-shrink: 0; display: flex; flex-direction: column; }
+.decks { display: flex; gap: var(--space-8); }
+.deck { flex: 1; min-width: 0; border: 0.0625rem solid var(--color-border-default); border-radius: var(--radius-lg); padding: var(--space-6); }
+/* Cover + title as one hit area — clicking anywhere in it focuses the deck's tab, so the
+   thumbnail and the title below it read as a single clickable unit, not two separate ones. */
+.deckCover { width: 100%; cursor: pointer; }
+/* Thumbnail + tab-picker combined: image always present (placeholder before any tab is picked)
+   so the picker arrow always has something to sit on; popover anchors to the cover art corner. */
+.deckThumbWrap { position: relative; width: 100%; margin-bottom: var(--space-6); }
+/* Owns the rounding + clip so the image and the picker button share one curve, not two independent
+   ones — and now also owns background (moved off .deckThumb below), so the placeholder box keeps
+   its shape and backdrop even while the <img> itself is hidden. Fixed height (not aspect-ratio —
+   tried that, made the deck box grow much taller than this compact layout wants) means object-fit
+   has to be cover, not contain, or the short/wide box would pillarbox a 16:9 source. */
+.deckThumbClip { position: relative; height: 2.75rem; border-radius: var(--radius-md); overflow: hidden; background: var(--color-bg-panel); }
+/* font-size: 0 was the original fix for WebKit/Blink's broken-image glyph, but it only shrinks
+   the glyph — it doesn't stop it painting for one frame when a request errors out from under it
+   (tab closing mid-load). setDeckThumb now also toggles the `hidden` attribute for the no-track
+   case, which is the actual guarantee; font-size: 0 stays as a second line of defense for the
+   in-flight-error case a hidden toggle can't preempt. alt="" means no caption text is lost either. */
+.deckThumb { display: block; width: 100%; height: 100%; font-size: 0; object-fit: cover; }
+/* .deckThumb's own `display: block` above would otherwise outrank the UA [hidden] rule (same
+   specificity, author sheet wins) and the hidden attribute would silently do nothing — this is
+   the actual fix for the broken-image glyph persisting after a tab closes (2026-08-13, direct
+   report). */
+.deckThumb[hidden] { display: none; }
+/* Placeholder guidance for empty second-deck slot. Visibility toggled in JS
+   (updateDeckConnectedVisual), not .deck.disconnected alone — depends on the other deck's state. */
+.deckEmptyHint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 var(--space-6); text-align: center; font-size: var(--text-2xs); line-height: 1.3; color: var(--color-text-tertiary); pointer-events: none; }
+/* Tinted per deck to match that deck's own play-button accent (isPlaying state), not the neutral base above. */
+#deckEmptyHintA { color: var(--color-accent-deckA); }
+#deckEmptyHintB { color: var(--color-accent-deckB); }
+/* Cascade override: author display:flex above beats browser's [hidden]{display:none}; this
+   selector wins over the plain class so JS hidden=true actually hides the element. */
+.deckEmptyHint[hidden] { display: none; }
+.tabPickBtn { position: absolute; top: 0.1875rem; left: 0.1875rem; width: 1rem; height: 1rem; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--color-0) 55%, transparent); color: var(--color-text-heading); border: none; border-radius: var(--radius-sm); cursor: pointer; }
+.tabPickBtn:active { background: color-mix(in srgb, var(--color-0) 75%, transparent); }
+/* Vector chevron, not a "▾" text glyph — that character fell back to a differently-shaped
+   glyph (iOS substitutes its own symbol font for it) on iPhone Safari, direct report. An SVG
+   path renders identically everywhere, no font fallback involved. */
+.tabPickIcon { width: 0.625rem; height: 0.375rem; flex-shrink: 0; }
+/* anchored under the arrow button, not spanning the full thumbnail width — top offset matches
+   button's own offset plus its height so the menu opens right where the arrow is. */
+.tabMenu { position: absolute; top: 1.3125rem; left: 0.1875rem; right: auto; width: 9rem; z-index: 10; max-height: 8rem; overflow-y: auto; background: var(--color-bg-panel); border: 0.0625rem solid var(--color-border-default); border-radius: var(--radius-md); box-shadow: var(--shadow-fader-thumb); text-align: left; }
+#tabPickB { left: auto; right: 0.1875rem; }
+#tabMenuB { left: auto; right: 0.1875rem; text-align: right; }
+.tabMenuItem { display: block; width: 100%; padding: var(--space-6) 0.4rem; background: none; border: none; border-bottom: 0.0625rem solid var(--color-border-default); color: var(--color-text-primary); font-size: var(--text-2xs); font-weight: 400; text-align: right; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabMenuItem.tabMenuItem--send { display: flex; align-items: center; justify-content: space-between; gap: 0.3rem; }
+.tabMenuItem:last-child { border-bottom: none; }
+.tabMenuItem:hover, .tabMenuItem:active { background: var(--color-bg-panel-hover); }
+.tabMenuEmpty { padding: var(--space-6) 0.4rem; font-size: var(--text-2xs); color: var(--color-text-muted); }
+select { width: 100%; font-size: var(--text-sm); margin-bottom: var(--space-6); background: var(--color-bg-panel); color: var(--color-text-primary); border: 0.0625rem solid var(--color-border-default); }
+/* the browser's own blue focus ring was stacking on top of our border — one green border
+   on the select itself replaces it, instead of two outlines competing */
+select:focus { outline: none; border-color: var(--color-success); }
+/* No margin-top — would stack on .headerRow's bottom margin; min-height reserves space so
+   an error message doesn't shift the tempo row. Padding matches .hint so long lines don't
+   sit flush against .container's edge. */
+#status { font-size: var(--text-sm); color: var(--color-text-tertiary); min-height: 0.875rem; margin-bottom: var(--space-4); padding: 0 var(--space-8); }
+.trialBanner { display: flex; flex-direction: column; gap: var(--space-6); font-size: var(--text-sm); color: var(--color-text-secondary); background: var(--color-bg-panel); border: 0.0625rem solid var(--color-border-default); border-radius: var(--radius-md); padding: var(--space-8) var(--space-12); margin-bottom: var(--space-6); }
+/* display:flex above beats browser's [hidden]{display:none}; explicit override required. */
+.trialBanner[hidden] { display: none; }
+.trialBannerRow { display: flex; align-items: center; gap: var(--space-8); }
+.trialBuyLink { color: var(--color-success); text-decoration: none; font-weight: 700; flex-shrink: 0; }
+.trialBuyLink:hover { color: var(--color-success-active); }
+.licenseKeyInput { flex: 1; min-width: 0; font: inherit; color: var(--color-text-primary); background: var(--color-bg-recessed); border: 0.0625rem solid var(--color-border-default); border-radius: var(--radius-sm); padding: var(--space-4) var(--space-6); }
+.licenseKeyInput:focus { outline: none; border-color: var(--color-success); }
+.licenseActivateBtn { flex-shrink: 0; font: inherit; color: var(--color-text-primary); background: var(--color-200); border: 0.0625rem solid var(--color-500); border-radius: var(--radius-md); padding: var(--space-4) var(--space-8); cursor: pointer; }
+.licenseActivateBtn:active { background: var(--color-bg-elevated); }
+.licenseActivateBtn:disabled { color: var(--color-text-muted); cursor: default; }
+.licenseStatus { font-size: var(--text-xs); color: var(--color-text-tertiary); min-height: 0.75rem; }
+.feedbackWrap { position: relative; display: inline-block; }
+/* Outside .headerBtns — needs explicit glyph-button size, doesn't inherit `.headerBtns button`. */
+/* scaleX(-1): ✎ U+270E has nib pointing left by default, mirrored so it points right. */
+#feedbackBtn { position: relative; top: 1px; left: -4px; width: 1.5rem; height: 1.5rem; line-height: 1; font-size: var(--text-lg); border-radius: var(--radius-md); cursor: pointer; background: none; border: none; color: var(--color-800); font-weight: 400; opacity: 0.5; }
+#feedbackBtn:active { color: var(--color-text-primary); }
+/* Plain text link, no pill border — last thing in the panel, after all the hint text
+   (2026-08-07, direct request). Warm/amber color echoes "coffee" via the existing deckB
+   accent rather than introducing a new one. */
+.coffeeBtn { display: block; margin: var(--space-5) auto var(--space-16); width: fit-content; padding: 0; font-size: var(--text-sm); line-height: 1.4; color: var(--color-accent-deckB); text-decoration: none; opacity: 0.75; transition: opacity 0.15s ease; }
+.coffeeBtn:hover, .coffeeBtn:focus-visible { opacity: 1; }
+/* position:fixed, bottom-right corner; min() clamps against the 250px panel floor. */
+/* 1:1 port of Fadercraft's FeedbackWidget: literal px, not dark-theme tokens — the white-card
+   look is intentional. Only the copy differs. */
+.feedbackPopover { position: fixed; bottom: 32px; right: 16px; width: min(300px, calc(100vw - 32px)); z-index: 10; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; background: #fff; border: none; border-radius: 8px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18); padding: 20px 20px 14px; }
+.feedbackPopover[hidden] { display: none; }
+.feedbackHeader { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.feedbackPrompt { margin: 0; font-size: 14px; color: #1a1a1a; font-weight: 600; line-height: 1.4; }
+.feedbackClose { flex-shrink: 0; margin-top: -2px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font: inherit; font-size: 24px; line-height: 1; color: #999; background: none; border: none; padding: 0; cursor: pointer; }
+.feedbackClose:hover { color: #1a1a1a; }
+.feedbackTextarea { box-sizing: border-box; width: 100%; min-height: 88px; max-height: 160px; font: inherit; font-size: 14px; color: #1a1a1a; background: #fff; border: 0.0625rem solid #e0e0e0; border-radius: 6px; padding: 10px 12px; resize: vertical; transition: border-color 0.15s; }
+.feedbackTextarea::placeholder { color: #aaa; }
+.feedbackTextarea:focus { outline: none; border-color: #1a1a1a; }
+.feedbackFooter { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.feedbackStars { display: flex; align-items: center; gap: 2px; }
+.feedbackStar { font: inherit; font-size: 20px; line-height: 1; color: #d0d0d0; background: none; border: none; padding: 0; cursor: pointer; transition: color 0.12s; }
+.feedbackStar.isFilled { color: #ffad56; }
+.feedbackSubmit { flex-shrink: 0; font: inherit; font-size: 14px; font-weight: 600; color: #fff; background: #1a1a1a; border: none; border-radius: 6px; padding: 10px 16px; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+.feedbackSubmit:hover { background: #333; }
+.feedbackSubmit:disabled { opacity: 0.5; cursor: default; }
+.feedbackStatus { font-size: 12px; color: #666; min-height: 0.75rem; }
+/* A left, B right. BPM number at the outer edge, rate+role trailing toward the center bar —
+   see updateTempoStatus() for the text order. Equal inset so it aligns with the crossfader. */
+/* Grid, not flex — the two labels must stay pinned to the row's true left/right edges (original
+   behavior) while the track fills the rest of the row (2026-08-11, direct request — the track
+   used to be capped at a small fixed max-width matching the main crossfader's own narrow size,
+   living in its own dedicated column; the tempo row has no such column, it should span the full
+   mixer width like the deck boxes below it do, not sit as a short strip in the middle).
+   Outer columns are a fixed 24mm each, NOT 1fr — 1fr only distributes leftover space equally,
+   it doesn't force equal actual widths: each 1fr track still floors at its own content's
+   min-content size, so one deck showing "175.7 BPM" and the other still on the cold "BPM"
+   placeholder rendered as two visibly different-width columns, throwing the whole row off-center
+   (2026-08-11, direct report, screenshot — "пара уехала вправо"). A fixed width sidesteps that:
+   both columns are always identical regardless of which side has the longer reading.
+   Track column is minmax(12mm, 1fr) — takes all remaining space after the two fixed label
+   columns, with a 12mm floor so it stays usable/draggable even on the narrowest panel width.
+   column-gap is the hard floor that keeps label text off the track regardless of track width. */
+.tempoStatus { display: grid; grid-template-columns: 24mm minmax(12mm, 1fr) 24mm; column-gap: var(--space-12); align-items: center; font-size: var(--text-base); font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: var(--space-6); padding: 0 var(--space-8); }
+/* pct on its own line above BPM, not inline — small/muted like #status, not bold BPM weight. */
+.tempoA { display: flex; flex-direction: column; align-items: flex-start; color: var(--color-accent-deckA); white-space: nowrap; }
+.tempoB { display: flex; flex-direction: column; align-items: flex-end; color: var(--color-accent-deckB); white-space: nowrap; }
+.tempoPct { font-size: var(--text-sm); font-weight: 400; color: var(--color-text-tertiary); min-height: 0.875rem; }
+/* Grayed while EQ-killed or crossed out (see isDeckSilent) — number still updates, color
+   signals "not active". */
+#tempoMainA.silent, #tempoMainB.silent { color: var(--color-text-tertiary); }
+/* Binary sync status: no dot, label text carries the color. Hard height not min-height —
+   content-derived height shifts sub-pixel across font rendering modes; hard height removes
+   that dependency and overflow:hidden guards against any remaining nudge. */
+.phaseDrift { display: flex; align-items: center; justify-content: center; height: var(--text-2xs); overflow: hidden; margin-bottom: var(--space-6); font-size: var(--text-2xs); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; line-height: 1; color: var(--color-text-tertiary); }
+#phaseDriftLabel.synced { color: var(--color-success-glow); }
+/* opacity not visibility:hidden — keeps it faintly legible while reserving layout. */
+.phaseInactive { opacity: 0.35; pointer-events: none; }
+/* Manual beat-grid nudge, 1/8-beat per click. Bare glyphs, no backing plate (same as .skipBtn). */
+.phaseNudgeRow { display: flex; align-items: center; justify-content: center; gap: var(--space-8); margin-bottom: var(--space-6); }
+.phaseNudgeBtn { flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: none; border: none; padding: 0; font-size: 0.5rem; color: var(--color-700); cursor: pointer; }
+.phaseNudgeBtn:hover { color: var(--color-text-primary); }
+/* Same color as hotkey labels — see .hint kbd. */
+.phaseNudgeGlyph { flex-shrink: 0; font-size: 0.9375rem; color: var(--color-text-secondary); }
+/* Tempo-blend bar: left = A stays native, B matches A; right = mirrored; center = both bend
+   toward a shared midpoint (neither at 1.00x). See applyTempoBlend(). Undragged = dim centered
+   inert thumb, both decks stay at native tempo. Same track/thumb language as the crossfader. */
+/* Fills its grid cell edge to edge (2026-08-11 — no longer capped to match the main crossfader's
+   narrow fixed width, see .tempoStatus above). width:100% tracks .tempoStatus's minmax column;
+   min-width repeated here as a floor so the track stays correctly bounded if it's ever laid out
+   outside that grid. */
+.tempoTrack { position: relative; top: 0.0625rem; width: 100%; min-width: 12mm; height: 1.625rem; cursor: pointer; touch-action: none; }
+.tempoTrack::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 0.125rem; background: var(--color-0); border-radius: 0.0625rem; transform: translateY(-50%); }
+/* Round, same gradient as .crossThumb. No groove line — on a circle it reads as a stray
+   mark, not a grip indicator. */
+.tempoThumb { position: absolute; top: 50%; left: 50%; width: 1.1rem; height: 1.1rem; background: linear-gradient(180deg, var(--color-650), var(--color-450)); border: 0.0625rem solid var(--color-bg-app); border-radius: var(--radius-full); box-shadow: var(--shadow-fader-thumb); transform: translate(-50%, -50%); transition: left 60ms linear; }
+/* focus ring removed: any panel click focuses #mixer, so the ring was on almost all the time. */
+/* flex-shrink:0 not flex:1/min-height:0 — body scrolls; see .container. */
+#mixer { flex-shrink: 0; display: flex; flex-direction: column; outline: none; border-radius: var(--radius-lg); padding: var(--space-8); text-align: center; }
+#mixer .decks { flex: 1; min-height: 0; }
+/* .deckColumn owns flex/width; .deck is just the bordered card below the label. */
+#mixer .deckColumn { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+/* padding-bottom reserves headroom for .bottomRow (position:absolute, anchored to this edge)
+   so the knob stack stays put while only the gap before the play button changes. */
+#mixer .deck { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 4rem; }
+.cross { flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: var(--space-20); padding: var(--space-10) var(--space-8); }
+/* Cue row: A left, B right, centered under their own deck's knob column — not just pinned to
+   the row's padding edges. Grid columns 1fr/1.5rem/1fr mirror .decks' own A/levelMetersCol/B
+   split exactly (levelMetersCol's rendered width is driven by #connect's 1.5rem, its only
+   content wider than the level-meter bars — see #connect/.levelMetersCol — so 1.5rem here lines
+   up with it pixel-for-pixel). No side padding: #mixer's own padding already matches .decks'
+   inset, so column 1's left edge lands exactly on deckColumn A's left edge (direct report —
+   cue buttons/hint columns were sitting under the panel's padding edge, not under the knobs). */
+.outputRow { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1.5rem 1fr; column-gap: var(--space-8); align-items: center; margin-top: var(--space-8); }
+/* grid-row: 1 on all three — without it, auto-placement can't fit the 1/-1-spanning
+   .cueSourceGroup into column 1 once cueBtnA already claims it there, so it (and then cueBtnB,
+   which then can't fit column 3 in that same row either) each get bumped onto their own implicit
+   row instead of sharing this one (direct report — icon/dropdown/icon stacked into 3 rows). */
+#cueBtnA { grid-column: 1; grid-row: 1; justify-self: center; }
+#cueBtnB { grid-column: 3; grid-row: 1; justify-self: center; }
+/* Pulled up out of its own row so its center lands on the crossfader line's center above it
+   (2026-08-07 direct request) — measured offset (crossfader-line-center minus cueBtn-center at
+   the default 16px root), expressed in rem so it tracks the panel's own zoomIn/zoomOut scaling
+   instead of going stale at a different zoom level. Re-measure and adjust if the row spacing
+   between .cross and .outputRow changes. */
+.cueBtn { flex-shrink: 0; width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; background: none; border: 0.0625rem solid var(--color-border-default); border-radius: var(--radius-md); color: var(--color-700); cursor: pointer; opacity: 0.4; transform: translateY(-2.4375rem); }
+.cueBtn:disabled { cursor: default; }
+/* Headphone SVG, not the 🎧 glyph — that character has no text/monochrome form in Unicode at
+   all (unlike ▶/⏮/⏭, it was never a dual-presentation dingbat), so no CSS or variation selector
+   can stop it rendering as a full-color emoji (direct report + screenshot: colorful cue icon). */
+.cueIcon { width: 0.875rem; height: 0.875rem; flex-shrink: 0; overflow: visible; }
+.cueIconCup { fill: currentColor; }
+/* Per-deck accent when cueing, consistent with knob pointer/LED/BPM colors. */
+.cueBtn.active { opacity: 1; border-color: var(--color-accent-deckA); color: var(--color-accent-deckA); box-shadow: var(--shadow-glow-deckA); }
+#cueBtnB.active { border-color: var(--color-accent-deckB); color: var(--color-accent-deckB); box-shadow: var(--shadow-glow-deckB); }
+/* Dropdown + cue-volume knob as one cluster — the outer spacing pins to the cluster as a
+   whole, not to the knob and dropdown individually. Spans the full grid (not just the middle
+   1.5rem track, far narrower than this cluster) and self-centers — same visual center as before,
+   independent of the side columns' width so widening/narrowing the deck columns can't skew it. */
+.cueSourceGroup { display: flex; align-items: center; gap: var(--space-10); grid-column: 1 / -1; justify-self: center; }
+/* min-width:0: flex min-width:auto overrides max-width — long name blew the box without it.
+   appearance:none + SVG arrow: native chevron ignores border-radius/padding; arrow color
+   hardcoded #999999 because background-image data URIs can't reference CSS custom properties.
+   display:flex: native <select> vertical centering is UA-dependent, didn't align with .cueBtn.
+   margin:0: Chromium adds ~6px margin-bottom by default; align-items:center aligns by margin
+   box, so that margin pushed <select> up relative to .cueBtn (confirmed via getBoundingClientRect). */
+.outputDeviceSelect { display: flex; align-items: center; flex-shrink: 0; min-width: 0; width: 6.5rem; height: 1.5rem; margin: 0; padding: 0 calc(var(--space-8) + 0.5rem); text-align: center; font-size: var(--text-2xs); color: var(--color-text-primary); background-color: var(--color-bg-panel); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23999999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right var(--space-8) center; background-size: 0.5rem 0.3125rem; border: 0.0625rem solid var(--color-border-default); border-radius: var(--radius-md); cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; opacity: 0.4; appearance: none; -webkit-appearance: none; }
+.outputDeviceSelect:active { background: var(--color-bg-panel-hover); }
+.outputDeviceSelect:disabled { cursor: default; }
+/* Positioned 20px from .deck's bottom edge (needs .deck as positioned ancestor + bottom
+   padding headroom). Centered via left:50%/translateX(-50%) — skipPrev/skipNext's fixed
+   width keeps them symmetric so adding them can't shift the center. */
+.bottomRow { position: absolute; bottom: var(--space-20); left: 50%; transform: translateX(-50%); display: flex; flex-direction: row; align-items: center; gap: var(--space-8); }
+/* Fixed width (not glyph-natural) keeps skip buttons symmetric — see .bottomRow. */
+.skipBtn { flex-shrink: 0; width: 1rem; height: 1.375rem; display: flex; align-items: center; justify-content: center; background: none; border: none; padding: 0; font-size: var(--text-sm); color: var(--color-700); cursor: pointer; }
+.skipBtn:hover:not(:disabled) { color: var(--color-text-primary); }
+.skipBtn:disabled { opacity: 0.3; cursor: default; }
+/* Straddles .deck's bottom border: translateY(50%) drops it so the border line runs through
+   the label's vertical center (fieldset-legend style). Background must match the PAGE
+   background (not the card's transparent bg) — without it the border cuts through the glyph. */
+.clusterLabel { position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 50%); background: var(--color-bg-app); padding: 0 calc(var(--space-6) * 2); font-size: 1rem; font-weight: 800; line-height: 1; }
+.clusterLabel.a, .clusterLabel.b { color: color-mix(in srgb, var(--color-text-secondary) 50%, transparent); }
+/* Tall hitbox, thin visual: fixed height + padding collapsed paintable area to zero under
+   box-sizing:border-box — pseudo-element line decouples the two. */
+/* Fixed physical length (2026-08-07, direct request) so the track's ends line up with the
+   cue-headphone buttons' outer edges below it — was flex:1 (filled whatever space was left). */
+.crossTrack { position: relative; top: 0.0625rem; flex: 0 0 45mm; width: 45mm; height: var(--space-20); cursor: pointer; touch-action: none; }
+.crossTrack::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 0.1875rem; background: var(--color-0); border-radius: 0.0625rem; transform: translateY(-50%); }
+/* Center tick: fixed reference at midpoint, independent of thumb. Taller than track box so
+   ends poke past the thumb and stay visible beneath it (z-index:0 competes with z-index:1
+   thumb). Asymmetric — pokes out BOTTOM only; explicit top+height (not top:50%+translateY)
+   since the two edges don't move symmetrically. */
+.crossTrack::after { content: ''; position: absolute; top: -0.3125rem; left: 50%; width: 0.0625rem; height: 2.1875rem; background: color-mix(in srgb, var(--color-700) 15%, transparent); transform: translateX(-50%); z-index: 0; pointer-events: none; }
+.crossThumb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.9375rem;
+  height: 1.875rem;
+  background: linear-gradient(180deg, var(--color-650), var(--color-450));
+  border: 0.0625rem solid var(--color-bg-app);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-fader-thumb);
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  /* no transition — CSS transition lags visibly behind live drag input ("sticky"). .animated
+     added only by keyboard nudge (nudgeCrossfader()), where there's no continuous input. */
+}
+.crossThumb.animated { transition: left 60ms linear; }
+.crossThumb::before { content: ''; position: absolute; top: 32.5%; bottom: 32.5%; left: 50%; width: 0.0625rem; background: color-mix(in srgb, var(--color-900) 20%, transparent); transform: translateX(-50%); }
+/* padding matches #mixer's so the legend edge aligns with the deck boxes above it. */
+.hint { flex-shrink: 0; font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-8); padding: 0 var(--space-8); }
+/* .hintGroup:first-child never matched (.hintNote is .hint's first child); border-top lives
+   here instead. .hintGroupFirst suppresses the duplicate below. */
+.hintNote { padding: 0.4375rem 0 var(--space-16); border-top: 0.0625rem solid var(--color-border-default); text-align: center; }
+/* #langToggle is a .ghostBtn — no dedicated rule needed. */
+/* #debugLangPreview: color:transparent hides the closed-state autonym; .debugLangPreviewLabel
+   shows the 2-letter code on top. min-width:0: native <select> has content-based intrinsic
+   min-width that silently beats an explicit width unless reset. The OPEN list is a native OS
+   widget — Chrome renders it outside page CSS, no amount of styling here affects it. */
+.debugLangWrap { position: relative; display: inline-block; width: 2.75rem; height: 1.5rem; vertical-align: middle; }
+.headerBtns .debugLangSelect { width: 2.75rem; min-width: 0; height: 1.5rem; padding: var(--space-4) 0.3rem; text-align: center; font-size: var(--text-2xs); color: transparent; background-color: transparent; border: 0.0625rem dashed var(--color-border-default); border-radius: var(--radius-md); cursor: pointer; appearance: none; -webkit-appearance: none; }
+.debugLangPreviewLabel { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: var(--space-4) 0.3rem; font-size: var(--text-2xs); color: var(--color-800); pointer-events: none; }
+.headerBtns .debugLangSelect option { background: var(--color-bg-panel); color: var(--color-text-primary); }
+.hintGroup { padding: var(--space-12) 0 var(--space-20); border-top: 0.0625rem solid var(--color-border-default); }
+/* :first-child never matched — see .hintNote's comment. */
+.hintGroupFirst { border-top: none; padding-top: 0; }
+.hintGroupTitle { font-size: var(--text-2xs); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 0.5625rem; text-align: center; }
+.hintRow { display: flex; align-items: baseline; gap: var(--space-8); line-height: 1.5; }
+/* Rows that wrap to two lines blended into the next — gap bumped to read as a clear boundary. */
+.hintRow + .hintRow { margin-top: var(--space-8); }
+.hintKeys { flex-shrink: 0; width: 3.5rem; color: var(--color-text-secondary); }
+.hintDesc { color: var(--color-text-muted); }
+/* 3-col A/desc/B row: same 1fr/1.5rem/1fr grid as .outputRow above (and .decks itself), so the
+   A/B key columns land centered under their own deck's knob column instead of under this row's
+   own padding edges (direct report — was sharing .outputRow's old, deck-independent alignment). */
+.hintRow3 { display: grid; grid-template-columns: 1fr 1.5rem 1fr; column-gap: var(--space-8); align-items: baseline; line-height: 1.5; }
+.hintRow3 + .hintRow3 { margin-top: var(--space-8); }
+/* grid-row: 1 on all three cells — without it, auto-placement can't fit the 1/-1-spanning
+   .hintDesc into column 1 once .hintKeysLeft already claims it there, so it (and then
+   .hintKeysRight, which then can't fit column 3 in that same row either) each get bumped onto
+   their own implicit row (direct report — key/label/key stacked into 3 rows instead of 1). */
+/* start/end (not center) on the base rule — every row shares this SAME anchor now, so the
+   per-step translateX below is the only thing that varies row to row. Mixing two different
+   anchor mechanisms (edge for row 1, centered+offset for the rest) was what produced the sharp
+   jump between gain and high before (direct report — "resembled a cliff, not a gradual slope"):
+   centering is itself a big jump relative to a flush edge, dwarfing the small per-row deltas
+   after it. One anchor for all six rows makes every step the same kind of move. */
+.hintKeysLeft { grid-column: 1; grid-row: 1; justify-self: start; text-align: center; }
+.hintKeysRight { grid-column: 3; grid-row: 1; justify-self: end; text-align: center; }
+.hintRow3 .hintDesc { grid-column: 1 / -1; grid-row: 1; justify-self: center; text-align: center; }
+/* Mimics a real keyboard's row stagger (direct request, referencing a physical keyboard photo):
+   one straight diagonal across all 6 rows in LIST order (gain → high → mid → low → fx →
+   play/pause), not grouped by which physical keyboard row each key actually sits on. Gain (step
+   0, untouched — no class needed) anchors flush at the column edge; each step below adds another
+   0.625rem toward center, so the whole run accumulates smoothly instead of one big jump followed
+   by small ones. */
+.hintKeysLeft.hintKeyStep1 { transform: translateX(0.625rem); }
+.hintKeysLeft.hintKeyStep2 { transform: translateX(1.25rem); }
+.hintKeysLeft.hintKeyStep3 { transform: translateX(1.875rem); }
+/* play/pause (a single lone key, not a pair) reuses fx's own step4 offset rather than getting
+   its own step5 — centered content in the same fixed-width box means matching offsets land on
+   the exact same x, so E/O end up sitting right under the "/" in fx's "C / V" / "N / M" above
+   them (direct request), instead of one more step further in. */
+.hintKeysLeft.hintKeyStep4 { transform: translateX(2.5rem); }
+.hintKeysRight.hintKeyStep1 { transform: translateX(-0.625rem); }
+.hintKeysRight.hintKeyStep2 { transform: translateX(-1.25rem); }
+.hintKeysRight.hintKeyStep3 { transform: translateX(-1.875rem); }
+.hintKeysRight.hintKeyStep4 { transform: translateX(-2.5rem); }
+/* A/B over key columns, "Deck" centered between them — same grid as .hintRow3 above it, so the
+   ghost key-pair in each .hintKeysLeft/Right cell lines up with the real row's cell exactly. */
+.hintDeckHeaders { display: grid; grid-template-columns: 1fr 1.5rem 1fr; column-gap: var(--space-8); align-items: baseline; }
+.hintDeckCenter { grid-column: 1 / -1; grid-row: 1; justify-self: center; text-align: center; }
+.hintDeckHeaders .hintKeysLeft, .hintDeckHeaders .hintKeysRight { grid-row: 1; }
+/* Ghost of a real key row positions A/B exactly — two estimated offsets both missed. Same
+   <kbd> markup as a real row, so width/position match by construction. visibility:hidden
+   (not display:none) preserves layout space for .hintDeckLetter to center on. */
+.hintDeckKeyGhost { position: relative; display: inline-block; visibility: hidden; }
+.hintDeckLetter { visibility: visible; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); white-space: nowrap; margin: 0; }
+.hint kbd { display: inline-block; font: inherit; font-size: var(--text-2xs); font-weight: 700; color: var(--color-text-secondary); padding: 0 0.1875rem; margin: 0 0.0625rem; border: 0.0625rem solid var(--color-border-default); border-radius: var(--radius-sm); line-height: 1.4; background: var(--color-bg-panel); }
+/* flex centering, not line-height — line-height leaned on ▶'s font metrics and read as
+   off-center. padding-left compensates for the triangle's visual weight (ink is left-heavy). */
+/* Idle dimmed — bright icon regardless of state read as already-on. isPlaying borrows
+   cueBtn's per-deck glow (border + icon in accent + shadow) for consistent language. */
+#mixer .playBtn { flex-shrink: 0; width: 1.375rem; height: 1.375rem; display: flex; align-items: center; justify-content: center; padding-left: 0.375rem; font-size: var(--text-sm); background: var(--color-200); color: var(--color-700); border: 0.0625rem solid var(--color-500); border-radius: var(--radius-md); cursor: pointer; }
+#mixer .playBtn:active { background: var(--color-bg-elevated); }
+#mixer .playBtn:disabled { filter: grayscale(1); opacity: 0.3; cursor: default; }
+#mixer .playBtn.isPlaying { color: var(--color-accent-deckA); border-color: var(--color-accent-deckA); box-shadow: var(--shadow-glow-deckA); }
+#mixer #playBtnB.isPlaying { color: var(--color-accent-deckB); border-color: var(--color-accent-deckB); box-shadow: var(--shadow-glow-deckB); }
+/* mask-image, not text-overflow: ellipsis/clip — a hard clip just chops the glyph mid-stroke;
+   this fades the cut edge to transparent (alpha 100 -> 0 over the last 20% of the box) instead. */
+/* mask-image fades BOTH edges — text-align: center on an overflowing nowrap box clips from
+   both the left AND right (centering trims the overflow evenly off each side, unlike a plain
+   left-aligned truncation which only ever overflows on the right), so a right-only fade (the
+   first version of this) left the left edge hard-clipped mid-glyph while the right edge's fade
+   made it read as stray padding instead — a left/right asymmetry bug (direct report). */
+#mixer .deckTitle { font-size: var(--text-2xs); color: var(--color-text-muted); margin-bottom: var(--space-6); padding: 0 0.5rem; text-align: center; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: clip; -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%); }
+/* Post-EQ/Gain, pre-crossfader (see counterDJSetup) — both meters comparable at any crossfader
+   position. -60..0dB mapped linearly. transition smooths poll-cycle jumps. */
+/* Vertical channel VU meters next to the crossfader. Fill stays flat solid, crisp horizontal
+   top edge — no taper/shadow (a soft top misrepresents the level as imprecise). */
+/* align-self:stretch removed: leftover from before .levelMetersCol existed — it stretched
+   to the connect button's width and packed bars left. */
+.levelMeters { display: flex; gap: 0.1875rem; align-items: flex-end; flex: 1; min-height: 0; }
+/* Wraps .levelMeters so #connect sits centered above the bars. No bottom margin: symmetric
+   margin left bars 20px short of .deck's bottom despite align-items:stretch — confirmed via
+   getBoundingClientRect. Top margin kept for breathing room above the button. */
+.levelMetersCol { display: flex; flex-direction: column; align-items: center; gap: var(--space-8); flex-shrink: 0; margin: var(--space-20) 0 0; }
+/* Segmented LED: 9 discrete cells, top cell in deck accent as the "hot" cap. Replaced a
+   gradient+mask approach that dithered visibly at rounded corners on this narrow bar —
+   each cell is a flex child with real gaps so nothing thin/repeating aliases. */
+.levelMeter { width: 0.5rem; height: 100%; display: flex; flex-direction: column; gap: 0.0625rem; }
+/* Black at rest — var(--color-100) nearly matched the app bg, so unlit cells read as missing. */
+.levelCell { flex: 1; min-height: 0; background: var(--color-0); border: 0.0625rem solid var(--color-0); }
+.levelCell:first-child { border-top-left-radius: var(--radius-sm); border-top-right-radius: var(--radius-sm); }
+.levelCell:last-child { border-bottom-left-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); }
+/* No transition — cells are binary; ballistics smooth the dB before quantization. */
+.levelCell.lit { background: var(--color-success); }
+#levelTrackA .levelCell:first-child.lit { background: var(--color-accent-deckA); }
+#levelTrackB .levelCell:first-child.lit { background: var(--color-accent-deckB); }
+
+/* EQ knobs: 12 o'clock = flat, left = cut, right = boost. Pointer/LED tinted per deck. */
+.knobs { display: flex; flex-direction: column; align-items: center; gap: var(--space-10); padding: var(--space-8) 0; }
+.knobWrap { display: flex; flex-direction: column; align-items: center; gap: var(--space-5); }
+/* Extra gap between Gain and HI only — Gain is :first-child in markup. */
+.knobWrap:first-child { margin-bottom: 0.5rem; }
+/* Dimmed before Connect — makes the no-op drag visible. Per-deck so a live deck looks live
+   even while the other is still disconnected. */
+.deck.disconnected .knobWrap { filter: grayscale(1); opacity: 0.4; pointer-events: none; }
+.knob {
+  position: relative;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: var(--radius-full);
+  background: radial-gradient(circle at 32% 28%, var(--color-450), var(--color-150) 60%, var(--color-50) 100%);
+  border: 0.0625rem solid var(--color-0);
+  box-shadow: var(--shadow-knob-rest);
+  cursor: ns-resize;
+  touch-action: none;
+}
+.knob:hover { box-shadow: var(--shadow-knob-hover); }
+/* Gain 33% smaller (1.9rem × 0.67 ≈ --space-20). */
+#knobA_gain, #knobB_gain { width: var(--space-20); height: var(--space-20); }
+.knob:active { cursor: grabbing; }
+.knobPointer {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 0.0625rem;
+  height: 0.5625rem;
+  background: var(--color-700);
+  border-radius: 0.0625rem;
+  transform-origin: 50% 100%;
+  transform: translateX(-50%) rotate(0deg);
+}
+#deckBoxA .knobPointer { background: var(--color-accent-deckA); box-shadow: var(--shadow-glow-deckA); }
+#deckBoxB .knobPointer { background: var(--color-accent-deckB); box-shadow: var(--shadow-glow-deckB); }
+/* Value-fill arc matching Traktor's knob style — dim full-sweep track, colored arc showing
+   how far the value sits along that sweep. */
+/* SVG rotation on each <circle> individually — track is fixed at -135°, fill start moves
+   with the neutral point, so they can't share one wrapper rotation. */
+.knobArc { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.knobArcFill { fill: none; stroke-width: 3; stroke-linecap: round; stroke: var(--color-700); }
+#deckBoxA .knobArcFill { stroke: var(--color-accent-deckA); }
+#deckBoxB .knobArcFill { stroke: var(--color-accent-deckB); }
+.knobLed { width: 0.25rem; height: 0.25rem; border-radius: var(--radius-full); background: var(--color-border-default); transition: background 120ms; }
+.knobLed.lit { background: var(--color-accent-deckA); box-shadow: var(--shadow-glow-deckA-strong); }
+#deckBoxB .knobLed.lit { background: var(--color-accent-deckB); box-shadow: var(--shadow-glow-deckB-strong); }
+.knobLabelRow { display: flex; align-items: center; gap: var(--space-4); }
+.knobLabel { font-size: var(--text-2xs); font-weight: 700; letter-spacing: 0.03em; color: var(--color-text-tertiary); }

@@ -1,7 +1,7 @@
 # DS Source
 
 **Источник:** своя ДС, встроена в файл продукта
-**Figma-файл:** https://www.figma.com/design/OdPRdjodGO3WiR6tgSP7AA/Fadercraft
+**Figma-файл:** https://www.figma.com/design/OdPRdjodGO3WiR6tgSP7AA/fadercraft
 **Дата сканирования:** 2026-06-19
 **Локаль продукта:** en
 

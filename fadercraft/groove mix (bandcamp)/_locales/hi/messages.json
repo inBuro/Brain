@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "पैनल में कहीं भी क्लिक करके इसे फ़ोकस में लाएँ — इसी से हॉटकी चालू होती हैं"
+  },
+  "deckEmptyHintB": {
+    "message": "मिक्सिंग शुरू करने के लिए दूसरा ट्रैक जोड़ें"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (या ▶ पर क्लिक करें)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "कोई भी जोड़ी"
+  },
+  "hintLeftRightDesc": {
+    "message": "बायाँ बटन कम करता है, दायाँ बटन बढ़ाता है — ऊपर की हर नॉब जोड़ी के लिए यही क्रम"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "न्यूट्रल (0dB / यूनिटी गेन) पर स्नैप करता है"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "एक बार न्यूट्रल होने पर, न्यूनतम पर कट करता है"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "माउस ऊपर/नीचे या दो उंगलियों वाला ट्रैकपैड, पैरामीटर एडजस्ट करता है"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "नज या बाएँ/दाएँ दबाकर रखें"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "ट्रैक को क्लिक-ड्रैग करें, या दो उंगलियों से ट्रैकपैड स्वाइप करें"
+  },
+  "hintTabDesc": {
+    "message": "बदलें कि कौन सा ट्रैक A/B है (या एक बार कनेक्ट होने पर बड़ा हेडर बटन)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "डेक के बीच साझा किया गया, यह प्रति-डेक सेटिंग नहीं है"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "या BPM रीडआउट्स के बीच बार को खींचें — टेम्पो को मिलाता है और बीट फेज़ को भी अपने आप फिर से संरेखित करता है, किसी अलग सिंक कार्रवाई की आवश्यकता नहीं"
+  },
+  "trialBannerText": {
+    "message": "निःशुल्क ट्रायल समय समाप्त हो गया है — GrooveMix काम करता रहेगा, लेकिन लाइसेंस लेने पर विचार करें।"
+  },
+  "trialBuyLink": {
+    "message": "लाइसेंस खरीदें"
+  },
+  "licenseActivateBtn": {
+    "message": "सक्रिय करें"
+  },
+  "licenseChecking": {
+    "message": "जाँच हो रही है…"
+  },
+  "licenseActivated": {
+    "message": "लाइसेंसशुदा — धन्यवाद!"
+  },
+  "licenseInvalid": {
+    "message": "अवैध लाइसेंस कुंजी।"
+  },
+  "feedbackPrompt": {
+    "message": "आप क्या बेहतर करेंगे?"
+  },
+  "feedbackSubmit": {
+    "message": "भेजें"
+  },
+  "feedbackSent": {
+    "message": "धन्यवाद — हमें मिल गया!"
+  },
+  "feedbackPlaceholder": {
+    "message": "कोई विचार, समस्या या अनुपलब्ध सुविधा बताएं।"
+  }
+}

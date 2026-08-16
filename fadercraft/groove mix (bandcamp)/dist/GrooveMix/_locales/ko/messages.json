@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "패널 아무 곳이나 클릭하면 포커스가 활성화되어 단축키를 사용할 수 있습니다."
+  },
+  "deckEmptyHintB": {
+    "message": "믹싱을 시작하려면 두 번째 트랙을 추가하세요."
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (또는 ▶ 클릭)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "모든 페어"
+  },
+  "hintLeftRightDesc": {
+    "message": "왼쪽 키는 낮추고, 오른쪽 키는 높입니다. 위 모든 노브 페어에 동일하게 적용됩니다."
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "중립(0dB / 유니티 게인)으로 스냅합니다."
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "이미 중립 상태일 때, 최소값으로 자릅니다."
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "마우스 상하 스크롤 또는 두 손가락 트랙패드로 파라미터를 조정합니다."
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "미세 조정 또는 왼쪽/오른쪽 길게 누르기"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "트랙을 클릭 드래그하거나, 두 손가락으로 트랙패드를 스와이프합니다."
+  },
+  "hintTabDesc": {
+    "message": "어떤 트랙이 A/B인지 바꿉니다 (연결 시 큰 헤더 버튼 사용 가능)."
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "덱 간에 공유되며, 덱별 설정이 아닙니다."
+  },
+  "hintTempoArrowsDesc": {
+    "message": "또는 BPM 표시 사이의 막대를 드래그하세요. 템포를 혼합하고 비트 페이즈도 자동으로 재정렬하며, 별도의 동기화 작업이 필요 없습니다."
+  },
+  "trialBannerText": {
+    "message": "무료 체험 시간이 종료되었습니다. GrooveMix는 계속 작동하지만, 라이선스 구매를 고려해 주세요."
+  },
+  "trialBuyLink": {
+    "message": "라이선스 구매"
+  },
+  "licenseActivateBtn": {
+    "message": "활성화"
+  },
+  "licenseChecking": {
+    "message": "확인 중…"
+  },
+  "licenseActivated": {
+    "message": "라이선스 활성화됨 — 감사합니다!"
+  },
+  "licenseInvalid": {
+    "message": "잘못된 라이선스 키입니다."
+  },
+  "feedbackPrompt": {
+    "message": "무엇을 개선할까요?"
+  },
+  "feedbackSubmit": {
+    "message": "보내기"
+  },
+  "feedbackSent": {
+    "message": "감사합니다. 의견이 접수되었습니다!"
+  },
+  "feedbackPlaceholder": {
+    "message": "아이디어, 문제점 또는 누락된 기능을 설명해 주세요."
+  }
+}

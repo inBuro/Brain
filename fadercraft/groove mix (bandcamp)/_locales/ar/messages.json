@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "انقر في أي مكان داخل اللوحة لتركيزها — هذا ما يشغل مفاتيح الاختصار"
+  },
+  "deckEmptyHintB": {
+    "message": "أضف مقطعًا صوتيًا ثانيًا لبدء المزج"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (أو انقر على ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "أي زوج"
+  },
+  "hintLeftRightDesc": {
+    "message": "المفتاح الأيسر يخفض، المفتاح الأيمن يرفع — بنفس الترتيب لكل زوج مقبض أعلاه"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "يعود إلى الوضع المحايد (0dB / كسب وحدوي)"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "يقطع إلى الحد الأدنى، بعد أن يكون بالفعل في الوضع المحايد"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "تحريك الماوس للأعلى/للأسفل، أو لوحة اللمس بإصبعين، يضبط المعلمة"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "تحريك طفيف أو الضغط مطولاً على اليسار/اليمين"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "انقر واسحب المسار، أو اسحب بإصبعين على لوحة اللمس"
+  },
+  "hintTabDesc": {
+    "message": "تبديل أي مسار هو A/B (أو زر العنوان الكبير، بمجرد الاتصال)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "مشترك بين الأجهزة، وليس إعدادًا خاصًا بكل جهاز"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "أو اسحب الشريط بين قراءات الـ BPM — يمزج الإيقاع ويعيد محاذاة طور النبض تلقائيًا أيضًا، لا حاجة لإجراء مزامنة منفصل"
+  },
+  "trialBannerText": {
+    "message": "انتهت مدة التجربة المجانية — يظل GrooveMix يعمل، ولكن فكر في الحصول على ترخيص."
+  },
+  "trialBuyLink": {
+    "message": "شراء ترخيص"
+  },
+  "licenseActivateBtn": {
+    "message": "تفعيل"
+  },
+  "licenseChecking": {
+    "message": "جاري التحقق…"
+  },
+  "licenseActivated": {
+    "message": "مرخص — شكرًا لك!"
+  },
+  "licenseInvalid": {
+    "message": "مفتاح ترخيص غير صالح."
+  },
+  "feedbackPrompt": {
+    "message": "ما الذي يمكننا تحسينه؟"
+  },
+  "feedbackSubmit": {
+    "message": "إرسال"
+  },
+  "feedbackSent": {
+    "message": "شكراً — تم الاستلام!"
+  },
+  "feedbackPlaceholder": {
+    "message": "صف فكرة، مشكلة، أو ميزة مفقودة."
+  }
+}

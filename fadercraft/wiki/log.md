@@ -8,6 +8,22 @@ created: 2026-04-28
 
 Append-only журнал операций над вики.
 
+## 2026-08-16 — SEO-аудит проверен, найденные баги пофикшены и задеплоены
+
+Продолжение записи ниже: исходный внешний аудит был написан без доступа к `~/.config/google/` (сессия в песочнице). Перепроверил его находки против локального GSC-монитора и живого GSC API — часть оказались уже закрытыми, часть неточными, и всплыл один реальный, ранее не пойманный баг.
+
+**Поправки к аудиту.** «Судьба `/free-custom-modes`» и «отправлен ли sitemap» — оба сняты: монитор показывает `/free-custom-modes` в индексе стабильно с ~1 августа, sitemap пересабмичивается автономно каждые 2 дня. «Dynamic Focus отсутствует в базе знаний» — раздуто: `roadmap.md` (Phase 3) знает продукт и обновлён 2026-08-08, не хватает только синтез-страницы. Регрессия `/guide/…mk3-across-live-sets` в noindex — **не новый сбой** (как ошибочно записано в первой правке брифа), а тот же нерешённый с 4 июля кейс: последний краул Google по этому URL всё ещё датирован `2026-07-04`, хотя заголовки на проде чистые уже давно.
+
+**Реальный баг, найденный при перепроверке:** `sitemap.xml` содержал мёртвый `/updates` (давно 301-нится на `/xl-updates`) и не содержал `/df-updates` вообще. GSC URL Inspection подтвердил: **`/xl-updates` — «URL is unknown to Google»**, ни разу не сканировалась, хотя страница живая и есть ссылка в футере — просто не было в sitemap. Это и есть «пропавшая страница» из исходного беспокойства фаундера.
+
+**Фиксы, задеплоены на прод (`inBuro/fadercraft-landing@6ce81c0`, живой билд подтверждён curl'ом):**
+- `functions/_middleware.js` — явный `X-Robots-Tag: noindex` на любой хост кроме `fadercraft.com`. Preview-хосты и так получали noindex по умолчанию от Cloudflare Pages (подтверждено curl'ом `x-robots-tag: noindex`) — фикс не решает уже проиндексированный дубль (Google просто ещё не пересканировал), а страхует на случай, если этот CF-дефолт когда-нибудь выключат.
+- `public/sitemap.xml` — `/updates` заменён на `/xl-updates` + `/df-updates`. Пересабмичен через GSC API (`204`).
+
+**Осталось только вручную** (у Request Indexing нет публичного API): зайти в Search Console → URL Inspection → «Запросить индексирование» для `/xl-updates` и повторно для `/guide/…mk3-across-live-sets`.
+
+**PR #18 смёржен** (`142744c`) с исправленным брифом.
+
 ## 2026-08-16 — Внешний SEO-аудит индексации + бриф задач для агента
 
 Повод: вопрос основателя, стоит ли переводить страницы с гайдами на FR/DE/en-GB ради индекса в этих странах. Ответ по существу — **нет, не сейчас** (аудитория ищет по-английски, en-GB = орфография а не язык, база не готова, переводы протухают); гейт на пересмотр = выгрузка GSC по странам. В ходе проверки вскрылось расхождение вики с реальностью, аудит вынесен в новую страницу `wiki/seo-audit-2026-08-16.md`.
@@ -18,9 +34,121 @@ Append-only журнал операций над вики.
 
 **Создано:** `wiki/seo-audit-2026-08-16.md` — находки со статусами (подтверждено/опровергнуто/не проверяемо) + очередь задач для агента блоками A→E (доступы → сверка → фиксы → данные под локализацию → гигиена вики), с критериями готовности и анти-листом. Приоритет: `A1 → C1 → B2 → C2`. **Код, прод, GSC и roadmap не трогали** — только новая страница + `index.md` + этот журнал; правка roadmap под факты вынесена в задачу E1.
 
+## 2026-08-11 — Dynamic Focus Slot v1.2 release bundle
+
 ## 2026-06-28 — Реорганизация репозитория: Control XL выделен в отдельную папку
 
-`Fadercraft/raw/` и `Fadercraft/dist/` перемещены в `Fadercraft/Control XL/raw/` и `Fadercraft/Control XL/dist/` через `git mv` (сохранена история). Все 517 трекаемых файлов получили статус R (rename). Также перемещены: `Fadercraft/Novation XL.md` → `Control XL/`, `Fadercraft/demo-video-titles.html` → `Control XL/`, `Fadercraft/solo_follower.js` → `Control XL/raw/`. Маркетинг-ассеты (`Fadercraft Presentation.mp4`, `.srt`, `Photos/`, `IMG_8046.jpg`, `References/`) переехали автоматически как часть `raw/` → `Control XL/raw/`. `.gitignore` обновлён на новые пути. Wiki, brand, ds, wiki, directives, research, docs — не тронуты. Пути в agent-memory (MEMORY.md, xl-performance.md, controlxl-project-map.md, controlxl-bundle-zips.md) и wiki (Version Check, Browser Load) обновлены.
+**Файлы:**
+- `dist/archive/Dynamic Focus Slot v1.2.amxd` md5=`ff0212ea` (847790B)
+- `dist/Fadercraft Dynamic Focus v1.2.zip` md5=`443eab62` (145422B)
+- Архив base: `_device-backups/Dynamic Focus/Dynamic Focus Slot.2026-08-11-113450.pre-v12-release-build.amxd`
+
+**Что вошло:**
+- JS v66 (вычищен): удалены 32 dev-only строки (`[COLOR-RAW]`, `[UMV-DRAG]`, TGT-DBG, ADV-DBG, drag repaint diagnostic). Оставлены 12 холодных production posts. Маркер: `S7-PROD-v1.2 LOADED`
+- MapButtonTint v47 (145 boxes/242 lines) — заменил старый v43 (132/227) из v1.2-clean base
+- DEVICE_VERSION='1.2' в df_version_check.js (embedded + on disk)
+
+**Функциональные фиксы vs v1.1:** v60 restore-state (mbt_map=0), v61 min/max desync, v62 white text + track repaint, v63 si=7 black text, v65 900ms+1500ms checkParentMove, v66 stale-guard hostTrack
+
+**НЕ опубликован.** Координатор решает дату деплоя на Gumroad. После публикации — обновить `versions.json` (dynamic_focus.latest='1.2').
+
+---
+
+## 2026-08-11 — v63-S7-UNIFIED: si=7 FOLLOW дизайн унифицирован с si<7
+
+**midi_learn_slot.js v63**:
+- Редизайн (прямой запрос): si=7 (bpslot7 mirror) теперь показывает track color bg + white text в FOLLOW mode, как и si=0..6. Прежний дизайн dark+amber (v42/v50) отменён.
+- `_updateMapBtnVisibility()`: `si < 7` → `si <= 7`; раздельный si===7 FOLLOW block (lnb_lbg_r/g/b + amber) удалён.
+- `_s7kaFn()`: keep-alive теперь красит track color + white (не amber); lcdbgcolor тоже обновляется каждые 100ms.
+- `checkParentMove()`: добавлены диагностические посты `drag repaint sync/300ms` с track color + hostId для верификации drag repaint chain.
+- Архив: `_device-backups/midi_learn_slot.2026-08-11-000038.pre-v63-s7-unified.js`
+
+⚠️ Дизайн si=7 dark+amber ОТМЕНЁН. Не возвращать без явного запроса.
+
+## 2026-08-10 — v60/v47: RESTORE STATE FIX — mbt_map=0 root cause устранён
+
+**midi_learn_slot.js v60** + **MapButtonTint v47**:
+- Диагноз: три фактора делают mbt_map=0 после byname-restore: (1) mb_bindtrig sync сброс it_mflag, (2) RangeAndName outlet 4 async сброс, (3) $i4=0 в it_state (arm button не трогали → it_vtrig → $i4 хранит 0 → state=0 всегда)
+- MapButtonTint v47: добавлен `varname="it_vtrig"` к объекту `it_vtrig (t b i)`
+- JS v60: в `_resolvePanelSlotsOnHostTrack()` — 100ms deferred Task, для каждого restored si<7: `it_mapstore.message(1)` + `it_vtrig.message(1)` → state=2 стабильно
+- Архивы: `_device-backups/MapButtonTint.2026-08-10-221456.pre-v47-vtrig-varname.maxpat` + `midi_learn_slot.2026-08-10-221456.pre-v59-restore-state.js`
+- Min/Max page1/page2 desync — отдельный баг, задокументирован в STATE-MAP.md §9, ждёт отдельного раунда
+
+## 2026-08-10 — DF Input: удалены диагностические print-объекты (debug spam fix)
+
+**Dynamic Focus Input.amxd** — удалены 4 debug бокса из frozen patcher JSON:
+- `dbg-ch` (`print dfi-raw-ch`), `dbg-pack` (`print dfi-pack-out`), `dbg-midiin-ch` (`print dfi-midiparse-cc`), `dbg-midiparse` (midiparse, только для debug-ветки)
+- Все три print-а стреляли на каждое CC-сообщение → flood консоли при активном контроллере → перегрузка Max-планировщика → lag в DF Slot
+- Path B repack: ΔL=−7548, MD5 `0c486e52` → `6757b0279244a0f87db1918338c387f0`, 31558→24010 B
+- Архив: `_device-backups/Dynamic Focus Input.2026-08-10-210359.pre-rm-debug-prints.amxd`
+- Embedded JS (dfi_relative.js / df_version_check.js / monitor_init.js) — байт-в-байт целы
+
+## 2026-08-10 — v56/v45: синхронный gate-close + немедленный tint (dark-bg+amber-text fix)
+
+**midi_learn_slot.js** v55 → **v56**: маркер `>>> S7-DEV-v56 LOADED <<<`.
+- Немедленный `applyColor()` в `panelmap()` и `_doRebind()` (до deferred 300ms; ранее только для absoluteMode)
+- Цель: it_unpk получает track_color ДО async RangeAndName completion → state machine fires state=2 с правильным lcdbgcolor
+
+**MapButtonTint.maxpat** v44 → **v45**: 144/240 → **145 boxes/242 lines**. Маркер `MapButtonTint v45 loaded`.
+- Добавлен `it_st2close [== 0]` id="it_st2close" rect=[1550,540]
+- Связи: `it_brc → it_st2close → it_dg[in0]`
+- Синхронно закрывает it_dg при state=2 (через it_brc, в той же Max event) — блокирует async p setButtonColor callback (lcdbgcolor=dark) после маппинга
+
+**Диагноз root cause (установлен статическим анализом):**
+`it_zpak [pak lcdcolor amber]` fires в live.text при loadbang (it_dg открыт via it_load). Затем p setButtonColor async live.colors callback пишет `lcdbgcolor=skin_lcd_bg` (тёмный) через it_dg (ещё открыт, потому что it_dgc2 закрывает async после RangeAndName). Итог: dark lcdbgcolor + amber lcdcolor = тёмный фон + amber текст si=4-6 в FOLLOW mode.
+
+**Архивы:** `MapButtonTint.2026-08-10-174734.pre-v45.maxpat`, `midi_learn_slot.2026-08-10-174734.pre-v56.js` — оба в `Brain/fadercraft/_device-backups/`
+
+---
+
+## 2026-08-10 — MapButtonTint v39: диагностика pack+coeff после сверки с SF
+
+**MapButtonTint.maxpat** обновлён с v38 (`cc4b526a`) до v39 (`a163d8ce`), архив `2026-08-10-032957.pre-v39-pack-coeff-diag.maxpat`.
+
+Сверка с Sends Follower (MapButton.maxpat): post-pak4 цепь ИДЕНТИЧНА в обоих устройствах (те же объект ID, те же соединения). SF не является рабочим эталоном для Max range — у неё та же ограниченность (max идёт только в pak COLD inlet, без тригера). Структурного превосходства нет.
+
+v38 CONFIRMED: pak4 корректно получает max/100 (пользователь подтвердил `dbg-pak4: 0. 0.97 0. 1. → 0. 0.5 0. 1.`). Обрыв строго после pak4.
+
+v39 добавляет диагностические prints: `print dbg-pack` после pack (obj-67) и `print dbg-coeff` после flonum obj-65 (*~ coefficient). Ожидание при Max=50%: `dbg-pack: 0. 0.5` и `dbg-coeff: 0.5`.
+
+## 2026-08-10 — MapButtonTint v38: Max-range fix (четвёртая попытка; explicit pak4 slot routing)
+
+**MapButtonTint.maxpat** обновлён с v37 (`f55c74c8`) до v38 (`cc4b526a`), архив `2026-08-10-031433.pre-v38-pak4-split.maxpat`.
+
+Диагноз: v37 подтвердил (через `ran-pak`), что `pak (obj-55)` корректно получает `[min/100, max/100]`. Но пользователь в Live видит прежний симптом. Полная статическая трассировка цепи pak→pak4→unpack→scale→pack→*~ структурно верна. Выдвинута гипотеза: `pak 0. 1. 0. 1. (obj-49)` при получении LIST `[min/100, max/100]` на inlet 0 берёт только ПЕРВЫЙ элемент для slot 0, slot 1 остаётся дефолтом 1.0 → Max всегда 1.0 → ceiling всегда 100%.
+
+Фикс: добавлен `obj-minmax-split (unpack 0. 1.)` между pak и pak4. unpack стреляет справа налево: outlet 1 (max/100) → pak4[1] COLD сначала, outlet 0 (min/100) → pak4[0] HOT → pak4 стреляет. Явная маршрутизация устраняет dependence на pak list-spreading. Добавлен `print dbg-pak4` для подтверждения. Ожидаемый Console: `ran-pak: 0. 0.5` + `dbg-pak4: 0. 0.5 0. 1.`.
+
+Ожидает теста в Live.
+
+## 2026-08-10 — MapButtonTint v37: Max-range fix (третья попытка; obj-mindiv100)
+
+**MapButtonTint.maxpat** обновлён с v36 (`c00afb75`) до v37 (`f55c74c8`), архив `2026-08-10-024610.pre-v37-maxfix2.maxpat`.
+
+Диагноз: `t b f outlet 0 (bang) → obj-53(flonum, prototypename:"Live") → /100 → pak` — теоретически верная цепь (v34/v36), но Max-параметр в Live не реагировал (три итерации). Гипотеза: Live-прототипный flonum не отвечает на bang в M4L bpatcher-контексте.
+
+Фикс: добавлен `obj-mindiv100` — стандартный flonum (без prototypename) между `/100 (min)` и `pak hot`. Теперь Min-путь обновляет obj-mindiv100 (хранит min/100), а Max-путь банкует obj-mindiv100 напрямую. Устранена зависимость от Live-прототипного flonum. Добавлен диагностический `print ran-pak` (убрать после подтверждения).
+
+Ожидает теста в Live. JS v45 без изменений.
+
+## 2026-07-27 — Dynamic Focus Slot v1.2: фикс learnedChannel persistence
+
+Закрыт баг: два DF Slot с одинаковым CC на разных Custom Mode (ch11/ch12) теряли канал после reload сета. Корень: `LiveAPI.set("value", ch)` обновляет LOM, но не stored value live.numbox → .als сохранял неверное значение.
+
+Изменения в `Dynamic Focus Slot.amxd` (FROZEN, md5 `592e002d` → `8e072d5f`, 778857→718317B):
+- `lnb_ch` varname `'live.numbox[1]'` → `'lnb_ch'` (теперь доступен через patcher.getnamed)
+- `pattr_ch` restore `[0]` → `[-1]` (дефолт = unlearned sentinel)
+- `midi_learn_slot.js` (`9c265566`, 86426B): в Learn/unmap/_resetAllMappings вместо `LiveAPI.set(chParamId, ch)` — `patcher.getnamed("lnb_ch").message(ch)` (raw number → inlet 0 → persists to .als)
+- Пересборка через Path B: JSON 213683→152913B (indent=1), dlst of32 все -60770
+
+Архив: `_device-backups/Dynamic Focus Slot.2026-07-27.amxd` (pre-fix, `592e002d`).
+Пользователю: в существующих .als нужен 1 re-Learn на каждый Slot.
+
+## 2026-07-13 — Relative-toggle команда извлечена из декомпилированного Live 12 скрипта
+
+Вопрос endless-энкодеров пересмотрен. Из `Launch_Control_XL_3/midi.py` (github.com/gluon/AbletonLive12_MIDIRemoteScripts) извлечены точные байты: per-row relative toggle = CC69/72/73 ch7 val=127 (`SET_RELATIVE_ENCODER_MODES`), connect-handshake `F0 00 20 29 02 15 02 7F F7`, encoder touch enable CC71 ch7 127. Гипотеза 2026-06-23 подтверждена как реальные команды официального скрипта; открытым остаётся только их действие в Custom Mode (hardware-тест, артефакты готовы). Firmware v1.1 (янв 2026) relative в Custom Mode НЕ добавила (acceleration curves, HUI, fader pickup). Обновлён раздел в [[Custom Mode SysEx Layout]]; полное состояние исследования + новый путь «software recenter via CC feedback» — в памяти m4l-master `encoder-relative-research.md`.
+
+`fadercraft/raw/` и `fadercraft/dist/` перемещены в `fadercraft/Control XL/raw/` и `fadercraft/Control XL/dist/` через `git mv` (сохранена история). Все 517 трекаемых файлов получили статус R (rename). Также перемещены: `fadercraft/Novation XL.md` → `Control XL/`, `fadercraft/demo-video-titles.html` → `Control XL/`, `fadercraft/solo_follower.js` → `Control XL/raw/`. Маркетинг-ассеты (`Fadercraft Presentation.mp4`, `.srt`, `Photos/`, `IMG_8046.jpg`, `References/`) переехали автоматически как часть `raw/` → `Control XL/raw/`. `.gitignore` обновлён на новые пути. Wiki, brand, ds, wiki, directives, research, docs — не тронуты. Пути в agent-memory (MEMORY.md, xl-performance.md, controlxl-project-map.md, controlxl-bundle-zips.md) и wiki (Version Check, Browser Load) обновлены.
 
 ## 2026-06-23 — Custom Mode SysEx Layout: исправлена модель label-маркеров
 
@@ -147,9 +275,9 @@ Append-only журнал операций над вики.
 **Решение:** убрать `lcxl-mk3-modes-bundle.syx` из distribution полностью. Bundle структурно валиден как SysEx (проверил: 28 сообщений с правильными headers, opcode, section bytes, name fields), но «байт-валидный» != «Components импортит». Без живого подтверждения работы — лучше не давать пользователю файл, который не работает.
 
 **Что удалено:**
-- `Fadercraft/dist/custom-modes/lcxl-mk3-modes-bundle.syx`
-- `Fadercraft/web/free-custom-modes/lcxl-mk3-modes-bundle.syx`
-- `Fadercraft/app/public/free-custom-modes/lcxl-mk3-modes-bundle.syx` (dev server)
+- `fadercraft/dist/custom-modes/lcxl-mk3-modes-bundle.syx`
+- `fadercraft/web/free-custom-modes/lcxl-mk3-modes-bundle.syx`
+- `fadercraft/app/public/free-custom-modes/lcxl-mk3-modes-bundle.syx` (dev server)
 
 **Что обновлено** (везде заменена инструкция «drag bundle» → «select target slot + Upload Custom Mode для каждого»):
 - `dist/custom-modes/README.md`
@@ -165,13 +293,13 @@ Append-only журнал операций над вики.
 
 Закрыт T12 bullet про free funnel (`web/free-custom-modes/`).
 
-**Что в папке `Fadercraft/web/free-custom-modes/`:**
+**Что в папке `fadercraft/web/free-custom-modes/`:**
 - `index.html` — статическая страница (стиль pricing.html/terms.html), hero «Free Custom Modes for Launch Control XL MK3», ссылки на bundle + per-mode `.syx`, инструкция импорта в Components, секция «What the paid bundle adds» с CTA на `fadercraft.gumroad.com/l/xl-performance`.
 - 14 индивидуальных `.syx` файлов (`1.syx`..`14.syx`)
 - `lcxl-mk3-modes-bundle.syx` (9276 B) для one-shot import
 - `README.md` — markdown-версия инструкций (зеркало `dist/custom-modes/README.md`)
 
-**Также создан** `Fadercraft/dist/custom-modes/README.md` — пойдёт внутрь Gumroad bundle как user-facing инструкция, идентичен версии на free funnel page.
+**Также создан** `fadercraft/dist/custom-modes/README.md` — пойдёт внутрь Gumroad bundle как user-facing инструкция, идентичен версии на free funnel page.
 
 **Phase 0:** 58/104 (~56%) → **59/104 (~57%)**. T12: 5/14 → 6/14.
 
@@ -181,7 +309,7 @@ Append-only журнал операций над вики.
 
 Пользователь импортнул bundle на железо, все 14 модов открываются и работают корректно (после короткой Finder-cache затыки на отображении модов 11/12 и bundle как «dim/не кликабельные» — оказалось чисто визуальный glitch macOS LaunchServices, OS-уровень файлы абсолютно нормальные; разрешилось через `touch` + рефреш Finder).
 
-**Roadmap T12 first bullet** — описание обновлено: 10 → 14 модов в `Fadercraft/dist/custom-modes/`, bundle 9276 B. Сам пункт уже был отмечен `[x]` ранее сегодня, дельта счётчиков нулевая, но описание теперь отражает финальный объём поставки.
+**Roadmap T12 first bullet** — описание обновлено: 10 → 14 модов в `fadercraft/dist/custom-modes/`, bundle 9276 B. Сам пункт уже был отмечен `[x]` ранее сегодня, дельта счётчиков нулевая, но описание теперь отражает финальный объём поставки.
 
 **Phase 0:** **58/104 (~56%)** — без изменений (закрытие mixer-модов произошло в рамках уже-закрытого bullet'а).
 
@@ -249,7 +377,7 @@ Append-only журнал операций над вики.
 
 ## 2026-05-26 — Lazy load + T3 brand commit closed
 
-- **Lazy load** добавлен на все below-the-fold `<img>` лендинга через нативный `loading="lazy" decoding="async"`. Затронуты: `CatalogSection.tsx` (картинки в карточках kit, среди них `lcxl-mk3.png` 1.1MB), `VideoSection.tsx` (poster), `ProductGallery.tsx` (main + thumbnails), `ProductCard.tsx`. Выше-the-fold `PerformanceFlow` `keys.png` (35KB) оставлен eager — он участвует в LCP. Vite-rebuild → новый bundle `index-B4gL0Se3.js` скопирован в `Fadercraft/web/`, старый `index-n9SfgvuN.js` удалён.
+- **Lazy load** добавлен на все below-the-fold `<img>` лендинга через нативный `loading="lazy" decoding="async"`. Затронуты: `CatalogSection.tsx` (картинки в карточках kit, среди них `lcxl-mk3.png` 1.1MB), `VideoSection.tsx` (poster), `ProductGallery.tsx` (main + thumbnails), `ProductCard.tsx`. Выше-the-fold `PerformanceFlow` `keys.png` (35KB) оставлен eager — он участвует в LCP. Vite-rebuild → новый bundle `index-B4gL0Se3.js` скопирован в `fadercraft/web/`, старый `index-n9SfgvuN.js` удалён.
 - **T3 Commit `brand/`** — отмечено закрытым: коммит `3b0de4d` ранее сегодня уже содержит `brand/brief.md` + `brand/colors.md` (+ `email-setup.md` ещё раньше). Пункт оставался открытым в роадмэпе по инерции.
 - **Phase 0 totals:** 55/104 (~53%) → **57/104 (~55%)**. T3 6/7 → 7/7 (закрыт целиком), T7-real 3/7 → 4/7.
 
@@ -257,7 +385,7 @@ Append-only журнал операций над вики.
 
 Закрыта серия пунктов по уточнению пользователя:
 
-- **T3 Social tiles (6/7)** — OG-картинка `Fadercraft/web/og.png` (1080×1080, 51KB) залита в репо. IG-пост 1:1 и Stories 1080×1920 вынесены в Phase 1 / маркетинг (под этой галочкой не считаются).
+- **T3 Social tiles (6/7)** — OG-картинка `fadercraft/web/og.png` (1080×1080, 51KB) залита в репо. IG-пост 1:1 и Stories 1080×1920 вынесены в Phase 1 / маркетинг (под этой галочкой не считаются).
 - **T5 Instagram (3/3 = 100%)** — handle `@fadercraft_` зарегистрирован, bio + ссылка на `fadercraft.com` стоят, в avatar — логотип/favicon-mark.
 - **T7-real лендинг (3/7)** — счётчик total бампнут с 5 до 7 (split `Smooth scroll + lazy load` на два пункта; `/free-custom-modes` уже добавлен ранее, но не учитывался в total). Закрыты: 9-секционный `index.html`, `style.css` с brand colors (mobile-first), smooth scroll в `main.js`. Открыты: `pricing.html`, hero loop video, lazy load, `/free-custom-modes` страница.
 - **T9 Demo video (1/9)** — YouTube канал «Fadercraft» создан.
@@ -267,7 +395,7 @@ Append-only журнал операций над вики.
 ## 2026-05-26 — External links page + IG handle `fadercraft_`
 
 - Создана [[external-links]] — single source of truth для внешних URL (IG/YT/Gumroad/support/лендинг) + список файлов в коде, где эти ссылки используются.
-- В [FooterFull.tsx:43](../../../Projects/Claude/Fadercraft/app/src/components/organisms/FooterFull/FooterFull.tsx#L43) обновлён IG href: `instagram.com/fadercraft` → `instagram.com/fadercraft_` (актуальный хэндл с trailing underscore).
+- В [FooterFull.tsx:43](../../../Projects/Projects/fadercraft/app/src/components/organisms/FooterFull/FooterFull.tsx#L43) обновлён IG href: `instagram.com/fadercraft` → `instagram.com/fadercraft_` (актуальный хэндл с trailing underscore).
 - [[index]] обновлён: добавлена ссылка на `external-links` в разделе Reference.
 
 ## 2026-05-26 — Beat 4 «hotkeys» — пересборка amber-LED оверлея под Figma
@@ -278,7 +406,7 @@ Append-only журнал операций над вики.
 - `1747:10703` keys.png frame: (-62, 49), 444×222.
 - `1803:5008` Frame 84 (overlay из 4 amber-квадратов 33×33 с гэпом 9px): (0, 184), 159×33, opacity 0.5.
 
-**Что сделано в коде** ([PerformanceFlow.module.css:347-358](../../../Projects/Claude/Fadercraft/app/src/components/organisms/PerformanceFlow/PerformanceFlow.module.css#L347-L358)):
+**Что сделано в коде** ([PerformanceFlow.module.css:347-358](../../../Projects/Projects/fadercraft/app/src/components/organisms/PerformanceFlow/PerformanceFlow.module.css#L347-L358)):
 
 - `.beat4Leds` переехал с `left: 14.5em / top: 8.0625em` (старая позиция под правой парой клавиш) на `left: 3.875em / top: 8.4375em` (новая позиция под левой парой). Координаты получены пересчётом Figma-координат Frame 84 относительно image-local origin: `x = 0 − (−62) = 62 → 3.875em`, `y = 184 − 49 = 135 → 8.4375em`.
 - Добавлен `opacity: 0.5` на `.beat4Leds` (в Figma overlay polу-прозрачный).
@@ -293,7 +421,7 @@ Append-only журнал операций над вики.
 
 **Что сделано.**
 
-- `~/Projects/Claude/Fadercraft/app/src/components/organisms/PerformanceFlow/PerformanceFlow.tsx:38` — заменена строка в массиве features (Two encoder layers per channel).
+- `~/Projects/Projects/fadercraft/app/src/components/organisms/PerformanceFlow/PerformanceFlow.tsx:38` — заменена строка в массиве features (Two encoder layers per channel).
 - Figma file `OdPRdjodGO3WiR6tgSP7AA` (Novation-XL) → page `06 — Content`, два TEXT-нода обновлены через `use_figma`:
   - `1398:143` («Rewritten takes → Encoders»): «6 controls per channel instead of 3» → «… instead of 2».
   - `1434:6902` (frame «XL Performance — lo-fi prototype v2» → BEAT 2 · ENCODERS): «Two encoder banks per channel — 6 controls instead of 3» → «… instead of 2».
@@ -301,7 +429,7 @@ Append-only журнал операций над вики.
 - Gumroad listing: пользователь поправил вручную (out of band). TODO в roadmap T12 закрыт чек-маркой.
 - `wiki/roadmap.md` → T12 (Bundle assembly + Gumroad product), пункт «Описание продукта на странице Gumroad» — child-callout заменён на ✅ запись о применённой правке во всех трёх каналах (код / Figma / Gumroad).
 
-Других вхождений «6 controls instead of 3» в `~/Brain/Fadercraft` и `~/Projects/Claude/Fadercraft` нет (grep clean, исключая build artifacts).
+Других вхождений «6 controls instead of 3» в `~/Brain/fadercraft` и `~/Projects/Projects/fadercraft` нет (grep clean, исключая build artifacts).
 
 ---
 
@@ -407,14 +535,14 @@ Append-only журнал операций над вики.
 
 **Что НЕ тронуто.**
 
-- React-имплементация (`~/Projects/Claude/Fadercraft/app/`) — там сейчас ModeGrid без цветового кодирования и без tooltip-механизма. Скриншот, который пользователь обсуждал в claude.ai, видимо был из Antigravity-сессии или Figma, не из этой кодовой базы. Имплементация — следующий шаг, после того как пользователь согласует копию.
+- React-имплементация (`~/Projects/Projects/fadercraft/app/`) — там сейчас ModeGrid без цветового кодирования и без tooltip-механизма. Скриншот, который пользователь обсуждал в claude.ai, видимо был из Antigravity-сессии или Figma, не из этой кодовой базы. Имплементация — следующий шаг, после того как пользователь согласует копию.
 - Hero (Beat 1) — оставлен как есть с "16 modes", флаг в open question #1.
 
 ---
 
 ## 2026-05-07 — Figma: Tooltip atom + hover-показ на ModeButton 1–16
 
-Не вики, а соседний design-репо `~/Projects/Claude/Fadercraft/`, но решение касается DS-парности. Подробности — `docs/log.md` от 2026-05-07. Кратко: Tooltip оформлен как атом с `Direction=top|bottom` variant и component-property `text`, лежит карточкой в сетке `02 — Atoms`. На `OneActionBetweenThem` 16 тултипов с `layoutPositioning='ABSOLUTE'` (1–8 над, 9–16 под), их `visible` забинден на 16 BOOLEAN-переменных коллекции `Prototype`, hover-реакции `MOUSE_ENTER`/`MOUSE_LEAVE` на каждой ModeButton выставляют `mode-N=true|false`. Заодно удалены 10 unused-вариантов `State=hover-*` ModeButton (апрельский эксперимент с радужной палитрой stroke без привязки к токенам, 0 usage).
+Не вики, а соседний design-репо `~/Projects/Projects/fadercraft/`, но решение касается DS-парности. Подробности — `docs/log.md` от 2026-05-07. Кратко: Tooltip оформлен как атом с `Direction=top|bottom` variant и component-property `text`, лежит карточкой в сетке `02 — Atoms`. На `OneActionBetweenThem` 16 тултипов с `layoutPositioning='ABSOLUTE'` (1–8 над, 9–16 под), их `visible` забинден на 16 BOOLEAN-переменных коллекции `Prototype`, hover-реакции `MOUSE_ENTER`/`MOUSE_LEAVE` на каждой ModeButton выставляют `mode-N=true|false`. Заодно удалены 10 unused-вариантов `State=hover-*` ModeButton (апрельский эксперимент с радужной палитрой stroke без привязки к токенам, 0 usage).
 
 
 
@@ -670,8 +798,8 @@ Append-only журнал операций над вики.
 
 - Created `wiki/landing-narrative.md` — 10-beat psychological arc for `fadercraft.com`. Drives section order, component priorities, and explicit deviations from the original spec (added beat 5 "How it works", moved bundle visuals from #4 to #8).
 - Added pointer in `wiki/index.md` Roadmap section.
-- Implementation workspace at `~/Projects/Claude/Fadercraft/`: `ModeButton` + `ModeGrid` built on both Figma and React side, parity confirmed via browser smoke test.
-- Token parity report: `~/Projects/Claude/Fadercraft/artifacts/parity-report-2026-05-06.md` (3 Figma fixes applied: action/secondary→coral, focus shadow→lavender, coral primitive value).
+- Implementation workspace at `~/Projects/Projects/fadercraft/`: `ModeButton` + `ModeGrid` built on both Figma and React side, parity confirmed via browser smoke test.
+- Token parity report: `~/Projects/Projects/fadercraft/artifacts/parity-report-2026-05-06.md` (3 Figma fixes applied: action/secondary→coral, focus shadow→lavender, coral primitive value).
 
 ## 2026-05-26 — Beat 8 newsletter copy finalized (Figma parity)
 
@@ -679,7 +807,7 @@ Append-only журнал операций над вики.
 - Body split into two short lines: "Buy once and start immediately." / "Or get one email when a new workflow, update or device ships."
 - Placeholder: `your@email.com` (was `you@studio.com`). Submit: `Join updates` (was `Subscribe`).
 - CTA bullet normalized: `Buy on Gumroad • $39` (was em-dash variant).
-- Code synced in `~/Projects/Claude/Fadercraft/app/src/components/organisms/NewsletterSection/`; CTA is `white-space: nowrap` + full-width on ≤719px so `$39` no longer wraps off the button on mobile.
+- Code synced in `~/Projects/Projects/fadercraft/app/src/components/organisms/NewsletterSection/`; CTA is `white-space: nowrap` + full-width on ≤719px so `$39` no longer wraps off the button on mobile.
 
 ## 2026-05-26 — T3 Brand identity closed (5/7)
 
@@ -728,7 +856,7 @@ Append-only журнал операций над вики.
 
 - Discord-сервер **Fadercraft** создан (founder: Yellowshoess, 2FA активен). Иконка `icon-512.png`, Community-режим включён (verification Low, scan media, rules → `#rules`, updates → `#server-updates`, safety notifications → `#server-updates`, default notif Only @mentions, 2FA-for-mod ON).
 - Структура: 4 категории / 10 каналов по спеке [[discord-server-setup]]. Роли `@Founder` (mint, Administrator), `@Verified Owner` (amber, default), `@everyone` минус send в INFO-каналах. Welcome + rules запинены, меншны живые.
-- **Permanent invite link**: `https://discord.gg/dAt2JGZps7` (Never / No limit / Temporary OFF). Подставлен в [FooterFull.tsx:44](Projects/Claude/Fadercraft/app/src/components/organisms/FooterFull/FooterFull.tsx#L44) `defaultSocials.DC`.
+- **Permanent invite link**: `https://discord.gg/dAt2JGZps7` (Never / No limit / Temporary OFF). Подставлен в [FooterFull.tsx:44](Projects/Projects/fadercraft/app/src/components/organisms/FooterFull/FooterFull.tsx#L44) `defaultSocials.DC`.
 - T14 9/10 (~90%). Открыто: первый `#announcements`-пост, привязанный к v1.0 launch (T13).
 - **Phase 0 итого: 68/114 (~60%).**
 - Follow-ups (не блокеры): Quickstart Support-блок при T10, Gumroad description ручной правкой, banner 960×540 в Figma.
@@ -865,9 +993,23 @@ Append-only журнал операций над вики.
 - Voice pass (2026-06-26): aligned remaining CXL-inherited sections to VO tone — bundle lists now verb-forward ("follows one track's send… / an entire return bus"), consistent across product page / receipt / short; REFUNDS de-legalized ("Refunds within 14 days if it doesn't work as described… what went wrong"); SUPPORT line made human ("Stuck, or found a bug? … replies within 48 hours"); dropped ⚑ on receipt (now in-voice + grounded). Listing copy publish-ready pending demo video + Vale.
 
 ## 2026-06-28 — Repo nesting fix: Sends Follower + Dynamic Focus consolidated under Fadercraft
-- Pulled new **`Dynamic Focus/`** folder (5 files: `dynamic_focus.js`, `Dynamic Focus.maxpat/.amxd`, `build_device.py`, `README.md`) from remote branch `claude/dynamic-focus-folder-kwbhti` into `Fadercraft/Dynamic Focus/`. It's a track-focus M4L proof-of-concept (device self-activates only while its host track is the selected track; no central manager, event-driven via `live_set view selected_track` observer — idioms mirror `solo_follower.js`). README verdict: architecture sound, recommended as product foundation.
-- **Resolved long-open org question (roadmap open-item #6):** moved `~/Brain/Sends Follower/` → **`~/Brain/Fadercraft/Sends Follower/`** via `git mv` (266 files, history preserved). Internal `raw/ dist/ wiki/ Sends Follower.md CLAUDE.md` kept verbatim — only the nesting changed, per founder's directive "keep the existing raw/dist distribution system, fix nesting." Sends Follower no longer a top-level sibling of Fadercraft; now sits inside the Fadercraft umbrella next to `Dynamic Focus/`.
+- Pulled new **`Dynamic Focus/`** folder (5 files: `dynamic_focus.js`, `Dynamic Focus.maxpat/.amxd`, `build_device.py`, `README.md`) from remote branch `claude/dynamic-focus-folder-kwbhti` into `fadercraft/Dynamic Focus/`. It's a track-focus M4L proof-of-concept (device self-activates only while its host track is the selected track; no central manager, event-driven via `live_set view selected_track` observer — idioms mirror `solo_follower.js`). README verdict: architecture sound, recommended as product foundation.
+- **Resolved long-open org question (roadmap open-item #6):** moved `~/Brain/Sends Follower/` → **`~/Brain/fadercraft/Sends Follower/`** via `git mv` (266 files, history preserved). Internal `raw/ dist/ wiki/ Sends Follower.md CLAUDE.md` kept verbatim — only the nesting changed, per founder's directive "keep the existing raw/dist distribution system, fix nesting." Sends Follower no longer a top-level sibling of Fadercraft; now sits inside the Fadercraft umbrella next to `Dynamic Focus/`.
 - Control XL untouched (its bundles stay in shared `dist/`, deploy-wired). Historical `~/Brain/Sends Follower/...` paths in older log entries left as-is (append-only journal).
 
 ## 2026-06-30 — Gumroad SF copy verified live; canon recorded for consistency
 Verified the live `l/sends-follower` listing (Kirill paste + browse scrape) against [[gumroad-description-sends-follower]] §1: body matches verbatim → marked as as-published source of truth for cross-surface consistency (VO ↔ site ↔ Gumroad). One delta found: REFUNDS block in the doc is NOT on the live listing — flagged, open decision (add to live or drop). Also surfaced VO↔site drifts (behavior-line, hero verb «Converts/turns», Manual «mouse/manually»); Gumroad confirms VO as canon. Site edits pending founder line-by-line picks.
+
+## 2026-08-09 — Dynamic Focus Slot v1.2-clean: 9 fixes ported to clean frozen base
+Assembled `Dynamic Focus Slot.amxd` v1.2-clean (`b3801e5c`, 765748B FROZEN) from scratch: base = released v1.1 frozen (`f2858303`), 9 confirmed fixes from 2026-08-08/09 ported in clean form (no diagnostic post() calls). Fixes include: v23 bang() inlet-11 guard (the actual root cause: X-click sent bang, fell into re-init instead of unmap), v20 lnb_tgt stored-value sync, v19 stale-notification guard in _doRebind(), v18 CcControlDevice byname guard, v16 arm-state guard, v15 unmap() race fix, v14 second-arm blink fix (it_dgc2) + X button on bpslot7, patcher-level live.observer detach (ran_obs_clr in RangeAndName). Placed in User Library as `Dynamic Focus Slot.amxd`. Backup at `_device-backups/Dynamic Focus/Dynamic Focus Slot.2026-08-09-121328.pre-v12-clean-base.amxd`. Pending: new zip bundle, DEVICE_VERSION bump, Gumroad upload. DEV.amxd + external JS/maxpat files unchanged for continued development.
+
+## 2026-07-14 — Buy shortlinks: 302 → tracking bridge pages (analytics gap closed)
+Analyst confirmed the Control XL goals (Actions 285962–285965) were healthy, but the six `*-buy` vanity links (`/yt-buy`, `/yt-sf-buy`, `/r-buy`, `/tg-buy`, `/m4l-buy`, `/fb-buy`) were server-side 302s straight to Gumroad — no HTML, no PostHog snippet, so those visits existed in Gumroad analytics but never in PostHog (gap since the 2026-06-12 redirect deploy). Replaced each with a static bridge page (`app/public/<slug>.html`) that fires `buy_click` via sendBeacon ($lib `fc-buy-bridge`, stamps `ph_did`+`cta` for Gumroad Ping attribution) and immediately redirects to the same checkout URL; removed the six lines from `_redirects` (a rule would shadow the asset). Deployed (commit `5a660d2`), E2E-verified on prod: owner-tagged test `buy_click` landed in PostHog with correct props. Same pass: Action 285962 filter widened to `href contains gumroad.com/l/control-xl` — retroactively counts 9 real CXL buy clicks instead of 2. Details in [[outbound-links]] §Buy bridge mechanism.
+
+## 2026-08-09 — Leads-export D1 sync stuck at 1 row (open bug, mid-investigation)
+- User got an owner-notification email for a new Free Custom Modes lead (`jumbos_prikstok_0x@icloud.com`, submitted 08:52 UTC), but the PostHog "Leads — Free Custom Modes" widget (data-warehouse source `019fb27d-131b-...`, syncs `fadercraft-leads` D1 via `/api/leads-export`) still showed only the old lead from 2026-07-29 (`jasonlawmakesnoise@gmail.com`).
+- Granted a Cloudflare API token (`damp-flower-b028`, existing all-purpose token, not a fresh scoped one) D1 Edit permission so Claude could query `fadercraft-leads` directly via `wrangler d1 execute --remote` (prior token in `~/.config/cloudflare/env` had no D1 scope at all → `code: 7403`).
+- **Confirmed via direct D1 query: both leads are actually in the table.** The write path (`functions/api/free-modes-gate.js` → `saveLead()`) works correctly — the owner email only fires after a successful D1 insert, so its arrival is itself proof the row landed.
+- **Real bug is on the read/sync side.** Reviewed `functions/api/leads-export.js` — logic looks correct (unfiltered `SELECT ... FROM leads` with no `since` should return all rows; `since` filter is `last_seen >= ?`, which would still include the new row even with a stale cursor). Yet every single scheduled sync job since 2026-07-30 (45+ runs, every 6h) has `rows_synced: 1` — including the run at **10:17 UTC, which started AFTER the 08:52 UTC lead already existed in D1** and still only synced 1 row. This rules out "sync just hasn't caught up yet" — something in the PostHog data-warehouse pipeline (dlt incremental-cursor handling, or Cloudflare edge caching despite `Cache-Control: no-store`) is dropping the new row.
+- Manually triggered a fresh sync via `external-data-sources-reload` MCP tool (job `019fe749-...`) — was still `Running` when this entry was written (some historical runs on this source have taken 3+ hours to complete for a trivial 1-2-row payload, itself a smell worth investigating separately). **Not yet resolved** — next step is to check that job's result and, if still stuck at 1, consider reconfiguring the source without `incremental_sync` (force true full_refresh with no `since` param sent at all) since the manifest's `incremental_sync.enabled: true` may be silently overriding the intended full-refresh behavior.
+- Source id: `019fb27d-131b-0000-ac8c-a2af8c1def47` (project 458316). D1: `fadercraft-leads` (`e10aabe3-8a67-41a9-a8cb-8e7f5ba68eb7`), binding `LEADS_DB` in `app/wrangler.toml`.

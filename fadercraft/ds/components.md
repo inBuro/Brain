@@ -1,6 +1,6 @@
 # Components (scan)
 
-**Источник:** https://www.figma.com/design/OdPRdjodGO3WiR6tgSP7AA/Fadercraft
+**Источник:** https://www.figma.com/design/OdPRdjodGO3WiR6tgSP7AA/fadercraft
 **Дата сканирования:** 2026-06-19
 **Страницы:** Atoms, Icons, Molecules, Organisms (Logo — пустая)
 

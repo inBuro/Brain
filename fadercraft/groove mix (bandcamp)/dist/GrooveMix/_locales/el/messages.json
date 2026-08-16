@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "Κάντε κλικ οπουδήποτε στον πίνακα για να του δώσετε εστίαση — έτσι ενεργοποιούνται οι συντομεύσεις πληκτρολογίου."
+  },
+  "deckEmptyHintB": {
+    "message": "Προσθέστε ένα δεύτερο κομμάτι για να ξεκινήσετε τη μίξη."
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (ή κάντε κλικ στο ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "Οποιοδήποτε ζεύγος"
+  },
+  "hintLeftRightDesc": {
+    "message": "το αριστερό πλήκτρο μειώνει, το δεξί αυξάνει — ίδια σειρά για κάθε ζεύγος κουμπιών παραπάνω"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "επαναφέρει στο ουδέτερο (0dB / ενιαία ενίσχυση)"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "μειώνει στο ελάχιστο, μόλις βρεθεί ήδη στο ουδέτερο"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "το ποντίκι πάνω/κάτω, ή το trackpad με δύο δάχτυλα, ρυθμίζει την παράμετρο"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "μετακίνηση ή κρατήστε αριστερά/δεξιά"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "κάντε κλικ-σύρετε το κομμάτι, ή σάρωση με trackpad δύο δαχτύλων"
+  },
+  "hintTabDesc": {
+    "message": "ανταλλάξτε ποιο κομμάτι είναι A/B (ή το μεγάλο κουμπί κεφαλίδας, μόλις συνδεθεί)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "κοινόχρηστο μεταξύ των decks, όχι ρύθμιση ανά deck"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "ή σύρετε τη γραμμή μεταξύ των ενδείξεων BPM — αναμειγνύει το τέμπο και αυτόματα ευθυγραμμίζει ξανά τη φάση του ρυθμού, δεν απαιτείται ξεχωριστή ενέργεια συγχρονισμού"
+  },
+  "trialBannerText": {
+    "message": "Ο χρόνος δωρεάν δοκιμής εξαντλήθηκε — το GrooveMix συνεχίζει να λειτουργεί, αλλά σκεφτείτε να αποκτήσετε άδεια."
+  },
+  "trialBuyLink": {
+    "message": "Αγορά άδειας"
+  },
+  "licenseActivateBtn": {
+    "message": "Ενεργοποίηση"
+  },
+  "licenseChecking": {
+    "message": "Έλεγχος…"
+  },
+  "licenseActivated": {
+    "message": "Με άδεια — ευχαριστούμε!"
+  },
+  "licenseInvalid": {
+    "message": "Μη έγκυρο κλειδί άδειας."
+  },
+  "feedbackPrompt": {
+    "message": "Τι θα βελτιώνατε;"
+  },
+  "feedbackSubmit": {
+    "message": "Αποστολή"
+  },
+  "feedbackSent": {
+    "message": "Ευχαριστούμε — το λάβαμε!"
+  },
+  "feedbackPlaceholder": {
+    "message": "Περιγράψτε μια ιδέα, ένα πρόβλημα ή μια λειτουργία που λείπει."
+  }
+}

@@ -50,9 +50,9 @@ updated: 2026-05-26
 
 When updating a link here, also touch:
 
-- `~/Projects/Claude/Fadercraft/app/src/components/organisms/FooterFull/FooterFull.tsx` — `defaultSocials`
-- `~/Projects/Claude/Fadercraft/app/src/pages/LandingPage.tsx` — `ctaHref`, support email in FAQ
-- `~/Projects/Claude/Fadercraft/app/src/pages/ProductPage.tsx` — same
+- `~/Projects/Projects/fadercraft/app/src/components/organisms/FooterFull/FooterFull.tsx` — `defaultSocials`
+- `~/Projects/Projects/fadercraft/app/src/pages/LandingPage.tsx` — `ctaHref`, support email in FAQ
+- `~/Projects/Projects/fadercraft/app/src/pages/ProductPage.tsx` — same
 
 ## Related pages
 

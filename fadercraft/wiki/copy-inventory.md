@@ -33,7 +33,7 @@ updated: 2026-06-10
 
 ---
 
-## LIVE LANDING COPY — snapshot from `~/Projects/Claude/Fadercraft/app/src`
+## LIVE LANDING COPY — snapshot from `~/Projects/Projects/fadercraft/app/src`
 
 > Source of truth = the code. This is a read-only snapshot for analysis; re-pull after landing edits.
 
