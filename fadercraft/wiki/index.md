@@ -30,6 +30,7 @@ updated: 2026-05-06
 
 - [[payment-rails]] — матрица платёжных рельсов (PayPal/Stripe/Lemon/Polar/Patreon/Paddle/Payhip/Payoneer/Isotonik/crypto/Georgian IE) с вердиктами под профиль «русский паспорт + Таиланд», расшифровка какие тайские документы что разблокируют.
 - [[external-links]] — единая таблица всех внешних ссылок Fadercraft (соцсети, Gumroad, support, лендинг); single source of truth для футера и outreach.
+- [[seo-audit-2026-08-16]] — внешний аудит индексации `fadercraft.com` (по индексу Google + почте, без доступа к проду/репо) + очередь задач для агента. Находки: сайт перестроен (хаб + `/control-xl`, `/sends-follower`, `/dynamic-focus`), продукт **Dynamic Focus $19 отсутствует в вики**, в индексе висит **preview-деплой Cloudflare Pages** (дубль сайта, протухшая сборка), судьба `/free-custom-modes` под вопросом, roadmap расходится с реальностью по 4 пунктам. Содержит вердикт по вопросу основателя о переводе страниц на FR/DE/en-GB (**нет, не сейчас**; гейт = выгрузка GSC по странам).
 - [[outbound-links]] — все campaign-tracked vanity-редиректы (UTM short links) для YT/Reddit-плейсментов; правила (новый канал = новый редирект до публикации), таблицы по кампаниям, процедура add→deploy→verify. Зеркало `app/public/_redirects`.
 
 ## Synthesis
