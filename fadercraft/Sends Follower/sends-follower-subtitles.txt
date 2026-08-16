@@ -1,0 +1,17 @@
+Sends Follower turns send levels into modulation sources.
+
+Instead of increasing the send level, you're shaping the effect's behavior.
+
+Each source can control up to 8 parameters, each with its own range and polarity.
+
+The pack includes two devices: Track and Return.
+
+Return follows the activity of an entire return bus.
+
+Track follows the send amount of a single track.
+
+Choose the source. Shape the sound.
+
+Fadercraft Sends Follower.
+
+Stay in the music.

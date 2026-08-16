@@ -7,11 +7,59 @@ metadata:
 
 # Sends Follower — device facts (m4l-master)
 
+## 🧪 DEV-КОПИЯ: фикс гонки персистентности маппинга (live.thisdevice gate) — 2026-07-04 (НЕ в рабочем, ждёт hw-теста)
+Симптом (доказан консолью founder): на load/freeze/reload часть/весь маппинг слетает в «Map» + флуд `live.remote~/jsliveapi • Live API is not initialized`. Первопричина: восстановление маппинга летит ДО готовности Live API двумя путями. (1) **`sf_mapall`** (Stored Only live.text, =1 если жали Map All) рестор Live-параметром → `sf_mapall_sel`→`sf_mapall_msg`→js `mapall()` с кучей `new LiveAPI` ПОКА API не готов → id 0 → live.remote~ set дропается → «Map». (2) **`sf_cmd_numbox`** (sfcmd, Stored Only) рестор → прямой корд `→udp_js` (`sf_udp.msg_int`) пишет TargetMin/Max — ранний реплей. (3) У **Return** дополнительно старый `loadbang()` сам звал installObservers/buildRefs ДО готовности (флуд jsliveapi).
+Девайсы на диске оказались **FROZEN** (483552/496177, embedded js == внешним по md5). Работа ТОЛЬКО на копиях в `_device-backups/persistence-fix-dev/` — развёрнуты **UNFROZEN** (js/maxpat/svg внешними файлами рядом; так гейт-правки патчера тривиальны, без каскадного dlst Path B). Рабочие файлы в User Library НЕ тронуты.
+ФИКС: **JS** — флаги `_liveReady`/`_pendingMapall`; `mapall()` при `!_liveReady` → `_pendingMapall=true;return` (дефер), реплей один раз когда готово. Track: флип `_liveReady=true` в КОНЦЕ `init()` (init уже гейтится live.thisdevice→delay400). Return: `loadbang()` теперь минимальный (только `_orphanArmedAt`, НИ одного LiveAPI), новая `liveready()` делает installObservers/buildRefs/resync/pushValue + флип + реплей. **Патчер** (оба, +6/+7 боксов): своя цепочка `live.thisdevice→deferlow→delay 400` (`rg_thisdev/rg_defer/rg_delay`) → гейт sfcmd: `sf_cmd_numbox` больше НЕ идёт прямо в udp; идёт в `sfcmd_gate [gate]` (закрыт по умолч.) + `sfcmd_hold [int]` (тихий захват), `t b 1` (`sfcmd_open`) от rg_delay открывает gate и реплеит hold один раз; `sfcmd_gate→udp_js`. Return доп.: `rg_msg [message liveready]` от rg_delay → `obj-46` (main js). Ранлайм-клики Map All/min-max проходят как раньше (после load gate открыт, _liveReady=true).
+Валидация: оба unfrozen парсятся (python+jq), ptch==filesize−0x20, 0x14=01, tail=1 null; счётчики Return 113→120 box/110→119 line, Track 104→110/82→89; все новые корды есть, старый `sf_cmd→udp` удалён; `node --check` обоих js OK, без кириллицы. **НЕ подставлять в рабочий сет** — founder тестит копию (изолир. пустой сет: map→save→reload→маппинг цел, флуда нет; затем freeze/unfreeze). Подмена/рефриз рабочих — отдельным шагом по подтверждению. Правки живут в внешних `sends_follower.js`/`sends_follower_track.js` в dev-папке; при финализации founder рефризит через Max (js ре-embed).
+**ROUND 2 (2026-07-04) — ❌ РЕГРЕССИЯ, ОТКАЧЕН. НЕ ПОВТОРЯТЬ.** Попытка дочистить остаточный флуд (~9 безобидных `jsliveapi`) top-guard'ами `if(!_liveReady){…return;}` на `buildRef`(Track)/`targetmap`(Track)/`buildRefs`(Return) + перенос флипа `_liveReady=true` в НАЧАЛО init()/liveready() — **сломала рабочее состояние**: на reload флуд взлетел до ~800 строк, появились НОВЫЕ `live.object` + `live.remote~ • Live API is not initialized` (в round-1 их НЕ было), и маппинг поехал (часть кнопок → «Map me»). Механизм регрессии (гипотеза): гейт buildRef/buildRefs + ранний флип сломали порядок сборки refs/наблюдателей → что-то зациклилось на не-готовом API. **УРОК: НЕ гейтить buildRef/buildRefs/targetmap по `_liveReady` и НЕ переносить флип в начало init/liveready.** Round-1 (флип В КОНЦЕ init / в liveready ПОСЛЕ buildRefs; гейт ТОЛЬКО на mapall) — подтверждён рабочим (маппинг персистентен, флуд ~9 безобидных jsliveapi). Косметику (остаток ~9) НЕ трогаем. Откат выполнен — dev-копии возвращены к round-1 (SFDBG убраны, guard'ы сняты, флипы на местах round-1, node --check OK).
+
+## ✅ РЕШЕНО: SF-Track «залитый круг» (send_dial) пуст/0 на загрузке сета — 2026-07-04 (CURRENT, подтверждено founder)
+СИМПТОМ (founder): в **– Track** заливка круга/энкодера НЕ восстанавливается при открытии сета (круг=0), в **– Return** норм. Проявлялось в ОБОИХ Demo (`1.als` малый / `Presentation 2.als` большой — это один девайс в двух сетах, НЕ две версии).
+ROOT CAUSE (**заводской баг, был и до правок**): круг `send_dial` = плоский `dial parameter_enable:0` → Live его НЕ сохраняет; рисуется ТОЛЬКО из js через `syncControls` (outlet2 `knobset`). НО на загрузке `init()` **крешил в `rebuildMenu()`** (`error calling function init`, обрыв на step3) → init не доживал до отрисовки → круг НИКОГДА не заливался. Виновник — umenu/`_parameter_range` emit: **`outlet.apply(null, …)`** — в Max js `outlet` привязан к js-объекту, вызов через `.apply(null,…)` теряет binding и бросает. Локализовано пошаговыми логами (`init ENTER→step1→step2→step3→креш`). Return не падает — у него НЕТ такого rebuildMenu (у Return `build()` без umenu/`_parameter_range`).
+ФИКС (ТОЛЬКО js `sends_follower_track.js`, `.amxd` НЕ трогал, unfrozen/внешний js): (1) **`outlet.apply(null,…)` → `outlet.apply(this,…)`** — корневой фикс (this=js-объект, binding сохранён). (2) всё тело `rebuildMenu` в `try/catch` (страховка: любой transient-throw больше не убивает init → init всегда доходит до конца → срабатывает one-shot). (3) GUARD `n<0 → defer return` (`liveReturnCount()` в catch даёт −1 при не-готовом Live API; не гнать отриц. n в цикл/range-math; позже rebuild из resync). (4) **one-shot `fillRestoreOneShot()`** — Task на `RESTORE_GATE_MS+150` из КОНЦА init (init-цепочка идёт после `live.thisdevice`→deferlow→delay 400, Live API готов; `live.thisdevice` уже есть в патче obj-21): читает цель (Manual: `manualVal`; Follow: `lastResult`, иначе одноразово `sendRef.get("value")`), `bigShown=-1`, `syncControls(target)` → рисует круг. (5) `onSendValueChange` во время restore-окна: вместо раннего return — `lastResult=val`+`syncControls(val)` (рисует круг; бар защищён внутренним automation-guard `syncControls`).
+⚠️ ПРОВАЛ v1 (откачен, урок): пробовал `refreshControlsFromCurrent()` с LiveAPI-чтением из Task, стартующего в init, ДО готовности Live API → `error calling function init` (круг вообще не рисовался — хуже). УРОК: НИКАКОГО LiveAPI-доступа в путях из init/Task на загрузке без готовности; `node --check` рантайм-креш Max не ловит — проверять в Max-контексте логами.
+СТАТУС: **работает** (founder подтвердил: круг заливается на загрузке). Все временные `[SFDBG]`-логи убраны. `node --check` OK. Финальная рабочая версия: js md5 `c2085457…`, бэкап `_device-backups/…021607.fillRestore-FINAL.{js,amxd}` (2026-07-04). Оставшиеся `post(` в js (`orderedSlotBoxes`/`applySlotRanges error`) — НЕ мои, штатная error-диагностика маппера.
+⚠️ `send_dial` = плоский `dial parameter_enable:0` (founder откатил былой `live.dial pe:1`) → Live НЕ восстанавливает, рисует только js. Путь загрузки: `.als` Demo → User Library `.amxd` (RelativePathType 6), НЕ embedded/frozen; shadow-проект `Documents/Max 9/.../Sends Follower – Track Project/code/` симлинкнут на User Library js.
+
+## ✅ FIX v2 (EVENT-DRIVEN): SF-Track Manual value не восстанавливался в ПОЛНОМ сете — 2026-07-04 (CURRENT)
+СИМПТОМ: fixed-delay фикс v1 (ниже) работал в ПУСТОМ сете, но ПАДАЛ в полном (32 трека, много девайсов): крутишь value-круг у макс → Cmd+S → полный Cmd+Q → reopen → круг снова 0.
+ROOT CAUSE: v1-фикс бэнгал `obj-70` (midi_dial) на ФИКСИРОВАННОЙ задержке 400ms (`t b b` после `delay 400`). В полном сете async-загрузка Live дольше 400ms → когда триггер бэнгает obj-70, Live ещё НЕ восстановил value параметра → bang выдаёт 0 → `lastSliderVal=0` → `manualVal` остаётся 0. Fixed-delay = хрупко, зависит от размера сета.
+FIX v2 (**event-driven, load-time-independent**): вместо угаданной задержки — LiveAPI value-observer на параметр midi_dial. Выстреливает ИМЕННО в момент, когда Live восстанавливает value (контракт property-observer M4L), для ЛЮБОГО размера сета. Механизм родной для девайса (уже есть sendValueObs/selParamObs/devicesObs).
+- **JS** (`sends_follower_track.js`): нов. var `midiDialObs`; `installMidiDialObserver()` резолвит параметр ПО ИМЕНИ (`name=="midi_dial"` среди `this_device parameters N`, index-independent), ставит observer на `value`; вызывается из `installObservers()`. Callback `onMidiDialValue(args)`: `v=clamp01(args[1])` → `lastSliderVal=v` (как userval("midi",v)); если Manual (`selectedSend<0`) → `manualVal=v`, `lastResult=-1`, `pushValue()`, `syncControls(v)`. READ-ONLY по параметру (не пишет в dial) → нет feedback-петли. Follow: dial не источник → manualVal не трогается. Idempotent с userval (то же значение).
+- **Patcher** (`.amxd`): удалён `dial_restore_trig` (`t b b`) + его 2 ветки (→send_menu, →obj-70); восстановлена прямая `menu_restore_del(delay 400)→send_menu` (menu-restore сохранён). 105→**104 boxes**, 84→**82 lines**. Path A length-preserving (pad 25370), size 98326 неизменен.
+- Pre-edit md5: `.amxd` `93af266d…`, js `e66ed6bf…`. **CURRENT: `.amxd` `b841caf6…` (98326B, 104box/82line), js `ed1d2998…`.**
+- Бэкапы pre-edit: `~/Brain/fadercraft/_device-backups/Sends Follower – Track.2026-07-04-manualObserver.amxd` (md5 `93af266d…`), `sends_follower_track.2026-07-04-manualObserver.js` (md5 `e66ed6bf…`).
+- Валидация: ptch==filesize-0x20, prefix/suffix байт-в-байт (unfrozen, suffix=1 null), только dial_restore_trig удалён (др. боксы identity), `menu_restore_del→send_menu` есть, obj-70 теперь кормит только midi_set; node --check OK; python+jq парс. **Требует полного Cmd+Q Live** (patcher+js).
+
+## ✅ FIX v1 (SUPERSEDED by v2 above): SF-Track Manual — fixed-delay `t b b` — 2026-07-04
+СИМПТОМ: в Manual крутишь value-круг на ненулевую позицию → Cmd+S → Cmd+Q → reopen → круг снова на 0.
+ROOT CAUSE: восстановление manualVal завязано на `lastSliderVal`, заполняемый ТОЛЬКО из `userval("midi",v)` (движение/рестор midi_dial `obj-70` live.slider). obj-70 — Stored Live-param, Live восстанавливает value, но outlet 0 НЕ выстреливает на load сам (единств. вход = `midi_set` prepend-set = silent). Нет бэнга → `lastSliderVal=-1` → select(0) Manual-ветка не срабатывала → manualVal 0.
+FIX v1 (patcher-only): `t b b` (`dial_restore_trig`) между `menu_restore_del`(delay 400) и `send_menu`; out1→obj-70 bang (кэш lastSliderVal), out0→send_menu bang (select→manualVal). **Хрупко (fixed 400ms) → заменён на observer v2.**
+
+## ✅ REGRESSION FIX: orphan-observer стирал persist слотов на КАЖДОМ load — 2026-07-04 (CURRENT)
+СИМПТОМ: на каждом set-load slot-параметры (Min/Max ranges, DI/PI/TI bindings, manual value) сбрасывались в 0/дефолт для НЕ-автоматизированных инстансов; автоматизированные восстанавливались (lane переписывал поверх сброса). Регрессия от orphan-observer (добавлен 2026-07-04 00:31, оба js).
+ROOT CAUSE: **MapAll — Live-параметр (`sf_mapall`, live.text, Stored Only, parameter_initial=[0])**. Если пользователь раньше жал MapAll, параметр сохраняется =1 и Live РЕСТОРИТ его в 1 на load → `sf_mapall`→`sel 1`→msg `mapall`→js `mapall()` вызывается АВТОМАТИЧЕСКИ на каждом load, заполняя `mapTargetIds[]`/`slotPath[]`. Параллельно orphan-observer: `installDevicesObserver()` (в init/loadbang) ставит `devices` list-observers на все треки; каждый эмитит на install → `onDevicesChange` (list-эмиссия ≠ "id"-нотификация, фильтр не ловит) → schedule `runOrphanCheck` через 120ms. На load целевые Live-объекты на ДРУГИХ треках ещё не резолвнуты (Live грузит сет асинхронно) → `new LiveAPI(slotPath[s]).id==0` → `alive=false` → `resetOrphanSlot(s)` → **`persistPath(slot,"")` стирает сохранённый path (DI/PI/TI→0 на диске) + Map reset**. Т.е. ложное «orphan» из-за гонки резолва.
+FIX (JS-only, оба unfrozen, .amxd НЕ трогались): в `runOrphanCheck()` обоих js добавлены 2 guard'а. (1) **Grace-window**: `_orphanArmedAt = now()+ORPHAN_ARM_MS(6000)` взводится в `init()` (Track) / `loadbang()` (Return); пока `now()<_orphanArmedAt` — reset подавлен, пасс ре-планируется на после окна. (2) **Confirm-counter**: `orphanMiss[s]` требует ORPHAN_CONFIRM=3 промаха подряд (через отдельные пассы, re-schedule 200ms) прежде чем стирать слот; alive/empty сбрасывает счётчик в 0; `mapall()` сбрасывает `orphanMiss[s]=0` при свежей привязке. Реальное удаление девайса ПОЗЖЕ в сессии по-прежнему детектится. pushValue/Y-sort(orderedSlotBoxes)/mm_idroute/send_menu/swap/border/orphan-детект нетронуты.
+- Бэкапы pre-fix: `_device-backups/sends_follower_track.2026-07-04-004914.preOrphanRestoreFix.js` (md5 `c71433e6…`), `sends_follower.2026-07-04-004914.preOrphanRestoreFix.js` (md5 `ffc61636…`).
+- node --check OK, non-ASCII-free. **Требует полного Cmd+Q Live** (unfrozen hot-reload ненадёжен для нового кода).
+- ⚠️ ГРАБЛЬ на будущее: `sf_mapall` — Live-параметр Stored-Only → при сохранённом значении 1 `mapall()` авто-стреляет на КАЖДОМ load. Любая load-time логика, читающая `mapTargetIds`/`slotPath`, должна учитывать гонку резолва Live-объектов (grace-window + retry, не мгновенный destructive-reset).
+
+## ✅ REGRESSION FIX: модуляция не доходила до mapper (qmetro-removal) — 2026-07-03 (CURRENT)
+СИМПТОМ: замапленные target-параметры НЕ двигались ни в Manual, ни в Follow — при этом bindings/Min-Max в панели показаны. Encoder не двигал bar. Т.е. значение SF не доходило до multimap-mapper.
+ROOT CAUSE: **регрессия от qmetro-removal (2026-07-02).** Модуляция идёт по signal-домену: `js outlet0 "max" v` → `route max` → `change 0.` → `send ---max_send` → `receive` → `mm_sig` (sig~) → `multimap_panel inlet0` → per-slot `clip~`→scale(Min/Max)→`live.remote~`. `sig~` СТАРТУЕТ = 0 и меняется ТОЛЬКО когда новое значение протолкнули через `outlet(0)`. Раньше `qmetro 33` бэнгал `bang()` непрерывно → значение (пере)доставлялось в sig~ на load и после любой (пере)привязки. После qmetro-removal `bang()`=no-op, а `outlet(0)` шлётся ТОЛЬКО по событию: Follow — `onSendValueChange`/`onAnySendChange` observer (при изменении send), Manual — `userval` (при движении дала). При СТАТИЧНОМ значении (сразу после load, после Map All привязки live.remote~, после смены Source/mode) sig~ никогда не (пере)наполняется → цели стоят на 0. Signal-chain патча БЫЛА цела (сверено байт-в-байт с рабочим 2026-07-02 .amxd) — баг чисто в JS-драйвере.
+FIX (JS-only, оба unfrozen девайса читают js с диска — .amxd НЕ трогались):
+- **Новая `pushValue()`** в обоих: безусловный re-emit текущего значения в mapper, ОБХОДИТ RESULT_EPS change-gate. Track: `v=(selectedSend<0)?manualVal:lastResult`, guard `v<0`(=never-seen, чтобы не занулить). Return: `v=computeResult(followMode)`.
+- **Точки вызова pushValue():** (1) конец `mapall()` — после привязки live.remote~; (2) Track `select()` — после смены Source (+`lastResult=-1` чтобы push не съелся gate'ом); Return `mode()` — если `!pickupActive`; (3) прайм на load через Task: Track `init()` `schedule(RESTORE_GATE_MS+100)`, Return `loadbang()` `schedule(1200)`.
+- Симуляция подтвердила: manual/follow статичное после mapall доставляется; fresh-load never-seen (lastResult=-1) НЕ шлёт ложный 0.
+- Бэкапы pre-fix: `_device-backups/sends_follower_track.2026-07-03-205202.preModDrive.js` (md5 `8e1e1b11…`), `sends_follower.2026-07-03-205202.preModDrive.js` (md5 `d8869d4e…`).
+- CURRENT js md5: Track `1947f724…`, Return `ece9a936…`. node --check OK, Cyrillic-free. **Требует полного Cmd+Q Live** (unfrozen hot-reload ненадёжен для нового кода). Проверка на железе: замапить слот → крутить дал (Manual) / менять send (Follow) → target двигается; на load замапленные цели должны сразу стоять на актуальном значении, не 0.
+
 ## ✅ SF-Track send_menu load-default → Manual — 2026-07-03 (CURRENT)
-`send_menu` = `umenu` (id/varname `send_menu`), Live-параметр `parameter_type:2` (enum), в `saved_attribute_attributes.valueof`. Дефолт свежей вставки задаётся ТОЛЬКО `parameter_initial` этого параметра (+`parameter_initial_enable:1`); JS на это явно полагается (sends_follower_track.js ~601-605, boot-redirect Manual→A удалён). Правка: `parameter_initial:[1]`→`[0]` (Manual). Байт-в-байт: 1 байт @ file-offset 10467 (`'1'`→`'0'`), размер 44942 неизменен, суффикс/ptch целы. Old md5 `e453ebb7…` → new `85504b60…`. Бэкап `~/Brain/Fadercraft/_device-backups/Sends Follower – Track.2026-07-03-162620.amxd`.
+`send_menu` = `umenu` (id/varname `send_menu`), Live-параметр `parameter_type:2` (enum), в `saved_attribute_attributes.valueof`. Дефолт свежей вставки задаётся ТОЛЬКО `parameter_initial` этого параметра (+`parameter_initial_enable:1`); JS на это явно полагается (sends_follower_track.js ~601-605, boot-redirect Manual→A удалён). Правка: `parameter_initial:[1]`→`[0]` (Manual). Байт-в-байт: 1 байт @ file-offset 10467 (`'1'`→`'0'`), размер 44942 неизменен, суффикс/ptch целы. Old md5 `e453ebb7…` → new `85504b60…`. Бэкап `~/Brain/fadercraft/_device-backups/Sends Follower – Track.2026-07-03-162620.amxd`.
 - **Enum indices:** `["Manual","B","C","D"]` → **Manual = index 0** (JS-маркер selectedSend=-1). Item i>=1 = i-1-й доступный return.
 - **Меню ДИНАМИЧЕСКОЕ:** JS `rebuildMenu()` `menu clear`→`append "Manual"`→`append` буква на каждый return (`getcount("return_tracks")`). Item0 всегда Manual.
-- **✅ БАГ ИСПРАВЛЕН — 2026-07-03: parameter range теперь синхронизируется в рантайме.** В `rebuildMenu()` (sends_follower_track.js) после append-цикла собирается массив `enumLabels=["Manual",A,B,…N]` и шлётся `outlet(1,"menu","_parameter_range",…labels)` (через `outlet.apply`). Механизм: для Enum-umenu сообщение **`_parameter_range <label label …>`** (space-delimited enum-список) переустанавливает mmax = labelCount−1 = число returns. Роутинг: js outlet1 → `route menu` → `route show hide` (pass-through outlet2) → `send_menu` umenu inlet0. Гонится на КАЖДЫЙ rebuildMenu → add/remove return ре-синкает mmax динамически. Ставится ДО финального `menu set`, selectedSend save/restore/clamp уже покрывал reset. **JS-only** (unfrozen, .amxd не трогался). Old js md5 `98a051c2…` → new `8e1e1b11…`. node --check OK, Cyrillic-free. Бэкап `~/Brain/Fadercraft/_device-backups/sends_follower_track.2026-07-03-164420.js`. Требует полного Cmd+Q Live (не hot-reload). Каветы Push-refresh из forum-thread к нам не относятся (Push не используется, индекс всегда валиден).
+- **✅ БАГ ИСПРАВЛЕН — 2026-07-03: parameter range теперь синхронизируется в рантайме.** В `rebuildMenu()` (sends_follower_track.js) после append-цикла собирается массив `enumLabels=["Manual",A,B,…N]` и шлётся `outlet(1,"menu","_parameter_range",…labels)` (через `outlet.apply`). Механизм: для Enum-umenu сообщение **`_parameter_range <label label …>`** (space-delimited enum-список) переустанавливает mmax = labelCount−1 = число returns. Роутинг: js outlet1 → `route menu` → `route show hide` (pass-through outlet2) → `send_menu` umenu inlet0. Гонится на КАЖДЫЙ rebuildMenu → add/remove return ре-синкает mmax динамически. Ставится ДО финального `menu set`, selectedSend save/restore/clamp уже покрывал reset. **JS-only** (unfrozen, .amxd не трогался). Old js md5 `98a051c2…` → new `8e1e1b11…`. node --check OK, Cyrillic-free. Бэкап `~/Brain/fadercraft/_device-backups/sends_follower_track.2026-07-03-164420.js`. Требует полного Cmd+Q Live (не hot-reload). Каветы Push-refresh из forum-thread к нам не относятся (Push не используется, индекс всегда валиден).
 
 ## ✅ Y-sort fix перенесён на SF-Track — 2026-07-03 (CURRENT)
 Тот же range-scramble-фикс, что был в `sends_follower.js` (SF-Return), применён к `sends_follower_track.js` (SF-Track). У SF-Track было ДВА наивных пути `getnamed("bpslot"+s)`:
@@ -19,7 +67,7 @@ metadata:
 - **`mapall()`** — binding push: SF-Track биндит ПО ИМЕНИ (`bp.subpatcher().getnamed("mb_map_id").message(id)`), обходя mm_idroute — НЕ через outlet-роутинг. Значит binding-канал тоже был уязвим к scramble (не был safe).
 Оба переведены на общий helper **`orderedSlotBoxes(mmSub)`** (собирает 8 bpslot, читает Y через `bpatcherRowY()` = presentation_rect→patching_rect→bp.rect, сорт top→bottom, возвращает боксы[r]=строка r). `applySlotRanges`: Min+Max одним проходом в boxes[r]. `mapall`: сначала резолвит id[s] для всех 8 слотов (по param-индексу, независимо от порядка панели), ПОТОМ пишет id[r] в boxes[r]. Оба канала теперь identity и взаимно согласованы (один и тот же ordered-список). Диагностик-дампы SF-Return (sfWriteDiag/File/sfGeomDump) НЕ портировались — не нужны.
 Офсеты SF-Track подтверждены: DI_START=1, MAPALL=9, PI_START=10, TI_START=18, MAX_START=26, MIN_START=34 (= SF-Return, без +1-сдвига — Mode/Source = pe=0 UI-таб).
-- **Бэкап pre-edit:** `~/Brain/Fadercraft/_device-backups/sends_follower_track.2026-07-03-145424.js` (md5 `6ccbd1bc…`).
+- **Бэкап pre-edit:** `~/Brain/fadercraft/_device-backups/sends_follower_track.2026-07-03-145424.js` (md5 `6ccbd1bc…`).
 - **CURRENT `sends_follower_track.js`** md5 `98a051c2…`, node --check clean, Cyrillic-free. multimap.maxpat НЕ трогался (уже пофикшен и расшарен).
 - ⚠️ Загрузка изменённого JS требует полного перезапуска Live (Cmd+Q) — не hot-reload.
 
@@ -36,18 +84,18 @@ metadata:
 - **Track.amxd:** 118→104 boxes, 103→82 lines. ptch=44910, инвариант OK.
 - **sends_follower.js:** `bang()` → no-op; `loadbang()` + safety Task(resync(false), 1000ms).
 - **sends_follower_track.js:** `bang()` → no-op; `userval` Manual-block: немедленный output+syncControls вместо defer-to-bang; `init()` + safety Task(resync(true), 1000ms) перед copy-detect block.
-- **Бэкапы (4 файла):** `~/Brain/Fadercraft/_device-backups/*2026-07-02-232809*`
+- **Бэкапы (4 файла):** `~/Brain/fadercraft/_device-backups/*2026-07-02-232809*`
 
 ## ✅ MapButton border-fix + multimap spacing — 2026-07-03 (CURRENT on-disk)
 ⚠️ **On-disk MapButton != секция ниже (2026-07-02 рефактор, 35 boxes/51 lines).** Реальный файл на диске 2026-07-03 был **38 boxes / 57 lines** и содержит `obj-swap-fmax/fmin/init/cmax/cmin` (которые тот рефактор якобы удалял) — значит founder/Max-editor перезаписал файл после той сборки. ВСЕГДА базировать правки на текущем on-disk, не на памяти.
-- **Бэкапы pre-edit:** `~/Brain/Fadercraft/_device-backups/MapButton.2026-07-03-144459.maxpat` (38 boxes/57 lines), `multimap.2026-07-03-144459.maxpat`.
+- **Бэкапы pre-edit:** `~/Brain/fadercraft/_device-backups/MapButton.2026-07-03-144459.maxpat` (38 boxes/57 lines), `multimap.2026-07-03-144459.maxpat`.
 - **Fix 1 (border на filled state):** `obj-14` (Map live.text, appearance=2, varname `live.text`) — `bgoncolor` и `bordercolor` = один оранжевый `[1.0,0.709804,0.196078,1.0]` → fill+border двоятся в mapped state. live.text не имеет `borderoncolor`, bordercolor статичен (expression пустой, colorlogic его не шлёт). Решение: новая ветка от `obj-14` outlet0 (value 0/1) → `sel 0 1` (`obj-border-sel`) → 2 message (`obj-border-off`=orange a1 при value0/unmapped-outline, `obj-border-on`=orange a0 при value1/filled-clean) → обратно в `obj-14` inlet0. +3 boxes/+5 lines → **41 boxes/62 lines**. Fill/text не тронуты.
 - **Fix 2 (multimap равномерные gaps):** 8 bpslot bpatcher, presentation Y-шаги были 15.862×5 + 16.552×2 (аномалии bpslot1→2, bpslot6→7); patching Y-шаги 32×6 + 34.71/38.53. Применён самый частый шаг: pres=15.862069, patch=32.0. Высоты (pres 21, patch 20.8482) НЕ менялись, порядок bpslot0..7 top→bottom сохранён, все mm_idroute patchlines/varname/id байт-в-байт идентичны бэкапу.
 - **Swap default (3-я правка от coordinator, НЕ применена):** `obj-swap-init` on-disk уже = `"set 1"` (кнопка стартует filled; `live.thisdevice` obj-6 бэнгает init→swap_btn `set 1` без вывода). Это ЕДИНСТВЕННЫЙ источник дефолта swap-btn — второго определителя нет. Откат на `set 0` = откат уже присутствующего состояния по неавторитетному coordinator-релею (не user) → оставлено пользователю на решение. Swap-логика (`t b` swap-on-click) не трогалась.
 
 ## ✅ MapButton swap-btn refactor (pattr-bang + pure-icon) — 2026-07-02 (устарело on-disk, см. выше)
 **MapButton.maxpat** 35 boxes, 51 lines:
-- **Архив:** `~/Brain/Fadercraft/_device-backups/MapButton_20260702_211950.maxpat` (до рефактора, 57 lines)
+- **Архив:** `~/Brain/fadercraft/_device-backups/MapButton_20260702_211950.maxpat` (до рефактора, 57 lines)
 - **Удалены объекты:** `obj-swap-fmax`, `obj-swap-fmin` (tracking-буферы = 0 до первого cold-inlet)
 - **Удалены 10 patchlines:** все шнуры к/от fmax/fmin + init-шнуры obj-6→pattr
 - **Добавлены 4 patchlines (pattr-bang схема):** `trig[3]→pattr-max[0]`, `pattr-max[0]→cmax[1]` (order=0), `trig[2]→pattr-min[0]`, `pattr-min[0]→cmin[1]` (order=0)
@@ -61,7 +109,7 @@ metadata:
 - **Фикс:** убраны `tabs`/`size`; `parameter_type:1→2` (Enum); добавлен `parameter_enum:["Peak","Total"]`; `parameter_initial:[0.0]→[0]` (int, как у нативного live.tab Enum)
 - **Формат по образцу:** рабочий `follow_mode` из бэкапа 2026-07-02.amxd с `parameter_type:2`, `parameter_enum`, без `tabs`/`size`
 - **Итог:** 127 boxes, 130 lines (без изменений)
-- **Архив pre-edit:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.liveTabLabels.amxd` (md5 `7052b05f0f6bb42df7c0b59bd6e9eee4`)
+- **Архив pre-edit:** `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02.liveTabLabels.amxd` (md5 `7052b05f0f6bb42df7c0b59bd6e9eee4`)
 
 ## ✅ live.tab restored (replaces two-button radio) — 2026-07-02 (SUPERSEDED by Enum fix above)
 **Return.amxd** `7052b05f0f6bb42df7c0b59bd6e9eee4` (112124B, unfrozen, Path A, pad=29430):
@@ -72,7 +120,7 @@ metadata:
 - **Сохранены:** `mode_loadbang`, `mode_label`, `mode_prepend` (→obj-46 js, без изменений)
 - **Live-параметр mode_tab:** последний pe=1 объект → index=43 (sf_cmd_numbox=42, sfcmd)
 - **Итог:** 127 boxes, 130 lines
-- **Архив pre-edit:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.liveTabFinal.amxd` (md5 `601b4c543624f45fc1d89772a236f1cc`)
+- **Архив pre-edit:** `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02.liveTabFinal.amxd` (md5 `601b4c543624f45fc1d89772a236f1cc`)
 
 ## ✅ parameter_initial defval fix (Peak=1) — 2026-07-02 (SUPERSEDED by live.tab restore)
 **Return.amxd** `601b4c543624f45fc1d89772a236f1cc` (112124B, unfrozen, Path A, pad=25153):
@@ -83,21 +131,21 @@ metadata:
   - `mode_loadbang[0]→mode_msg0[0]`, `mode_loadbang[0]→mode_zero_b[0]`, `mode_loadbang[0]→mode_init_peak[0]`
 - **Оставшиеся шнуры obj-21:** только `obj-21[0]→obj-23[0]` (штатный, не тронут). `mode_loadbang` теперь висит без соединений.
 - **mode_btn_total:** `parameter_initial` не добавлен (дефолт 0 правильный).
-- **Архив pre-fix:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeDefval.amxd` (md5 `37035d6aff7886fdd3707f0f7d9961cd`)
+- **Архив pre-fix:** `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeDefval.amxd` (md5 `37035d6aff7886fdd3707f0f7d9961cd`)
 
 ## ✅ loadbang→live.thisdevice mode init fix — 2026-07-02 (SUPERSEDED by defval fix above)
 **Return.amxd** `37035d6aff7886fdd3707f0f7d9961cd` (112124B, unfrozen, Path A, pad=24362):
 - **Причина:** `mode_loadbang` срабатывал ДО restore `devicestoredonly=1` параметров → init Peak=1 перетирался restore=0. Кнопки нажимались, но при загрузке ни одна не светилась.
 - **Фикс:** добавлены 3 patchline от `obj-21` (live.thisdevice, outlet 0) к `mode_msg0[0]`, `mode_zero_b[0]`, `mode_init_peak[0]`. `mode_loadbang`-шнуры оставлены (не удалены). `live.thisdevice` срабатывает ПОСЛЕ restore параметров и перезаписывает loadbang-инит.
 - **live.thisdevice в патче:** уже был (`obj-4` и `obj-21`); использован `obj-21` (y≈207, ближайший по секции).
-- **Архив pre-fix:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeDefaultFix.amxd` (md5 `1f4136762ef0344a7c9cf4dd8d32efb7`)
+- **Архив pre-fix:** `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeDefaultFix.amxd` (md5 `1f4136762ef0344a7c9cf4dd8d32efb7`)
 
 ## ✅ mode_btn_peak/total click fix — 2026-07-02
 **Return.amxd** `1f4136762ef0344a7c9cf4dd8d32efb7` (112124B, unfrozen, Path A, pad=24792):
 - **Причина нерабочего клика:** `parameter_enable=0` на `live.text` → объект работает как пассивный дисплей, mouse interaction не обрабатывается.
 - **Фикс:** `mode_btn_peak` и `mode_btn_total`: `parameter_enable: 0 → 1`, добавлен `devicestoredonly: 1` (не засоряет automation lanes), `numoutlets: 1 → 2`, добавлен `saved_attribute_attributes.valueof` (parameter_type=2 enum/int, parameter_mmax=1, parameter_invisible=2 Stored Only).
 - **Связи не изменились:** outlet 0 → `mode_sel_peak/total[0]` (как и было). Outlet 1 не используется.
-- **Архив pre-fix:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeClickFix.amxd` (md5 `7e3871e4`)
+- **Архив pre-fix:** `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeClickFix.amxd` (md5 `7e3871e4`)
 
 ## ✅ mode_tab → live.text radio buttons (Peak/Total) — 2026-07-02
 **Return.amxd** `7e3871e4` (112124B, unfrozen, Path A, pad=25538):
@@ -107,7 +155,7 @@ metadata:
 - **mode=0 (toggle):** кнопки переключаются кликом, управляются программно через int в inlet.
 - **Radio-схема:** Peak click → sel 1 → zero_a→Total(off) + msg0→prepend→JS. Total click → sel 1 → zero_b→Peak(off) + msg1→prepend→JS.
 - **Init:** mode_loadbang → msg0(mode 0)→prepend→JS + zero_b→Total(0) + init_peak(1)→Peak(1).
-- **Архив:** `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeButtons.amxd` (md5 `550641d6`)
+- **Архив:** `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02.modeButtons.amxd` (md5 `550641d6`)
 - JS target: `mode_prepend` → `obj-46` (js sends_follower.js, inlet 0) — не изменился.
 
 ## ✅ Map button style + numbox right-align — 2026-07-02
@@ -116,8 +164,8 @@ metadata:
 - `obj-8` (TargetMin live.numbox): `textjustification` 0 → 2 (right).
 - `obj-3` (TargetMax live.numbox): `textjustification` 0 → 2 (right).
 - `bgoncolor` в mapped state — не тронут (orange solid, как было).
-- Архив pre-edit: `~/Brain/Fadercraft/_device-backups/MapButton.2026-07-02.mapStyle.maxpat` (md5 `85a641c9`)
-- Архив Return.amxd: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.mapStyle.amxd` (md5 `ce3d22b9`)
+- Архив pre-edit: `~/Brain/fadercraft/_device-backups/MapButton.2026-07-02.mapStyle.maxpat` (md5 `85a641c9`)
+- Архив Return.amxd: `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02.mapStyle.amxd` (md5 `ce3d22b9`)
 - ARCHITECTURE: `bordercolor` в `obj-14` статический (выражение = пустое). `p colors` субпатчер шлёт `focusbordercolor` (не `bordercolor`) в `obj-14`; `bordercolor` от темы идёт только в `obj-9` (border overlay). `p setButtonColor` управляет `lcdcolor`/`lcdbgcolor` только в armed state.
 
 ## ✅ mode_loadbang подключён: Peak-init при загрузке — 2026-07-02
@@ -125,14 +173,14 @@ metadata:
 - Добавлен box `mode_init_val` (message "0", rect=[120,537,29.5,20]), 2 новых line: `mode_loadbang[0]→mode_init_val[0]` и `mode_init_val[0]→mode_tab[0]`.
 - До правки: `mode_loadbang` висел в воздухе, ни одного соединения. `mode_tab` получал значение только от пользователя, при загрузке не инициализировался.
 - Path A (pad=27962, длина файла не изменилась 111326B). boxes 127→128, lines 129→131.
-- Архив pre-edit: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.peakDefault.amxd` (md5 `869b201292c50aa206f694256efccd32`)
+- Архив pre-edit: `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02.peakDefault.amxd` (md5 `869b201292c50aa206f694256efccd32`)
 - Цепочка инициализации: `mode_loadbang → mode_init_val(msg "0") → mode_tab → mode_prepend(prepend mode) → obj-46(js)`
 
 ## ✅ mode_tab: tablist → tabs (лейблы Peak/Total) — 2026-07-02
 **Return.amxd** `74c1a84e` (82677B, unfrozen):
 - `mode_tab` (maxclass=tab): атрибут `tablist` переименован в `tabs` (правильный атрибут для стандартного Max tab). Было: `tablist: ["Peak","Total"]` → показывало "one two three" (дефолт). Стало: `tabs: ["Peak","Total"]`. `size:2` сохранён.
 - Path A (pad=3, длина файла не изменилась 82677B). ptch_size 82645 — без изменений.
-- Архив: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.tabFix.amxd` (md5 `d7b868f9`)
+- Архив: `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02.tabFix.amxd` (md5 `d7b868f9`)
 
 ## ✅ Mode-селектор (tab+pattr) возвращён — 2026-07-02
 **Return.amxd** `d7b868f9` (82677B, unfrozen):
@@ -142,20 +190,20 @@ metadata:
 - `tab` (НЕ live.tab) — НЕ создаёт Live-параметр. `pattr` с `varname=follow_mode_val` сохраняет значение с проектом. Presentation: label y=131, tab y=147.
 - Path B (unfrozen, нет dlst) — ptch_size обновлён LE@0x1C (80391→82645).
 - ⚠️ АТРИБУТ: правильный атрибут для Max tab — `tabs`, НЕ `tablist`. `tablist` даёт дефолтный "one two three".
-- Архив: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02-withMode.amxd` (md5 `508b6426`)
+- Архив: `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02-withMode.amxd` (md5 `508b6426`)
 
 ## ✅ Mode-блок ПОЛНОСТЬЮ УДАЛЁН (follow_mode + вся цепочка) — 2026-07-02
 **Return.amxd** `508b6426` (80423B, unfrozen):
 - Удалены 5 объектов: `follow_mode` (tab), `mode_prepend` (prepend mode), `mode_delay` (delay 300), `mode_loadbang` (loadbang), `mode_label` (comment "Mode").
 - Удалены 4 patchline: mode_loadbang→mode_delay, mode_delay→follow_mode[0], follow_mode[0]→mode_prepend[0], mode_prepend[0]→obj-46[0].
 - boxes: 128→123, lines: 131→127.
-- Архив: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02-174212.noMode.amxd` (md5 `ca30266200cb25696a54850c314171a8`)
+- Архив: `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02-174212.noMode.amxd` (md5 `ca30266200cb25696a54850c314171a8`)
 
 ## ✅ follow_mode live.tab → tab (стандартный Max, всегда виден) — 2026-07-02
 **Return.amxd** (предыдущая версия, `ca30266200cb25696a54850c314171a8`, 112284B):
 - `follow_mode` заменён: `maxclass: live.tab` → `maxclass: tab`. Атрибуты `parameter_enable`, `parameter_mappable`, `saved_attribute_attributes` (themecolor), `activebgcolor`, `bgcolor` — удалены. Добавлен `tablist: ["Peak","Total"]`. `numoutlets: 3 → 2`, `outlettype: ["",""]`. Позиции (`patching_rect`, `presentation_rect`), `presentation:1`, `varname:follow_mode`, `fontname/fontsize` — сохранены. Связи (in: mode_delay→follow_mode[0]; out: follow_mode[0]→mode_prepend[0]) — нетронуты.
 - Результат: tab всегда виден в locked/presentation view, НЕ создаёт Live-параметр, работает как стандартный Max-объект.
-- Архив: `~/Brain/Fadercraft/_device-backups/Sends Follower – Return.2026-07-02.livetabFix.amxd` (md5 `5c5473ca56ded6f4e200a2307f9720f0`)
+- Архив: `~/Brain/fadercraft/_device-backups/Sends Follower – Return.2026-07-02.livetabFix.amxd` (md5 `5c5473ca56ded6f4e200a2307f9720f0`)
 
 ## ✅ follow_mode PARAMETER_ENABLE=0 (UI-only, не Live-параметр) — 2026-07-02
 **Return.amxd** `575a496e` (82144B, unfrozen):
@@ -206,7 +254,7 @@ metadata:
 - **Learn (per-slot) уже был:** arm/targetmap/captureTarget/slotPath — «запись цели» отдельно от «установки remote». Map All = батч-установка из индексов. Ручной Map-клик НЕ сломан (независимый путь внутри MapButton).
 - **CURRENT md5 (2026-07-01 MapAll/patcherNav fix):** Return.amxd `af8bd255` (80081B), sends_follower.js `e8c26df3`, sends_follower_track.js `9354a516`, multimap.maxpat `e63ee426`, MapButton.maxpat `32a5306f`.
 - **⚠️ IMPORTANT — Stored Only trap (2026-07-01):** `parameter_invisible=2` (Stored Only) у SF_TIdx/DIdx/PIdx/MapAll параметров — ОБЯЗАТЕЛЬНЫЙ инвариант. Max Editor при сохранении СБРАСЫВАЕТ его на `1` (скрыто, но НЕ Stored Only) — из-за этого параметры видны для Live API но не персистят в .als. После любого Editor-save — проверять и восстанавливать `parameter_invisible=2` у всех 25 sf_* боксов. md5 после fix `7a2ba43c` (52656B, unfrozen). Архив pre-fix: `_device-backups/Sends Follower – Return.2026-07-01-144752.preClassnameFix.amxd`.
-- **Архивы:** `~/Brain/Fadercraft/_device-backups/*.2026-07-01-141110.preMapAll.{amxd,js,maxpat×2}`. Бэкапы перед patcher-nav fix: `MapButton.2026-07-01.preMapallFix.maxpat`, `sends_follower.2026-07-01.preMapallFix.js`, `sends_follower_track.2026-07-01.preMapallFix.js`.
+- **Архивы:** `~/Brain/fadercraft/_device-backups/*.2026-07-01-141110.preMapAll.{amxd,js,maxpat×2}`. Бэкапы перед patcher-nav fix: `MapButton.2026-07-01.preMapallFix.maxpat`, `sends_follower.2026-07-01.preMapallFix.js`, `sends_follower_track.2026-07-01.preMapallFix.js`.
 - **Live-API последовательность для Claude (per slot N, 0-based):** set param `SF_TIdx<N+1>` = track index (или -(rt+1) для return-трека-источника), `SF_DIdx<N+1>` = device index, `SF_PIdx<N+1>` = parameter index; повторить для нужных слотов; затем set `SF_MapAll` = 1 (momentary — сбросится). JS соберёт пути и замапит все заданные слоты.
 - **⚠️ NEEDS LIVE TEST:** (a) записать индексы + Map All → слоты замаплены (кнопки filled, remote~ модулирует); (b) невалидные индексы → слот пропущен без ошибок; (c) return-track источник через t<0; (d) ручной Map-клик по-прежнему работает; (e) save/reload → remote~ `_persistence:1` восстанавливает цели (индекс-параметры Stored Only тоже персистят).
 - **МЕХАНИЗМ (обновлён 2026-07-01 patcher-nav fix):** mapall() теперь использует прямую патчерную навигацию: `_sfPatcher.getnamed("multimap_panel").subpatcher().getnamed("bpslot"+s).subpatcher().getnamed("live_remote").message("id",id)` — идентично applySlotRanges(). `MapButton.maxpat obj-5 (live.remote~)` получил `varname="live_remote"` чтобы getnamed() находил его. Старые outlet(2/4, s, id) пути через mm_ididin оставлены в .amxd как dead code (не вредят). Track.amxd теперь тоже работает через этот же прямой путь (outlet(4) более не используется mapall).
@@ -283,10 +331,10 @@ Founder: «вообще неприемлемо» — на reload все dial=0, 
 Оба девайса заморожены пользователем в Max/Live GUI и скопированы в релизную папку. Headless-заморозка через скрипт НЕ потребовалась — файлы в User Library уже содержали корректные frozen контейнеры.
 
 **Frozen builds (v1.0):**
-- `Return`: `/Users/Kirill/Brain/Fadercraft/Sends Follower/dist/build-v1.0/Sends Follower – Return.amxd`
+- `Return`: `/Users/Kirill/Brain/fadercraft/Sends Follower/dist/build-v1.0/Sends Follower – Return.amxd`
   - md5=`ae513363b3789ca4003dd9646b89a103`, size=497631 bytes
   - Вшиты: `sends_follower.js` (`f0eb7d86`), `multimap.maxpat` (`33942de2`), `MapButton.maxpat` (`1ac478ef`), `multimap-unmap.svg` (`1a31f546`), `sf_version_check.js` (`a5d905fc`)
-- `Track`: `/Users/Kirill/Brain/Fadercraft/Sends Follower/dist/build-v1.0/Sends Follower – Track.amxd`
+- `Track`: `/Users/Kirill/Brain/fadercraft/Sends Follower/dist/build-v1.0/Sends Follower – Track.amxd`
   - md5=`a4fdd2b37e384c3574e74b27af47442d`, size=504408 bytes
   - Вшиты: `sends_follower_track.js` (`d3136f2f`), `multimap.maxpat` (`33942de2`), `MapButton.maxpat` (`1ac478ef`), `multimap-unmap.svg` (`1a31f546`), `sf_version_check.js` (`a5d905fc`)
 
@@ -433,7 +481,7 @@ Founder: главную ручку (`obj-3`) сделать двусторонн
 - ⚠️ OPEN founder HW-тест: (а) кручу ручку мышью→send едет; (б) мапаю HW/фейдер на ручку→send за движением; (в) меняю send в микшере→ручка подхватывает; (г) переключаю dropdown→ручка ресинкается под новый send; (д) нет петли/дрожания (особ. при автоматизации send). Полный рестарт Live (stale cache).
 
 ## 🟢🟢 CANON-2026-06-25 (UNFROZEN source of truth) — Track ГИБРИД Source (A/B/C/D=send + None=ручной MIDI) ПОДТВЕРЖДЁН в Live
-Снапшот `~/Brain/Fadercraft/Sends Follower/raw/archive/CANON-2026-06-25/` (7 файлов). **Актуальные md5 — обновлять при ЛЮБОЙ правке.** User Library working-копии UNFROZEN (дев продолжается на них).
+Снапшот `~/Brain/fadercraft/Sends Follower/raw/archive/CANON-2026-06-25/` (7 файлов). **Актуальные md5 — обновлять при ЛЮБОЙ правке.** User Library working-копии UNFROZEN (дев продолжается на них).
 - ⚠️ **CANON Track ОБНОВЛЁН 2026-06-25** (пользователь подтвердил «Manual»-финал в Live): **Track `6f73a43f`** + **`sends_follower_track.js` `b1bd009d`**. Эволюция Track-канона: `25df3d6a`→`03879b16`→`16fb11f3`→**`6f73a43f`** (js `6a000af3`→`33b24f50`→`a42ef291`→**`b1bd009d`**). SUPERSEDED-копии каждой ступени в archive root. **Source пункт 0 = «Manual»** (бывш. «None»; лейбл, логика selectedSend=-1 та же). **Return/SendsReader/shared канон НЕ тронуты.**
 - **НОВАЯ СЕМАНТИКА Source (финал) = выбор ИСТОЧНИКА МОДУЛЯЦИИ для 8-слот мэппера:**
   - **A/B/C/D:** выход=уровень выбранного трек-send; БОЛЬШОЙ круг (plain `dial`, parameter_enable:0, floatoutput Float 0..1, большой rect, мышь) ↔ send двусторонне+гард; бар+подпись СПРЯТАНЫ.
@@ -441,7 +489,7 @@ Founder: главную ручку (`obj-3`) сделать двусторонн
   - **Видимость:** JS `updateBarVis()`→`outlet(1,"barvis",0/1)` (1=None) на load+смену source; патч `route barvis→sel 0 1→script show/hide midi_dial+midi_label→thispatcher`. **Дефолт A**, персист выбора через umenu-параметр. Гард `syncControls` (lastWritten/bigShown/midiShown, EPS) рвёт пинг-понг в обоих режимах. Детали — секции выше (none-manual-source / hybrid-mididial).
 - **Return** `be5955d3` (88352B) + движок `sends_follower.js` `566db5ba`. **Track `6f73a43f`** (~66KB, UNFROZEN, JSON@0x20, 80 box/85 line, Source пункт0=«Manual») + `sends_follower_track.js` `b1bd009d` (outlets 4). Shared: `MapButton.maxpat` `b410e4c0`→**`3e937392`** (per-instance filled-mapped по id≠0 фикс 2026-06-26, см. секцию вверху; канон НЕ финализирован до теста), `multimap.maxpat` `02d24003`, `sf_version_check.js` `a5d905fc`. SendsReader `9c0386ab` (НЕ продуктовый, не в релизе).
 - **Полное дерево deps продуктового девайса:** движок.js (js) + `sf_version_check.js` (**node.script**) + `multimap.maxpat`(bpatcher)→`MapButton.maxpat`→`multimap-unmap.svg`.
-- **🟡 RELEASE-FROZEN (2026-06-25) — Track УСТАРЕЛ:** **Релиз-артефакты `~/Brain/Fadercraft/Sends Follower/dist/`:** `Sends Follower – Return.amxd` **`16fc2b2b`** (766416B, FROZEN — АКТУАЛЕН) + `Sends Follower – Track.amxd` **`2cd82bca`** (753897B, FROZEN). ⚠️🔴 **dist-Track `2cd82bca` УСТАРЕЛ** относительно канона `6f73a43f` (заморожен ДО гибрид-Source: двусторонний круг / Manual-ручной-MIDI-источник / live.slider). **При следующем релизе Track НАДО ПЕРЕМОРОЗИТЬ** из канон-Track `6f73a43f`+js `b1bd009d`. Return-freeze `16fc2b2b` актуален (Return не менялся). dist/ НЕ трогаю сейчас (только пометка). SendsReader НЕ в релизе.
+- **🟡 RELEASE-FROZEN (2026-06-25) — Track УСТАРЕЛ:** **Релиз-артефакты `~/Brain/fadercraft/Sends Follower/dist/`:** `Sends Follower – Return.amxd` **`16fc2b2b`** (766416B, FROZEN — АКТУАЛЕН) + `Sends Follower – Track.amxd` **`2cd82bca`** (753897B, FROZEN). ⚠️🔴 **dist-Track `2cd82bca` УСТАРЕЛ** относительно канона `6f73a43f` (заморожен ДО гибрид-Source: двусторонний круг / Manual-ручной-MIDI-источник / live.slider). **При следующем релизе Track НАДО ПЕРЕМОРОЗИТЬ** из канон-Track `6f73a43f`+js `b1bd009d`. Return-freeze `16fc2b2b` актуален (Return не менялся). dist/ НЕ трогаю сейчас (только пометка). SendsReader НЕ в релизе.
   - **Валидация freeze (оба):** dlst содержит ВСЕ deps — `multimap.maxpat`(`02d24003`)+`MapButton.maxpat`(`b410e4c0`)+`multimap-unmap.svg`(`1a31f546`)+`sf_version_check.js`(`a5d905fc`)+движок(`566db5ba` Return/`6a000af3` Track), все embedded-md5 **MATCH-canon** (freeze НЕ подменил движок старой версией). JSON парсится, 0 dangling, не битый UTF-8, ptch=fs−0x20. warn-механизм/план B (version_link mode 1 / text+texton / live_alert) / прозрачность(2) / qmetro 20 / multimap_panel numoutlets 2 / mm_targetprep — целы в Return-freeze. ⚠️ **node.script `sf_version_check.js` УСПЕШНО вшит в dlst** — блокер снят, version-check внутри (single-file релиз, co-locate НЕ нужен). Track НЕ имеет warn-ветки (правильно — warning только Return).
   - **User Library возвращены в UNFROZEN канон** (все 7 файлов восстановлены из CANON-2026-06-25, md5 совпали, frozen=False) — дев продолжается на unfrozen working-копиях.
 - Док обновлён: `wiki/concepts/known-behaviors.md` (warning теперь РАБОТАЕТ — детект по реальной map-цели; убрана старая «device cannot warn»), wiki/log.md, Vale clean (только `version_link` domain-флаг).
@@ -504,7 +552,7 @@ Founder: Return на Return A, замаплен на Send A (кормит Return
 **Шаги:** полный рестарт Live → Max Console → увести один send в 0 → смотреть строки `SFLAG`: сколько тиков и мс result/vals идут от высокого к 0; падение за 1 тик = мгновенно, ползёт N тиков = Live-интерполяция.
 
 ## 📝 KNOWN BEHAVIOR (by design, не баг) — Total 1.0 latch в self-feeding петле — 2026-06-24
-Return в **Total**, выход замаплен на send, кормящий watched-шину: при слоте **Max=1.0** жёсткий кламп Total (`result>1.0→1.0`) даёт плоскую мёртвую зону на потолке — пока сумма ОСТАЛЬНЫХ сендов ≥ 1.0, выход держится на 1.0, замапленный параметр не возвращается. **Max ≤ 0.99** держит точку на наклоне → ОК. By design: кламп защищает downstream percent/dial (0..1). Self-driven send уже исключён из агрегации (`eb2b2518`) — петли НЕТ, это только инхерентный потолок Total. В Peak нет. Founder-принятое решение: для такой петли держать **Max ≤ 0.99**, кода НЕ менять. Док: `~/Brain/Fadercraft/Sends Follower/wiki/concepts/known-behaviors.md` (+ index + log). JS остался `eb2b2518` (фикс без диагностики).
+Return в **Total**, выход замаплен на send, кормящий watched-шину: при слоте **Max=1.0** жёсткий кламп Total (`result>1.0→1.0`) даёт плоскую мёртвую зону на потолке — пока сумма ОСТАЛЬНЫХ сендов ≥ 1.0, выход держится на 1.0, замапленный параметр не возвращается. **Max ≤ 0.99** держит точку на наклоне → ОК. By design: кламп защищает downstream percent/dial (0..1). Self-driven send уже исключён из агрегации (`eb2b2518`) — петли НЕТ, это только инхерентный потолок Total. В Peak нет. Founder-принятое решение: для такой петли держать **Max ≤ 0.99**, кода НЕ менять. Док: `~/Brain/fadercraft/Sends Follower/wiki/concepts/known-behaviors.md` (+ index + log). JS остался `eb2b2518` (фикс без диагностики).
 
 ## ✅ Return: исключение self-driven send из агрегации (анти-feedback) — 2026-06-24
 Founder замапил выход Return на send, кормящий ТУ ЖЕ watched-шину → петля: вверх замапленный send растёт, вниз не падает (Peak: сам себя держит max; Total: самоподдержка). ДИАГНОЗ: код двунаправлен (агрегация пересчитывается с нуля каждый bang, `change 0.` пропускает спад, сигнальный путь `clip~/scale/live.remote~` непрерывен — НЕ баг записи) → причина = положительная обратная связь (выход на свой вход). Founder выбрал **вариант (ii): исключать self-driven send из агрегации**.
@@ -768,13 +816,13 @@ session start: Max Console `send_follower: built 3 send refs for return 0` (JS R
 
 
 Standalone project, separate from / unrelated to Control XL & Instrument Follower. Project wiki =
-`~/Brain/Fadercraft/Sends Follower/wiki/` (entities/concepts/index/log; docs in English, run Vale after edits).
+`~/Brain/fadercraft/Sends Follower/wiki/` (entities/concepts/index/log; docs in English, run Vale after edits).
 Wiki has the functional model (LiveAPI send-gather → max → live.remote~ + buses); don't duplicate.
 
 ## Paths
 - Device (edit in place): `~/Music/Ableton/User Library/Max Devices/SendsFollower.amxd`
-- Archive (dated pre-edit backup, never overwrite): `~/Brain/Fadercraft/Sends Follower/raw/archive/SendsFollower.YYYY-MM-DD[-HHMMSS].amxd`
-- raw mirror (immutable, read-only): `~/Brain/Fadercraft/Sends Follower/raw/SendsFollower.amxd`
+- Archive (dated pre-edit backup, never overwrite): `~/Brain/fadercraft/Sends Follower/raw/archive/SendsFollower.YYYY-MM-DD[-HHMMSS].amxd`
+- raw mirror (immutable, read-only): `~/Brain/fadercraft/Sends Follower/raw/SendsFollower.amxd`
 - Rack wrapper: `~/Music/Ableton/User Library/Presets/Audio Effects/Audio Effect Rack/SendsFollowerRack.adg`
   (chain = Sends Follower → stock LFO). Note older wiki text says `MaxSendsFollower.adg` — actual file is `SendsFollowerRack.adg`.
 - Embedded JS on-disk canon copies: `Max Devices/sends_follower.js` (5808 B, since Follow Mode 2026-06-17), `Max Devices/sf_version_check.js` (3106 B).
@@ -1011,3 +1059,66 @@ Mirror of Control XL update-check, **minus** `hdr_show`/`hdr_hide` (no header ob
 
 ## Distribution note
 Manifest `https://fadercraft.com/api/sends-follower.json` + Gumroad NOT touched by me (out of scope) — deploy is a separate explicit step. Device works offline (fallback URL = library.gumroad.com) until manifest is live.
+
+## Orphan-slot detection: Track vs Return targetmap divergence (2026-07-04)
+Durable architectural fact (worth remembering — it was the root cause of a Map-button bug).
+- **Bug:** deleting the target device of an INTERACTIVELY-mapped slot left its Map button
+  yellow (looked mapped) in **SF-Track**. Orphan-detector (`runOrphanCheck`) skips any slot
+  whose `mapTargetIds[s]==0` (`if(!storedId) continue`).
+- **Root cause:** `mapTargetIds` was populated ONLY by `mapall()` (AbletonMCP auto-map).
+  The two devices' `targetmap()` DIVERGED:
+  - **SF-Return `targetmap(slot,id)`** STORES the id: `mapTargetIds[s]=id` + `recomputeWarn()`.
+    Return's interactive mapping is NATIVE (comment: "mapping goes around JS"), id flows back
+    via `mb_idout → prepend targetmap → js` on BOTH live-map and reload-resolve → orphan works.
+    **No bug in Return.**
+  - **SF-Track `targetmap(slot,id)`** IGNORED the id (only armed the slot); interactive map is
+    JS-driven `arm → selParamObs → captureTarget → resolveAndConnect`, none of which set
+    `mapTargetIds` → orphan-detector never ran for hand-mapped slots.
+- **Fix (Track js only, device stays UNFROZEN — external `sends_follower_track.js`):**
+  (1) populate `mapTargetIds[slot]` in `resolveAndConnect()` by resolving `slotPath[slot]` id
+  (covers interactive capture + reload-retry); (2) belt-and-suspenders: Track `targetmap` now
+  also captures a real non-zero id if one arrives (mirror of Return). Reset path unchanged:
+  `resetOrphanSlot → mb_map_id.message(0)` = same "id 0" the X button sends → clears yellow +
+  releases live.remote~ for any slot regardless of how it was mapped.
+- **Index-shift case (secondary):** covered via RESET (not repoint) — stored index-path resolves
+  to a different id than stored → `alive=false` → after ORPHAN_CONFIRM=3 misses → slot reset.
+  Same behavior already shipped for auto-map slots. Tradeoff: adding a device ABOVE a mapped
+  target also triggers reset (if live.remote~ tracks identity, that unmaps a still-valid slot).
+  Accepted for now (consistent w/ auto-map); revisit only if founder wants repoint-on-shift.
+- **State:** `[SFDBG]` logs LEFT IN pending one Max Console confirmation screenshot; strip after
+  founder confirms button goes off on target delete. Pre-edit js backup
+  `~/Brain/fadercraft/_device-backups/sends_follower_track.2026-07-04-112604.js` (md5 c2085457).
+  `.amxd` NOT modified (b841caf6…, unchanged).
+
+## CORRECTION (2026-07-04, round 2): manual mapping is NATIVE, bypasses JS entirely
+First fix (populate mapTargetIds in resolveAndConnect) did NOT work. Console on manual-map+delete
+showed ONLY `onDevicesChange fired ×5` — no targetmap/captureTarget/resolveAndConnect/orphanCheck.
+- **Why:** in SF-Track, the per-slot Map button maps NATIVELY inside `MapButton.maxpat`:
+  `p mapping` subpatcher contains `live.path live_set view selected_parameter` + a gate driven by
+  the Map toggle → on Map-on, next-clicked Live param is learned by `live.remote~` directly. The
+  JS arm→selParamObs→captureTarget path is NOT used for the user's manual workflow → JS never gets
+  slotPath NOR mapTargetIds for hand-mapped slots. So the entire JS orphan model (revalidate stored
+  path/id) has nothing to check.
+- **Native loss-detection already exists in patcher:** `RangeAndName` subpatcher (inside MapButton)
+  has `live.observer` with `property id` (obj-5 + msg "property id") watching the mapped param's id,
+  plus `getid`/`live.object`/`route min max name id`. This is the native self-heal that SHOULD reset
+  the button on delete — but the button stays yellow, so either the id-observer doesn't fire on
+  delete (Live returns cached id for deleted objects — documented gotcha) or its output doesn't
+  reach the reset. Prior JS attempt to hook this observer caused feedback-loop crash (see JS header
+  comment) — do NOT re-hook it naively.
+- **id-report wiring EXISTS but is silent at map time:** each `bpslot<N>` outlet1 (=mb_idout) →
+  multimap `prepend N` → mm_idout → device `prepend targetmap` → js `targetmap(slot,id)`. So IF the
+  MapButton emitted its id, targetmap would fire. It doesn't fire on manual map → MapButton emits id
+  only on the live.observer/getid trigger, not on initial native learn.
+- **Next step (instrumented, awaiting screenshot):** added `[SFDBG] runOrphanCheck ENTER` + per-slot
+  storedId/slotPath log BEFORE the guard; ENTER logs in targetmap/captureTarget/resolveAndConnect/
+  onSelParamChange/arm; catch-all `anything()`. Goal: prove whether JS has ANY knowledge of a
+  hand-mapped slot, and whether targetmap(slot,0) fires on delete (candidate real fix). If JS has
+  nothing, the real fix must live in the patcher (MapButton RangeAndName id-observer) or force manual
+  mapping through JS. Track js md5 d0b00921 (17 SFDBG). `.amxd` still b841caf6 (untouched).
+
+## Current-state update 2026-07-07 — netreceive cleanup (SF-Track)
+Удалён легаси UDP-транспорт из SF-Track (консольная ошибка `netreceive: No such object`). Активная копия `User Library/Max Devices/Sends Follower – Track.amxd` (UNFROZEN): md5 f88e4e6e → **97f75d80** (101086→99945 B). Удалено 2 бокса + 2 линии: `netreceive -u 7400` (id `udp_netrecv`) → `route sf` (id `udp_route_sf`) → вход0 `js sf_udp.js`. Цепь была мёртвой: route кормился ТОЛЬКО от netreceive. Рабочий путь не задет: `sfcmd_gate`(gate)→`js sf_udp.js`, node.script UDP внутри sf_udp.js, version_check, live.thisdevice-гейт — все на месте. boxes 110→108, lines 89→87. Bkp: `_device-backups/…2026-07-07-173234.preNetreceiveRemoval.amxd`. ⚠️ dist/build-v1.0 (FROZEN v1.0 staging) всё ещё содержит netreceive — рефриз через Max GUI при след. релизе.
+
+## Current-state update 2026-07-07 — netreceive cleanup (SF-Return)
+То же, что в Track, но для Return. Активная `User Library/…/Sends Follower – Return.amxd` (UNFROZEN): md5 bc74e534 → **23255b74** (108760→107619 B). Удалено 2 бокса + 2 линии: `netreceive -u 7400`(udp_netrecv)→`route sf`(udp_route_sf)→вход0 `js sf_udp.js` (route кормился только от netreceive — тупик). boxes 120→118, lines 119→117. Рабочий путь цел: `sfcmd_gate`→`js sf_udp.js`; ⚠️ у Return version-check = **node.script `sr_version_check.js`** (не sf_version_check.js!), main js = **`sends_follower.js`** (не …_track.js). Bkp: `_device-backups/…2026-07-07-174215.preNetreceiveRemoval.amxd`. ⚠️ dist/build-v1.0 (FROZEN v1.0) содержит netreceive в ОБЕИХ половинках — рефриз через Max GUI при след. релизе.

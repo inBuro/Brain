@@ -21,4 +21,4 @@ metadata:
 `version_check.js` outlet → route dot/url → `prepend set`/vlink_* → текстовая кнопка "Update ready" + `launchbrowser $1` по клику. Url из манифеста (server-controlled) оверрайдит hardcoded fallback (seeded через loadmess). Подтверждено юзером на железе что работает.
 
 ## Слои/режимы — в проектной wiki, не дублировать
-Mode Encoding, CC47 Cross-Mode Transit, Custom Mode SysEx Layout, Instruments/Mixer Layer — в `~/Brain/Fadercraft/wiki/concepts/` и `entities/`.
+Mode Encoding, CC47 Cross-Mode Transit, Custom Mode SysEx Layout, Instruments/Mixer Layer — в `~/Brain/fadercraft/wiki/concepts/` и `entities/`.

@@ -11,6 +11,6 @@ Read at the start of every task. One line per memory file.
 
 ## Standing context
 - Reports in Russian (chat), artifacts/docs in English. Clock times in Thai time (UTC+7), dates absolute.
-- Strategy source of truth: `~/Brain/Fadercraft/wiki/roadmap.md` + `log.md` — keep roadmap synced when decisions change the plan.
+- Strategy source of truth: `~/Brain/fadercraft/wiki/roadmap.md` + `log.md` — keep roadmap synced when decisions change the plan.
 - Live analytics numbers come from the analyst agent (via main agent), never invented.
-- Audience comments source of truth: `~/Brain/Fadercraft/research/voice/voice-guide.md` (Voice Guide) — read directly for actual comments/quotes/per-comment register + the dated "Источники" URL list; never ask the user for links/screenshots. Maintained by the copywriter (owner) — don't edit it; ask main agent to call copywriter if a fresh thread needs pulling.
+- Audience comments source of truth: `~/Brain/fadercraft/research/voice/voice-guide.md` (Voice Guide) — read directly for actual comments/quotes/per-comment register + the dated "Источники" URL list; never ask the user for links/screenshots. Maintained by the copywriter (owner) — don't edit it; ask main agent to call copywriter if a fresh thread needs pulling.

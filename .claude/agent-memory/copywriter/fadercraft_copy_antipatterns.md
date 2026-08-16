@@ -7,7 +7,7 @@ metadata:
 
 # Fadercraft Copy Anti-Patterns
 
-Source of depth: `/Users/Kirill/Brain/Fadercraft/research/voice/voice-guide.md`
+Source of depth: `/Users/Kirill/Brain/fadercraft/research/voice/voice-guide.md`
 Related: [[fadercraft-audience-voice]]
 
 These are not stylistic preferences — each pattern below caused a documented hostile reception in real community threads. Treat as a hard block list.
@@ -115,6 +115,16 @@ These are not stylistic preferences — each pattern below caused a documented h
 **Why it fails (documented, 2026-06-16 post, full read 2026-06-18):** r/abletonlive Rule 1 prohibits buy/sell/beg. A post with a product link is a Rule-1 violation and was reported. Additionally, the RoundWitty4668 account is now publicly tagged as an ad account in the thread — any future reply from this account inherits that stigma.
 
 **Fix:** Never broadcast own posts in r/abletonlive. Only organic replies on *other people's questions* — one short paragraph, concrete nouns, link only in a follow-up comment if directly asked.
+
+---
+
+## 11. YouTube reply drafts missing a video link
+
+**Pattern:** Writing a `Ответ` draft for the comment-miner reply pipeline that never includes a `youtube.com` or `youtu.be` URL.
+
+**Why it fails (documented, 2026-08-06):** Kirill caught this three times in one session — first in a batch of Dynamic Focus drafts, then found a live, already-posted public reply with no link, then found more across Control XL and other pending rows. A reply with no link answers the question but converts no one.
+
+**HARD RULE (updated 2026-08-12):** Every `Ответ` draft MUST contain a `youtu.be` or `youtube.com` URL. No exceptions — not even for organic help replies on third-party videos. When the topic is per-track or selected-track control on any MIDI controller (including third-party like Korg, Arturia, etc.), Dynamic Focus (`https://youtu.be/vEJGWkK9gIU`) is almost always the right link. Insert the URL organically as part of the answer — state the mechanism, then point to the video: "si quieres que los mappings sigan el track seleccionado automáticamente, eso es lo que hace Dynamic Focus: https://youtu.be/vEJGWkK9gIU". Never fabricate a URL. This is also a hard mechanical gate in `yt-reply-post.py` (rows without a link are pulled and flagged in Notion `Reason`).
 
 ---
 

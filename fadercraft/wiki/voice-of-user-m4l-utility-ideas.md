@@ -161,6 +161,83 @@ Control XL line and to the LCXL feedback work already done.
 - Comment likes are a weak signal here; most of these sit at 0–1♥ because they are buried
   replies under tutorials, not top comments.
 
+## Now automated (2026-08-16)
+
+This lane runs in the Cloudflare Worker alongside the product miner, as two jobs:
+
+- `discover` (cron `0 2 * * *`, 09:00 ICT) – walks `keywordsDiscovery`, wish-language
+  pre-filter, per-comment judgement on Gemini 3.1 Pro, writes to the **M4L Idea Mining**
+  Notion DB. Own KV cursor (`discoveryCursor`) and own dedup prefix (`dseen:`) – sharing
+  `seen:` with the product miner would make it skip exactly the wish-comments the product
+  gate already rejected.
+- `cluster` (cron `30 2 * * *`, 09:30 ICT) – assigns each new row to an **existing** cluster
+  where one fits, then denormalizes `Mentions`, `Cluster likes` and `Score` onto every
+  member row so the table sorts by demand. Matching against existing clusters is the
+  load-bearing part: clustering each day's batch in isolation would split one need across
+  days and frequency would never accumulate.
+
+Manual: `/run?job=discover|cluster&token=…`. `/maintenance?job=reset-discovery-dedup` forgets
+`dseen:` so a changed classifier can re-judge (prefix-scoped – never touches `seen:`).
+
+**Score** = `(Mentions × 10 + Cluster likes) × effort multiplier`, where micro 1.0 /
+medium 0.75 / large 0.5. Frequency dominates because it is the only real demand signal;
+likes are a deliberately weak tiebreaker (these comments are buried replies at 0–1♥, so
+weighting them would rank by luck of placement); effort discounts rather than decides, so a
+popular hard thing still outranks a trivial thing nobody asked for.
+
+`Scope` (feature / product / suite) and `Effort` (micro / medium / large) are separate axes
+on purpose – a need can be product-substantial and cheap to build, which is the best
+combination. `feature` rows are stored, not filtered: a single comment is almost always
+feature-sized, and the product emerges from the cluster – Macro Variations showed up here as
+three separate clusters totalling 7 mentions, the same way it did in the one-shot sweep.
+
+First live ranking reproduced the manual result: **Automate rack Macro Variations** on top.
+
+## Market check – the finding that reframes this whole lane (2026-08-16)
+
+A `market` job now runs as a pipeline stage (cron `45 2 * * *`), asking per cluster whether
+somebody already ships this, using Gemini with Google Search grounding. First full pass:
+**7 of 7 clusters came back "exists free"**, with specific, checkable evidence.
+
+| Cluster | Already solved by |
+|---|---|
+| Automate rack Macro Variations | AbletonKurse "AUTOMATE MACRO VARIATIONS" pack (PWYW), KBDevices "Variation Launcher" |
+| Morph between Macro Variations | KBDevices **Smooth Automator** (free/PWYW), Metamagicum "Preset Morpher", Maboroshy "Variation Transition" |
+| Advance scene on clip end | Stock Live – Scene Follow Actions set to "Linked" / "Next" |
+| Auto-toggle metronome during recording | Stock Live – metronome dropdown, "Enable Only While Recording" |
+| MIDI pedalboard effect toggling | Stock Live – Audio Effect Rack macros + Chain Selector |
+| Macro knob as toggle button | Greywood "Toggle Button Macro", surfingpikachu "Simple One-Button Macro" |
+| Multi-voice drum pattern generator | mganss "DrumBrain"; Live 12 Suite ships Iftah's "Generators" pack |
+
+**What this means.** The demand ranking was measuring the wrong thing. A need that recurs in
+2025–2026 comments does not imply a gap – it far more often means the solution exists and the
+asker cannot find it. Frequency alone would have sent us to build a device two people already
+give away. Scoring now multiplies demand by a market factor (`exists free` 0.25, `exists paid`
+0.6, `partial` 0.85, `none found` 1.0), which collapsed the top cluster from 34 to 9.
+
+The lane is therefore not a shortlist generator – it is a **filter whose output is the rare
+`none found` row**. Those are what to watch; everything else is noise or, at best, a content
+opportunity (people asking for things that already exist are a video/reply audience, not a
+product market).
+
+**Caveat:** a checker that answers "exists" seven times out of seven deserves suspicion. The
+evidence is specific and checkable rather than hand-waving, which is why it is trusted here,
+but spot-check any verdict before acting on it – especially a `none found`, where the cost of
+a false negative is building something redundant.
+
+## Recency floor
+
+Comments now have to be from **2025-01-01 or later** (`CONFIG.commentsSince`), on both lanes.
+Video-level search stays wide on purpose – an old tutorial keeps collecting fresh comments.
+Comment ordering switched `relevance` → `time`, since relevance returns a video's all-time top
+comments, which on an older video are mostly pre-2025 and get discarded after we already paid
+to fetch them.
+
+Applied retroactively: 17 of 26 rows were pre-2025 and were archived. Notably **Automate rack
+Macro Variations survived intact** – all three of its mentions are 2025-01-03, 2025-01-24 and
+2026-03-29 – which is what confirmed the complaint is alive in the Live 12 era rather than a
+Live 11 leftover. It is still a no-build, but for the market reason, not a staleness one.
+
 ## Next steps
 
 1. Verify the top 3–4 clusters against what already exists on maxforlive.com / Isotonik /

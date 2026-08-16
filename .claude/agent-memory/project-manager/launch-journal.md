@@ -2,6 +2,381 @@
 
 Newest entries at the top. Format: What / Numbers / Qualitative / Read / Decision.
 
+## 2026-08-08 — Dynamic Focus — first live user feedback (n=1)
+
+**What:** First post-purchase feedback from the very first paying customer of Dynamic Focus. Product is live at fadercraft.com/dynamic-focus, Gumroad $19. Context (owner-confirmed): this is the sole Gumroad buyer from the first week of sales, who purchased on launch day (day-1 purchase). Raw text verbatim: "Got this last week to use with various hardware items. I can do some hardware modulation mapping. Yes!"
+
+**Numbers:** 1 buyer total in week 1 (Gumroad). This feedback = 100% of the first-week customer base. "Last week" relative to 2026-08-08 → purchase on launch day, used ~1 week before leaving feedback. No buy_click / purchase PostHog events cross-referenced against this individual.
+
+**Qualitative:**
+- "various hardware items" — user has multiple hardware pieces (plural). Matches the cross-controller ICP identified in voice-of-user study (per_track_mapping 17/43, pattern appears under LCXL MK3, LC MK3, and generic MIDI controller videos — not a single-hardware-specific niche).
+- "hardware modulation mapping" — user's own language for the job-to-be-done. Our copy uses "per-track focus/banking"; they name the OUTPUT, not the mechanism. Closest to the per_track_mapping VoU bucket (17/43 comments). The mechanism was invisible; the result — working hardware mapping — is what they report.
+- "Yes!" — affirmative, no friction, no caveats, no "but...". Product completed the job.
+
+**Read:**
+- The core use case (hardware-heavy user, multiple controllers, per-track mapping) worked end-to-end in a real session. This is the first evidence of that.
+- User language skews output-level, not mechanism-level: "hardware modulation mapping" will likely appear again as organic phrasing in reviews or community replies — worth picking up if confirmed in future data.
+- n=1. Cannot infer: pricing reaction, which DF feature they used (static per-track vs follow_selection), whether the visibility/on-screen display hook played a role, channel, or any funnel signal. No action on positioning or copy based on one message.
+
+**Decision:**
+- Record as first data point only. Product works for hardware users; user language = "hardware modulation mapping."
+- If channel is identified: apply insight-#10 playbook — one question about their setup (which hardware, which tracks), no review push, no Gumroad link.
+- Roadmap Phase 3 note updated (2026-08-08) to reflect first live feedback.
+- Next checkpoint: when 3–5 more feedback instances arrive — synthesize language patterns and use-case spread then, not now.
+
+## 2026-08-06 — GrooveMix v0.4.0 — end-of-day product state snapshot
+
+**What:** Capstone state snapshot after a high-intensity build day. GrooveMix (Chrome extension, two-YouTube-tab DJ mixer with crossfader + EQ + cue preview) reached v0.4.0. CWS listing passed first review ("Published for all") earlier in the day, then re-entered review after 0.4.0 upload; status at day-end: "Pending review." Full product, positioning, analytics, CWS, distribution, and monetization state recorded here as the baseline for the 7-day distribution sprint starting 2026-08-07.
+
+**Numbers (snapshot 2026-08-06 end of day):**
+- Version: 0.4.0 (bumped from 0.3.0 same day)
+- CWS status: Pending review for 0.4.0
+- Real distinct users with track_loaded / source=extension: near-zero (personal contacts + dev sessions only)
+- PostHog project 542001; dashboard "Extension Usage" (9 item names corrected 2026-08-06)
+- Sideload zip: dist/GrooveMix.zip + INSTALL.txt, distributed to handful of personal contacts
+- Gumroad listing: NOT created yet (TODO, no products, no pricing)
+
+**v0.4.0 changes shipped (summary):**
+- EQ auto-reset for inactive deck on connect (extended from earlier behavior)
+- Album art click → browser tab focus
+- Global error tracking: unhandled JS errors + ui_error events via status channel + breadcrumb trail (last 20 actions)
+- Bug fix: visual state stuck after reconnect (Play/art displayed disconnected state while actually connected) — forced full redraw on every connect
+- Bug fix: CSP error (PostHog external script load blocked by default MV3 CSP) — disabled via disable_external_dependency_loading (NOT by weakening CSP — deliberate, avoids CWS review surface)
+- Bug fix: person_profiles not set explicitly → anonymous users (100% of real users) received no PostHog person profile → Retention/Lifecycle would have been empty permanently. Fixed: person_profiles: 'always'
+- Manual button_click capture added (Play/Pause, Cue, Connect, Swap) — confirmed: PostHog autocapture = 0 events ever in side panel context; cause unknown; workaround via manual capture
+
+**Qualitative:**
+- Positioning re-established and confirmed: core value = mix music WITHOUT DJ decks/controllers, from laptop, with cue pre-listen before introducing a track into the mix. "Shared control" (two people, one laptop) = MINOR — 0 hits in two independent voice-of-user studies (YouTube comments + CWS competitor reviews, both 2026-08-02 and 2026-08-06).
+- CWS competitor research (2026-08-06, see RESEARCH.md): cue/headphone preview = most acute unmet need in segment. you.dj gates cue behind Pro subscription + hardware requirement (second sound card / Bluetooth headphones / MIDI controller). No CWS extension has cue. DJMusic (only crossfader competitor in CWS, 7K users) broken for ~50% users architecturally (embed-based player, not real tab). New competitor found: tinytunes DJ (dj.t-tunes.com) — same concept as GrooveMix (browser, no gear), but no cue ("coming soon") and no Bandcamp ("coming soon") — further behind on features than GrooveMix.
+- YouTube comment miner (Cloudflare Worker, daily cron): seed keywords updated for new positioning (no-gear/cue cluster, replacing shared_control cluster).
+- UX-researcher prepared follow-up question set for testers who gave polite-neutral "that's cool" response — how to extract real signal on positioning without direct prompting.
+- GA4 in CWS dashboard: dead end (auto-created Google account has no admin rights; GA4 awaiting web tag that will never appear — extensions are not websites). Real install/uninstall numbers: CWS dashboard "Installs and uninstalls" tab, already works without additional setup.
+
+**Read:**
+- Product has genuine feature lead over every CWS competitor on the combined set (crossfader + EQ on real YouTube tab + cue preview without hardware or subscription). The gap is now distribution, not product.
+- Analytics infrastructure was addressed at the right moment (before real users arrive): future sessions are readable, person profiles exist, button events are tracked.
+- CWS review is the hard gate for high-upside public channels. While waiting, technical audiences (r/chrome_extensions, r/SideProject) are the only safe pre-CWS option.
+- Sideload on cold DJ/music/general audiences = malware fingerprint risk (insight #26, same day) — waiting for CWS is the correct call, not a delay.
+- v0.4.0 zip is current (already rebuilt at 0.4.0). INSTALL.txt not a blocker.
+
+**Decision:**
+- Hard rule: no posts in DJ/music/general-audience communities until CWS 0.4.0 approved.
+- Immediate (2026-08-07): tester follow-up + r/chrome_extensions post.
+- Write r/IIB and r/Beatmatch drafts this week; publish when CWS clears.
+- Prepare Gumroad listing draft this week (description, screenshots, pricing). NOT published, NOT activated. Purpose: ready to flip when 100-user alert fires.
+- Bandcamp: confirmed CORS blocker (t4.bcbits.com), tabCapture pipeline needed — explicitly backlogged.
+- Monetization: OFF until PostHog 100-user alert fires. Owner decides timing.
+- Post-CWS priority: r/IIB first → r/Beatmatch second → r/DJs third (read r/Beatmatch culture-match signal before going to r/DJs).
+- Checkpoint: 2026-08-13 — synthesize tester signal + Reddit signal + user count, r/DJs go/no-go.
+- Roadmap written: ~/Brain/fadercraft/groove mix/wiki/roadmap.md (created 2026-08-07).
+
+## 2026-08-06 — GrooveMix Reddit channel research: sideload risk + subreddit map
+
+**What:** Pre-launch channel research for GrooveMix MVP (Chrome extension, two-YouTube-tab DJ mixer with cue pre-listen). CWS listing submitted but NOT live yet — install currently only via sideload (zip → Developer Mode → Load unpacked). Owner evaluating two channels: personal circle vs Reddit cold launch. Research task: assess sideload friction risk for cold Reddit audience, map 5+ subreddits with self-promo policy, give timing recommendation.
+
+**Numbers:** No live experiment — research/planning entry. Product status: MVP done, CWS review pending, 0 public users.
+
+**Qualitative:** Reddit blocked for direct fetch; data from GummySearch, OneUp Today, search results, and cross-referencing 2024-2025 Chrome extension malware wave context.
+
+Subreddits assessed:
+- r/chrome_extensions (47K): self-promo is top-1 flair; developer-audience; LOW sideload risk
+- r/SideProject (776K): explicitly welcomes launches; must show real product; LOW sideload risk
+- r/InternetIsBeautiful (16.6M): novel products only; no sign-up/install barriers allowed; VERY HIGH sideload risk; VERY HIGH post-CWS potential
+- r/DJs (313K): hardware-focused (Pioneer/Denon culture); no explicit self-promo rules found; VERY HIGH sideload risk; MEDIUM post-CWS fit (audience culture mismatch: "no equipment" may be dismissed)
+- r/Beatmatch (50K): beginner DJ community; less hardware-dogmatic; MEDIUM sideload risk; BEST DJ-sub fit post-CWS
+- r/WeAreTheMusicMakers (2M+): knowledge/production community, not tool-promo-friendly; bans AI content; HIGH sideload risk; LOW product fit (production ≠ DJ mixing)
+
+**Read:**
+- The sideload friction is a DUAL risk: (1) conversion collapse (cold user quits at "enable Developer Mode"), (2) reputational damage if top comment frames it as suspicious — this damage persists because Reddit is indexed forever. Context makes it worse: 2024-2025 saw multiple high-profile Chrome extension malware waves ("productivity tools" turned spyware); "download zip from unknown site → enable Developer Mode → install" is now literally the textbook malware fingerprint in the non-technical public's mind.
+- Sideload is ONLY safe for technical audiences who have context (chrome_extensions, SideProject). For DJ/music communities, it's a conversation-poisoner.
+- Separate finding on audience fit: r/DJs is hardware-focused; a "browser mixer without equipment" concept may face "this isn't real DJing" pushback independently of the sideload question. r/Beatmatch (beginners without gear) is the better audience match.
+- r/InternetIsBeautiful has enormous upside post-CWS — "open two YouTube tabs and here's what happens" is the exact IIB format. Zero upside pre-CWS.
+
+**Decision:**
+- **WAIT for CWS for all DJ/music/general-audience subs** (r/DJs, r/Beatmatch, r/InternetIsBeautiful, r/WeAreTheMusicMakers). First public appearance must not be poisoned by a "why enable Developer Mode" top comment.
+- **If first testers needed NOW:** post ONLY in r/chrome_extensions (priority #1) or r/SideProject — honest "pre-CWS alpha, looking for testers" framing, video/screenshots mandatory, no selling tone.
+- **Post-CWS priority order:** r/InternetIsBeautiful (wow-factor play, 16.6M) → r/Beatmatch (best audience fit for "no equipment" angle) → r/DJs (larger but culture-mismatch risk, needs careful framing).
+- **Frame invariant** (same rule as Fadercraft): first-person, own voice, specific use-case ("DJing YouTube tracks at a house party without a controller"), zero AI-polish. Never "product announcement" — always "I built this, here's what it does, first testers welcome."
+- Checkpoint: when CWS review comes back live, immediately queue posts for r/InternetIsBeautiful + r/Beatmatch. Don't wait.
+
+## 2026-08-06 — YouTube reply posting session #5 (Control XL focus)
+
+**What:** Daily reply session via `yt-reply-post.py` + mandatory pre-session vanish audit via `yt-reply-audit.py`. 10-reply cap, 120s gap. All 10 replies are Control XL product.
+
+**Numbers (audit, before posting):**
+- Replied rows checked: 39
+- Still visible: 37
+- Newly vanished: 2 (lc=UgzSWXF_Nnl7XHlihat4AaABAg, lc=UgzTxh_3z-kz0jH_1b14AaABAg) — both marked Vanished in Notion per protocol
+
+**Numbers (posting):**
+- Eligible candidates fetched: 10 (top 10 by likes after author dedup)
+- Attempted: 10 / Posted: 10 / Confirmed visible (self-check): 10 / Vanished at self-check: 0 / Failed: 0
+- All 10 replied = Control XL (sorted by likes: 34/12/8/6/5/4/2/2/2/1)
+- Videos hit: "using LCXL3 to turn Ableton Live into a Drum machine" (3 replies), "Launch Control XL 3 vs MK2" (3 replies), "Why the LAUNCH CONTROL by Novation is AMAZING" (1), "How does Launchkey work with Ableton Live?" (1), "It Got Even Better! Launch Control XL 3 1.1 Update!" (1), "Before You Buy The Launch Control XL3, You Need To Know This" (1)
+- Pool remainder after session: ~22 eligible (Control XL ~10, Dynamic Focus ~10, Sends Follower ~2)
+
+**Qualitative:** No failures or errors. All 10 confirmed visible at t+10s. 2 Vanished found in audit (5.1% of Replied pool) — within normal range, not an obstructive wave.
+
+**Read:**
+- 10/10 clean is the best outcome since 2026-07-31 (15/15). The 10/day cap appears to be holding below the spam classifier's threshold.
+- 2 Vanished from audit represent replies posted in earlier sessions (not today's). Vanish rate of Replied pool: ~5%. Acceptable; no pattern change detected.
+- All 10 eligible candidates happened to be Control XL. DF/SF drafts remain in queue — they will surface in the next sessions as CXL drafts get consumed.
+
+**Decision:** Continue daily cadence at 10/day. Run vanish audit before every session — mandatory. Next session tomorrow. Copywriter should replenish the pool (especially DF/SF drafts) so the queue doesn't run dry on non-CXL products.
+
+## 2026-07-18 — Dynamic Focus strategic research synthesis
+
+**What:** PM synthesis across all accumulated DF research — YouTube comment mining (2026-07-08 miner + 2026-07-13 voice-of-user study), Voice Guide, m4l-master architecture state, competitive landscape, Isotonik filter. Triggered by founder's request for a go/no-go strategic report. No new primary data gathered in this session; synthesis of existing corpus.
+
+**Numbers (research corpus):**
+- YouTube miner (2026-07-08): 126 targeted comments, topScore 120/80/58/51/46/45/41 — 6+ of top-10 in one cluster (encoder value/position not visible on hardware)
+- Voice-of-user study (2026-07-13): 44 videos / 1176 total comments / 220 pre-filtered / 43 matches tagged `Product = Dynamic Focus`
+- Bucket breakdown: per_track_mapping 17, follow_selection 13, visibility 7, takeover 6
+- Likes (resonance weight): visibility 112 total (one comment = 105 likes), follow_selection 7, per_track 7, takeover 4
+- Competitive: Global MIDI Map (paid M4L competitor) confirmed selling; its pains = >16-param limit + no per-track isolation
+- Pricing tier implied: Workflow ($24) — above Utility (SF $14), below Flagship (Control XL $39)
+
+**Qualitative:**
+- The 105-like comment ("value vs knob position… endless encoders and on-screen values") is one of the strongest single-comment resonance signals seen in any Fadercraft research window. For a niche instrument video, 105 likes on one comment about a specific pain is rare.
+- Pain is cross-product: appears under LCXL MK3, LC MK3, and generic MIDI controller videos — not just one hardware niche.
+- Two draft replies already written and on-file for Score 120/80 threads (informal field test of the hook, insight #10 shape). These exist as planted seeds — no product exists yet to pitch.
+- Global MIDI Map confirms market willingness to pay for this problem — people BUY it despite its limitations (>16-param cap + no per-track isolation). DF wins exactly on those two limitations.
+- Knobbler (Steinkamp's tablet value display) = visibility competitor only, no mapping or focus.
+- Isotonik filter (from 2026-07-10 second decline of SF): "Ableton-native AND not shaped like mapping/parameter-follower utility." DF is per-track banking/focus — not parameter-to-parameter mapping. It passes both halves of this filter explicitly.
+
+**Read:**
+- HOOK = visibility (on-screen display of all encoder positions); this is the loudest APPLAUSE signal (105 likes). People don't shop for it but they recognize it instantly.
+- OFFER = per-track mapping + follow-selection; this is where the SEARCH intent lives (30/43 comments asking "how do I do this").
+- WHY NOTHING HAS WON IN 12 YEARS: Hardware companies won't add LED rings to budget lines (cost). Ableton's Pickup silences the controller until physical position matches (dead-end, confirmed in voice data). Remote scripts are hardware-specific. No M4L dev has combined on-screen display + per-track focus + universal CC-learn in one device.
+- DF's structural differentiator: works with ANY absolute controller via CC-learn (not hardware-specific like scripts), uses Value Scaling to prevent jumps without silencing, shows all 8 encoder positions simultaneously.
+- Signal is cross-controller and cross-product — this is a property of the angle, not of one niche's complaints.
+- Evidence base is strong enough to schedule. NOT strong enough to rush ahead of Sends Follower (which is built, priced, on Gumroad, and needs only video edit + deploy — days of work vs DF's weeks).
+
+**Decision:**
+1. CONDITIONAL GO on Phase 3 — add DF formally to roadmap with evidence base. Change status from "NOT scheduled, evidence-gathering" to "Phase 3, first deliverable = 1-page spec." No deadline until spec is written.
+2. Reply to top 2-3 YouTube comment threads (Score 120/80/58) in insight #10 shape (ask about their setup, 3 concrete nouns, no Gumroad link, no pitch). This week, ~2h of work. First live test of the hook on a warm audience.
+3. Sends Follower remains the critical path. No DF work until SF is deployed and first Reddit post is done.
+4. After SF launch: write 1-page DF spec (pricing tier Workflow $24, target controllers nanoKONTROL2/MPK Mini/Launchkey/generic-8-knob, video scenario, first Quick-start shape).
+5. Isotonik re-contact gate opens after SF deploy AND DF spec — two products live + one in spec = stronger pitch than SF alone.
+6. Checkpoint: re-read this entry after YouTube thread replies arrive (qualitative signal on hook phrasing) AND after SF's first Reddit post + first sessions.
+
+## 2026-07-10 — Daily traffic snapshot: baseline day after the 08 Jul spike, Reddit at zero, pipeline blind-spot flagged again
+
+**What:** Analyst's daily read of landing traffic for 2026-07-10 (single-day cut, no experiment running).
+
+**Numbers (analyst, as fed):**
+- 34 pv / 22 uniques / 24 sessions. vs 09 Jul: −44%/−46%/−44%. vs 08 Jul (peak, 80pv/60DAU): normalization. vs weekly average (30.9pv/21.1DAU): +10%/+4%.
+- Sources: Max for Live 15 sessions (63%, ~all on `/sends-follower`); Direct 6 (25%, 4 new/2 return); internal self-hop 2 (8%); Facebook 1 (new untagged `utm_campaign=fb_page` via `l.facebook.com`); Reddit 0; Google/YouTube/Telegram organic 0.
+- Geo: 14 countries, no dominant one — US 8pv, TH 8pv, GB 4pv, rest 1–2 each. A couple of ambiguous TH sessions resemble the owner but aren't tagged as such. No VPN anomalies.
+- Behavior: `/sends-follower` 89% of the day → `/control-xl` 8pv → `/` 1 → `/free-custom-modes` 1. Bounce ~18%. Avg session ~123s, skewed by two long sessions (915s, 731s).
+- Funnel: buy_click = 2 (both via Max for Live, on `/sends-follower`, one UA one DE). purchase = 0. footer/cta view in 37% of sessions. video_play = 15 launches across 8 sessions (above-normal). demo_interact = 1. faq_open = 0. social_click = 0.
+
+**Qualitative:** No comment threads in this window — pure traffic/funnel read. video_play at 15 across 8 sessions is a real engagement uptick from the maxforlive audience specifically (consistent with the channel's known buyer-mode profile, insight #12/#19).
+
+**Read (PM):**
+- **The day is a non-event by volume — normalization after the 08 Jul peak, not a decline.** vs-yesterday −44% looks alarming in isolation but the right baseline is the weekly average, where the day is +4–10%. This is the same mechanical pattern as every prior push-then-decay cut (insight #3): don't read day-over-day drops against a spike day.
+- **Max for Live is doing exactly what a passive evergreen listing is supposed to do (insight #12): 63% of sessions, both buy_clicks, elevated video_play, and it's the STABLE floor, not a spike.** This day is the clearest evidence yet that maxforlive is now driving Sends Follower specifically (not just Control XL as in the 06-17 sale) — both buy_click sessions were on `/sends-follower`.
+- **Reddit at 0 is mechanical, not a new signal.** No post has run recently (last push exhausted per the 06-26/07-04 WoW reads); a channel that is 100% push-driven decays to zero between pushes. One zero-day is not "Reddit is dying" — it's "no push happened." Do not react by posting today (anti-impulse, insight #4) — this needs a deliberate, prepped post (first-person, own-voice, product-page link), not a reflexive one.
+- **buy_click=2, purchase=0 is the recurring, still-open pattern — and it is NOT new information.** This exact gap (buy_click fires, `purchase` doesn't reliably land in PostHog) was diagnosed on 2026-06-17 after sale #1 and logged as a MUST-fix pipeline gap (insight #20; roadmap `wiki/roadmap.md` line ~369, still `[ ]` unclosed as of today). Two hypotheses remain undistinguished at this volume: (a) genuine checkout abandonment on Gumroad (price/trust/friction), (b) the known telemetry gap — Gumroad Ping → PostHog `purchase` is unreliable and unverified end-to-end. Because (b) is a KNOWN, already-flagged, still-unfixed defect, it is irresponsible to read "0 purchases today" as a demand signal without first ruling out the instrumentation gap.
+- **The two buy_clicks landing on the SAME channel + SAME page is a small, encouraging coherence signal, not a pattern yet** (n=2). It says maxforlive → `/sends-follower` intent exists; it says nothing about conversion rate.
+- **The untagged Facebook session and the ambiguous TH sessions are both attribution hygiene items, not product signals** — one stray session each, no action beyond noting them.
+
+**Decision:**
+1. **P1 — Escalate the pipeline MUST-fix (real `purchase` → PostHog + stamped Buy-link) from "open backlog item" to "do this before reading any more daily buy_click/purchase numbers."** It has been open since 2026-06-17 (three-plus weeks) and every single day's conversion read is compromised until it's closed. Ask founder to run one real test-purchase on Sends Follower ($14, cheaper to test-buy than Control XL) to verify Gumroad Ping → PostHog end-to-end.
+2. **P2 — Founder checks the Gumroad seller dashboard directly for 10 Jul orders**, independent of PostHog — the fastest way to know today, right now, whether "purchase=0" is real or a telemetry gap, without waiting on the eng fix.
+3. **P3 — No action on Reddit.** Zero is expected in a no-push window; the next Reddit post should be the planned, prepped Sends Follower launch post (per 07-08 entry), not a reactive fill-in.
+4. **P4 — Keep feeding maxforlive** (still-open video/ratings levers from 06-24/07-04 carryover) — today reinforces it's the one channel converting attention into buy_click for BOTH products now.
+5. **Checkpoint:** re-read once the pipeline fix is verified (target: this week) and once ≥3 more buy_click events accumulate on `/sends-follower` — that's when "does maxforlive convert SF" becomes a real read instead of n=2.
+
+**Ignore as noise today:** the day's own pv/session numbers vs yesterday (spike-day comparison, not a real drop); the 14-country geo spread (small-n, no dominant market to act on); the single untagged Facebook session (n=1, wait for volume); the ambiguous TH sessions (likely owner, not a market signal); the long-session-skewed average duration (2 outliers, not representative).
+
+## 2026-07-08 — Strategic fork: promote Sends Follower vs. build Dynamic Focus/Mapping Deck first
+
+**What:** Founder asked which to do right now — (A) Reddit-promote the already-built
+Sends Follower, or (B) build-then-launch a new device first ("map to any parameter,
+shown as a colored on-screen encoder, active only when its channel is in focus" — this
+is the existing Dynamic Focus / DF Master+DF Slot+DF Input concept, working name
+"Mapping Deck"). Trigger: today's cloud YouTube-comment-miner pull (Notion DB
+`39255889-1bb0-818f-ae1c-cd5d93a94041`, 126 targeted comments ranked by Score) surfaced
+"no encoder position/value indication" as the dominant pain cluster.
+
+**Numbers (state-of-build, checked today):**
+- Sends Follower (per `roadmap.md` Phase 2, last touched 2026-06-30 + PM 2026-07-07
+  analytics-goal framing): device **frozen v1.0**, Gumroad product **published ($14,
+  live)**, page built locally, **NOT yet deployed to prod** (`/sends-follower` still
+  falls through to Control XL on the live router), demo video **VO recorded, not
+  edited/published** (critical-path blocker), footer link not yet flipped. Overall
+  Phase 2 counter ~46%, but nearly all open items are launch-logistics (deploy, edit
+  video, publish), not device work. **Never posted about on any channel** (grep of
+  analyst's `reddit-threads-tracking.md` = zero SF mentions).
+- Dynamic Focus / DF Master (per m4l-master memory, `df-master.md`, last touched
+  2026-06-30): a real working M4L device — persistence architecture v6.4 (128-slot
+  design, per-instance state via live.numbox SAA), performance-optimized (cached
+  LiveAPI objects, batched param loading), several runtime bugs fixed as of
+  2026-06-30. UNFROZEN (dev state). **Not on `roadmap.md` at all** — no Phase/task
+  list, no spec, no pricing tier, no page, no Gumroad product, no video, no name
+  finalized beyond a working "Mapping Deck" label in memory. I.e. it is at the
+  pre-Phase-2 stage Sends Follower was at on 2026-06-17, not close to shippable.
+- Comment-mining top-Score rows (queried live, sorted desc): #1 Score 120 (@jackdenis_eu,
+  "No encoder position indication? But Why?? This is a must on Live gig!", 8 replies,
+  reason tagged "Wants visual feedback on encoder positions") — **already has a founder/
+  copywriter reply on file** describing "a Max for Live device... shows the live value
+  of every encoder on Live's screen the second you turn it." #2 Score 80
+  (@tomaszsiejko6562, same pain, same reply pattern already drafted). #3 Score 58
+  (LED-ring feature request). #4 Score 51 ("No motorized faders, no LED rings... those
+  dimming RGB lights suck"). #5/#6 Score 46/45 (LED rings / screen-hunting friction).
+  #9 Score 41 ("The knob info was literally the deal breaker for me... Live looping
+  really leaves no room for wondering if that knob or send or eq thing is where it's
+  supposed to be" — persistence/state-visibility, not just live value). Pattern: 6+ of
+  the top ~10 rows are the SAME cluster (encoder value/position not visible on
+  hardware), across multiple different videos/products (LCXL MK3, LC MK3, generic
+  MIDI controllers) — a real, recurring, unprompted pain, not a one-off.
+
+**Qualitative:** The top-scored pain is NOT about Sends Follower's job (performed send
+modulation) — it's squarely Dynamic Focus/Mapping Deck's job (on-screen live value +
+per-channel focus). Two of the highest-score comments already have a reply on file that
+describes Dynamic Focus's mechanism in plain language, in the insight-#10 shape (share
+what we built, ask nothing, no link) — i.e. informal field-testing of the hook is
+already underway, unattributed to a released product.
+
+**Read:**
+1. This is a real, repeated, high-score demand signal for the CAPABILITY Dynamic Focus
+   provides — strong enough to formally schedule the product, not strong enough (single
+   comment cluster, no live product, no price-clickability test yet) to justify dropping
+   an already-funded, already-priced, zero-remaining-build asset to go build it first.
+2. Sends Follower's remaining gap to launch is entirely logistics (deploy + video edit +
+   first post) — days, not weeks — and it is sunk cost sitting idle. Fadercraft's
+   chronic bottleneck across every checkpoint so far has been DISTRIBUTION/reach, not a
+   shortage of sellable product (insight #14, #19, #25) — an unpromoted, Gumroad-live
+   product is the cheapest possible next unit of reach.
+3. Dynamic Focus/Mapping Deck launch effort is NOT "zero because the JS is done" — per
+   insight #17, the expensive part of a launch is spec+freeze+copy+page+Gumroad+video+
+   positioning, none of which exist yet for this device, and its UX (focus-based,
+   multi-device, on-screen) is harder to explain than Sends Follower's one-line pitch —
+   likely a multi-week effort, not a rush job.
+4. The two signals don't compete for the same slot: promoting SF costs ~0 marginal
+   product-build time (it's built); scheduling Mapping Deck properly costs real weeks
+   regardless of when it starts. Sequencing SF now doesn't delay Mapping Deck by a
+   meaningful margin, and building Mapping Deck now would delay SF's already-paid-for
+   launch for no reason (anti-impulse rule, insight #4).
+
+**Decision:** Recommend to founder — (1) finish and ship the Sends Follower launch this
+week (edit demo video = critical path, deploy `/sends-follower` to prod, flip footer
+link, then first Reddit post in the proven first-person/own-voice format with its own
+`/sf`-style UTM); (2) in parallel, reply to the top 2-3 highest-score comment threads
+(120/80/58) in the ask-about-their-setup shape (insight #10) — near-zero cost,
+already-warm, doubles as testimonial/positioning research for Mapping Deck; (3) formally
+add Dynamic Focus/Mapping Deck to `roadmap.md` as a new Phase-3 candidate this week,
+backed by this comment cluster as the evidence base, with a 1-page spec as the first
+deliverable (per insight #17 sequencing) — but do NOT rush it to market ahead of a
+freeze+positioning pass. Next checkpoint: SF's first Reddit post + first sessions/goal
+data (analyst); Mapping Deck's 1-page spec review once written.
+
+## 2026-07-05 — Landing go/no-go: "For you, specifically" ICP section (Control XL page)
+
+**What:** Founder asked whether the mid-page section "For you, specifically" / H2 "One
+workflow across performance and production" earns its place. Three ICP columns (Live
+performer / Studio producer / New LCXL owner), positioned after video + PerformanceFlow,
+before Kit → FAQ → Requirements. No dedicated PostHog tracking exists for it.
+
+**Numbers (analyst, modeled, low-medium confidence):** ~28-33% of `/` visitors reach the
+section (~18-21 of 64 visits over 13 days) — interpolated between the video section
+(45% reach, instrumented) and FAQ (25% reach, instrumented) plus scrolldepth heatmap.
+Zero rage-clicks, zero click-clusters in the section's screen area. N is tiny (64
+visits/13d); this is an estimate, not a direct measurement.
+
+**Qualitative:** No frustration signal at all in the zone — flat, not negative (the
+tiles aren't links, so no-click is expected, not a rejection signal). Modeled reach for
+this section sits ABOVE both FAQ (25%) and Requirements (19%), two sections the project
+already treats as worth their space.
+
+**Read (PM):** Separating what's data-dependent from what isn't. The strategic
+question ("does this section do real narrative work") does NOT need more traffic data
+to answer — it's answerable from the page's own logic:
+- Video + PerformanceFlow show the MECHANISM (what the product does, how it moves
+  between modes). Kit/FAQ/Requirements are LOGISTICS (what's in the box, objections,
+  compatibility). Neither layer says "this is for someone like you" — that's a distinct
+  job, ICP self-identification, and nothing else on the page does it.
+- This job is not decorative. Insight #2 in `insights.md` ("I built one fixed template
+  myself" = the ICP self-identifies) and insight #1 (four independent people converging
+  on the same DIY workaround: Elektron guy, hardware-mixer guy, Gig Performer/pedalboard
+  guy, us) both point at the same mechanic: recognition ("this is literally what I'm
+  already doing/needing") is what pulled people in on Reddit. The three ICP columns are
+  the on-page version of that same recognition moment, for three concretely different
+  people (performer / producer / new owner) who arrive with different mental models of
+  "why would I want this."
+- So the section is not a duplicate of the video (mechanism) or Kit/FAQ (logistics) — it
+  fills a real, currently-unique gap: naming the buyer, not the product.
+- Given that, cutting on a *traffic-volume* guess would be solving the wrong problem —
+  the section's justification doesn't come from reach numbers, it comes from what's
+  missing on the page without it. The reach estimate (28-33%, above FAQ/Requirements) is
+  corroborating, not decisive, and it corroborates KEEP, not CUT.
+- Separately and independently of the traffic question: the three ICP columns have no
+  CTA/anchor — that's a real, obvious design gap regardless of how much traffic reaches
+  them. It doesn't need more data to justify fixing; it needs fixing because a
+  self-identification moment with no next step wastes the click it earns.
+
+**Decision:** KEEP the section — no cut, on strategic grounds (fills a real, unique
+narrative gap: ICP self-identification, nothing else on the page does this job), not
+on the traffic estimate. Do NOT do a heavy rework — the modeled-only reach data isn't
+solid enough to redesign against (analyst confidence low-medium, N=64/13d), and rule
+"challenge evidence before building" applies. Ship two small, low-cost, non-data-gated
+fixes in the same pass: (1) analyst's `data-section="for-you"` attribute so reach stops
+being modeled and becomes measured; (2) give each of the three ICP cards one small
+anchor/action (e.g., scroll-anchor to the part of the video/Kit most relevant to that
+role, or to the matching FAQ item) so the section stops being a dead-end after the
+recognition beat — this creates a real click event to read, not just scrolldepth.
+Checkpoint: revisit in ~2 weeks once `data-section` has real reach numbers and the new
+per-card action has click data — that's when "does it need more work" becomes an
+answerable data question. Until then, treat existence as settled, not open.
+
+## 2026-07-04 — THREE-WEEK WoW TRAFFIC READ (analyst PostHog cut, W-2=08–14 Jun / W-1=15–21 Jun / W0=22–28 Jun + partial TW 29 Jun–04 Jul)
+**What:** Product read of analyst's three-week WoW cut (clean external traffic, owner-excluded, bot-filtered). Synthesis/retrospective entry — no single experiment, whole window. Numbers as fed; nothing invented.
+
+**Numbers (analyst, owner-excluded):**
+- Sessions: W-2 43 → W-1 65 → W0 28 (W-2→W-1 +51%; W-1→W0 −57%)
+- Pageviews: 58 → 91 → 43
+- buy_click: 0 → 4 → 3 (buy_click-rate: 0% → 6.2% → 10.7%)
+- video_play: 3 → 8 → 10 (+167%; +25%)
+- demo_interact: 0 → 11 → 10
+- mode_download: 2 → 3 → 3
+- Real purchases: 0 → 1 → 0
+- Channels W0: Facebook 10 (NEW #1 — single Novation FB-group post ~24 Jun), Reddit 6, Direct/Unknown 5, Max for Live 2, YouTube 1, Google Organic 2 (FIRST EVER), DuckDuckGo 1 (first ever)
+- Partial TW (29 Jun–04 Jul): ~15–18 clean sessions; real buy_click from TW/YouTube 03 Jul; YouTube now sending organic referrer sessions (www.youtube.com) not just UTM
+
+**Qualitative (analyst's observations):**
+- W0 traffic collapse = no new Reddit push; single post lives 3–4 days then dies — purely push-driven baseline
+- Facebook Novation-group post ~24 Jun: channel-#1 in W0 from zero; 0 buy_click from FB arrivals — come to look, not buy
+- buy_click-rate improved at lower traffic (10.7% W0 vs 6.2% W-1); FR mobile = 2 buy_clicks but no Gumroad crossover — mobile/checkout friction
+- Google Organic + DDG: first-ever search referrers (~8 GSC impressions, position 6–7); numbers negligible but structurally new
+- Engagement (video/demo) HELD at 3× lower traffic — W0 audience quality higher than W-1
+
+**Read (PM):**
+FACTS separated from interpretation:
+
+*The traffic collapse is predictable and mechanical.* W-1 spike = the Reddit Novation-group push (~15–16 Jun, inside the window); W0 = no push, the natural decay floor. This is exactly insight #3's documented half-life — a push pulses then dies. No surprise here; reading it as a "problem" would be wrong. The deeper issue is that there's still no renewable floor beneath the pulses (zero search referrers through all of W-2/W-1; the two organic sessions in W0 are the FIRST in the product's history, from a position 6–7 with 8 impressions).
+
+*buy_click-rate inversion is the most interesting datum in this cut.* More sessions → fewer buy_click-rate; fewer sessions → higher buy_click-rate. Two possible reads, both worth holding: (a) the W0 audience is genuinely higher intent — maxforlive and YouTube organic pull buyer-mode people vs. Reddit that drags mobile casual lookers (insight #8); (b) small-n noise — 3 vs. 4 buy_clicks is one click's difference on tiny numbers. I cannot separate these at these volumes. What the rate movement does de-risk: the "nobody ever reaches the CTA" problem (insight from the 26 Jun read: the blocker moved from CTA-visibility to persuasion/readiness). buy_click-rate at 10.7% means people ARE clicking to buy on some sessions — the Gumroad-to-purchase gap is the next open question.
+
+*Facebook: a channel with zero to #1 in one week, and zero conversion.* The Novation-group post worked for reach (10 sessions, channel #1) but produced no buy_click. Two non-exclusive explanations: (a) mobile-browser FB → Gumroad is a rough funnel for a $39 purchase (insight #8: mobile intent is capture, not conversion); (b) FB Novation-group audience might skew more casual/community than maxforlive's buyer-mode browsing. Important: the 0 buy_click from 10 FB sessions is consistent with our overall pattern (Reddit: 39 sessions, 0 buy_click in the 26 Jun window; maxforlive: 3 sessions, 1 sale). The community-traffic→purchase gap is structural, not specific to FB.
+
+*Engagement holding at lower traffic is the clean quality signal.* video_play 10 and demo_interact 10 on 28 sessions vs video_play 8 and demo_interact 11 on 65 sessions = engagement PER SESSION doubled roughly. This is not a page improvement — it's mix-shift (same mechanism as 26 Jun read: when Reddit mobile drops, the remaining audience is desktop-intent). But the implication is the same: the product surfaces that require desktop attention ARE working when the right person arrives.
+
+*The two Google Organic sessions + partial-TW YouTube referrers are structurally significant despite tiny numbers.* This is not "seeds" framing — these are literally the FIRST organic/algorithmic sessions in the product's history. They represent a qualitatively new acquisition mode turning on (not yet a channel, but a proof-of-life). The YouTube one is notable: www.youtube.com referrer means someone found the video through YouTube's own algorithm or search, not via our UTM links. Position 6–7 for the GSC impressions is consistent with the 26 Jun read (we have zero SEO work done; what organic exists is accidental).
+
+*The mobile buy_click with no Gumroad crossover is a real friction point to track.* FR mobile = 2 buy_clicks but didn't clear Gumroad checkout. This matches insight #8 (mobile sessions' job is capture, not conversion) and hints that the Gumroad checkout experience on mobile may be adding friction on top of the normal intent gap.
+
+**Decision (direction; re-openable):**
+Context: the 26 Jun read already identified the dual bottleneck (no renewable traffic floor + offer doesn't close the traffic we do get). This three-week cut confirms and sharpens both, without changing the priority stack. No pivot.
+
+- **P1 — Sends Follower launch remains the strategic center of gravity.** SF on maxforlive (the only self-sustaining channel) is a second compounding listing. SF also doubles as the Isotonik re-open unlock. Neither the W0 collapse nor the FB result changes this — they re-confirm the need for a renewable source, and SF → maxforlive is the one proven renewable we can add.
+- **P2 — Feed maxforlive the listing levers it's owed** (video + seed genuine ratings). Still unshipped from the 26 Jun P1 carryover. The partial-TW buy_click and YouTube organic sessions are consistent with maxforlive-quality intent — the channel rewards investment.
+- **P3 — Organic SEO is no longer "not on the map."** Two Google sessions in a week, position 6–7 with zero deliberate SEO work, is a signal that the content is indexable and the query space exists. This is not an immediate action — it's a tracking item. At current volume, one article that ranks for a relevant query ("LCXL MK3 Ableton mapping" tier) would DOUBLE the organic floor. The JTBD guide (content-assets.md Asset #1) becomes more compelling in this context — not urgent but moving up the priority ladder.
+- **P4 — Mobile checkout friction: watch, don't fix yet.** The FR-mobile 2-buy_click-no-Gumroad gap is real but n=2. Before deciding it's a Gumroad UX problem vs. an intent problem, need more events. Keep the session replay lens on any future buy_click from mobile; do not redesign the checkout for n=2.
+- **P5 — Reddit push deliberately absent from W0: correct.** The no-push = no-traffic result is not a failure to remedy with another pulse — it's confirmation that pulses should be timed to launches (SF launch, maxforlive rating seed) not deployed as a traffic maintenance tool. Next Reddit push should be the SF launch post, with a direct link to the SF product page (not the free-modes funnel — insight #7).
+- **ANTI-LIST:** (a) don't read the W0 traffic drop as a signal that Reddit is declining — it's the absence of a push, not a declining channel; (b) don't read Facebook's W0 #1-channel position as "FB is our next channel" — 10 sessions, 0 buy_click, a single post; (c) don't act on the mobile checkout friction at n=2; (d) don't start SEO work before the SF launch page exists (sequence: SF page → then optimize); (e) don't interpret the buy_click-rate improvement as a page/copy win — mix-shift confounder (insight #8); (f) don't conflate partial-TW data with the completed-week numbers (TW window incomplete as of 04 Jul).
+- **Checkpoint:** SF spec → SF page → SF maxforlive listing. At that point re-read the channel picture. The 2-3-sale bar for any channel holds (insight #19). Re-check GSC position and organic session count in 2 weeks — if organic keeps arriving without deliberate SEO, it's worth one content investment. No new insight banked — application of #1/#3/#7/#8/#12/#19/#20.
+
 ## 2026-06-26 — SENDS FOLLOWER SUPPORT/ONBOARDING PLAN — tier the post-purchase process to the PRICE: a $14 Utility impulse-buy does NOT carry the $39 flagship's verification process; the real support lever is the helper DOC, not Discord tickets/roles
 **What:** Locked the launch-time support & onboarding scenario for Sends Follower (product #2, Utility tier, **$14**, Gumroad impulse-buy). Coordinator-relayed that the founder discussed + confirmed this; treated as a planning entry to record the decision and sync roadmap + Discord spec (no user-authority claim acted on beyond recording the plan as direction). This is a launch-PLAN entry, not an experiment — no metric.
 
@@ -11,7 +386,7 @@ Newest entries at the top. Format: What / Numbers / Qualitative / Read / Decisio
 1. **Discord — REUSE the existing "Fadercraft" server.** No new servers/roles/channels. SF support lives in the existing `#support`.
 2. **Turn ON Gumroad→Discord native integration on the SF product** (one toggle in the product editor): auto-invite buyer on purchase + auto-kick on refund. Zero manual work.
 3. **Do NOT make the manual key→DM→`@Verified Owner` flow a required SF onboarding step.** `@Verified Owner` stays OPTIONAL/REACTIVE — if a buyer wants the badge, they DM their key like a Control XL owner; it is NOT part of documented SF onboarding, and no automation is built for it.
-4. **The PRIMARY SF support lever = the bundle helper doc** (`~/Brain/Fadercraft/sends-follower-bundle.md`, currently a good draft): quickstart + the LFO→parameter mapping table. Finalize it (voice=Steinkamp, Vale pass) — THIS is the real support, not Discord tickets. The #1 user-testing risk (buyers don't discover the LFO mapping on their own) is cured by this doc, not by a verification process.
+4. **The PRIMARY SF support lever = the bundle helper doc** (`~/Brain/fadercraft/sends-follower-bundle.md`, currently a good draft): quickstart + the LFO→parameter mapping table. Finalize it (voice=Steinkamp, Vale pass) — THIS is the real support, not Discord tickets. The #1 user-testing risk (buyers don't discover the LFO mapping on their own) is cured by this doc, not by a verification process.
 
 **Read (PM):**
 - **Process-weight must scale with PRICE/tier — this is the right call and it's a clean application of insight #20 (post-purchase journey = the minimum that lets the buyer succeed; everything heavier is volume-gated).** At lifetime n=1 and a barely-forming audience, a verification/role process costs more (friction + founder manual work + support load) than it protects. For a $14 impulse buy specifically, post-purchase friction is the ENEMY of conversion — a buyer who paid $14 on impulse and then hits a "DM your key to verify" gate is being taxed for nothing. Control XL's $39 flagship can carry a bit more ceremony; SF cannot and shouldn't.
@@ -208,7 +583,7 @@ Newest entries at the top. Format: What / Numbers / Qualitative / Read / Decisio
 - **Checkpoint:** (1) immediate — copywriter drafts the reply (warm, concede hardware point, take intro pack, plant software-only seed); (2) on Sends Follower launch-readiness — re-open Isotonik with the polished SF asset on Darren's filter. New insight banked (#25 — a constructive B2B "no" that names its criteria is a channel-RE-AIM signal, and third-party-hardware dependence is a structural distribution liability a curator prices in, independent of the product's value).
 
 ## 2026-06-18 — CORRECTION to the SOCIAL-WINDOW SYNTHESIS — the r/abletonlive `1u74c6t` LIVE thread arrived and FLIPS its read: the window's "engine" post was a HOSTILE pile-on, not a success — strongest proof yet of "right angle, delivery kills it" + the value of a human voice
-**What:** The live content of the r/abletonlive thread `1u74c6t` (campaign `abletonlive_post`, link in-post was `fadercraft.com/r-abl`) finally arrived (founder/copywriter, ~2 days post-publish). In the SOCIAL-WINDOW SYNTHESIS below this post was listed as the window's traffic engine — "#1 of the day, 100% ratio, warm reception, open question = pull the comments." **The actual content overturns that read: it was a HOSTILE PILE-ON, not a warm success.** This entry CORRECTS the synthesis entry below (the relevant lines are amended in place too); it does not invent new numbers beyond what was fed + the Voice Guide (`~/Brain/Fadercraft/research/voice/voice-guide.md`, source dated 2026-06-17) which already carried this thread as hostile — the synthesis simply read the early vanity snapshot (ratio 100%) instead of the content.
+**What:** The live content of the r/abletonlive thread `1u74c6t` (campaign `abletonlive_post`, link in-post was `fadercraft.com/r-abl`) finally arrived (founder/copywriter, ~2 days post-publish). In the SOCIAL-WINDOW SYNTHESIS below this post was listed as the window's traffic engine — "#1 of the day, 100% ratio, warm reception, open question = pull the comments." **The actual content overturns that read: it was a HOSTILE PILE-ON, not a warm success.** This entry CORRECTS the synthesis entry below (the relevant lines are amended in place too); it does not invent new numbers beyond what was fed + the Voice Guide (`~/Brain/fadercraft/research/voice/voice-guide.md`, source dated 2026-06-17) which already carried this thread as hostile — the synthesis simply read the early vanity snapshot (ratio 100%) instead of the content.
 
 **Numbers (live thread, ~2 days post-publish; fed by founder, cross-checked vs Voice Guide):**
 - 4.5K views · post score ≈1 (SANK — the early "100% ratio / #1 of the day" was a launch-hour vanity snapshot that did not survive) · 18 comments · format was announced as an AMA (12:16–4:16, 2026-06-16).
@@ -476,7 +851,7 @@ Newest entries at the top. Format: What / Numbers / Qualitative / Read / Decisio
 - **Server manifest on a TEST value.** `app/public/api/sends-follower.json` currently `latest=9.9.9` (changelog literally says "revert to 1.0 after testing") — deliberately > device 1.0 so the button lights up during hardware verification. **In repo, NOT deployed.** Must revert to 1.0 before real launch or first buyer on v1.0 sees a false "New Version".
 - **Site build clean** (`npm run build` ok, manifest + naming in `dist`), not deployed.
 - **Still NOT done:** Quickstart, the 1-page spec (content blocker), presentation video, landing copy, real page over the stub, Gumroad product, vanity redirects, hardware update-check verification + deploy.
-- **Org flag:** the device backup + its own wiki landed in a NEW folder `~/Brain/Sends Follower/` (own `wiki/`, `raw/archive/`, `log.md`, `CLAUDE.md`) — separate from `~/Brain/Fadercraft/wiki/`. Structure is forking; open question whether to consolidate under Fadercraft.
+- **Org flag:** the device backup + its own wiki landed in a NEW folder `~/Brain/Sends Follower/` (own `wiki/`, `raw/archive/`, `log.md`, `CLAUDE.md`) — separate from `~/Brain/fadercraft/wiki/`. Structure is forking; open question whether to consolidate under Fadercraft.
 
 **Read (PM):** This is real, verifiable execution — not a metric and not direction-changing, so the read is short and honest. The two genuinely de-risking moves landed correctly: (a) JS baked into the freeze (the Control XL lesson transferred, not re-learned the hard way), and (b) update-check mirrored from a proven device rather than reinvented. The naming close removes the only cross-surface ambiguity I'd flagged. Nothing here touches the unproven-line caveat — Phase 2 is still a lean bet on built assets, and the only market signal that matters (conversion/first sale) is still ahead. The remaining gating item for the whole content track is unchanged: the 1-page spec blocks copy AND video, so it's the true next unblocker after the deploy/verify loop.
 
@@ -508,7 +883,7 @@ Newest entries at the top. Format: What / Numbers / Qualitative / Read / Decisio
 
 ## 2026-06-17 — SendsFollower (product #2) launch roadmap committed to wiki — a deliberately LEAN second launch on Control XL infrastructure
 
-**What:** Founder commissioned a planning artifact, not an experiment: a 5-phase, 21-task launch roadmap for Fadercraft's **second paid product — SendsFollower** (a Max for Live device for Ableton Live, **software-only**, not tied to LCXL hardware). Written into `~/Brain/Fadercraft/wiki/roadmap.md` as a new "Phase 2 — SendsFollower launch" block ([NEW] vs [REUSE] tagged, progress mini-table 0/21); `index.md` + `log.md` updated. No code/deploy touched (planning-only). This is the FIRST move on the umbrella-brand product line — but note the strategic-checkpoint caveat below.
+**What:** Founder commissioned a planning artifact, not an experiment: a 5-phase, 21-task launch roadmap for Fadercraft's **second paid product — SendsFollower** (a Max for Live device for Ableton Live, **software-only**, not tied to LCXL hardware). Written into `~/Brain/fadercraft/wiki/roadmap.md` as a new "Phase 2 — SendsFollower launch" block ([NEW] vs [REUSE] tagged, progress mini-table 0/21); `index.md` + `log.md` updated. No code/deploy touched (planning-only). This is the FIRST move on the umbrella-brand product line — but note the strategic-checkpoint caveat below.
 
 **Numbers:** none — planning session. (Control XL conversion verdict still pending under the 100-session/first-sale checkpoint; Phase 2 does NOT wait on it — founder's call.)
 
@@ -1076,13 +1451,131 @@ The checkpoint recommendation was "product + price visible on the page + return 
 
 **Qualitative:** N/A — purely structural.
 
-**Read:** The forked layout (`~/Brain/Sends Follower/` as a sibling to `~/Brain/Fadercraft/`) was a temporary artifact of how the device was scaffolded. Consolidating under the umbrella keeps one coherent product-tree and avoids two separate CLAUDE.md/wiki contexts for what is clearly one brand.
+**Read:** The forked layout (`~/Brain/Sends Follower/` as a sibling to `~/Brain/fadercraft/`) was a temporary artifact of how the device was scaffolded. Consolidating under the umbrella keeps one coherent product-tree and avoids two separate CLAUDE.md/wiki contexts for what is clearly one brand.
 
 **Decision:** CLOSED — consolidate.
-- Sends Follower moved: `~/Brain/Sends Follower/` → `~/Brain/Fadercraft/Sends Follower/` (git mv, history preserved).
+- Sends Follower moved: `~/Brain/Sends Follower/` → `~/Brain/fadercraft/Sends Follower/` (git mv, history preserved).
 - Internal structure (`raw/`, `dist/`, `wiki/`, `CLAUDE.md`) unchanged; only nesting changed.
-- New products Dynamic Focus also lives under `~/Brain/Fadercraft/` from the start.
-- Control XL re-homed to `~/Brain/Fadercraft/Control XL/{raw,dist}` (m4l-master, deploy paths re-bound).
+- New products Dynamic Focus also lives under `~/Brain/fadercraft/` from the start.
+- Control XL re-homed to `~/Brain/fadercraft/Control XL/{raw,dist}` (m4l-master, deploy paths re-bound).
 - Roadmap updated same day (see roadmap.md item 6 under Phase 2 open risks).
 - Historical paths in this journal (`~/Brain/Sends Follower/...`) remain as-is — they were accurate at time of writing.
-- Future references: canonical path is `~/Brain/Fadercraft/Sends Follower/`.
+- Future references: canonical path is `~/Brain/fadercraft/Sends Follower/`.
+
+## 2026-07-04 — Control XL landing: "panel anatomy" section review (Figma draft)
+
+**What:** Product review of a new Figma section for the Control XL landing page — a
+labeled diagram of the hardware panel (Page/Bank/Daw/Prelisten row + MIXER 11-14)
+with per-control callouts, closing on the line "These controls are primarily intended
+as Keyboard Mapping targets, making it easy to switch layouts from anywhere in Live."
+Figma: `node-id=2574-16677`. Not yet built/shipped — design-stage only.
+
+**Numbers:** N/A (pre-build review, no traffic yet).
+
+**Qualitative:** N/A.
+
+**Read:** This section is the visual full-blown execution of the founder's 2026-06-24
+backlog idea ("Also in Control XL" bullet row, roadmap P2, week-plan line 350) — same
+content (Page/Bank/cross-mode-jump/Cue) has grown from "short bullet row" into a full
+annotated-diagram section. That week's own guardrail (351.d) explicitly warned against
+exactly this drift: "don't turn the bullet idea into a hero/feature redesign or
+abstract block." A per-button labeled panel risks reading as spec-sheet/anatomy-for-
+anatomy's-sake — boring, and off the validated angle (insight #1: people buy "permanent
+interface, map once" as a STORY, not a features list). The genuinely new, sellable fact
+here is the closing line (Key-Mapping targets → hands-free switching from anywhere in
+Live) — that's mechanism-proof for the already-validated permanent-interface angle, and
+currently the section buries it as a bottom caption instead of leading with it.
+
+**Decision:** Direction given to design/copy (not yet built): flip the section so the
+payoff line ("map once, switch layouts from anywhere via keyboard, hands-free") is the
+lead/H2, and the panel diagram becomes supporting evidence under it, not the headline.
+De-emphasize MIXER 11-14 as four individually-labeled buttons (compress to one line —
+"4 dedicated mixer layouts"); keep Page/Bank/Daw/Prelisten as the named "verbs" of the
+story with one plain-noun line each. Confirm with founder whether this section REPLACES
+the P2 "Also in Control XL" bullet row (same content, don't ship both) before build.
+Checkpoint: re-review once copywriter has a payoff-first draft; no data checkpoint
+needed (this is pre-launch design direction, not a live experiment).
+
+## 2026-07-07 — Sends Follower analytics goal-prioritization (pre-launch framing)
+**What:** Product framing pass for /sends-follower analytics goals ahead of the analyst
+mirroring Control XL's PostHog event/goal setup onto the SF page. No PostHog/code touched
+by PM; this is the goal hierarchy + funnel the analyst should wire against.
+**Numbers:** n/a — pre-instrumentation framing, no live SF data yet.
+**Qualitative:** SF page (`SendsFollowerPage.tsx`) is structurally much lighter than
+Control XL's (`ProductPage.tsx`): Header -> HeroProduct (single CTA, no A/B) ->
+VideoSection -> EffectsMarquee+CalloutBar -> TrackOrReturnSection (two workflow rows, each
+with its own inline demo video) -> RequirementsSection -> NewsletterSection -> Footer. No
+interactive scroll-morph mixer/plugin demo, no FAQ, no ICP columns, no secondary
+"free modes" bridge CTA — confirms the deliberate reuse-max lean-launch scope from
+insight #17 held through to shipping.
+**Read:** Primary conversion = `purchase` (Gumroad Ping -> PostHog, $14). Secondary /
+micro-conversions along the funnel: (1) hero CTA view/click ("Buy on Gumroad - $14"),
+(2) main demo `video_play`, (3) per-row demo engagement on Track vs Return inside
+TrackOrReturnSection — SF-specific signal with no CXL equivalent: which of the two
+workflows people watch tells us which use case is pulling interest, feeds product
+positioning not just funnel health, (4) requirements-section reach (friction /
+compatibility check, diagnostic not a goal), (5) newsletter signup as a capture net for
+undecided visitors. Funnel: session start -> hero seen (no bounce) -> video_play ->
+track-or-return section reached (+ which row engaged) -> buy_click (hero or newsletter
+CTA) -> Gumroad checkout -> purchase. What NOT to clone from Control XL: its hero A/B
+experiment infra (CXL runs `hero-permanent-interface` because it's the flagship /
+high-traffic bet; SF is product #2 at $14, would take far longer to reach significance at
+its traffic — ship one hero variant, revisit only once SF has its own volume); its
+interactive mixer-morph instrumentation (mode hover/click telemetry) — SF has no
+equivalent interactive surface, don't invent artificial UI-interaction events to "match"
+CXL's scheme; its secondary "free custom modes" lead-magnet bridge CTA — that's
+flagship-consideration scaffolding for a $39 higher-commitment purchase, not needed for a
+$14 impulse buy where the single Buy CTA should stay the only ask; its FAQ / ICP-columns
+sections — don't exist on the SF page, no goals to hang there.
+**Decision:** Hand this goal/funnel list to the analyst to wire the actual PostHog goals
+against SF's real DOM/events (mirror only what structurally applies from CXL's markup,
+per the read above). Judge SF's first sessions/purchases against its own baseline, not
+Control XL's numbers — product #2, utility tier, no dedicated launch campaign yet, expect
+smaller absolute volume. Next checkpoint: once analyst reports first SF PostHog goal data
+(n TBD, no fixed date — gated on SF traffic starting, not a calendar date).
+
+## 2026-07-10 — Isotonik Studios DECLINES Sends Follower — second considered "no" from the same curator, category-level this time (Smart-device overlap + free Ableton stock devices); door held open specifically for our Ableton-native tools
+
+**What:** Darren (Isotonik) replied on the Sends Follower pitch — the same channel re-aimed to software-only after the 2026-06-24 Control XL decline (insight #25). We had reworked the SF landing page per his earlier feedback; this reply is his verdict after "having had a proper look." Full email text supplied by the founder in this task's brief (not re-typed verbatim here beyond the load-bearing lines below); an attached screenshot showed two Ableton stock M4L devices, Max API Param2Param + MultiMap.
+
+**Numbers:** none — qualitative B2B thread, no metric to log.
+
+**Qualitative (verbatim, load-bearing lines):**
+- "Thanks for updating the page — the rework does make the concept clearer." — confirms our landing fix worked; this was a real second look, not a form reply.
+- "mapping/follower devices aren't a particularly strong category for us. We already have our Smart device in the store which handles modulation mapping across 16 destinations, so there's overlap there straight away." — internal catalog overlap, his call to make.
+- "The bigger issue is that Ableton themselves ship two free devices that cover this kind of send-reading and modulation functionality, and with a broader feature set on top... very tough position to sell from when the competition is free and comes from Ableton directly." — his screenshot names Max API Param2Param + MultiMap.
+- "I don't think this particular one is the right fit for the store, I'm afraid... you mentioned earlier you had a few Ableton-native tools in development, and I'm still happy to take a look when you've got something else in shape. Come back when you're ready."
+
+**Read:**
+1. **Second considered decline from the same curator, second DIFFERENT objection type.** Control XL (06-24) failed on structural hardware-maintenance liability (unfixable — LCXL-dependent by definition). Sends Follower fails on category-crowding: (a) internal overlap with Isotonik's own Smart device — not ours to argue, it's his catalog; (b) "Ableton ships this free with a broader feature set" — a curator-level read of the CATEGORY (mapping/parameter-follower), not necessarily of SF's specific mechanism. Param2Param/MultiMap are static parameter-to-parameter / one-to-many mapping devices; SF's differentiator is manual, gestural send-driven modulation performed live — our own positioning is "performed modulation vs reactive envelope-following" (project memory: SF positioning). Darren's screenshot suggests he bucketed SF into the same broad category as Ableton's free mapping utilities at a glance rather than judging the performed-modulation mechanism specifically.
+2. **The mechanism distinction is real but not worth arguing.** This is a considered second pass from someone who took the time to specify two distinct, informed reasons and re-looked at a page we'd already reworked for him once — not a brush-off. Litigating "actually it's mechanistically different" now risks reading as arguing with a paying gatekeeper who has twice given us a clean, respectful no (same discipline as 06-24 — insight #25: concede a curator's considered call, don't push).
+3. **New, durable market intelligence, independent of Isotonik specifically:** a paid, narrow send/mapping utility is a hard sell to an experienced curator BECAUSE Ableton bundles free devices that cover the surface-level category — regardless of whether the underlying mechanism actually differs. This is a genuinely new signal (only this B2B channel has surfaced it); self-serve buyers on Reddit/maxforlive evaluate the actual job-to-be-done, not "is there a free-from-platform alternative in the same broad bucket," so this does NOT contradict SF's self-serve traction plan.
+4. **Same shape as 06-24: a constructive "no" that names its criteria + explicitly reopens the door is a channel RE-AIM signal, not a close.** He named the next filter almost as plainly as last time — "Ableton-native tools in development." Two data points now sharpen that filter to: Ableton-native, AND not shaped like a mapping/parameter-follower utility, ideally not something Ableton already ships free. Dynamic Focus / Mapping Deck (per-track controller-focus/banking) is a different job-to-be-done than parameter mapping and should clear both objections.
+5. **Do not conflate a store-fit rejection with a market rejection.** SF's self-serve viability (Gumroad, maxforlive, Reddit/YouTube) rests on different buyer psychology than a curated-store gatekeeper's category read — nothing here should slow or restage the SF launch itself.
+
+**Decision:**
+- **Sends Follower via Isotonik = CLOSED.** Not a pause, not a "try a better pitch" — this was a considered second look after our rework, and the objection (internal overlap + free-competitor optics) isn't fixable by copy or positioning. Accept it.
+- **Isotonik channel overall = still OPEN, still warm.** Filter for the next pitch: Ableton-native, non-mapping/parameter-follower shape. Best current candidate = **Dynamic Focus / Mapping Deck**, once its launch surfaces are polished — same timing-gate discipline as before (hand him the strongest version, not a raw idea).
+- **Sends Follower stays a self-serve product** (Gumroad + maxforlive + owned channels + Reddit/YouTube) exactly as planned. Isotonik was always a nice-to-have B2B amplifier for SF, never its primary channel — this decline changes nothing about the SF launch plan or its own analytics/checkpoint (2026-07-07 entry above).
+- **Reply to Darren now (short, same-session, one action):** thank him for the specific, considered second pass (rare — most curators wouldn't spell out two distinct reasons); accept plainly, no argument on the mechanism point; take him up on "come back when you've got something else in shape" — mention briefly that Ableton-native tools ARE in the pipeline, WITHOUT attaching or pitching Dynamic Focus now. One-outbound discipline: this is a reply, not new outbound.
+- **Standing item, unchanged:** the Wise-Thailand payout-rail blocker from 06-24 is still unresolved and independent of product-fit — moot for this reply (he declined before payout came up again) but still a live gate for any future yes; don't forget it when Dynamic Focus is eventually ready to pitch.
+- **Checkpoint:** re-open Isotonik when Dynamic Focus / Mapping Deck's launch surfaces are polished AND (separately) the payout-rail question has a path forward. No new outbound until then.
+
+## 2026-08-06 — Mapping Deck cancelled; Notion retag of 33 rows (4→Dynamic Focus, 29 frozen)
+**What:** Kirill decided that "Mapping Deck" as a separate future product is permanently cancelled. No separate launch, no separate product page. Dynamic Focus (already selling at fadercraft.com/dynamic-focus, Gumroad $19) is the only active product name in the by-name controller-focus category. Task: audit all 33 Notion DB rows tagged Product="Mapping Deck", retag those that actually describe Dynamic Focus's value proposition to "Dynamic Focus", leave the rest with their existing tag.
+**Numbers:** 33 rows total with Product="Mapping Deck" at time of audit (2026-08-06 Thai time). Breakdown: 4 retagged to "Dynamic Focus" (Group A), 29 left as-is (Group B). 0 API errors on PATCH calls.
+**Qualitative:**
+Group A (4 rows, per-track isolation pain = DF's core):
+- Row 16 [follow_selection]: "whenever I play the MID keyboard in live it does not focus on the track... it plays drum bass and Piano at the same time" — exact Dynamic Focus pain (MIDI input bleeding across tracks instead of focusing selected track).
+- Row 21 [per_track_mapping]: "use the same set of physical knobs for various plugins... so my physical knobs do not affect every mapping simultaneously. or is there some other way to do that, to 'lock' the..." — per-track isolation wish, DF solves this exactly.
+- Row 22 [per_track_mapping]: "when I switch to the next track Korg... [mappings collide]" — track-switching mapping conflict, DF's core proposition.
+- Row 27 [per_track_mapping]: "I use two different synthesizers (VSTs) — each on a separate MIDI track. I map my controller for synth #1 and for synth #2 separately. However..." — same controller conflicting across two MIDI tracks, DF solves.
+
+Group B (29 rows — pain that DF doesn't cover):
+- Bulk are [persistence] pain: "Can mapping be saved? I won't have to map every time I open a new project" / "it doesn't save midi mappings for the next project" — about project-reload persistence, DF doesn't address this (DF solves track-switching, not project reload of Ableton's native MIDI map).
+- [layered_decks] pain: "not happy with the '1 track at a time' paradigm" / "Is it possible to control multiple track faders for mixing?" — wants multi-track simultaneous control, DF is intentionally per-selected-track.
+- [visibility] pain: "Motorized faders and this would be perfect" / "see the value on the LCD screen" — controller hardware display feedback, out of DF scope.
+- [per_track_mapping] with persistence semantics: "I want to control basic controls in VSTs and always consistently mapped across all VSTs" / "is it possible to map more than 16 parameters?" — slot count and template portability, not per-track isolation.
+
+**Read:** The original research correctly identified these as two distinct pain categories. The 4 Group A rows were mislabeled Mapping Deck only because they entered the Notion DB during the Mapping Deck research sweep (query="manual-classify-by-claude" and specific keyword runs) — they genuinely describe DF's core job-to-be-done. The 29 Group B rows describe real market pain (persistence is notably the top-volume bucket with the most commercial signal) but that pain is not what DF solves, and there's no shipped product to speak to it now that Mapping Deck is cancelled. The persistence pain is a large, unaddressed opportunity — worth noting for future product thinking, not for immediate action.
+**Decision:** 4 Group A rows now feed into the standard yt-reply-post.py queue (they pass the existing filter since they're tagged Dynamic Focus, no code change needed). 29 Group B rows frozen with Mapping Deck tag — still blocked by yt-reply-post.py filter, correctly so. **Open question for Kirill (not decided by PM): archive these 29 rows (Status=Ignore or Notion Archive) or leave them in the DB as frozen research? They will never result in a reply, but they ARE a documented voice-of-user corpus for the persistence/layered-decks pain territory.** Raise with Kirill in next session. Directive and memories updated. n8n "Mapping Deck Voice-of-User Miner" workflow status: open question whether to shut it down (see main report).

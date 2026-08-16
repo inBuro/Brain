@@ -1,11 +1,11 @@
 ---
 name: controlxl-bundle-zips
-description: Рецепт и инварианты пересборки Control XL bundle-зипов (Demo + Starter) в ~/Brain/Fadercraft/Control XL/dist/
+description: Рецепт и инварианты пересборки Control XL bundle-зипов (Demo + Starter) в ~/Brain/fadercraft/Control XL/dist/
 metadata:
   type: project
 ---
 
-Два релизных зипа Control XL живут в `~/Brain/Fadercraft/Control XL/dist/`:
+Два релизных зипа Control XL живут в `~/Brain/fadercraft/Control XL/dist/`:
 `Fadercraft Control XL v1.0 - Demo.zip` (~193 MB, с Samples) и `... - Starter.zip` (~180 KB, без Samples).
 
 **Целевое дерево бандла** (root = `Fadercraft Control XL v1.0 - <Demo|Starter>/`):
@@ -16,7 +16,7 @@ metadata:
 - `Control XL <Demo|Starter> Project/`: `Control XL <X>.als` + `Max Devices/Control XL.amxd` + `Ableton Project Info/Cache.cfg` (+ `Samples/` только в Demo)
 - README в зип НЕ кладём.
 
-**Источник сборки (ЕДИНСТВЕННЫЙ, с 2026-06-10):** `~/Brain/Fadercraft/Control XL/dist/`. Из `~/Projects/Claude/Fadercraft/` больше НИЧЕГО не брать (старый custom-modes мастер юзер снёс).
+**Источник сборки (ЕДИНСТВЕННЫЙ, с 2026-06-10):** `~/Brain/fadercraft/Control XL/dist/`. Из `~/Projects/Projects/fadercraft/` больше НИЧЕГО не брать (старый custom-modes мастер юзер снёс).
 - Моды: `Control XL/dist/15 Custom Modes/` (15 `.syx`, эталон). Папка УЖЕ с правильным именем — в зип кладётся как есть, БЕЗ переименования. `15.syx` len 670, **byte574 = 0x6e**.
 - Девайс/Router/проект/Quickstart.pdf: из `Control XL/dist/`. Root `Control XL.amxd` берётся из `Control XL/dist/Control XL <X> Project/Control XL.amxd`.
 - README в зип НЕ класть.

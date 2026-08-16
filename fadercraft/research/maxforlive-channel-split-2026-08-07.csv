@@ -1,0 +1,63 @@
+Date,Campaign,Product,Sessions,Unique Persons,Buy Clicks
+2026-06-15,control_xl_listing,Control XL,2,2,0
+2026-06-16,control_xl_listing,Control XL,1,1,0
+2026-06-18,(none - referrer only),Sends Follower,1,1,0
+2026-06-19,control_xl_listing,Control XL,2,2,0
+2026-06-20,control_xl_listing,Control XL,3,1,0
+2026-06-21,control_xl_listing,Control XL,1,1,0
+2026-06-24,control_xl_listing,Control XL,2,2,0
+2026-06-29,control_xl_listing,Control XL,2,2,0
+2026-07-01,control_xl_listing,Control XL,1,1,0
+2026-07-02,control_xl_listing,Control XL,3,3,3
+2026-07-04,control_xl_listing,Control XL,1,1,0
+2026-07-08,(none - referrer only),Sends Follower,22,22,0
+2026-07-09,(none - referrer only),Sends Follower,37,35,4
+2026-07-10,(none - referrer only),Sends Follower,18,16,2
+2026-07-10,control_xl_listing,Control XL,3,1,0
+2026-07-11,(none - referrer only),Sends Follower,8,7,0
+2026-07-12,(none - referrer only),Sends Follower,3,3,0
+2026-07-13,(none - referrer only),Sends Follower,2,2,0
+2026-07-14,(none - referrer only),Sends Follower,3,3,0
+2026-07-14,control_xl_listing,Control XL,1,1,0
+2026-07-15,(none - referrer only),Sends Follower,5,3,0
+2026-07-15,control_xl_listing,Control XL,1,1,0
+2026-07-16,(none - referrer only),Sends Follower,2,2,0
+2026-07-17,(none - referrer only),Sends Follower,3,3,1
+2026-07-18,(none - referrer only),Sends Follower,2,2,1
+2026-07-19,(none - referrer only),Sends Follower,3,3,0
+2026-07-19,control_xl_listing,Control XL,5,5,1
+2026-07-20,(none - referrer only),Sends Follower,1,1,0
+2026-07-20,control_xl_listing,Control XL,1,1,0
+2026-07-21,(none - referrer only),Sends Follower,3,3,1
+2026-07-22,(none - referrer only),Sends Follower,2,2,0
+2026-07-22,control_xl_listing,Control XL,1,1,0
+2026-07-23,(none - referrer only),Sends Follower,3,2,0
+2026-07-23,dynamic_focus_listing,Dynamic Focus,5,5,2
+2026-07-24,(none - referrer only),Sends Follower,10,7,0
+2026-07-24,control_xl_listing,Control XL,1,1,0
+2026-07-24,dynamic_focus_listing,Dynamic Focus,40,38,4
+2026-07-25,(none - referrer only),Sends Follower,1,1,1
+2026-07-25,control_xl_listing,Control XL,1,1,0
+2026-07-25,dynamic_focus_listing,Dynamic Focus,15,15,1
+2026-07-26,(none - referrer only),Sends Follower,2,2,1
+2026-07-26,dynamic_focus_listing,Dynamic Focus,7,7,0
+2026-07-27,(none - referrer only),Sends Follower,2,2,0
+2026-07-27,control_xl_listing,Control XL,2,1,0
+2026-07-27,dynamic_focus_listing,Dynamic Focus,8,8,1
+2026-07-28,(none - referrer only),Sends Follower,1,1,0
+2026-07-28,control_xl_listing,Control XL,1,1,1
+2026-07-28,dynamic_focus_listing,Dynamic Focus,1,1,0
+2026-07-29,control_xl_listing,Control XL,1,1,0
+2026-07-30,(none - referrer only),Sends Follower,1,1,0
+2026-07-31,(none - referrer only),Sends Follower,1,1,0
+2026-07-31,dynamic_focus_listing,Dynamic Focus,1,1,0
+2026-08-01,(none - referrer only),Sends Follower,1,1,0
+2026-08-01,dynamic_focus_listing,Dynamic Focus,2,2,0
+2026-08-02,(none - referrer only),Sends Follower,2,1,0
+2026-08-02,dynamic_focus_listing,Dynamic Focus,1,1,1
+2026-08-03,(none - referrer only),Sends Follower,1,1,0
+2026-08-04,(none - referrer only),Sends Follower,2,2,0
+2026-08-04,dynamic_focus_listing,Dynamic Focus,1,1,0
+2026-08-05,(none - referrer only),Sends Follower,2,2,0
+2026-08-07,(none - referrer only),Sends Follower,4,3,0
+2026-08-07,dynamic_focus_listing,Dynamic Focus,2,2,0

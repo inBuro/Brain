@@ -7,9 +7,9 @@ metadata:
 
 # LCXL3 Encoder Relative Mode — Research State
 
-**Status: unconfirmed hypothesis, hardware test required**
+**Status: commands CONFIRMED as real (decompiled Live 12 remote script, 2026-07-13) — but their effect in Custom Mode still needs the hardware test**
 
-**Why:** Custom Mode encoders are absolute (0-127), causing dead zones at 0/127 edges. Proposal: undocumented firmware command (CC69/72/73 ch7 val=127) may toggle per-row relative mode even in Custom Mode.
+**Why:** Custom Mode encoders are absolute (0-127), causing dead zones at 0/127 edges. CC69/72/73 ch7 val=127 are the per-row relative toggles Ableton's own script sends in DAW mode; whether firmware honors them while in Custom Mode is the open question.
 
 **How to apply:** Do not build production logic until hardware validates Outcome A below.
 
@@ -32,17 +32,31 @@ Firmware may respond to per-row relative toggle commands even in Custom Mode via
 Source: user's own discovery — NOT confirmed in Novation docs, NOT confirmed by monitoring.
 These CC numbers correspond to Novation's DAW-mode per-row relative toggle mechanism (CC30/ch7 family).
 
-**Origin of specific CC numbers (69/72/73):**
-These were provided by the user as a hypothesis. The official DAW-mode docs mention CC30/ch7
-for mode-select but do not publish per-row relative toggle CC numbers openly
-(programmer's reference pages return 403/404 on machine reads).
+**Origin of specific CC numbers (69/72/73) — CONFIRMED 2026-07-13:**
+Extracted from decompiled Live 12 remote script `Launch_Control_XL_3/midi.py`
+(github.com/gluon/AbletonLive12_MIDIRemoteScripts):
+
+```python
+SYSEX_HEADER = (0xF0, 0, 32, 41, 2, 21)                # F0 00 20 29 02 15
+SET_RELATIVE_ENCODER_MODES = ((182, 69, 127), (182, 72, 127), (182, 73, 127))
+# 182 = 0xB6 = CC status, MIDI channel 7 (1-based) → exactly CC69/72/73 ch7 val=127
+def make_connection_message(connect=True):             # DAW-mode handshake
+    return SYSEX_HEADER + (2, 127 if connect else 0, 0xF7)   # F0 00 20 29 02 15 02 7F F7
+def make_enable_touch_output_message():
+    return (182, 71, 127)                              # CC71 ch7 = enable encoder TOUCH output
+```
+
+So the CCs are the genuine official toggles, not a guess. Caveat: the script sends them
+AFTER the connection SysEx (device already in DAW mode), to the DAW In port. Unknown:
+does firmware apply them (a) when received in Custom Mode, (b) globally vs DAW-engine-only.
+Bonus fact: encoders are touch-sensitive; CC71 ch7 127 enables touch messages (DAW mode).
 
 ---
 
 ## Artifacts built (2026-06-23)
 
 ### EncoderRelativeMonitor.amxd
-- **Path:** `~/Brain/Fadercraft/Control XL/raw/EncoderRelativeMonitor.amxd`
+- **Path:** `~/Brain/fadercraft/Control XL/raw/EncoderRelativeMonitor.amxd`
 - **md5:** `1094455eeb9d8a28d20d30ad1fa3fc1d`
 - **Size:** 9227 B, 20 boxes / 11 lines, unfrozen MIDI Effect (mmmm)
 - **Function:** validation tool for hardware test (Step 0)
@@ -52,7 +66,7 @@ for mode-select but do not publish per-row relative toggle CC numbers openly
 - **Use:** Drop on MIDI track → open Max editor → click Row N button → twist encoder → check Console
 
 ### EncoderRelativeTest.amxd
-- **Path:** `~/Brain/Fadercraft/Control XL/raw/EncoderRelativeTest.amxd`
+- **Path:** `~/Brain/fadercraft/Control XL/raw/EncoderRelativeTest.amxd`
 - **md5:** `1db34bd6dfa3e85b55697fd6a39b57a5`
 - **Size:** 11961 B, 25 boxes / 21 lines, unfrozen MIDI Effect (mmmm)
 - **Function:** prototype decoder for Outcome A (relative mode confirmed)
@@ -90,13 +104,34 @@ If hardware produces two's complement, swap decoder in EncoderRelativeTest.
 
 ---
 
-## Path 2 (fallback if Outcome B)
+## Path C (untested, added 2026-07-13): software relative emulation via CC feedback recenter
 
-Recenter via SysEx is **not possible in Custom Mode** — SysEx works only in DAW mode on LCXL3.
-If Outcome B, the only paths are:
+SysEx recenter is impossible in Custom Mode, but **plain CC feedback might not be**: if firmware
+accepts an incoming CC on the Custom port and updates the encoder's internal position (as needed
+for LED-ring/screen sync), then endless is achievable purely in software:
+
+1. M4L reads absolute CC, computes delta vs last value, applies delta to own accumulator
+2. When encoder idle ~150ms, send CC val=64 back to the Custom port → internal position recenters
+3. Encoder never reaches 0/127 → no dead zones. Ring stays near center (fine — position is meaningless for endless)
+
+**5-min hardware test:** send CC (e.g. val=64) to the Custom port for a mapped encoder CC#,
+then twist that encoder. If output continues FROM 64 → Path C works. If output continues from
+old position → firmware ignores feedback for position, Path C dead. Filter echo to avoid loops.
+This is the classic BCF2000/X-Touch endless-emulation trick.
+
+## Path 2 (fallback if Outcome B and Path C fail)
+
+If Outcome B, the remaining paths are:
 1. Wait for Novation to implement relative mode in Custom Mode firmware
-2. Switch to DAW mode integration (completely different architecture)
-3. Accept absolute encoder limitation and add visual feedback of value position
+   (firmware v1.1, Jan 2026: added encoder acceleration curves, HUI, fader pickup — relative
+   in Custom Mode still NOT implemented)
+2. Switch to DAW mode integration (different architecture, but ALL bytes now known:
+   don't add LCXL3 as Control Surface in Live prefs → DAW port stays free → M4L midiin/midiout
+   bind to DAW port → send connect SysEx `F0 00 20 29 02 15 02 7F F7` → send the three
+   SET_RELATIVE_ENCODER_MODES CCs → consume pivot-64 deltas)
+3. HUI mode (new in firmware v1.1): HUI V-pots are inherently relative; M4L could decode the
+   HUI port directly. Wilder architecture, unexplored.
+4. Accept absolute encoder limitation and add visual feedback of value position
 
 ---
 

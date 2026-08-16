@@ -26,9 +26,10 @@ analyst reads it. Keep status/URLs current here as assets ship.
 
 ## Asset #1 — JTBD guide: LCXL MK3 mappings across every Live Set
 
-- **Status:** PLANNED — not written or published as of 2026-07-03. No route yet.
-- **Intended URL (canonical):** `fadercraft.com/guide/launch-control-xl-mk3-across-live-sets`
-  (working title/slug; route not built).
+- **Status:** PUBLISHED (2026-07-03) — live on prod, in sitemap, indexable. Copy
+  may still get light refinement, but the URL is stable — **safe to share now** as
+  a reply link. Technical claims were fact-checked against Ableton/Novation docs.
+- **Canonical URL (live):** `https://fadercraft.com/guide/launch-control-xl-mk3-across-live-sets`
 - **Working title:** "How to use Launch Control XL MK3 across all your Ableton Live Sets".
 - **JTBD / angle:** native Ableton MIDI mappings don't carry between Live Sets.
   Control XL stores mappings inside a Max for Live device → map once, works in
@@ -40,10 +41,18 @@ analyst reads it. Keep status/URLs current here as assets ship.
   know the brand yet, they google the pain.
 - **Why it exists:** owned SEO asset (weight accrues to our domain, not Medium),
   and a reusable "closer" for comment/thread replies about mapping persistence.
-- **Distribution once live:** Reddit (r/ableton, r/edmproduction), Ableton forum
-  threads about mapping persistence (also earns a backlink), YouTube comments +
-  video description. Publish canonical on our domain ONLY; any Medium/dev.to
-  repost must carry `rel=canonical` back to us.
+- **Distribution once live:** Publish canonical on our domain ONLY; any
+  Medium/dev.to repost must carry `rel=canonical` back to us.
+  **Platform rules (2026-07-03 strategic read):**
+  - r/Novation, maxforlive, YouTube comments/description, Ableton forum — link
+    directly with a short human preamble ("wrote about this in more detail if
+    curious"); these surfaces accept help-first links.
+  - r/ableton / r/abletonlive — NEVER drop the URL as a standalone reply. Give a
+    plain-noun concrete answer first (TrieMond formula from voice-guide); offer
+    the link only if the thread is warm. Raw link = "posting an ad" penalty.
+  - Cluster note: "template vs M4L" threads = direct fit for the link. "Newcomer
+    overwhelmed by MIDI" threads = start with a simplified plain-answer, then
+    link — don't rely on the article to do the simplification work for them.
 
 ---
 

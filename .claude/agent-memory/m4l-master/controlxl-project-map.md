@@ -16,7 +16,7 @@ metadata:
 ## ⚠️ РАЗВОРОТ ПРАВИЛА 2026-06-06 (8): USER LIBRARY = ОСНОВНОЙ РЕДАКТИРУЕМЫЙ АРТЕФАКТ
 Прежнее правило (слот 1 проектный эталон = источник правок; слот 2 User Library = explicit-only deploy-таргет) **ОТМЕНЕНО**. Новое правило пользователя:
 - **Слот 2 (User Library) = основная канонная рабочая копия. ВСЕ правки идут СЮДА:** `/Users/Kirill/Music/Ableton/User Library/Max Devices/Control XL.amxd`.
-- **Pre-edit backup ОБЯЗАТЕЛЕН ВСЕГДА** перед каждой правкой: архив этого User Library .amxd с датой-временем → `~/Brain/Fadercraft/Control XL/raw/archive/Control XL.YYYY-MM-DD-HHMMSS.amxd` (не перезаписывать).
+- **Pre-edit backup ОБЯЗАТЕЛЕН ВСЕГДА** перед каждой правкой: архив этого User Library .amxd с датой-временем → `~/Brain/fadercraft/Control XL/raw/archive/Control XL.YYYY-MM-DD-HHMMSS.amxd` (не перезаписывать).
 - **Propagate-only-on-command:** копирование/пропагация дальше (слот 1 репо-эталон, слоты 3–6, zip) — ТОЛЬКО по явной команде «копируй дальше»/«пропагируй». Никакой автопропагации.
 
 ## ⛔ BROWSER LOAD ОТЛОЖЕН + ПОЛНЫЙ ОТКАТ 2026-06-06 (14) — все слоты = `44aa142b`
@@ -28,7 +28,7 @@ metadata:
   - Слот 1 проектный эталон восстановлен на `44aa142b` (был `63d95bbe` с ранней нерабочей Browser Load).
   - Слоты 3–6 — оставались `44aa142b` (Browser Load их не касался).
 - **Удалены scratch-js** (`browser_load.js`, `fc_browserload.js`, `fc_bload2.js` + их `.backup-*`) из User Library Max Devices и из project device. `version_check.js` и `SendsFollower.amxd` НЕ тронуты.
-- **Архивные бэкапы со всей историей попыток Browser Load** сохранены в `~/Brain/Fadercraft/Control XL/raw/archive/` (`Canon-`/`UserLib-`/`Control XL.*` с датами 2026-06-06) — если фича вернётся, история там.
+- **Архивные бэкапы со всей историей попыток Browser Load** сохранены в `~/Brain/fadercraft/Control XL/raw/archive/` (`Canon-`/`UserLib-`/`Control XL.*` с датами 2026-06-06) — если фича вернётся, история там.
 
 ### История (отменено): расхождение версий «закрыто» 2026-06-06 (9) — Browser Load в User Library
 ~~Browser Load доставлен в User Library; User Library = `63d95bbe623f9238f48bccdcd7e96c92` (271 box / 410 line, с `bl_*` + `browser_load.js` рядом на диске).~~ **ОТКАЧЕНО (14) — см. выше. Все ссылки на `63d95bbe`/`0fc224e4`/`095885b6` как актуальные — недействительны.**
@@ -49,12 +49,12 @@ metadata:
 ## ВСЕ СЛОТЫ (куда пропагировать)
 | # | Роль | Путь | Имя файла |
 |---|------|------|-----------|
-| 2 | **User Library — ОСНОВНОЙ РЕДАКТИРУЕМЫЙ АРТЕФАКТ** (правила 2026-06-06 (8)); md5 **`6a348306`** (актуальный эталон 2026-06-27 22:58, 264344 B, frozen пользователем после CPU-fix) | `/Users/Kirill/Music/Ableton/User Library/Max Devices/Control XL.amxd` | `Control XL.amxd` |
-| 1 | **Проектный репо-эталон** (propagate-target, only-on-command); md5 **`275c016a`** (НЕ синхронизирован — пропагация по команде) | `/Users/Kirill/Projects/Claude/Fadercraft/device/Control XL.amxd` | `Control XL.amxd` |
-| 3 | Demo bundle main | `/Users/Kirill/Brain/Fadercraft/Control XL/dist/Control XL Demo Project/Max Devices/Control XL.amxd` | `Control XL.amxd` |
-| 4 | Demo bundle Router (ссылка из `Router.als`, type-1 relative) — РАСКЛАДКА АКТУАЛЬНА: `Control XL.amxd` в КОРНЕ dist-проекта (НЕ `XL_Performance.amxd`) | `/Users/Kirill/Brain/Fadercraft/Control XL/dist/Control XL Demo Project/Control XL.amxd` | `Control XL.amxd` |
-| 5 | Starter bundle main | `/Users/Kirill/Brain/Fadercraft/Control XL/dist/Control XL Starter Project/Max Devices/Control XL.amxd` | `Control XL.amxd` |
-| 6 | Starter bundle Router (ссылка из `Router.als`, type-1 relative) — `Control XL.amxd` в КОРНЕ dist-проекта | `/Users/Kirill/Brain/Fadercraft/Control XL/dist/Control XL Starter Project/Control XL.amxd` | `Control XL.amxd` |
+| 2 | **User Library — ОСНОВНОЙ РЕДАКТИРУЕМЫЙ АРТЕФАКТ** (правила 2026-06-06 (8)); md5 **`22c8b5e1`** (актуальный эталон 2026-07-04 23:25, 269407 B, frozen пользователем: lamp-exclusion + btn11 off-color) | `/Users/Kirill/Music/Ableton/User Library/Max Devices/Control XL.amxd` | `Control XL.amxd` |
+| 1 | **Проектный репо-эталон** (propagate-target, only-on-command); md5 **`275c016a`** (НЕ синхронизирован — пропагация по команде) | `/Users/Kirill/Projects/Projects/fadercraft/device/Control XL.amxd` | `Control XL.amxd` |
+| 3 | Demo bundle main | `/Users/Kirill/Brain/fadercraft/Control XL/dist/Control XL Demo Project/Max Devices/Control XL.amxd` | `Control XL.amxd` |
+| 4 | Demo bundle Router (ссылка из `Router.als`, type-1 relative) — РАСКЛАДКА АКТУАЛЬНА: `Control XL.amxd` в КОРНЕ dist-проекта (НЕ `XL_Performance.amxd`) | `/Users/Kirill/Brain/fadercraft/Control XL/dist/Control XL Demo Project/Control XL.amxd` | `Control XL.amxd` |
+| 5 | Starter bundle main | `/Users/Kirill/Brain/fadercraft/Control XL/dist/Control XL Starter Project/Max Devices/Control XL.amxd` | `Control XL.amxd` |
+| 6 | Starter bundle Router (ссылка из `Router.als`, type-1 relative) — `Control XL.amxd` в КОРНЕ dist-проекта | `/Users/Kirill/Brain/fadercraft/Control XL/dist/Control XL Starter Project/Control XL.amxd` | `Control XL.amxd` |
 
 ## ПРАВИЛА СТРУКТУРЫ (нюансы)
 - **Имена файлов в бандлах НЕ менять.** Main-сеты ссылаются на `Control XL.amxd`; `Router.als` — на `XL_Performance.amxd`. В оба слота кладётся ОДИН И ТОТ ЖЕ эталон, только под разными именами. (Слоты 4 и 6 = тот же байт-в-байт эталон, имя файла другое.)
@@ -62,15 +62,15 @@ metadata:
 - Огрызок `XL_Performance.amxd` 150220 B (прошлый) больше не актуален — заменён эталоном.
 
 ## ZIP-ДЕЛИВЕРАБЛЫ (публикация пользователям)
-- `/Users/Kirill/Brain/Fadercraft/Control XL/dist/Fadercraft Control XL v1.1 - Demo.zip` (201132046 B, md5 `090ecde4`, пересобран 2026-06-23 с обновлёнными .syx)
-- `/Users/Kirill/Brain/Fadercraft/Control XL/dist/Fadercraft Control XL v1.1 - Starter.zip` (244621 B, md5 `d08e008b`, пересобран 2026-06-23 с обновлёнными .syx)
+- `/Users/Kirill/Brain/fadercraft/Control XL/dist/Fadercraft Control XL v1.1 - Demo.zip` (201140871 B, md5 `6884ce48`, пересобран 2026-07-04 с девайсом `22c8b5e1`)
+- `/Users/Kirill/Brain/fadercraft/Control XL/dist/Fadercraft Control XL v1.1 - Starter.zip` (270238 B, md5 `240e12c2`, пересобран 2026-07-04 с девайсом `22c8b5e1`)
 - Старые v1.0 zip остались в dist/ (не удалять без команды).
 - Внутр. структура zip: верхняя папка `Fadercraft Control XL v1.1 - {Demo,Starter}/` → `Control XL {Demo,Starter} Project/` → те же файлы, что в dist-папке + папка `15 Custom Modes/` с 15 .syx.
 - ⚠️ ГРАБЛИ ZIP Demo: Demo Project содержит `Router.als` в корне папки проекта на диске — при сборке через rsync он попадает внутрь; в финальный zip его надо ИСКЛЮЧИТЬ (`-x "*/Control XL Demo Project/Router.als"`). В корне zip `Router.als` должен быть ОДИН (взятый из dist-папки проекта).
 - **Пересборка zip = ОТДЕЛЬНЫЙ публикационный шаг.** Делать ТОЛЬКО по явной команде (правила: no-auto-deploy + version-bump→Gumroad-proof). Никогда автоматически.
 
 ## ПРОЦЕДУРА правки (правила 2026-06-06 (8); итеративная — см. [[feedback-iterative-no-versionlog]])
-1. **Pre-edit backup ВСЕГДА:** архив текущего User Library `.amxd` (слот 2) → `~/Brain/Fadercraft/Control XL/raw/archive/Control XL.YYYY-MM-DD-HHMMSS.amxd` (не перезаписывать).
+1. **Pre-edit backup ВСЕГДА:** архив текущего User Library `.amxd` (слот 2) → `~/Brain/fadercraft/Control XL/raw/archive/Control XL.YYYY-MM-DD-HHMMSS.amxd` (не перезаписывать).
 2. Правку делаю **прямо в User Library (слот 2)**.
 3. Валидация пересборки (re-parse JSON, счётчики box/line, хвост байт-в-байт, инварианты размеров). Не сошлось — откат к архиву.
 4. **СТОП.** Слоты 1, 3–6 и zip НЕ трогаю. Пропагация дальше — ТОЛЬКО по явной команде «копируй дальше»/«пропагируй».
@@ -80,7 +80,17 @@ metadata:
 ### Explicit-only шаг: «копируй дальше» / «пропагируй»
 Только по явной команде. Тогда: заархивировать целевые слоты с датой-временем → скопировать User Library .amxd байт-в-байт в указанные слоты (1 и/или 3–6, имена файлов слотов соблюдать) → md5 целей = источник. zip — отдельный публикационный шаг.
 
-## ⚠️ АКТУАЛЬНЫЙ ЭТАЛОН с 2026-06-27 (22:58, CPU-fix freeze by user): `6a3483061bc05bc7a24a1548569a7402` (264344 B) — СЛОТЫ 2,3,4,5,6 СИНХРОНИЗИРОВАНЫ; СЛОТ 1 НЕ СИНХРОНИЗИРОВАН
+## ⚠️ АКТУАЛЬНЫЙ ЭТАЛОН с 2026-07-05 (13:06, freeze by user): `924bfac1097077e3f0e75ac0ae78cc61` (269411 B) — СЛОТЫ 2,3,4,5,6 + ОБА ZIP СИНХРОНИЗИРОВАНЫ (2026-07-05 13:12); СЛОТ 1 НЕ СИНХРОНИЗИРОВАН
+Пользователь перекомпоновал ЛИЦЕВУЮ ПАНЕЛЬ (Live device view) MIXER-секции 2026-07-05 13:06. Правка = ТОЛЬКО `presentation_rect` у 17 боксов (mode11-14-btn с y=34→132; заголовок mixer_hdr_{label,left,right}+version_link с y≈11/19→109/117; лейблы/UI bank/page/daw/pre подняты). Логика/связи/встроенные JS — БАЙТ-В-БАЙТ идентичны прошлому эталону `22c8b5e1`. Граф 335 box / 491 line (без изменений). JSON +4 B (257525→257529). dlst те же 4 ресурса (JSON + nav_track.js 1184 + version_check.js 3187 + solo_follower.js 7030), все node --check OK. DEVICE_VERSION='1.1' (НЕ бампилась). frozen (mx@c@0x20, JSON@0x30).
+Bundle пересобран 2026-07-05 13:12 по команде: слоты 3–6 (dist) заменены на `924bfac1`; оба zip обновлены методом in-place update ТОЛЬКО 3 `.amxd`-записей (project-root + Max Devices/ + top-level standalone) через `zip -X` в /tmp → cp в dist; остальное (сэмплы/.als/моды/Quickstart/version_check.js) сохранено байт-в-байт, счётчики записей целы (Starter 29, Demo 81), integrity-тест OK, junk 0. **Новые zip: Starter `bf422bc9` (270262 B), Demo `e17c48ff` (201140895 B).** Слот 1 (репо `device/`, `275c016a`) НЕ трогался. `.als` (OriginalFileSize/CRC) НЕ обновлялись — Live резолвит по RelativePath. Модовые папки (dist `15 Custom Modes/` + app/public `free-custom-modes/`) не менялись, 15 syx, 15.syx byte574=0x6e.
+Архивы pre-swap слотов + pre-rebuild zip: `raw/archive/Control XL.2026-07-05-131103-pre-swap-slot{3,4,5,6}-*.amxd` и `Fadercraft Control XL v1.1 - {Demo,Starter}.2026-07-05-131103-pre-rebuild.zip`.
+
+## ⚠️ ПРЕДЫДУЩИЙ ЭТАЛОН 2026-07-04 (23:25, freeze by user): `22c8b5e1e0869979e305b0ece0b64ec2` (269407 B) — заменён `924bfac1`
+Пользователь зафризил User Library (слот 2) 2026-07-04 23:25 после двух моих правок: (1) взаимо-исключение 4 верхних ламп Page/Bank/Daw/Prelisten — 4 message-бокса `set 0` (`mix_obj-mx-clr-{page,bank,daw,pre}`) + проводка; (2) off-цвет кнопки 11 `mix_obj-mode11-btn`: `saved_attribute_attributes.bgcolor.expression` = `themecolor.live_lcd_bg` (как 12/13/14, было `live_meter_bg`). Freeze самодостаточен: dlst = 4 ресурса (JSON 257526 + `nav_track.js` 1184 + `version_check.js` 3187 + `solo_follower.js` 7030), все JS проходят `node --check`. Граф: 335 box / 491 line. DEVICE_VERSION='1.1' (НЕ бампилась).
+Пропагация 2026-07-04: слоты 3–6 (dist bund) заменены на `22c8b5e1`; оба zip пересобраны из существующих (структура байт-в-байт по layout: Starter 29 записей, Demo 81 запись) с 3 копиями `.amxd` каждый (project-root + Max Devices/ + top-level standalone). Внешний `version_check.js` (3100 B, старее вшитого 3187) в зипах/dist НЕ трогался (задание: version_check не менять) — избыточен, т.к. вшит во freeze. Слот 1 (репо `device/`) НЕ трогался. `.als` (OriginalFileSize/CRC) НЕ обновлялись — Live резолвит по RelativePath и обновит метаданные при следующем save.
+Архивы pre-swap слотов + pre-rebuild zip: `raw/archive/*.2026-07-04-233235-pre-swap-slot{3,4,5,6}-*.amxd` и `Fadercraft Control XL v1.1 - {Demo,Starter}.2026-07-04-233235-pre-rebuild.zip`. Новые zip: Starter `240e12c2` (270238 B), Demo `6884ce48` (201140871 B).
+
+## ⚠️ ПРЕДЫДУЩИЙ ЭТАЛОН 2026-06-27 (22:58, CPU-fix freeze by user): `6a3483061bc05bc7a24a1548569a7402` (264344 B)
 Пользователь зафризил User Library 2026-06-27 22:58 после CPU-runaway fix (solo_follower.js: debounce 1ms→50ms, удалён `new LiveAPI("live_set view")` на каждый apply). Пропагация выполнена 2026-06-27 23:08 в слоты 3–6 (dist bund). Слот 1 НЕ трогался.
 **dlst этого файла: 3 ресурса (Control XL.amxd JSON + nav_track.js + solo_follower.js).** `version_check.js` (node.script, embed:0) в dlst НЕТ — лежит рядом на диске. В dist-папках и зипах `version_check.js` теперь кладётся РЯДОМ с `.amxd` в обоих слотах (корень проекта + Max Devices/).
 Граф: 331 box / 477 line.

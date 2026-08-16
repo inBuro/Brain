@@ -1,54 +1,77 @@
 ---
 name: custom-channel-maxforlive
-description: Custom Channel Type rules in project modifiers.customChannelTypeRules — "Max for Live" (utm_source=maxforlive) and "Reddit" (utm_source=reddit OR referring_domain icontains reddit), both configured 2026-06-18; how they're stored, how to query/verify, retroactive behavior, the full final array, and the UTM-on-$referrer gotcha that limits coverage
+description: Custom Channel Type rules in project modifiers.customChannelTypeRules — "Max for Live" (utm_source=maxforlive OR referring_domain icontains maxforlive, widened 2026-07-09) and "Reddit" (utm_source=reddit OR referring_domain icontains reddit), configured 2026-06-18; how they're stored, how to query/verify, retroactive behavior, the full final array
 metadata:
   type: project
 ---
 
-# Custom Channel Type rules (configured 2026-06-18)
+# Custom Channel Type rules (configured 2026-06-18, maxforlive rule widened 2026-07-09)
 
 Two custom channel rules now live in `modifiers.customChannelTypeRules` (array, order = priority,
 first-match-wins, ALWAYS above PostHog defaults). Their conditions are disjoint (maxforlive vs
-reddit) so order between them is cosmetic. **FULL FINAL ARRAY (verified live 2026-06-18):**
+reddit) so order between them is cosmetic. **FULL FINAL ARRAY (verified live 2026-07-09):**
 ```json
 [
   {"id":"maxforlive","channel_type":"Max for Live","combiner":"OR","items":[
-    {"id":"maxforlive-utm-source","key":"utm_source","op":"exact","value":"maxforlive"}]},
+    {"id":"maxforlive-utm-source","key":"utm_source","op":"exact","value":"maxforlive"},
+    {"id":"maxforlive-referring-domain","key":"referring_domain","op":"icontains","value":"maxforlive"}]},
   {"id":"reddit","channel_type":"Reddit","combiner":"OR","items":[
     {"id":"reddit-utm-source","key":"utm_source","op":"exact","value":"reddit"},
     {"id":"reddit-referring-domain","key":"referring_domain","op":"icontains","value":"reddit"}]}
 ]
 ```
-**When adding a 3rd rule: `project-get` first, APPEND to this array, never send a single-rule array
-(that clobbers the others).** The write tool is `project-settings-update {"id":458316,"modifiers":{"customChannelTypeRules":[…]}}` — PATCH semantics on top-level fields, but `modifiers` is replaced WHOLE, so you must include every existing rule.
+**When adding/widening a rule: `project-get` first, APPEND/edit within this array, never send a
+single-rule array (that clobbers the others).** The write tool is
+`project-settings-update {"id":458316,"modifiers":{"customChannelTypeRules":[…]}}` — PATCH
+semantics on top-level fields, but `modifiers` is replaced WHOLE, so every existing rule must be
+resent together.
 
-# Custom Channel Type "Max for Live" (configured 2026-06-18)
+# Custom Channel Type "Max for Live" (configured 2026-06-18, widened 2026-07-09)
 
 Set up so the maxforlive.com listing traffic shows as its OWN channel in Web
 Analytics instead of being lumped into Referral/Direct. See [[sale-1-attribution]]
 (first sale came from this channel) and the maxforlive UTM markers in [[posthog-access]].
+**maxforlive.com is a confirmed, ongoing acquisition channel** — for Control XL originally, and
+since ~2026-07-08 also driving real volume to Sends Follower (owner-confirmed 2026-07-09 the SF
+listing is intentional and ongoing, not a one-off).
 
-## THE RULE
-- **`utm_source = maxforlive` (exact) → channel_type "Max for Live"**, single condition, combiner OR.
+## THE RULE (as of 2026-07-09)
+- **`utm_source = maxforlive` (exact) OR `referring_domain icontains maxforlive` → channel_type
+  "Max for Live"**, combiner OR, two conditions.
 - Custom channel rules ALWAYS take priority over PostHog's default channel types,
-  and the FIRST matching rule wins. This is the only custom rule, so it's first by
-  definition → fires before Referral/Direct/Organic. (If more custom rules are added
-  later, keep this one's position in mind — order in the array = priority.)
+  and the FIRST matching rule wins. This is still effectively first (only maxforlive/reddit
+  exist) → fires before Referral/Direct/Organic.
+
+## WHY WIDENED (2026-07-09) — the referrer-only gap
+The original rule (06-18, `utm_source=maxforlive` only) missed any session where the UTM never
+reached the entry-pageview UTM field — documented below for the 06-15 buyer, and reproduced at
+scale by [[day-2026-07-08]]: **20+ sessions on 07-08 landed via `$referring_domain=maxforlive.com`
+with NO utm params at all** (SF's maxforlive listing apparently doesn't pass UTMs on its
+outbound link), all falling through to default "Referral" classification. Owner confirmed the
+channel is real and ongoing → added `referring_domain icontains maxforlive` as a second OR
+condition on the same rule (channel_type unchanged).
+- **VERIFIED immediately after the write, against 07-08 data:** `SELECT $channel_type, count()
+  FROM sessions WHERE <07-08 day bounds, Asia/Bangkok> GROUP BY $channel_type` →
+  **Direct 31, Max for Live 22, Reddit 8, Referral 4, Organic Search 2, Organic Video 2**.
+  Isolating `$entry_referring_domain ILIKE '%maxforlive%'` → all 22 sessions now read "Max for
+  Live" (previously would have read "Referral" under the old rule, per the same default
+  classification logic verified for the original 3 pre-widening sessions below).
+- The buyer-session gotcha below (UTM-in-`$referrer`-after-self-hop) is STILL not caught by this
+  widened rule either — that's a different, deeper gap (referrer overwritten by an on-site hop
+  before the referring-domain field itself gets set), not fixable by a channel-type rule at all.
+  It remains a hand-attribution case.
 
 ## WHERE IT LIVES (storage) — applied via MCP, no UI step needed
 - Stored on the PROJECT under **`modifiers.customChannelTypeRules`** (a HogQLQueryModifiers
-  field). Was `modifiers: null` before; now holds exactly this one rule. Writing it did
-  NOT clobber anything — `default_modifiers` (bounceRate, sessionTableVersion, etc.) are
-  separate and untouched.
-- Applied through the MCP with `project-settings-update {"id":458316,"modifiers":{"customChannelTypeRules":[…]}}`
+  field). Applied through the MCP with
+  `project-settings-update {"id":458316,"modifiers":{"customChannelTypeRules":[…]}}`
   (`modifiers` is an open `{}` field in the tool schema → it accepts the rules array).
   NO manual dashboard step was required. The equivalent UI lives at
   https://us.posthog.com/settings/project-web-analytics (Web analytics → Custom channel type).
 - **Exact JSON shape (verified against PostHog source channel_type.py):**
   rule = `{id, channel_type, combiner:"OR"|"AND", items:[…]}`;
   condition = `{id, key, op, value}`. Backend reads only channel_type/combiner/items +
-  key/op/value; `id`s are for the UI editor. Our rule:
-  `{"id":"maxforlive","channel_type":"Max for Live","combiner":"OR","items":[{"id":"maxforlive-utm-source","key":"utm_source","op":"exact","value":"maxforlive"}]}`
+  key/op/value; `id`s are for the UI editor.
 - **CustomChannelField keys:** utm_source, utm_medium, utm_campaign, referring_domain, url, pathname, hostname.
 - **CustomChannelOperator ops:** exact, is_not, is_set, is_not_set, icontains, not_icontains, regex, not_regex.
 
@@ -57,24 +80,22 @@ Analytics instead of being lumped into Referral/Direct. See [[sale-1-attribution
   via HogQL). So the rule reclassifies ALL historical sessions instantly, no backfill.
 - VERIFY query (owner auto-excluded because these all have email=None; for sessions
   table there's no email col, cross-check via events):
-  `SELECT $channel_type, count(), uniqExact(distinct_id) FROM sessions WHERE $entry_utm_source='maxforlive' GROUP BY $channel_type`
+  `SELECT $channel_type, count(), uniqExact(distinct_id) FROM sessions WHERE $entry_utm_source='maxforlive' OR $entry_referring_domain ILIKE '%maxforlive%' GROUP BY $channel_type`
 
-## COVERAGE AS OF 2026-06-18 — 3 sessions / 3 persons reclassified to "Max for Live"
-- All 3 sessions with `$entry_utm_source='maxforlive'` now read channel_type "Max for Live"
-  (were "Referral": entry_utm_medium=referral, entry_referring_domain=maxforlive.com).
+## COVERAGE HISTORY
+- **As of 2026-06-18** (utm_source-only rule): 3 sessions / 3 persons reclassified to "Max for
+  Live" (were "Referral": entry_utm_medium=referral, entry_referring_domain=maxforlive.com).
   Dates: 06-15 00:16 ICT (ES/Edge, entry `/`), 06-15 04:58 ICT (DK/Firefox), 06-16 15:43 ICT.
   All campaign=control_xl_listing, all real visitors (email=None ≠ owner).
-- **GOTCHA — the buyer's own session is NOT in this set, and that's expected.** The buyer
-  ([[sale-1-attribution]], session 019eca70-…, 06-15 15:40, entry `/free-custom-modes`)
-  has `$entry_utm_source = None` because the maxforlive UTM lived in `$referrer` after a
-  self-referrer in-site hop, never landing on the entry-UTM field. A custom channel rule
-  keyed on `utm_source` therefore CANNOT catch sessions where the UTM only survived in
-  `$referrer`. To also capture those, a referring_domain-based rule (`referring_domain
-  icontains maxforlive` → "Max for Live") could be added — but careful, the buyer's
-  entry_referring_domain was the self-domain too, so even that wouldn't catch THAT
-  session. The real fix is upstream (preserve UTM on the captured entry pageview). For
-  now the rule cleanly separates the 3 clean-entry maxforlive sessions; the buyer's
-  session stays Referral and is attributed by hand.
+- **As of 2026-07-09** (widened rule): 22 sessions read "Max for Live" on 07-08 alone (see
+  [[day-2026-07-08]]) — the Sends Follower listing driving real, recurring volume.
+- **GOTCHA — the original buyer's own session is STILL NOT caught, and that's expected.** The
+  buyer ([[sale-1-attribution]], session 019eca70-…, 06-15 15:40, entry `/free-custom-modes`)
+  has `$entry_utm_source = None` AND `$entry_referring_domain` = the self-domain (fadercraft.com)
+  because the maxforlive UTM lived in `$referrer` after an on-site self-referrer hop, never
+  landing on either the entry-UTM or entry-referring-domain field. Neither condition on this rule
+  can catch that specific shape — the real fix would be upstream (preserve UTM on the captured
+  entry pageview). That one session stays hand-attributed.
 
 # Custom Channel Type "Reddit" (configured 2026-06-18)
 

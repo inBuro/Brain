@@ -49,7 +49,7 @@ The .amxd moved from `Max Devices/DF Master.amxd` to `Max Devices/DF Master/DF M
 
 **JS md5 before:** `453ad52bc1f3880745e4065de59d6c62` (997 lines)
 **JS md5 after:**  `9d14af051b1bcd32048106acb93a04ae` (1075 lines)
-**Archive:** `df_master.2026-06-30.js` in `~/Brain/Fadercraft/Dynamic Focus/archive/`
+**Archive:** `df_master.2026-06-30.js` in `~/Brain/fadercraft/Dynamic Focus/archive/`
 
 Four optimizations applied to `df_master.js` only (`.amxd` NOT repacked — unfrozen, JS external):
 
@@ -155,7 +155,7 @@ The single authoritative `resolveAll()` is in `restoreFromParams`'s `Task(200ms)
 - After any Max-editor save: run repack script (classnamespace fix + JSON recompact)
 
 ## Archive dir
-`~/Brain/Fadercraft/Dynamic Focus/archive/`
+`~/Brain/fadercraft/Dynamic Focus/archive/`
 Pre-edit backup: `DF Master.2026-06-29-155036.amxd` (md5 `46e5f27e`, 758452 B = Max-editor-saved indented)
 
 **MapButtonDF_M.maxpat md5:** `bfa2f07fff4590ad0a9d713b8a043f17` (shortname Min->dfmin, Max->dfmax)
@@ -197,7 +197,7 @@ NO `parameter_initial_value` — unnecessary and may trigger reset in some Live 
 - `MapButtonDF_M.maxpat` — Map Param кнопка
 - `df_master.js` — движок v5.4
 
-**Archive dir:** `~/Brain/Fadercraft/Dynamic Focus/archive/`
+**Archive dir:** `~/Brain/fadercraft/Dynamic Focus/archive/`
 **Last clean source before SAA-fix:** `DF Master.2026-06-29-131458.amxd` (77718 B) — had SOA instead of SAA for path (broken)
 **Current on-disk (SAA-fixed, shortname=longname):** md5=edf5c84ea1b2eb4c7c6ecdc1d1676e07, 77250 B
 

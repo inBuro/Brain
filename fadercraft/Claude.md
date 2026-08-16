@@ -1,203 +1,64 @@
-## Purpose
+# Agent Environment
 
-  
+Оркестрация проекта Fadercraft. Этот файл — реестр среды верхнего уровня: как агент здесь работает, откуда берёт навыки/субагентов/память, и как ведёт wiki. Fadercraft — зонтичный проект; продукты (`Control XL/`, `Dynamic Focus/`, `groove mix/`, `Sends Follower/`) — папки внутри него, у каждой свои `raw/`, `wiki/` (index.md, log.md, roadmap.md, concepts/, entities/), а у некоторых — свой CLAUDE.md (например `Sends Follower/CLAUDE.md`), который сужает правила ниже внутри своей папки.
 
-This wiki is a structured, interlinked knowledge base for a team chat.
+## Структура среды
+- `.claude/skills/`, `.claude/agents/`, `.claude/agent-memory/` (в корне `~/Brain`, общие для всех проектов) — навыки, субагенты, их персистентная память между сессиями
+- `directives/_archive/` (в корне `~/Brain`) — архив исходных директив, из которых собраны навыки; справочно
+- `ds/` — индекс дизайн-системы этого проекта
+- `wiki/` — база знаний уровня Fadercraft (index.md, log.md, roadmap.md, concepts/, entities/, sources/)
+- Внутри каждого продукта — своя пара `raw/` + `wiki/` по тем же правилам, что описаны ниже
 
-Claude maintains the wiki. The human curates sources, asks questions, and guides the analysis.
+## Навыки, используемые в этой среде
+- `figma-mcp` — подключение и работа через Figma MCP
+- `parity-check` — read-only аудит совпадения кода и Figma
+- `release-environment` — сборка директив в среду; только по явной команде
+- `fadercraft-youtube-outreach` — пайплайн ответов на YouTube; только по явной команде, публикует от имени канала
+- `ai-seo`, `seo-audit` — SEO и AI-видимость контента
 
-  
-  
+## Субагенты, используемые в этой среде
+`analyst` (PostHog-аналитика), `m4l-master` (правка .amxd устройств), `project-manager` (roadmap, разбор запусков), `copywriter` (тексты), `ux-researcher` / `ux-ui-designer` (UX и Figma), `ableton-producer` (Live-сессия). Актуальный полный список и их инструменты — в системном промпте (Agent tool), здесь не дублируется.
 
-## Folder structure
-  
+## Как ведётся wiki (этот уровень и каждый продукт)
 
-```
+**Ingest.** Когда в `raw/` добавляется новый источник и пользователь просит его внести:
+1. Прочитать источник целиком
+2. Обсудить ключевые выводы с пользователем до записи
+3. Создать summary-страницу в `wiki/`, названную по источнику
+4. Создать/обновить страницы концептов на каждую крупную идею или сущность
+5. Проставить wiki-ссылки `[[page-name]]` между связанными страницами
+6. Обновить `wiki/index.md` (новые страницы + однострочные описания)
+7. Добавить запись в `wiki/log.md` (дата, источник, что изменилось)
 
-raw/ -- source documents (immutable -- never modify these)
+Один источник может затронуть 10-15 страниц — это нормально.
 
-wiki/ -- markdown pages maintained by Claude
-
-wiki/index.md -- table of contents for the entire wiki
-
-wiki/log.md -- append-only record of all operations
-
-```
-
-  
-  
-
-## Ingest workflow
-
-  
-  
-
-When the user adds a new source to `raw/` and asks you to ingest it:
-
-  
-
-1. Read the full source document
-
-2. Discuss key takeaways with the user before writing anything
-
-3. Create a summary page in `wiki/` named after the source
-
-4. Create or update concept pages for each major idea or entity
-
-5. Add wiki-links ([[page-name]]) to connect related pages
-
-6. Update `wiki/index.md` with new pages and one-line descriptions
-
-7. Append an entry to `wiki/log.md` with the date, source name, and what changed
-
-  
-
-A single source may touch 10-15 wiki pages. That is normal.
-
-  
-
-## Page format
-
-  
-
-Every wiki page should follow this structure:
-
-  
-
+**Формат страницы:**
 ```markdown
-
 # Page Title
-
-  
-  
-
-**Summary**: One to two sentences describing this page.
-
-  
-  
-
-**Sources**: List of raw source files this page draws from.
-
-  
-  
-
-**Last updated**: Date of most recent update.
-
-  
-  
-
+**Summary**: 1-2 предложения.
+**Sources**: файлы-источники.
+**Last updated**: дата.
 ---
-
-  
-  
-
-Main content goes here. Use clear headings and short paragraphs.
-
-  
-  
-
-Link to related concepts using [[wiki-links]] throughout the text.
-
-  
-  
-
+Основной текст, короткие абзацы, ссылки [[wiki-links]] по тексту.
 ## Related pages
-
-  
-  
-
 - [[related-concept-1]]
-
-- [[related-concept-2]]
-
 ```
 
-  
-  
+**Цитирование.** Каждое фактическое утверждение — ссылка на источник, формат `(source: filename.pdf)`. Противоречие источников — отметить явно. Утверждение без источника — пометить как needs-verification.
 
-## Citation rules
+**Ответы на вопросы.** Сначала `wiki/index.md` → найти релевантные страницы → прочитать и синтезировать ответ → сослаться на конкретные страницы. Если ответа нет в wiki — сказать прямо. Если ответ ценный — предложить сохранить как новую страницу.
 
-  
-  
+**Lint (по запросу).** Проверить: противоречия между страницами, страницы-сироты (нет входящих ссылок), упомянутые но не описанные концепты, устаревшие утверждения, соответствие формату выше. Отчёт — нумерованный список с предлагаемыми правками.
 
-- Every factual claim should reference its source file
+**Правила.** `raw/` никогда не редактировать. После изменений обновлять `wiki/index.md` и `wiki/log.md`. Имена страниц — lowercase-with-hyphens. Простой ясный язык; при сомнении в категоризации — спросить пользователя.
 
-- Use the format (source: filename.pdf) after the claim
-
-- If two sources disagree, note the contradiction explicitly
-
-- If a claim has no source, mark it as needing verification
-
-  
-  
-
-## Question answering
-
-  
-
-When the user asks a question:
-
-  
-  
-
-1. Read `wiki/index.md` first to find relevant pages
-
-2. Read those pages and synthesize an answer
-
-3. Cite specific wiki pages in your response
-
-4. If the answer is not in the wiki, say so clearly
-
-5. If the answer is valuable, offer to save it as a new wiki page
-
-  
-
-Good answers should be filed back into the wiki so they compound over time.
-
-  
-  
-
-## Lint
-
-  
-
-When the user asks you to lint or audit the wiki:
-
-- Check for contradictions between pages
-
-- Find orphan pages (no inbound links from other pages)
-
-- Identify concepts mentioned in pages that lack their own page
-
-- Flag claims that may be outdated based on newer sources
-
-- Check that all pages follow the page format above
-
-- Report findings as a numbered list with suggested fixes
-
-  
-  
-
-## Rules
-
-  
-
-- Never modify anything in the `raw/` folder
-
-- Always update `wiki/index.md` and `wiki/log.md` after changes
-
-- Keep page names lowercase with hyphens (e.g. `machine-learning.md`)
-
-- Write in clear, plain language
-
-- When uncertain about how to categorize something, ask the user
+## Проект: Fadercraft
+Зонтичный бренд M4L/Ableton-утилит. Продукты: **Control XL** (custom modes для Launch Control XL3), **Dynamic Focus / Mapping Deck**, **Groove Mix** (ранее Counter DJ), **Sends Follower**. У каждого продукта — свой `roadmap.md`/`log.md` внутри его `wiki/`; статус и приоритеты уровня бренда — в `wiki/roadmap.md` и `wiki/log.md` здесь, в корне Fadercraft.
 
 ## Дизайн-система
+Все правила интерфейса — в `ds/CONTRACT.md`. Перед задачами с экранами/формами/компонентами:
+1. Прочитать `ds/CONTRACT.md` целиком.
+2. Прочитать `ds/foundation.md` и `ds/components.md` — актуальные токены и UI-кит.
+3. Действовать строго по контракту: компоненты — из каталога, цвета/размеры/радиусы — через Variables, без прибитых значений.
 
-В проекте индексирована дизайн-система через `ds_scan`. Все правила работы с интерфейсом — в `ds/CONTRACT.md`. При любых задачах, связанных с дизайном экранов, форм, компонентов:
-
-1. Прочитай `ds/CONTRACT.md` целиком.
-2. Прочитай `ds/foundation.md` и `ds/components.md` для актуального состояния токенов и UI-кита.
-3. Действуй строго по правилам контракта: компоненты — из каталога, цвета/размеры/радиусы — через Variables, без прибитых значений.
-
-Для запуска сканирования или обновления индекса — запусти директиву `directives/directive_ds_scan.md`.
+Пересканировать дизайн-систему — курсовая процедура `ds-scan` (`directives/_archive/directive_ds_scan.md`), запускать только вручную.

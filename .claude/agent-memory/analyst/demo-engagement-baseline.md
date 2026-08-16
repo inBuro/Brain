@@ -25,7 +25,7 @@ analysis. Sessions before = control cohort, sessions on/after = treated cohort.
 ## EXACT fix timestamp — TO CONFIRM before any real before/after split
 The date is ~2026-06-12 but the precise deploy time is NOT yet pinned. Before running the
 actual comparison, get the exact deploy moment from the project repo:
-- Repo: `~/Projects/Claude/Fadercraft` (the code workspace; see main MEMORY.md "Fadercraft workspaces").
+- Repo: `~/Projects/Projects/fadercraft` (the code workspace; see main MEMORY.md "Fadercraft workspaces").
 - Source it from `git log` around 2026-06-12 (commit that touches the hero/demo control styles)
   AND/OR the Cloudflare Pages deploy log (`wrangler pages deployment list` for project
   `fadercraft-landing`). Use the deploy time, not just commit time — what visitors saw is gated
@@ -54,7 +54,7 @@ controller.** Verified against the live event schema 2026-06-12:
 
 ### Proposed fix for the gap (do when ready to instrument)
 Add an explicit custom event, same delegated-listener pattern as the other CTAs in
-`~/Projects/Claude/Fadercraft/app/index.html` (see [[posthog-access]] custom-events section).
+`~/Projects/Projects/fadercraft/app/index.html` (see [[posthog-access]] custom-events section).
 - Event name suggestion: **`demo_interact`** — fires on the FIRST click of any clickable
   interactive-demo control in a session (de-dupe so it counts engaged sessions, not click spam;
   optionally also a raw per-click variant if click volume per session is interesting).

@@ -7,7 +7,7 @@ metadata:
 
 # Fadercraft Audience Voice
 
-Source of depth: `/Users/Kirill/Brain/Fadercraft/research/voice/voice-guide.md`
+Source of depth: `/Users/Kirill/Brain/fadercraft/research/voice/voice-guide.md`
 
 ## Core principle: the platform decides the tone
 
