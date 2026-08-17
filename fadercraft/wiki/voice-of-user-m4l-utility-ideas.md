@@ -4,6 +4,13 @@ First discovery sweep aimed at a question the production miner cannot answer: **
 Max for Live utility do Ableton users keep asking for?** – as opposed to "does this comment
 match one of the three products I already sell".
 
+> **Status 2026-08-17: the discovery lane is off the cron schedule.** It ran daily for one
+> day (`discover` / `cluster` / `market`), which only added ~12 comments a day to a
+> conclusion already drawn below. The lanes still exist in `worker-comment-miner` – re-run
+> on demand with `/run?job=discover|cluster|market&token=$RUN_TOKEN`, or restore the three
+> cron expressions in `wrangler.toml` to put it back on a schedule. Cost was not the
+> reason: the whole Gemini project runs ~THB 1.5/day, and this sweep cost THB 85 once.
+
 ## Why the production miner went quiet
 
 Two independent causes, both structural:
