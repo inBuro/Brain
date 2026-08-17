@@ -1,1 +1,12 @@
 /bin/bash: /Users/Kirill/Brain/agents/hiring-manager/tools/telegram-vacancy-bot/daily_run.sh: No such file or directory
+Пайплайн отработал полностью. Коротко, что было:
+
+- **Fetch** — 1032 сообщения из 32 каналов (rolling, 35/канал).
+- **Filter** — 68 новых против seen-store (1391 → теперь 1459).
+- **Classify** — 4 MAYBE, 64 REJECT. Отклонённое — крипто-инженерные роллапы JobStash, резюме кандидатов, курсы/скам-реклама, RUB-вилки и junior/офисные дизайн-подработки.
+- **Dedupe** — два идентичных поста Blink за сегодня схлопнулись в кластер, дубль убран из пуша; два дайджеста (СЕТИ, Rost) в кластеры не попали.
+- **Push** — 3 лида в Notion («Вакансии»): remote Middle+ Product Designer @ Авиасейлс + Blink (дайджест СЕТИ), Product Designer @ Blink (standalone), тот же пул через дайджест Rost. Все — MAYBE (роль/уровень/remote подходят, зарплата не указана). `notion_rows.json` 116 → 119.
+
+⚠️ Отдельно: `daily_run.log` показывает, что плановый запуск 16 авг в 18:00 упал ещё на старте — `daily_run.sh: No such file or directory`. Сам скрипт на месте и исполняемый, значит в launchd-plist, похоже, устаревший путь (папка бота переехала в `tools/` 15 авг). Ежедневная автоматизация сейчас не срабатывает — стоит починить plist. Чинить молча не стал, скажи — поправлю.
+
+**Итог: 68 new messages scanned, 3 new MATCH/MAYBE pushed to Notion.**
