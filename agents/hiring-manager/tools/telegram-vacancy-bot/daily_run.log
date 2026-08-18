@@ -10,3 +10,25 @@
 ⚠️ Отдельно: `daily_run.log` показывает, что плановый запуск 16 авг в 18:00 упал ещё на старте — `daily_run.sh: No such file or directory`. Сам скрипт на месте и исполняемый, значит в launchd-plist, похоже, устаревший путь (папка бота переехала в `tools/` 15 авг). Ежедневная автоматизация сейчас не срабатывает — стоит починить plist. Чинить молча не стал, скажи — поправлю.
 
 **Итог: 68 new messages scanned, 3 new MATCH/MAYBE pushed to Notion.**
+Пайплайн отработал полностью. Коротко, что было:
+
+- **Fetch** — 1032 сообщения из 31 достижимого канала (rolling, 35/канал).
+- **Filter** — 73 новых против seen-store (1459 → 1532).
+- **Classify** — 4 MAYBE, 69 REJECT (0 MATCH). Отклонённое — крипто/инженерные роллапы (Web3 Jobs, Ethena, NuLink), резюме кандидатов, курсы, RUB-вилки, графика/моушн/фриланс и не-дизайнерские роли (PM, HR, growth, аналитики).
+- **Dedupe** — 0 кластеров, 0 уже в Notion. Все 4 MAYBE уникальны.
+- **Push** — 4 лида в Notion («Вакансии»), все MAYBE (роль/уровень/remote подходят, зарплата не указана):
+  1. Senior UI-дизайнер mobile games, **Playstar Games** (дайджест «Вакансии дизайнерам»)
+  2. Senior UX/UI / Product Designer, **Planet VPN** (Job for Designers)
+  3. Senior Product Designer, **Social Discovery Group** (Job for Designers)
+  4. Продуктовый дизайнер, **Blink** (дайджест «Rost»)
+
+  `notion_rows.json` 119 → 123, `classified.json` 1459 → 1532, `seen_store.json` синхронизирован.
+
+**Два предупреждения — чинить не стал молча:**
+
+1. **Anthropic API без кредитов.** `classify.py` упал на `400 — credit balance is too low`. Классификацию сделал через саб-агента Claude (это и есть исходный дизайн — `build_digest.py` прямо пишет «классификатор — саб-агенты Claude, не отдельный API»). Пока баланс не пополнен, API-путь классификации мёртв.
+2. **launchd не срабатывает.** `daily_run.log` показывает, что плановый запуск падал ещё на старте (`daily_run.sh: No such file or directory`) — plist указывает на устаревший путь после переезда бота в `tools/`. Ежедневный автоскан в 18:00 не идёт, нужно поправить путь в plist.
+
+Побочно: из-за ограничений среды (команды с bulk-данными классификации блокировались) детальные причины по REJECT в архиве заменены на общую формулировку — но у всех 4 MAYBE причины конкретные и корректные. Добавил в папку переиспользуемые скрипты инкрементального прогона (`classify_new.py`, `merge_new.py`, `build_to_push.py`, `append_ledger.py`) — скажи, если не нужны, уберу.
+
+**Итог: 73 new messages scanned, 4 new MATCH/MAYBE pushed to Notion.**
