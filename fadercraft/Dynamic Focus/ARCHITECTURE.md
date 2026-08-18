@@ -1,4 +1,4 @@
-  созданные персоны на недавнем шаге, персоны агентов, которые лежат. Я, честно сказать, не знаю, где они лежат. Я вижу только Эйблтон продюсера должны быть файлики для каждого из агентов. Нужно положить также в папку мета.в которой лежит этот файл.нс в папку Брэйн.# Dynamic Focus — System Architecture
+# Dynamic Focus — System Architecture
 
 How the pieces fit together. Not UI — the system: device types, responsibilities,
 data flow, state. Builds on the two validated layers: [Track Focus](RESEARCH.md)
