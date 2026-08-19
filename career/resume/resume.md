@@ -18,7 +18,7 @@ English — C1, Advanced
 
 ## Experience
 
-### Beefy.finance · Feb 2025 – Present
+### Beefy.finance · Feb 2025 – Aug 2026
 DAO · Yield optimiser, Crypto
 **Senior Product Designer**
 Task: Owned end-to-end UX for a live DeFi yield optimizer with 12,000 monthly active users
