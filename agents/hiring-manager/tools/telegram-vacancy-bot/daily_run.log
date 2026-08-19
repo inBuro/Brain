@@ -32,3 +32,7 @@
 Побочно: из-за ограничений среды (команды с bulk-данными классификации блокировались) детальные причины по REJECT в архиве заменены на общую формулировку — но у всех 4 MAYBE причины конкретные и корректные. Добавил в папку переиспользуемые скрипты инкрементального прогона (`classify_new.py`, `merge_new.py`, `build_to_push.py`, `append_ledger.py`) — скажи, если не нужны, уберу.
 
 **Итог: 73 new messages scanned, 4 new MATCH/MAYBE pushed to Notion.**
+2026-08-19 manual run: scanned 91 new / 1033 fetched | MAYBE 9 MATCH 0 REJECT 82 | dupes 0 | pushed 9/9 to Notion | pool 132
+Pipeline complete.
+
+**91 new messages scanned, 9 new MATCH/MAYBE pushed to Notion** (0 MATCH, 9 MAYBE, 82 REJECT; 0 dupes; Notion pool now 132).

@@ -7658,5 +7658,460 @@
     "verdict": "REJECT",
     "reason": "Не подходит по роли, уровню, формату или валюте оплаты",
     "date": "2026-08-18T07:03:07+00:00"
+  },
+  "1151522902:6099": {
+    "verdict": "REJECT",
+    "reason": "candidate resume trader/analyst",
+    "date": "2026-08-19T10:00:03+00:00"
+  },
+  "1151522902:6098": {
+    "verdict": "REJECT",
+    "reason": "smart contract security auditor",
+    "date": "2026-08-18T14:00:01+00:00"
+  },
+  "1435567661:1335": {
+    "verdict": "MAYBE",
+    "reason": "digest UX/UI Designer Middle remote; salary unstated/RUB",
+    "date": "2026-08-19T07:29:35+00:00"
+  },
+  "1435567661:1334": {
+    "verdict": "REJECT",
+    "reason": "webinar promo",
+    "date": "2026-08-18T11:30:01+00:00"
+  },
+  "1512435004:3143": {
+    "verdict": "REJECT",
+    "reason": "digest no designer roles",
+    "date": "2026-08-19T07:08:02+00:00"
+  },
+  "1230079882:1234": {
+    "verdict": "REJECT",
+    "reason": "hybrid Moscow not remote",
+    "date": "2026-08-19T07:08:01+00:00"
+  },
+  "1230079882:1233": {
+    "verdict": "REJECT",
+    "reason": "webinar promo",
+    "date": "2026-08-19T06:32:01+00:00"
+  },
+  "1887365954:1080": {
+    "verdict": "REJECT",
+    "reason": "QA Engineer",
+    "date": "2026-08-19T07:08:01+00:00"
+  },
+  "1887365954:1079": {
+    "verdict": "REJECT",
+    "reason": "course ad",
+    "date": "2026-08-18T14:34:44+00:00"
+  },
+  "1887365954:1078": {
+    "verdict": "REJECT",
+    "reason": "channel promo",
+    "date": "2026-08-18T14:30:47+00:00"
+  },
+  "1938067478:5075": {
+    "verdict": "MAYBE",
+    "reason": "Senior Product Designer fully remote Profi.ru; salary not stated",
+    "date": "2026-08-19T10:40:17+00:00"
+  },
+  "1938067478:5074": {
+    "verdict": "REJECT",
+    "reason": "content moderator RUB",
+    "date": "2026-08-19T10:10:08+00:00"
+  },
+  "1938067478:5073": {
+    "verdict": "REJECT",
+    "reason": "text entry manager scam",
+    "date": "2026-08-19T09:40:12+00:00"
+  },
+  "1938067478:5072": {
+    "verdict": "REJECT",
+    "reason": "sales manager RUB",
+    "date": "2026-08-19T09:10:14+00:00"
+  },
+  "1938067478:5071": {
+    "verdict": "REJECT",
+    "reason": "copywriter",
+    "date": "2026-08-19T08:40:12+00:00"
+  },
+  "1938067478:5070": {
+    "verdict": "REJECT",
+    "reason": "AI image evaluator RUB",
+    "date": "2026-08-19T08:10:12+00:00"
+  },
+  "1938067478:5069": {
+    "verdict": "MAYBE",
+    "reason": "Design Director Tutu.ru remote hands-on; salary not stated",
+    "date": "2026-08-19T07:46:20+00:00"
+  },
+  "1938067478:5068": {
+    "verdict": "REJECT",
+    "reason": "game designer",
+    "date": "2026-08-18T16:40:14+00:00"
+  },
+  "1938067478:5067": {
+    "verdict": "REJECT",
+    "reason": "not a vacancy",
+    "date": "2026-08-18T16:10:11+00:00"
+  },
+  "1938067478:5066": {
+    "verdict": "REJECT",
+    "reason": "traffic arbitrage assistant",
+    "date": "2026-08-18T12:44:35+00:00"
+  },
+  "2232544984:460": {
+    "verdict": "MAYBE",
+    "reason": "digest remote Product Designer roles; salary unstated/RUB",
+    "date": "2026-08-19T08:09:39+00:00"
+  },
+  "1818997587:26477": {
+    "verdict": "REJECT",
+    "reason": "People/HR Lead",
+    "date": "2026-08-19T08:00:20+00:00"
+  },
+  "1818997587:26476": {
+    "verdict": "REJECT",
+    "reason": "Technical Recruiter",
+    "date": "2026-08-19T08:00:19+00:00"
+  },
+  "1818997587:26475": {
+    "verdict": "REJECT",
+    "reason": "Research Engineer onsite NYC",
+    "date": "2026-08-19T08:00:19+00:00"
+  },
+  "1818997587:26474": {
+    "verdict": "REJECT",
+    "reason": "Smart Contract Engineer",
+    "date": "2026-08-19T08:00:19+00:00"
+  },
+  "1818997587:26473": {
+    "verdict": "REJECT",
+    "reason": "Backend Engineer",
+    "date": "2026-08-19T08:00:18+00:00"
+  },
+  "1818997587:26472": {
+    "verdict": "REJECT",
+    "reason": "Head of Protocol Engineering",
+    "date": "2026-08-19T08:00:14+00:00"
+  },
+  "1818997587:26471": {
+    "verdict": "REJECT",
+    "reason": "Product Engineer onsite NYC",
+    "date": "2026-08-19T08:00:14+00:00"
+  },
+  "1818997587:26470": {
+    "verdict": "REJECT",
+    "reason": "Head of Security",
+    "date": "2026-08-19T08:00:14+00:00"
+  },
+  "1818997587:26469": {
+    "verdict": "REJECT",
+    "reason": "Product Engineer onsite NYC",
+    "date": "2026-08-19T08:00:13+00:00"
+  },
+  "1818997587:26468": {
+    "verdict": "REJECT",
+    "reason": "CFO/Head of Treasury",
+    "date": "2026-08-19T08:00:13+00:00"
+  },
+  "1818997587:26467": {
+    "verdict": "REJECT",
+    "reason": "Platform Engineer onsite NYC",
+    "date": "2026-08-19T08:00:06+00:00"
+  },
+  "1818997587:26466": {
+    "verdict": "REJECT",
+    "reason": "Product Designer but onsite NYC",
+    "date": "2026-08-19T08:00:06+00:00"
+  },
+  "1818997587:26465": {
+    "verdict": "REJECT",
+    "reason": "Design Engineer frontend onsite NYC",
+    "date": "2026-08-19T08:00:05+00:00"
+  },
+  "1818997587:26464": {
+    "verdict": "REJECT",
+    "reason": "Sales Manager onsite Tallinn",
+    "date": "2026-08-19T08:00:05+00:00"
+  },
+  "1818997587:26463": {
+    "verdict": "REJECT",
+    "reason": "Intelligence Analyst",
+    "date": "2026-08-19T08:00:05+00:00"
+  },
+  "1818997587:26462": {
+    "verdict": "REJECT",
+    "reason": "AI Engineer",
+    "date": "2026-08-19T08:00:01+00:00"
+  },
+  "1818997587:26461": {
+    "verdict": "REJECT",
+    "reason": "SWE Infrastructure",
+    "date": "2026-08-19T08:00:01+00:00"
+  },
+  "1818997587:26460": {
+    "verdict": "REJECT",
+    "reason": "Forward Deployed Engineer",
+    "date": "2026-08-19T08:00:01+00:00"
+  },
+  "1818997587:26459": {
+    "verdict": "REJECT",
+    "reason": "Staff SWE Backend",
+    "date": "2026-08-19T08:00:00+00:00"
+  },
+  "1818997587:26458": {
+    "verdict": "REJECT",
+    "reason": "SWE Backend",
+    "date": "2026-08-19T08:00:00+00:00"
+  },
+  "1818997587:26457": {
+    "verdict": "REJECT",
+    "reason": "SWE Backend Platform",
+    "date": "2026-08-19T01:00:22+00:00"
+  },
+  "1818997587:26456": {
+    "verdict": "REJECT",
+    "reason": "Accounting Manager",
+    "date": "2026-08-19T01:00:22+00:00"
+  },
+  "1818997587:26455": {
+    "verdict": "REJECT",
+    "reason": "New Business Associate hybrid London",
+    "date": "2026-08-19T01:00:22+00:00"
+  },
+  "1818997587:26454": {
+    "verdict": "REJECT",
+    "reason": "Account Manager hybrid London",
+    "date": "2026-08-19T01:00:22+00:00"
+  },
+  "1818997587:26453": {
+    "verdict": "REJECT",
+    "reason": "Senior PM Growth hybrid NYC",
+    "date": "2026-08-19T01:00:22+00:00"
+  },
+  "1818997587:26452": {
+    "verdict": "REJECT",
+    "reason": "Account Executive",
+    "date": "2026-08-19T01:00:15+00:00"
+  },
+  "1818997587:26451": {
+    "verdict": "REJECT",
+    "reason": "account management",
+    "date": "2026-08-19T01:00:15+00:00"
+  },
+  "1818997587:26450": {
+    "verdict": "REJECT",
+    "reason": "business operations",
+    "date": "2026-08-19T01:00:15+00:00"
+  },
+  "1818997587:26449": {
+    "verdict": "REJECT",
+    "reason": "M&A/corp dev",
+    "date": "2026-08-19T01:00:14+00:00"
+  },
+  "1818997587:26448": {
+    "verdict": "REJECT",
+    "reason": "AE sales",
+    "date": "2026-08-19T01:00:14+00:00"
+  },
+  "1818997587:26447": {
+    "verdict": "REJECT",
+    "reason": "supply chain analyst onsite",
+    "date": "2026-08-19T01:00:07+00:00"
+  },
+  "1818997587:26446": {
+    "verdict": "REJECT",
+    "reason": "operations analyst hybrid",
+    "date": "2026-08-19T01:00:07+00:00"
+  },
+  "1818997587:26445": {
+    "verdict": "REJECT",
+    "reason": "fullstack engineer",
+    "date": "2026-08-19T01:00:07+00:00"
+  },
+  "1818997587:26444": {
+    "verdict": "REJECT",
+    "reason": "robotics developer",
+    "date": "2026-08-19T01:00:07+00:00"
+  },
+  "1818997587:26443": {
+    "verdict": "REJECT",
+    "reason": "3D/mechanical CAD designer",
+    "date": "2026-08-19T01:00:06+00:00"
+  },
+  "1100655091:11307": {
+    "verdict": "REJECT",
+    "reason": "legal counsel",
+    "date": "2026-08-19T07:16:05+00:00"
+  },
+  "1100655091:11306": {
+    "verdict": "REJECT",
+    "reason": "DevOps engineer",
+    "date": "2026-08-18T23:06:27+00:00"
+  },
+  "1100655091:11305": {
+    "verdict": "REJECT",
+    "reason": "DevOps engineer",
+    "date": "2026-08-18T23:02:09+00:00"
+  },
+  "1100655091:11304": {
+    "verdict": "REJECT",
+    "reason": "DevOps engineer",
+    "date": "2026-08-18T22:57:36+00:00"
+  },
+  "1100655091:11303": {
+    "verdict": "REJECT",
+    "reason": "growth/UA role",
+    "date": "2026-08-18T22:53:06+00:00"
+  },
+  "1100655091:11302": {
+    "verdict": "REJECT",
+    "reason": "growth/UA role",
+    "date": "2026-08-18T22:48:26+00:00"
+  },
+  "1100655091:11301": {
+    "verdict": "REJECT",
+    "reason": "growth/UA role",
+    "date": "2026-08-18T22:41:29+00:00"
+  },
+  "1373050413:4770": {
+    "verdict": "REJECT",
+    "reason": "freelance social media content designer",
+    "date": "2026-08-19T08:16:14+00:00"
+  },
+  "1361592424:4697": {
+    "verdict": "MAYBE",
+    "reason": "Senior Product Designer full-time remote; no salary; RU territory excluded",
+    "date": "2026-08-19T10:23:09+00:00"
+  },
+  "1361592424:4696": {
+    "verdict": "REJECT",
+    "reason": "part-time/project",
+    "date": "2026-08-19T08:57:06+00:00"
+  },
+  "1361592424:4695": {
+    "verdict": "REJECT",
+    "reason": "candidate resume",
+    "date": "2026-08-18T15:28:00+00:00"
+  },
+  "1361592424:4694": {
+    "verdict": "REJECT",
+    "reason": "Junior candidate resume",
+    "date": "2026-08-18T15:25:54+00:00"
+  },
+  "1788647101:2048": {
+    "verdict": "REJECT",
+    "reason": "SMM/content strategist",
+    "date": "2026-08-19T07:05:10+00:00"
+  },
+  "1788647101:2047": {
+    "verdict": "REJECT",
+    "reason": "product manager",
+    "date": "2026-08-19T07:01:29+00:00"
+  },
+  "1788647101:2046": {
+    "verdict": "REJECT",
+    "reason": "no designer role in list",
+    "date": "2026-08-18T16:31:39+00:00"
+  },
+  "1788647101:2045": {
+    "verdict": "REJECT",
+    "reason": "promo ad",
+    "date": "2026-08-18T11:10:07+00:00"
+  },
+  "1964574584:3840": {
+    "verdict": "MAYBE",
+    "reason": "Product Designer Middle+/Senior remote option; RU company likely RUB; no salary",
+    "date": "2026-08-18T19:59:42+00:00"
+  },
+  "1964574584:3839": {
+    "verdict": "REJECT",
+    "reason": "part-time 80h/month RUB",
+    "date": "2026-08-18T19:56:46+00:00"
+  },
+  "1052346215:10274": {
+    "verdict": "REJECT",
+    "reason": "media/content roles",
+    "date": "2026-08-19T10:03:03+00:00"
+  },
+  "1052346215:10273": {
+    "verdict": "REJECT",
+    "reason": "Director of Data Science",
+    "date": "2026-08-19T08:00:45+00:00"
+  },
+  "1052346215:10272": {
+    "verdict": "MAYBE",
+    "reason": "Senior Product Designer listed; location ambiguous; no salary",
+    "date": "2026-08-18T14:58:31+00:00"
+  },
+  "1052346215:10271": {
+    "verdict": "REJECT",
+    "reason": "social/brand projects lead",
+    "date": "2026-08-18T13:28:31+00:00"
+  },
+  "1052346215:10270": {
+    "verdict": "REJECT",
+    "reason": "CEO role office Almaty",
+    "date": "2026-08-18T11:58:31+00:00"
+  },
+  "1257927154:5646": {
+    "verdict": "MAYBE",
+    "reason": "Product Designer Middle MTS femtech; remote/salary unclear",
+    "date": "2026-08-18T14:22:09+00:00"
+  },
+  "1257927154:5645": {
+    "verdict": "REJECT",
+    "reason": "freelance Moscow",
+    "date": "2026-08-18T12:55:43+00:00"
+  },
+  "1696221413:2334": {
+    "verdict": "REJECT",
+    "reason": "head of UA/marketing",
+    "date": "2026-08-19T07:02:35+00:00"
+  },
+  "1553765875:1479": {
+    "verdict": "REJECT",
+    "reason": "B2B project manager",
+    "date": "2026-08-19T07:35:11+00:00"
+  },
+  "1553765875:1478": {
+    "verdict": "MAYBE",
+    "reason": "Senior Product Designer role RU content platform remote; other roles graphic/brand",
+    "date": "2026-08-18T15:38:51+00:00"
+  },
+  "2215076852:777": {
+    "verdict": "REJECT",
+    "reason": "PSP onboarding manager Cyprus",
+    "date": "2026-08-18T17:03:46+00:00"
+  },
+  "2215076852:776": {
+    "verdict": "REJECT",
+    "reason": "smart contract auditor",
+    "date": "2026-08-18T14:01:43+00:00"
+  },
+  "1702888054:3101": {
+    "verdict": "REJECT",
+    "reason": "trader/analyst resume",
+    "date": "2026-08-19T10:00:03+00:00"
+  },
+  "1702888054:3100": {
+    "verdict": "REJECT",
+    "reason": "smart contract auditor",
+    "date": "2026-08-18T14:00:02+00:00"
+  },
+  "1885568649:617": {
+    "verdict": "REJECT",
+    "reason": "smart contract auditor",
+    "date": "2026-08-18T14:01:47+00:00"
+  },
+  "1622301621:1077": {
+    "verdict": "REJECT",
+    "reason": "smart contract auditor",
+    "date": "2026-08-18T14:02:09+00:00"
+  },
+  "1721696537:6079": {
+    "verdict": "REJECT",
+    "reason": "account-buying solicitation",
+    "date": "2026-08-18T12:23:11+00:00"
   }
 }

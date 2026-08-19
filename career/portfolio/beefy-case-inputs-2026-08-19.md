@@ -555,3 +555,62 @@ reason. State the fact and stop:
 
 No invented rationale. An unexplained gap stated plainly is safe; a fabricated
 one is not.
+
+---
+
+## Feature authorship — confirmed by Kirill 2026-08-19
+
+What was his own work, what predates him, what he never touched. This matters
+more than any metric: claiming a feature that existed before you is the one
+mistake an interview does not forgive.
+
+**Built from zero by Kirill:**
+
+- **beGEMS** — the feature did not exist at all; created from scratch
+- **Cross-chain ZAP** — did not exist; he produced the flow and all use cases
+- **Adaptive sizing** — the product had no responsive behaviour before him. He
+  introduced it. Shipped "almost, but not entirely" — say "introduced responsive
+  layout across the product", not "made the product responsive"
+
+**Reworked by Kirill (a predecessor version existed):**
+
+- **Dashboard** — pre-Kirill state captured, `40002745:59838` in the Product file
+- **Treasury** — pre-Kirill state, `40002745:64321`
+- **Sorting & filtering**, **Boosts**, **Safety Score**, **Enhanced Search**,
+  **Featured vaults**, **CLM merge**, **Transaction dust**, **Sign a message**
+
+**Boosted vaults visibility — uncertain, treat with care.** Kirill does not
+remember a real feature existing before him; possibly just a coloured button,
+the feature was only forming. **Do not claim "created from scratch" here.** Safe
+phrasing: "boosts existed only as a highlight on the card; I designed the
+visibility system around them". If certainty appears later, sharpen it.
+
+**Not his work — never mention as his:**
+
+- **Bridge BIFI** — untouched, the feature is as it was
+- **Buy crypto** — the functionality was retired during his time; it no longer
+  exists in the product
+
+**Asset menu** — no "before" sources found, but there is research:
+`40004677:3557` (Frame 3615, 1440x5386).
+
+**New wallet connector — the old version is still live in production.** The
+redesign was never built. That means the "before" state can be screenshotted
+from beefy.com right now, and the case can honestly say the design shipped as a
+decision but not as code — a normal and very common situation, worth stating
+plainly rather than hiding.
+
+## No "before" material for beGEMS and boosts (confirmed 2026-08-19)
+
+Both have only "after" states — beGEMS because Kirill built it from zero, boosts
+because the feature barely existed before him. Do not ask the PM for those
+screenshots and do not build a before/after pair for either; show the result and
+describe the starting point in words.
+
+## The project has ended
+
+Kirill is no longer paid by Beefy (as of 2026-08-19). Every surface still says
+"Feb 2025 – Present": `career/resume/resume.md`, `cv/index.html`, `cv/ru/index.html`,
+both Notion CV pages, and the case draft. All of them need the real end date, and
+it must be identical everywhere — a date mismatch between CV and case is exactly
+the kind of thing a recruiter notices.
