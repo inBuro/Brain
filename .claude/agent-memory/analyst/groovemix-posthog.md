@@ -69,6 +69,7 @@ Dashboard created 2026-08-05. Key insight IDs (do NOT delete these):
 - **k8bQJDP3** (id: 10771016) — "Sessions by country" WorldMap. breakdown fixed 2026-08-07: was `$geoip_country_name` (map showed 0 — WorldMap requires ISO alpha-2 codes), corrected to `$geoip_country_code`. Confirmed data: TH=9 sess, MX=1 sess (30d). math=unique_session.
 - **POj0JCaY** (id: 10826587) — "Users by country" WorldMap. Companion to k8bQJDP3 — identical config (source=extension, $geoip_country_code breakdown, -30d) but math=dau (unique users). Created 2026-08-07, on dashboard 1957704. PostHog has NO native per-tile aggregation toggle for WorldMap — two separate insights is the only option.
 - **5mmf21PF** (id: 10770955) — Sessions over time (TrendsQuery, unique_session, daily, source=extension)
+- **BoM5jXGa** (id: 11147699) — "Sessions — trailing 3 days (alert target)" — DataVisualizationNode/HogQLQuery, BoldNumber; rolling 3 complete days of unique extension sessions. Alert target for the silence alert; do NOT delete.
 - **GkWeK0qL** (id: 10771407) — "Trial → License Funnel" (FunnelsQuery, 4 steps, favorited)
 - **Fm8Hez3W** (id: 10792069) — "Users — Progress to 100 (cumulative)" — TrendsQuery, first_time_for_user math, ActionsLineGraphCumulative display, all-time, filterTestAccounts=true; favorited. Visual progress chart toward 100-user milestone.
 - **XoX3sVkg** (id: 10792070) — "Total Extension Users (milestone alert)" — DataVisualizationNode/HogQLQuery, BoldNumber display; returns `count(DISTINCT person_id)` on track_loaded/source=extension/owner excluded. Alert target for 100-user milestone.
@@ -84,16 +85,34 @@ Custom name: "2. Active mixing (crossfader or EQ used)"
 
 FunnelsQuery series does NOT support `type: "OR"` property group natively — must use HogQL filter for OR conditions on boolean props.
 
-### Alert on Sessions over time (created 2026-08-06)
+### Alert on extension sessions (created 2026-08-06, retargeted 2026-08-19)
 
-- Alert ID: `019fd348-4fb4-0000-12bf-b0253e015512`
-- Name: "Sessions — Daily Drop Alert"
-- Insight: 5mmf21PF (id: 10770955)
-- Condition: `absolute_value`, lower bound = 1 (fires when sessions = 0 in a day)
-- Calculation: `daily`
-- Subscriber: Kirill Bush (id: 579310, hello@groovemix.app) — email auto-updated when account email changed 2026-08-06
-- State: `Not firing`, enabled: true
+- Alert ID: `019fd348-4fb4-0000-12bf-b0253e015512` (same alert, reused — not recreated)
+- Name: "Sessions — 3-day silence alert" (was "Sessions — Daily Drop Alert")
+- Insight: **BoM5jXGa** (id: 11147699) — "Sessions — trailing 3 days (alert target)", SQL BoldNumber.
+  Was 5mmf21PF (daily trends), which is now chart-only and no longer wired to any alert.
+- Condition: `absolute_value`, lower bound = 1; `calculation_interval: daily`;
+  config `HogQLAlertConfig` / `evaluation: last_row` / `column: sessions_3d`
+- Subscriber: Kirill Bush (id: 579310, hello@in-buro.com)
 - URL: https://us.posthog.com/project/542001/alerts?alert_type=insights&alert_id=019fd348-4fb4-0000-12bf-b0253e015512
+
+**Why retargeted:** the old version evaluated one calendar day against a lower bound of 1, so a single
+day with nobody opening the extension fired it. It went off on 2026-08-18 (0 sessions) after 13
+straight non-zero days (1–8 sessions/day, 1–5 DAU) — real low usage, not breakage. Verified the same
+day: `groovemix.app/ingest` 200 on POST, site 200, and the project still received events on 08-18
+(5 events, landing-page traffic), so ingestion was alive; only extension usage was absent.
+
+**Why a new insight rather than `calculation_interval: weekly`:** PostHog docs do not state whether a
+weekly calculation interval evaluates a weekly bucket or just re-checks the insight's own daily bucket
+less often, and `alert-simulate` only works for anomaly detectors, so the semantics could not be
+probed. Putting the window inside the query removes the ambiguity — the alert now fires only when
+three consecutive complete days have zero extension sessions.
+
+**SQL / day-boundary note:** `SELECT count(DISTINCT properties.$session_id) ... WHERE
+properties.source = 'extension' AND toDate(timestamp) >= today() - 3 AND toDate(timestamp) < today()`.
+Excludes the in-progress day on purpose. This SQL runs ~1 session/day lower than the trends
+`unique_session` math on the same days (e.g. 08-17: SQL 4 vs trends 5) — irrelevant for a
+zero/non-zero alert, but don't treat the two numbers as interchangeable in reporting.
 
 ### Alert: 100-user milestone (created 2026-08-06)
 
