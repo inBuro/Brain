@@ -20,7 +20,7 @@
 
 **`fadercraft`** (проектная, `~/Brain/.claude/skills/fadercraft/`) — 1 подскилл: fadercraft-youtube-outreach (майнинг+ответы на YouTube, `disable-model-invocation`). SEO и дизайн потребляет из глобальных групп, своих копий не держит.
 
-**`career`** (проектная, `~/Brain/.claude/skills/career/`) — 1 свой подскилл (telegram-vacancy-mining) + индекс 22 глобальных резюме/job-search скиллов (не перенесены, вендорский бандл без общей структуры).
+**`portfolio`** (проектная, `~/Brain/.claude/skills/portfolio/`) — 2 своих подскилла (telegram-vacancy-mining, portfolio-writer) + индекс 22 глобальных резюме/job-search скиллов (не перенесены, вендорский бандл без общей структуры).
 
 **`dev-toolchain`** (проектная, `~/Brain/.claude/skills/dev-toolchain/`) — 1 свой подскилл (directus-cms, CMS через официальный MCP) + индекс вендорского пака gstack (55 скиллов: браузер/iOS/планирование/деплой/документация/безопасность/сессия/GBrain/QA — не перенесён, свой корневой роутер `_gstack-command`).
 
@@ -34,7 +34,7 @@
 ## Счётчики (на 2026-08-15)
 
 - Глобальный верхний уровень `~/.claude/skills/`: 81 запись = `design` + `frontend` + `ux-research` + `seo` (роутеры) + 55 gstack-related + 22 резюме-бандл.
-- Проектный верхний уровень `~/Brain/.claude/skills/`: 5 записей = `skills-architect` (над группами) + `fadercraft`, `career`, `dev-toolchain`, `meta` (4 из 8 операционных групп; design/frontend/ux-research/seo — глобальные).
+- Проектный верхний уровень `~/Brain/.claude/skills/`: 5 записей = `skills-architect` (над группами) + `fadercraft`, `portfolio`, `dev-toolchain`, `meta` (4 из 8 операционных групп; design/frontend/ux-research/seo — глобальные).
 - Удалено: `market-news-analyst` (глобальный симлинк на Trading-скилл, не нужен).
 - Перенесено из `directives/` в скиллы: `directus-cms` (был сиротой, не отмечен в архиве).
 - Перенесено из agent-memory в скиллы: 18 UX-фреймворков `ux-researcher` (`.claude/agent-memory/ux-researcher/skills/` → `ux-research/subskills/frameworks/rules/awesome-ux-skills/`) — методология, не накопленные факты, один канон в группе, не в памяти агента.
