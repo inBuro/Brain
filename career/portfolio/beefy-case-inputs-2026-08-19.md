@@ -202,7 +202,7 @@ Input fields, Browser.
   reference would stay frozen while he kept iterating elsewhere. The design
   work in them is his; their value is as evidence of a handoff practice, not as
   separate projects.
-- **v2.4 Beefy Design System** — his.
+- **v2.4 Beefy Design System** — his, and **built from zero**. Before him the project had no design system at all: what existed was a Sketch export, assembled without an understanding of how a design system works. Say "built", never "reworked".
 
 Practical consequence for the case: the "what I shipped" list should not stop at
 the 17 dated pages. Undated pages in Product — Ultimate Vaults, Tooltips
@@ -367,15 +367,15 @@ show that.
 
 **Division of labour — confirmed by Kirill 2026-08-19.** The idea of recruiting
 respondents this way, and of the post itself, is his: he needed participants and
-built the route to them. Pablo is the admin/manager — he holds the access rights
+built the route to them. Pablo is the product manager (not a community manager — corrected 2026-08-19) — he holds the access rights
 and owns the copywriting, so every wording in the channel and all direct
 communication with users is Pablo's, with Kirill observing. Kirill prepared the
 tests; Pablo approved them.
 
 How to phrase it in the case, precisely and without inflation: *"I initiated and
 designed the field-testing programme — the participant pool, the test protocol
-and the instrumented prototype. Community communication was run by the
-community manager."*
+and the instrumented prototype. Communication with participants was run by the
+product manager."*
 
 Both `t.maze.co` links still return 200 and open correctly (checked 2026-08-19).
 
@@ -568,8 +568,10 @@ mistake an interview does not forgive.
 
 - **beGEMS** — the feature did not exist at all; created from scratch
 - **Cross-chain ZAP** — did not exist; he produced the flow and all use cases
-- **Adaptive sizing** — the product had no responsive behaviour before him. He
-  introduced it. Shipped "almost, but not entirely" — say "introduced responsive
+- **Adaptive sizing** — the whole product ran on three layout breakpoints and the
+  mobile layout appeared straight after 640px — nothing sat between desktop and
+  phone. He built out the full ladder — the interface now uses the maximum space available at any width (corrected 2026-08-19 — earlier note said there was
+  no responsive behaviour at all, which overstates it). Shipped "almost, but not entirely" — say "introduced responsive
   layout across the product", not "made the product responsive"
 
 **Reworked by Kirill (a predecessor version existed):**
@@ -614,3 +616,14 @@ Kirill is no longer paid by Beefy (as of 2026-08-19). Every surface still says
 both Notion CV pages, and the case draft. All of them need the real end date, and
 it must be identical everywhere — a date mismatch between CV and case is exactly
 the kind of thing a recruiter notices.
+
+## Rive animation — material to collect
+
+Kirill built interface animation in Rive, not just decoration. The example worth
+leading with: **the deposit button's state while a long blockchain transaction
+is pending** — the animation holds the user through an unavoidable wait, which
+is a product problem, not a visual one. Other micro-interactions exist too.
+
+To show it on the page, the assets need to be exported as short looping video or
+GIF (a static screenshot cannot carry animation). Ask Kirill for the Rive files
+or recordings when the case reaches the layout stage.
