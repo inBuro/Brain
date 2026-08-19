@@ -41,7 +41,7 @@ Zug, Switzerland · B2B crypto liquidity provider, AML/KYT tool
 Task: Creation of B2B liquidity provider FinchTrade; AML/KYT tool MarketGuard; communications design.
 Process: product requirements analysis, user personas, competitor research (B2C2, Wintermute, Flowdesk, CoinAlpha), 20+ JTBD interviews, MVP feature list, User Stories Map, IA + validation, UX/UI with A/B tests, quantitative/qualitative research. Post-MVP: metric growth via feedback+data, hypothesis generation, design system docs, brand communications, additional features, designer supervision.
 Achievements: user cabinet & admin panel; optimized document workflow; onboarding time reduced 79% vs v1; Finch design system created; product website www.finchtrade.com (IA organized around audience pains/tasks/goals); results 1 month vs 5 months post hard-launch — bounce rate 68%→14%, time on site 00:00:57→00:03:10, page depth 1.12→3.28, misclicks 62%→6%; page load speed optimized up to 98% (with FE dev); brand identity, SMM style guide, LinkedIn/Medium feed, POS materials; AML/KYT product www.marketguard.io with cabinet+admin panel — a multi-tenant B2B platform with separate trader and compliance officer roles.
-Cases in portfolio: FinchTrade (in-buro.com/works/finchtrade) and MarketGuard (in-buro.com/works/finchguard) — see also FG research process (in-buro.com/works/finchguard#research)
+Cases in portfolio: FinchTrade (in-buro.com/works/finchtrade) and MarketGuard (in-buro.com/works/marketguard) — see also FG research process (in-buro.com/works/marketguard#research)
 
 ---
 
@@ -59,7 +59,7 @@ Hong Kong · Freelance marketplace · Mobile app, web service
 **Product Designer**
 Led design department; design system creation; redesign of freelance marketplace mobile app (Kwork); new UX solutions; growth points/hypotheses; user feedback processing/backlog; designing new product "TopFreelancer"; design reviews.
 Achievements: created TopFreelancer (new product); redesigned Kwork iOS app — App Store rating 2.2→4.9 (80+ reviews), order conversion 14%→23.2%; hired/onboarded 2 mid designers; created Kwork Design system.
-Case in portfolio: in-buro.com/works/kwork [ВНИМАНИЕ: страница /works/kwork на момент 2026-08-14 отдаёт SPA-фолбэк (заголовок главной страницы сайта), папки works/kwork в репозитории нет — кейс нужно воссоздать или убрать ссылку]
+[РЕШЕНО 2026-08-19: ссылка на кейс убрана здесь и из cv/index.html + cv/ru/index.html. Kwork/Mirafox не попадает в текущий скоуп портфолио — показывать нечего, кейс не воссоздаём. Достижения роли остаются текстом.]
 
 ---
 
@@ -107,3 +107,4 @@ AI Native Designer (Pixel Perfect, [pixelperfect.school/ai-native-designer](http
   - 1.8 Саммари: добавлена рамка shipped/live-продуктов («shipping live products, not concepts») — ссылки на живые продукты в CV уже были, само это не проговаривалось
 - 2026-08-14: добавлено примечание про /works/kwork в Mirafox; добавлен Prom.io раздел; структура Skills разбита по категориям
 - 2026-08-14 (уточнение): предыдущая правка ошибочно удалила ссылку OTP Bank как "дубликат" — это была ошибка только в EN Notion-версии CV; RU Notion всегда содержала корректную отдельную ссылку. Кейс восстанавливается на /works/bank-otp, ссылка возвращена
+- 2026-08-19: ссылка /works/kwork удалена из мастер-CV и обоих HTML-CV (404 на проде, кейс решено не восстанавливать); finchguard → marketguard в ссылке FinchTrade/MarketGuard

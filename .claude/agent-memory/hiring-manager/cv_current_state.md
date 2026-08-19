@@ -51,7 +51,29 @@ metadata:
 - saeco/index.html: `<h1>Starbucks. Promo</h1>` вместо "Saeco. Promo"
 - sollers/index.html, entangle/index.html: meta description = "Swiss trading platform tailored to your needs" (чужой текст FinchTrade)
 
-## Финансы поиска работы
+## Статус на 2026-08-19 (аудит расхождений)
 
-Roadmap до первого отклика: `~/Brain/career/applications/roadmap-2026-08-17.md`
-Полный аудит: `~/Brain/career/portfolio/audit-2026-08-14.md`
+Старт откликов сдвинут на **2026-08-24**. Актуальный аудит: `~/Brain/career/applications/audit-2026-08-19.md`.
+
+**Критические пробелы на 19.08:**
+1. `cv/index.html` и `cv/ru/index.html` → `/works/kwork` → 404 — рекрутер видит битую ссылку из PDF
+2. PDF (EN+RU) устарел: от 14.08, HTML правился 19.08 — нужна перегенерация
+3. 83 незакоммиченных изменения в репо, включая `works/marketguard/` как untracked
+4. `sitemap.xml` на проде: `/works/finchguard/` вместо `/works/marketguard/`; `/works/marketguard/` не проиндексирован
+5. `resume.md` → `/works/finchguard` (редирект работает, но нестройно)
+
+**Что НЕ делать до 24.08:** Beefy.finance кейс и Prom.io/MIDL кейс — обоим нужно >1 недели.
+
+**Пробелы в профиле (нужно уточнить у Кирилла):**
+- Индустриальный фокус: только crypto/DeFi или шире?
+- Зарплатные ожидания: $4500+ — минимум или цель? Форма оплаты?
+- Релокация vs remote-only?
+- ~~Атрибуция `~/Brain/career/raw/*.png`~~ — **закрыто 19.08:** это материалы MarketGuard/FinchGuard (CJM compliance-персон, LinkedIn-страница FinchGuard, Scorechain), не Beefy и не MIDL. Для Beefy и MIDL визуальных исходников в `~/Brain` нет вообще
+- NDA/публичность материалов Beefy.finance
+- Статус pipeline на 24.08 (вакансии Playneta + crypto payments из Telegram от 10.08 актуальны?)
+
+## Roadmap-файлы
+
+Роадмап 08-17 (устарел): `~/Brain/career/applications/roadmap-2026-08-17.md`
+Аудит 08-14: `~/Brain/career/portfolio/audit-2026-08-14.md`
+Аудит 08-19 (актуальный): `~/Brain/career/applications/audit-2026-08-19.md`
