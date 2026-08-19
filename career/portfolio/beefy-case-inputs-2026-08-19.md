@@ -365,7 +365,193 @@ a bot-driven pool of 33 field testers, sequenced waves, and a promo video
 (`~/Work/Beefy/testing.mp4`) to pull people in. Very few product designers can
 show that.
 
-> To confirm with Kirill: whose idea were the `#app-testing` channel and the
-> `@Field Tester` role, and who ran the Maze accounts — he designed the tests,
-> but Pablo posted them. Also: are the two `t.maze.co` links still live, and can
-> he open the result reports behind them?
+**Division of labour — confirmed by Kirill 2026-08-19.** The idea of recruiting
+respondents this way, and of the post itself, is his: he needed participants and
+built the route to them. Pablo is the admin/manager — he holds the access rights
+and owns the copywriting, so every wording in the channel and all direct
+communication with users is Pablo's, with Kirill observing. Kirill prepared the
+tests; Pablo approved them.
+
+How to phrase it in the case, precisely and without inflation: *"I initiated and
+designed the field-testing programme — the participant pool, the test protocol
+and the instrumented prototype. Community communication was run by the
+community manager."*
+
+Both `t.maze.co` links still return 200 and open correctly (checked 2026-08-19).
+
+---
+
+## "Ai Brand" file (`5b8djJxIjfAEpAOv3nfwXb`) — coursework, not shipped brand
+
+Made during an Identica branding course run with AI assistance, on Beefy as the
+subject matter. Structured as Research → Strategy → Conception → Draft.
+
+**The strategy is complete, not a sketch:**
+
+- **Vision** — Beefy as the obvious choice for people who want to protect and
+  grow capital without becoming DeFi experts
+- **Mission** — a space where an ordinary user grows capital through carefully
+  selected, transparent strategies with a controlled risk factor
+- **Values** — Growth ("fertile valleys"), Clarity ("clear paths"), Diversity
+  ("many routes")
+- **Metaphor** — Beefy as a *landscape of yield*: protected fertile valleys and
+  fields where experienced herders watch every plot, capital gathers strength
+  over years, and market chaos stays beyond the horizon
+- **Mascot** — the Beefy cow reframed as an experienced herder/gardener who
+  cultivates the yield landscape; expertise and care, not a social-media pet
+- **Creative opponent** — against invisible or understated risk, against
+  short-term hype at the cost of trust, for honestly explaining where yield
+  comes from
+- **Line** — "Fields of Yield" / "Milk from Fields of Yield"
+
+Carriers worked out: pitch deck, investor one-pager, brandwall, SMM banners,
+roll-ups, sticker pack, apparel, caps, lanyards, shoppers, notebooks, mugs,
+NFC/QR cards, physical token-cards, a desk stand-up mascot, plus dApp
+screenshot, og:image, favicon, Twitter page, footer. Foundations pages for
+colours, fonts, layouts, elements, and a `GoldenCanonGrid-1920` component.
+
+**How to use it — and how not to.** This is a concept produced as coursework; it
+was never adopted by Beefy. Presenting it inside the Beefy case would read as
+"I rebranded Beefy", which is false and unrecoverable in an interview.
+
+Recommended placement, in order of value:
+1. A separate, clearly labelled portfolio piece — *"AI-assisted brand concept
+   (coursework)"* — which demonstrates brand strategy plus an AI workflow, two
+   things the current portfolio does not show at all
+2. A line in the CV courses list, alongside AI Native Designer and Dofurther
+3. Nothing inside the Beefy case itself
+
+> Needed from Kirill for the CV line: exact course name, provider and dates.
+
+---
+
+## Maze results — recovered 2026-08-19
+
+The report link Kirill supplied (`app.maze.co/report/Filtering-option/4s7bs7m8scxu0p`)
+is public (`isPrivate: false`). Its data was extracted from the page's own API
+response — full dump saved to `career/research/maze-filtering-report-2026-08-19.md`.
+Note: only the *report* was opened, never the test links themselves, so no
+phantom session was added to the study.
+
+**Study "Filtering option", project "Beefy 2" — 52 respondents, 9 blocks. This is the MOBILE filtering test** (confirmed by Kirill 2026-08-19); desktop was tested separately.
+Prototype under test is the same one analysed above (`394:34766` on the
+`Filtering v.2` canvas).
+
+| Task | Usability score | Direct success | Bounced | Avg duration | Misclick rate |
+|---|---|---|---|---|---|
+| Only stablecoin vaults | 66 | 23/35 | 12 | 43.5 s | 74.3% |
+| Only CLM pools which are boosted | 66 | 19/29 | 10 | 26.2 s | 60.1% |
+| Only BTC-correlated vaults and pools | 74 | 20/27 | 7 | 27.2 s | 72.8% |
+| Back to default view | 96 | 25/26 | 1 | 6.4 s | 46.3% |
+
+Satisfaction with the current filter selection: **4.1 of 5** (n=23).
+Save feature usage: Sometimes 25, Never 21, Often 6 (n=52) — nearly half never
+use it at all.
+
+**What the numbers say, plainly.** Building a filter query was expensive and
+error-prone — three quarters of clicks missed on the stablecoin task, and it
+took 43 seconds. Undoing a filter was cheap and reliable (score 96, 6 seconds).
+So the cost sat in *composing* a query, not in recovering from one — which is
+exactly the argument for reordering controls by first-click priority and pinning
+the filter section.
+
+**Verbatims worth quoting in the case:**
+
+> "Filters are doing too much work… anything associated with Beefy-specific
+> actions, i.e. boosting or vault types, should be managed elsewhere."
+> "Boosted filter was not where the other filters are."
+> "I felt overwhelmed with the menu and filters."
+> "Several different buttons and menu to achieve the goal."
+> "unintuitive on mobile"
+> "Possibility to save filters (like presets) so you can change between
+> customized personal filter setups quickly"
+> "Vaults with very low TVL should be hidden more… lists too long."
+
+The "boosted filter is not where the other filters are" complaint maps directly
+onto the shipped fix ("boosted vaults pinned inside the visible filter area").
+That is a clean finding → decision → outcome chain, which is what a case needs.
+
+### Second study — "Boosts mobile", 46 respondents
+
+Report `app.maze.co/report/Boosts-mobile/1bf7k7m8mue3gk`, maze id 359319951 —
+this is the wave-1 study announced in Discord on 26 March 2025. Full dump in
+`career/research/maze-boosts-mobile-report-2026-08-19.md`.
+
+| Task | Score | Direct success | Bounced | Avg duration | Misclick |
+|---|---|---|---|---|---|
+| Open the vault that can be boosted | 100 | 46/46 | 0 | 12.1 s | 42.2% |
+| Open the All Available Boosts page | 91 | 39/43 | 4 | 12.1 s | 63.1% |
+| Boost a vault of your choice | 95 | 39/41 | 2 | 38.4 s | 39.5% |
+
+Satisfaction with the boosting experience: **3.6 of 5** (n=40) — half a point
+below the filter study, on tasks people nearly always completed.
+
+**The dominant finding is unmissable: people want deposit and boost to be one
+action.** It comes back eight separate times, unprompted:
+
+> "why 2 actions? deposit + boost should be 1 action"
+> "1 click deposit+boost"
+> "have the option to deposit and boost in one transaction (currently is deposit
+> (1 transaction), then boost (1 transaction))"
+> "maybe single step option for boosted vault like 'deposit & boost', and
+> similar for withdraw"
+> "ideally would boost automatically on the initial deposit so it's only 1 tx"
+
+Secondary, and directly actionable in design:
+
+> "Boost vault were outside the filters" / "Include it within the filters"
+> "no connection between Saved and Boosted filters. why are they merged?"
+> "golden ribbons at the bottom were confusing" / "remove ribbons"
+> "the boost recap only appeared after scrolling down a few vaults, which you
+> might miss if you don't scroll"
+> "make the 'back' button more straightforward"
+> "make the 'boosted' vault button the boost-yellow colour… or have it pulse"
+> "the default option should be boost all"
+
+**The pattern across both studies.** Success rates are high, satisfaction is
+not, and misclick rates sit between 39% and 74%. People get there — they just
+pay for it. That is the honest, defensible frame for the case: the redesign was
+not rescuing a broken flow, it was removing a tax on a flow that worked.
+
+> Note: the visible tasks in "Boosts mobile" are navigation-shaped ("open the
+> page that…"), so its numbers describe findability, while the filter study
+> measures query construction. Do not merge the two tables into one score.
+
+### Publishing — cleared
+
+Kirill confirmed 2026-08-19: **everything he has handed over may be published.**
+No NDA restriction on the numbers, the Discord screenshots, the Maze results or
+the prototype internals.
+
+### Misclick rates are inflated by the test environment
+
+The prototypes were mobile, and part of the audience opened them on desktop,
+where the mobile frame needs scrolling — those participants produced noticeably
+more rage-clicks. A share of every misclick figure is therefore an artefact of
+how the test was taken, not of the interface. Keep the caveat attached to the
+numbers in the case: the ranking between tasks is sound, the absolute
+percentages overstate the problem.
+
+### Scope limit — the research is mobile-only
+
+Desktop versions of both studies exist in Maze but are **empty**: no
+respondents, no screens (confirmed by Kirill 2026-08-19). So every number in
+this document — 52 respondents on filtering, 46 on boosts, all misclick rates,
+durations and satisfaction scores — describes the **mobile** experience.
+
+Desktop was designed (see the `Boosts desktop` page in the User tests file and
+the desktop layouts in Product) but never tested.
+
+**Say this out loud in the case.** Naming the boundary of your evidence reads as
+seniority, not weakness — and it pre-empts the interview question "so did you
+validate desktop too?", which is otherwise a trap.
+
+Kirill does not remember why desktop went untested, so the case must not offer a
+reason. State the fact and stop:
+
+> "Testing covered the mobile experience — 52 and 46 participants across two
+> studies. Desktop shipped on the same design decisions without a separate
+> round of user validation."
+
+No invented rationale. An unexplained gap stated plainly is safe; a fabricated
+one is not.
