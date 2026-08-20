@@ -18,4 +18,4 @@
 
 ## Проекты
 
-Fadercraft (`fadercraft/Claude.md`), Bifi (`bifi/Claude.md`) — каждый со своим CLAUDE.md, читать по мере входа в проект.
+Fadercraft (`fadercraft/Claude.md`), Bifi (`bifi/Claude.md`), Скриншотер (`screenshotter/CLAUDE.md`) — каждый со своим CLAUDE.md, читать по мере входа в проект.
