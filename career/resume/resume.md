@@ -40,7 +40,7 @@ Zug, Switzerland · B2B crypto liquidity provider, AML/KYT tool
 **Product Designer**
 Task: Creation of B2B liquidity provider FinchTrade; AML/KYT tool MarketGuard; communications design.
 Process: product requirements analysis, user personas, competitor research (B2C2, Wintermute, Flowdesk, CoinAlpha), 20+ JTBD interviews, MVP feature list, User Stories Map, IA + validation, UX/UI with A/B tests, quantitative/qualitative research. Post-MVP: metric growth via feedback+data, hypothesis generation, design system docs, brand communications, additional features, designer supervision.
-Achievements: user cabinet & admin panel; optimized document workflow; onboarding time reduced 79% vs v1; Finch design system created; product website www.finchtrade.com (IA organized around audience pains/tasks/goals); results 1 month vs 5 months post hard-launch — bounce rate 68%→14%, time on site 00:00:57→00:03:10, page depth 1.12→3.28, misclicks 62%→6%; page load speed optimized up to 98% (with FE dev); brand identity, SMM style guide, LinkedIn/Medium feed, POS materials; AML/KYT product www.marketguard.io with cabinet+admin panel — a multi-tenant B2B platform with separate trader and compliance officer roles.
+Achievements: user portal & admin panel; optimized document workflow; onboarding time reduced 79% vs v1; Finch design system created; product website www.finchtrade.com (IA organized around audience pains/tasks/goals); results 1 month vs 5 months post hard-launch — bounce rate 68%→14%, time on site 00:00:57→00:03:10, page depth 1.12→3.28, misclicks 62%→6%; page load speed optimized up to 98% (with FE dev); brand identity, SMM style guide, LinkedIn/Medium feed, POS materials; AML/KYT product www.marketguard.io with user portal + admin panel — a multi-tenant B2B platform with separate trader and compliance officer roles.
 Cases in portfolio: FinchTrade (in-buro.com/works/finchtrade) and MarketGuard (in-buro.com/works/marketguard) — see also FG research process (in-buro.com/works/marketguard#research)
 
 ---
@@ -96,6 +96,7 @@ AI Native Designer (Pixel Perfect, [pixelperfect.school/ai-native-designer](http
 ---
 
 ## Changelog
+- 2026-08-20: `user cabinet & admin panel` → `user portal & admin panel` (FinchTrade/MarketGuard) — калька с «личный кабинет», доводка правки 2.1 из Vocabulary Gap Analysis до мастер-CV и HTML-CV
 - 2026-08-14 (Vocabulary Gap Analysis, правки 1.1–1.8 — см. `career/research/additions.md`):
   - 1.1 Skills → AI: список названий модулей курса заменён на реальные инструменты (`Claude Code, MidJourney, Figma MCP, Agentic workflows, AI-assisted prototyping`) — рынок не считывал прежние названия как инструменты
   - 1.2 Beefy.finance, Task: убрана самоирония «Juggling pixels», заменена на рамку владения тем же результатом («Owned end-to-end UX... 12,000 monthly active users»)
