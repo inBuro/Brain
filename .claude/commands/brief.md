@@ -1,0 +1,1 @@
+../../workflows/brief.md

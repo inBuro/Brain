@@ -50,7 +50,7 @@ lines.append(
 for m in maybes:
     lines.append(entry(m))
 
-out_path = os.path.expanduser("~/Brain/career/research/telegram-vacancies-2026-08-10.md")
+out_path = os.path.expanduser("~/Brain/portfolio/research/telegram-vacancies-2026-08-10.md")
 with open(out_path, "w") as f:
     f.write("\n".join(lines))
 

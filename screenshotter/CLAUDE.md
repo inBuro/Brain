@@ -14,6 +14,12 @@ hotkey, two size modes, window shadows removed rather than baked in.
 - [wiki/roadmap.md](wiki/roadmap.md) — what is done and what is next
 - [wiki/log.md](wiki/log.md) — what happened, in order
 
+## Rules
+
+- Read `wiki/internals.md` before touching capture, hotkeys, or permissions — the traps below are only a summary
+- A trap paid for once goes into `wiki/internals.md` the same day, or the next session pays for it again
+- Intermediates (build logs, scratch captures) go to `.tmp/`, never next to the source
+
 ## Hard facts
 
 - **Swift cannot build on this Mac.** CLT 26.2 landed on macOS 15.7 and its compiler

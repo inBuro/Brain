@@ -7,7 +7,7 @@ metadata:
 
 ## CV
 
-Существует как две живые Notion-страницы (RU: "CV Кирилл Буш", EN: "CV Kirill Bush") под родительской страницей "inBuro". Мастер-копия также сохранена в `~/Brain/career/resume/resume.md` (EN, после аудита 2026-08-14).
+Существует как две живые Notion-страницы (RU: "CV Кирилл Буш", EN: "CV Kirill Bush") под родительской страницей "inBuro". Мастер-копия также сохранена в `~/Brain/portfolio/resume/resume.md` (EN, после аудита 2026-08-14).
 
 Контент: 8 мест работы 2018–2025 (Service-guru, OTP Bank, Mirafox, Sollers Auto, FinchTrade/MarketGuard, Prom.io/MIDL, Beefy.finance). Опыт 7+ лет → уровень Senior (из CV явно "Senior Product Designer").
 
@@ -53,7 +53,7 @@ metadata:
 
 ## Статус на 2026-08-19 (аудит расхождений)
 
-Старт откликов сдвинут на **2026-08-24**. Актуальный аудит: `~/Brain/career/applications/audit-2026-08-19.md`.
+Старт откликов сдвинут на **2026-08-24**. Актуальный аудит: `~/Brain/portfolio/applications/audit-2026-08-19.md`.
 
 **Критические пробелы на 19.08:**
 1. `cv/index.html` и `cv/ru/index.html` → `/works/kwork` → 404 — рекрутер видит битую ссылку из PDF
@@ -68,12 +68,12 @@ metadata:
 - Индустриальный фокус: только crypto/DeFi или шире?
 - Зарплатные ожидания: $4500+ — минимум или цель? Форма оплаты?
 - Релокация vs remote-only?
-- ~~Атрибуция `~/Brain/career/raw/*.png`~~ — **закрыто 19.08:** это материалы MarketGuard/FinchGuard (CJM compliance-персон, LinkedIn-страница FinchGuard, Scorechain), не Beefy и не MIDL. Для Beefy и MIDL визуальных исходников в `~/Brain` нет вообще
+- ~~Атрибуция `~/Brain/portfolio/raw/*.png`~~ — **закрыто 19.08:** это материалы MarketGuard/FinchGuard (CJM compliance-персон, LinkedIn-страница FinchGuard, Scorechain), не Beefy и не MIDL. Для Beefy и MIDL визуальных исходников в `~/Brain` нет вообще
 - NDA/публичность материалов Beefy.finance
 - Статус pipeline на 24.08 (вакансии Playneta + crypto payments из Telegram от 10.08 актуальны?)
 
 ## Roadmap-файлы
 
-Роадмап 08-17 (устарел): `~/Brain/career/applications/roadmap-2026-08-17.md`
-Аудит 08-14: `~/Brain/career/portfolio/audit-2026-08-14.md`
-Аудит 08-19 (актуальный): `~/Brain/career/applications/audit-2026-08-19.md`
+Роадмап 08-17 (устарел): `~/Brain/portfolio/applications/roadmap-2026-08-17.md`
+Аудит 08-14: `~/Brain/portfolio/portfolio/audit-2026-08-14.md`
+Аудит 08-19 (актуальный): `~/Brain/portfolio/applications/audit-2026-08-19.md`

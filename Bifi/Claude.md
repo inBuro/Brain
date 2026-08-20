@@ -11,13 +11,26 @@ SOP: цель, входы, инструменты, выход, краевые с
 Принятие решений: поднимает нужный навык, вызывает инструменты в нужном порядке, обрабатывает ошибки, уточняет, обновляет процедуры по ходу.
 
 **Уровень 3 — Execution (`execution/`)**
-Детерминированные скрипты, на которых работает приложение. Ключи и токены — в `.env`, в шеринг не попадают.
+Детерминированные скрипты, на которых работает приложение. Ключи и токены — в `~/.config/<сервис>/env` (600), вне репозитория; в проекте не хранятся.
 
-## Структура
-- `.claude/skills/` (в корне `~/Brain`) — процедуры как навыки, общие для всех проектов; `../directives/` — их оригинальные тексты (архив/справка)
-- `execution/` — скрипты (появятся, когда дойдём до приложения)
-- `ds/` — индекс дизайн-системы (см. ниже)
-- `.tmp/` — временные файлы, периодически чистим
+## Что где лежит
+
+| Что | Где |
+| --- | --- |
+| Процедуры как навыки, общие для всех проектов | `.claude/skills/` в корне `~/Brain` |
+| Три Bifi-специфичные директивы (`ds_scan`, `ds_rebind`, `figma_mcp`) | `directives/` |
+| Оригиналы остальных процедур, справка и архив | `../directives/` |
+| Индекс дизайн-системы: контракт, токены, компоненты | `ds/` |
+| Детерминированные скрипты приложения | `execution/` |
+| База знаний проекта: концепты, сущности, источники | `wiki/` |
+| Источники, которые не редактируем | `raw/` |
+| Фикстуры и тестовые данные | `fixtures/` |
+| Хронология проекта, append-only | `log.md` |
+| Промежуточные файлы, пересобираются | `.tmp/`, вне git |
+| Ключи и токены | `~/.config/<сервис>/env` (600), вне репозитория |
+
+Датированный артефакт именуется `<тема>-YYYY-MM-DD.md` — это снимок на дату, задним числом не переписывается,
+рядом кладётся новый.
 
 ## Как работать в этой среде
 
@@ -36,198 +49,8 @@ SOP: цель, входы, инструменты, выход, краевые с
 
 Источник истины — Figma + папка `ds/`. Индекс ссылается на конкретный Figma-файл. Если работаешь с **копией** этого файла, индекс надо переподвязать — но это делает пользователь, запустив курсовую процедуру `ds-rebind` (`../directives/_archive/directive_ds_rebind.md`). Сам переподвязку не инициируй.
 
+## Как ведётся wiki
 
+Канон — общий для проектов с парой `raw/` + `wiki/`, лежит в `~/Brain/templates/wiki-rules.md`:
 
-## Purpose
-
-  
-
-This wiki is a structured, interlinked knowledge base for a team chat.
-
-Claude maintains the wiki. The human curates sources, asks questions, and guides the analysis.
-
-  
-  
-
-## Folder structure
-  
-
-```
-
-raw/ -- source documents (immutable -- never modify these)
-
-wiki/ -- markdown pages maintained by Claude
-
-wiki/index.md -- table of contents for the entire wiki
-
-wiki/log.md -- append-only record of all operations
-
-```
-
-  
-  
-
-## Ingest workflow
-
-  
-  
-
-When the user adds a new source to `raw/` and asks you to ingest it:
-
-  
-
-1. Read the full source document
-
-2. Discuss key takeaways with the user before writing anything
-
-3. Create a summary page in `wiki/` named after the source
-
-4. Create or update concept pages for each major idea or entity
-
-5. Add wiki-links ([[page-name]]) to connect related pages
-
-6. Update `wiki/index.md` with new pages and one-line descriptions
-
-7. Append an entry to `wiki/log.md` with the date, source name, and what changed
-
-  
-
-A single source may touch 10-15 wiki pages. That is normal.
-
-  
-
-## Page format
-
-  
-
-Every wiki page should follow this structure:
-
-  
-
-```markdown
-
-# Page Title
-
-  
-  
-
-**Summary**: One to two sentences describing this page.
-
-  
-  
-
-**Sources**: List of raw source files this page draws from.
-
-  
-  
-
-**Last updated**: Date of most recent update.
-
-  
-  
-
----
-
-  
-  
-
-Main content goes here. Use clear headings and short paragraphs.
-
-  
-  
-
-Link to related concepts using [[wiki-links]] throughout the text.
-
-  
-  
-
-## Related pages
-
-  
-  
-
-- [[related-concept-1]]
-
-- [[related-concept-2]]
-
-```
-
-  
-  
-
-## Citation rules
-
-  
-  
-
-- Every factual claim should reference its source file
-
-- Use the format (source: filename.pdf) after the claim
-
-- If two sources disagree, note the contradiction explicitly
-
-- If a claim has no source, mark it as needing verification
-
-  
-  
-
-## Question answering
-
-  
-
-When the user asks a question:
-
-  
-  
-
-1. Read `wiki/index.md` first to find relevant pages
-
-2. Read those pages and synthesize an answer
-
-3. Cite specific wiki pages in your response
-
-4. If the answer is not in the wiki, say so clearly
-
-5. If the answer is valuable, offer to save it as a new wiki page
-
-  
-
-Good answers should be filed back into the wiki so they compound over time.
-
-  
-  
-
-## Lint
-
-  
-
-When the user asks you to lint or audit the wiki:
-
-- Check for contradictions between pages
-
-- Find orphan pages (no inbound links from other pages)
-
-- Identify concepts mentioned in pages that lack their own page
-
-- Flag claims that may be outdated based on newer sources
-
-- Check that all pages follow the page format above
-
-- Report findings as a numbered list with suggested fixes
-
-  
-  
-
-## Rules
-
-  
-
-- Never modify anything in the `raw/` folder
-
-- Always update `wiki/index.md` and `wiki/log.md` after changes
-
-- Keep page names lowercase with hyphens (e.g. `machine-learning.md`)
-
-- Write in clear, plain language
-
-- When uncertain about how to categorize something, ask the user
+@~/Brain/templates/wiki-rules.md

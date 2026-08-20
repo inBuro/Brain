@@ -50,3 +50,6 @@ fadercraft/Control XL/raw/Demo-set Project/Samples/Processed/Crop/Melody 1 28 *.
 # Python venv + bytecode caches inside agent tools — rebuildable, never commit
 **/.venv/
 **/__pycache__/
+
+# Промежуточные файлы проектов — пересобираются, никогда не коммитятся
+**/.tmp/

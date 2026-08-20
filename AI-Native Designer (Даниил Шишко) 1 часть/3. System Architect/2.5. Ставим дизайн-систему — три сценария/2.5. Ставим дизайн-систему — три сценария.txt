@@ -1,0 +1,54 @@
+Третий шаг рельса.
+После wireframes пора ставить дизайн-систему — Variables, фундамент, базовые компоненты.
+На уроке разбираем три реальных сценария, в которых оказываются продуктовые дизайнеры.
+A — ДС нет, ставим стартовую с нуля через ds_baseline: бриф из пяти вопросов → две коллекции Variables (Primitive и Semantic) → фундамент-секция плюс семь базовых компонентов в одном Figma-файле с wireframes.
+B — берём готовую базу из Figma Community (Shadcn, Material, Carbon, Gravity UI), дублируем к себе и применяем ds_scan.
+C — в компании уже есть своя ДС, через ds_scan индексируем её в ds/foundation.md и ds/components.md, чтобы агент работал по компактной карте, а не пытался прочитать дерево на 300+ компонентов. Финальная фаза каждой директивы — ds/CONTRACT.md и блок-указатель в CLAUDE.md.
+Без контракта дизайн-система остаётся декорацией, с ним — все следующие сборки экранов идут через ДС обязательно.
+
+После урока ты сможешь:
+
+    Ставить стартовую ДС с нуля через ds_baseline или индексировать существующую через ds_scan.
+    Работать с тремя слоями токенов (примитивные → смысловые → компонентные) через коллекции Figma Variables.
+    Закреплять контракт ДС в проекте, чтобы все последующие задачи на интерфейс шли через UI-кит и Variables, без прибитых hex.
+
+
+Полезные материалы:
+Библиотеки, которые можно заимствовать
+Shadcn/ui — Подходит для веб-продуктов на React, где важна возможность глубокой кастомизации компонентов. Tailwind-first, работает с Variables.
+
+    shadcn/ui: The Ultimate UI Kit for Figma — основной комплект от RAVN, поддерживается активно
+    Obra shadcn/ui Kit Community Edition — альтернативная community-сборка
+    shadcn/ui components with Variables & Tailwind classes — версия с Variables и Tailwind-классами слоев, обновлена в январе 2026
+    Документация и Figma-секция от автора
+
+Material 3 — Подходит для мобильных и кросс-платформенных продуктов. Готовая система типографики, цвета, motion. Вариант, когда не нужно сильно кастомизировать стиль.
+
+    Material 3 Design Kit (официальный) — основной файл от Material team
+    Material 3 Design Kit (Variables + Properties) — версия с Figma Variables и component properties
+    Material 3 Design Kit But Better — community-версия с улучшенной адаптивностью и Auto Layout
+
+IBM Carbon — Подходит для корпоративных b2b-продуктов с большим количеством данных, таблиц, форм. Сильная сторона — плотность и читаемость.
+
+    Carbon Design System v11 — текущая основная версия
+    IBM Carbon Design System (Gray 100) — тёмная тема как отдельный файл
+    Carbon Native Mobile (beta) — мобильная версия
+    Документация и набор Figma-китов
+
+Gravity UI — Open-source ДС от Yandex. Подходит для b2b-инструментов, дашбордов, разработческих интерфейсов. Поддерживает кириллицу из коробки, имена компонентов и описания на русском в части файлов.
+
+    Gravity UI Design System — основной файл с компонентами и Variables
+    Gravity UI Icons — иконки отдельным файлом
+    Gravity UI Illustrations — иллюстрации
+    Gravity Themer (плагин) — плагин для перекраски под бренд
+    Профиль Gravity-UI в Figma Community
+
+Relume — Подходит, когда продукт — это лендинг или маркетинговый сайт с типовыми секциями (hero, features, testimonials, footer). 1000+ готовых блоков, не отдельные компоненты, а уже собранные секции.
+
+    Relume Library Figma Kit — основной файл
+    Free Relume Library Figma Kit v1.14 — бесплатная версия для community
+    PRO Relume Library Figma Kit v1.5 — расширенная версия
+    Relume Figma Library — официальный сайт
+
+Директива directive_ds_baseline.md — для сценария A ⬇️⬇️⬇️
+Директива directive_ds_scan.md — для сценариев B и C ⬇️⬇️⬇️

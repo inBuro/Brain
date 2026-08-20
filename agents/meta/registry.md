@@ -101,7 +101,7 @@
 - **ID:** `hiring-manager`
 - **Домен:** личный хайринг-менеджер на стороне кандидата — мониторинг/майнинг вакансий, отклики и cover letters, актуальность и вычитка резюме, юзкейсы и портфолио-описания проделанной работы, консистентность комплекта заявки.
 - **Триггеры:** вакансия, резюме, CV, отклик, cover letter, юзкейс, портфолио, поиск работы, заявка на позицию, LinkedIn Open to Work.
-- **Директивы:** `vacancy_mining` (поиск вакансий под профиль, лог в `career/research/`), `application_draft` (отклик/cover letter под конкретную вакансию в `career/applications/<slug>/`), `resume_maintain` (мастер-версия `career/resume/resume.md`, обновляется по новым результатам), `resume_proofread` (обязательная вычитка перед сдачей), `case_study_write` (Задача→Действие→Результат в `career/portfolio/`), `portfolio_entry` (сырой факт → портфолио-формулировка, источник — реальная история в `~/Brain`), `consistency_audit` (сверка тайтлов/цифр/tone перед сдачей комплекта).
+- **Директивы:** `vacancy_mining` (поиск вакансий под профиль, лог в `portfolio/research/`), `application_draft` (отклик/cover letter под конкретную вакансию в `portfolio/applications/<slug>/`), `resume_maintain` (мастер-версия `portfolio/resume/resume.md`, обновляется по новым результатам), `resume_proofread` (обязательная вычитка перед сдачей), `case_study_write` (Задача→Действие→Результат в `portfolio/portfolio/`), `portfolio_entry` (сырой факт → портфолио-формулировка, источник — реальная история в `~/Brain`), `consistency_audit` (сверка тайтлов/цифр/tone перед сдачей комплекта).
 - **Память:** `agent-memory/` → `~/Brain/.claude/agent-memory/hiring-manager/` (пока пустая — bootstrap при первой задаче).
 - **API:** —
 

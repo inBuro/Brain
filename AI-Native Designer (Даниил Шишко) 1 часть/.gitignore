@@ -1,0 +1,6 @@
+# Course videos — 6+ GB, source material, never in git
+*.mp4
+*.wav
+.DS_Store
+.tmp/
+*.log

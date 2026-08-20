@@ -18,4 +18,16 @@
 
 ## Проекты
 
-Fadercraft (`fadercraft/Claude.md`), Bifi (`bifi/Claude.md`), Скриншотер (`screenshotter/CLAUDE.md`) — каждый со своим CLAUDE.md, читать по мере входа в проект.
+Fadercraft (`fadercraft/Claude.md`), Bifi (`bifi/Claude.md`), Скриншотер (`screenshotter/CLAUDE.md`), portfolio (`portfolio/CLAUDE.md`, рабочая область поиска работы: резюме, кейсы, отклики) — каждый со своим CLAUDE.md, читать по мере входа в проект.
+
+Три разных «портфолио» не путать: `portfolio/` — эта рабочая область поиска работы (резюме, кейсы, отклики); `~/Projects/Projects/portfolio/` — код сайта in-buro.com; `.claude/skills/portfolio/` — группа скиллов по резюме и job-search.
+
+Раскладка у всех одна: правила (CLAUDE.md проекта) → директивы (скиллы) → исполнение (скрипты проекта), артефакты по папкам и никогда в корень, промежуточное — в `.tmp/` вне git, ключи — в `~/.config/<сервис>/env`.
+
+Директивы курса лежат в `directives/` (индекс — `directives/README.md`), у каждой есть воркфлоу-обёртка в `workflows/`,
+связанная симлинком в `.claude/commands/` и вызываемая слэш-командой: `/brief`, `/prd`, `/ds-scan`.
+Когда за какой тянуться — `directives/_catalog.md` и `workflows/_catalog.md`.
+Новый проект разворачивается командой `/init-project` по шаблону `templates/project-claude-md.md`.
+
+База знаний по курсу «AI-Native Designer» (`AI-Native Designer (Даниил Шишко) 1 часть/CLAUDE.md`) — транскрипты, конспекты
+и каталог директив по 44 урокам; вопросы по курсу отвечать оттуда, а не пересматривая видео.
