@@ -8113,5 +8113,405 @@
     "verdict": "REJECT",
     "reason": "account-buying solicitation",
     "date": "2026-08-18T12:23:11+00:00"
+  },
+  "1151522902:6101": {
+    "verdict": "REJECT",
+    "reason": "wrong role: influencer marketing manager",
+    "date": "2026-08-19T16:00:01+00:00"
+  },
+  "1151522902:6100": {
+    "verdict": "REJECT",
+    "reason": "wrong role: marketing manager; junior; office Moscow",
+    "date": "2026-08-19T13:00:02+00:00"
+  },
+  "1090349566:7639": {
+    "verdict": "REJECT",
+    "reason": "course ad, not a vacancy",
+    "date": "2026-08-19T15:06:05+00:00"
+  },
+  "1090349566:7638": {
+    "verdict": "REJECT",
+    "reason": "course ad, not a vacancy",
+    "date": "2026-08-19T14:00:12+00:00"
+  },
+  "1435567661:1336": {
+    "verdict": "MAYBE",
+    "reason": "digest; #4 senior interface designer VkusVill remote fits, salary not stated",
+    "date": "2026-08-20T07:32:53+00:00"
+  },
+  "1512435004:3144": {
+    "verdict": "REJECT",
+    "reason": "Moscow hybrid, not remote",
+    "date": "2026-08-20T07:08:02+00:00"
+  },
+  "1938067478:5082": {
+    "verdict": "REJECT",
+    "reason": "wrong role: game designer",
+    "date": "2026-08-20T09:40:12+00:00"
+  },
+  "1938067478:5081": {
+    "verdict": "REJECT",
+    "reason": "not a design role; suspicious generic remote gig",
+    "date": "2026-08-20T09:10:16+00:00"
+  },
+  "1938067478:5080": {
+    "verdict": "REJECT",
+    "reason": "wrong role: PM assistant",
+    "date": "2026-08-20T08:40:13+00:00"
+  },
+  "1938067478:5079": {
+    "verdict": "REJECT",
+    "reason": "freelance gig, not a design role",
+    "date": "2026-08-20T08:10:09+00:00"
+  },
+  "1938067478:5077": {
+    "verdict": "REJECT",
+    "reason": "not a vacancy: freelancer channel collection link",
+    "date": "2026-08-19T17:01:15+00:00"
+  },
+  "1938067478:5076": {
+    "verdict": "REJECT",
+    "reason": "wrong role: 3D visualizer",
+    "date": "2026-08-19T13:26:12+00:00"
+  },
+  "1277300882:6173": {
+    "verdict": "REJECT",
+    "reason": "marketing designer; hybrid Poland; part-time",
+    "date": "2026-08-19T17:36:57+00:00"
+  },
+  "1277300882:6172": {
+    "verdict": "REJECT",
+    "reason": "office Almaty, not remote",
+    "date": "2026-08-19T15:00:32+00:00"
+  },
+  "2232544984:461": {
+    "verdict": "MAYBE",
+    "reason": "digest; #2 Aviasales mid product designer remote, #5 Brele mid/sr product designer remote; salary not stated",
+    "date": "2026-08-20T08:17:34+00:00"
+  },
+  "1818997587:26538": {
+    "verdict": "REJECT",
+    "reason": "wrong role: deployment strategist",
+    "date": "2026-08-20T08:00:25+00:00"
+  },
+  "1818997587:26537": {
+    "verdict": "REJECT",
+    "reason": "wrong role: deployment strategist",
+    "date": "2026-08-20T08:00:24+00:00"
+  },
+  "1818997587:26536": {
+    "verdict": "REJECT",
+    "reason": "wrong role: account director",
+    "date": "2026-08-20T08:00:24+00:00"
+  },
+  "1818997587:26535": {
+    "verdict": "REJECT",
+    "reason": "wrong role: investigator; onsite Israel",
+    "date": "2026-08-20T08:00:24+00:00"
+  },
+  "1818997587:26534": {
+    "verdict": "REJECT",
+    "reason": "wrong role: software engineer; hybrid",
+    "date": "2026-08-20T08:00:24+00:00"
+  },
+  "1818997587:26533": {
+    "verdict": "REJECT",
+    "reason": "wrong role: data science manager; onsite",
+    "date": "2026-08-20T08:00:17+00:00"
+  },
+  "1818997587:26532": {
+    "verdict": "REJECT",
+    "reason": "wrong role: client support; junior; onsite",
+    "date": "2026-08-20T08:00:16+00:00"
+  },
+  "1818997587:26531": {
+    "verdict": "REJECT",
+    "reason": "wrong role: staff data engineer; hybrid London",
+    "date": "2026-08-20T08:00:16+00:00"
+  },
+  "1818997587:26530": {
+    "verdict": "REJECT",
+    "reason": "wrong role: executive recruiter; hybrid",
+    "date": "2026-08-20T08:00:16+00:00"
+  },
+  "1818997587:26529": {
+    "verdict": "REJECT",
+    "reason": "wrong role: business development manager; onsite",
+    "date": "2026-08-20T08:00:16+00:00"
+  },
+  "1818997587:26528": {
+    "verdict": "REJECT",
+    "reason": "wrong role: tax manager",
+    "date": "2026-08-20T08:00:09+00:00"
+  },
+  "1818997587:26527": {
+    "verdict": "REJECT",
+    "reason": "wrong role: regulatory affairs analyst",
+    "date": "2026-08-20T08:00:09+00:00"
+  },
+  "1818997587:26526": {
+    "verdict": "REJECT",
+    "reason": "wrong role: quantitative researcher",
+    "date": "2026-08-20T08:00:08+00:00"
+  },
+  "1818997587:26525": {
+    "verdict": "REJECT",
+    "reason": "wrong role: QA engineer",
+    "date": "2026-08-20T08:00:08+00:00"
+  },
+  "1818997587:26524": {
+    "verdict": "REJECT",
+    "reason": "wrong role: head of customer outcomes; hybrid Melbourne",
+    "date": "2026-08-20T08:00:08+00:00"
+  },
+  "1818997587:26523": {
+    "verdict": "REJECT",
+    "reason": "wrong role: head of people; hybrid Melbourne",
+    "date": "2026-08-20T08:00:01+00:00"
+  },
+  "1818997587:26522": {
+    "verdict": "REJECT",
+    "reason": "wrong role: staff data scientist",
+    "date": "2026-08-20T08:00:01+00:00"
+  },
+  "1818997587:26521": {
+    "verdict": "REJECT",
+    "reason": "wrong role: senior data scientist",
+    "date": "2026-08-20T08:00:00+00:00"
+  },
+  "1818997587:26520": {
+    "verdict": "REJECT",
+    "reason": "wrong role: people operations specialist",
+    "date": "2026-08-20T08:00:00+00:00"
+  },
+  "1818997587:26519": {
+    "verdict": "MAYBE",
+    "reason": "Staff Product Designer at Walrus, remote; role/grade fit, salary not stated",
+    "date": "2026-08-20T08:00:00+00:00"
+  },
+  "1818997587:26518": {
+    "verdict": "REJECT",
+    "reason": "wrong role: software engineer; onsite SF",
+    "date": "2026-08-20T01:00:21+00:00"
+  },
+  "1818997587:26517": {
+    "verdict": "REJECT",
+    "reason": "wrong role: software engineer; onsite SF",
+    "date": "2026-08-20T01:00:21+00:00"
+  },
+  "1818997587:26516": {
+    "verdict": "REJECT",
+    "reason": "wrong role: production engineer; onsite Sunnyvale",
+    "date": "2026-08-20T01:00:21+00:00"
+  },
+  "1818997587:26515": {
+    "verdict": "REJECT",
+    "reason": "wrong role: production engineer; onsite Sunnyvale",
+    "date": "2026-08-20T01:00:21+00:00"
+  },
+  "1818997587:26514": {
+    "verdict": "REJECT",
+    "reason": "wrong role: production engineer; onsite SF",
+    "date": "2026-08-20T01:00:20+00:00"
+  },
+  "1818997587:26513": {
+    "verdict": "REJECT",
+    "reason": "wrong role: production engineer; onsite",
+    "date": "2026-08-20T01:00:13+00:00"
+  },
+  "1818997587:26512": {
+    "verdict": "REJECT",
+    "reason": "wrong role: engineering operations manager; onsite",
+    "date": "2026-08-20T01:00:13+00:00"
+  },
+  "1818997587:26511": {
+    "verdict": "REJECT",
+    "reason": "wrong role: security analyst; hybrid",
+    "date": "2026-08-20T01:00:13+00:00"
+  },
+  "1818997587:26510": {
+    "verdict": "REJECT",
+    "reason": "wrong role: software engineer; hybrid",
+    "date": "2026-08-20T01:00:13+00:00"
+  },
+  "1818997587:26509": {
+    "verdict": "REJECT",
+    "reason": "wrong role: data science intern; grade intern",
+    "date": "2026-08-20T01:00:13+00:00"
+  },
+  "1818997587:26508": {
+    "verdict": "REJECT",
+    "reason": "wrong role: business development",
+    "date": "2026-08-20T01:00:07+00:00"
+  },
+  "1818997587:26507": {
+    "verdict": "REJECT",
+    "reason": "wrong role: datacenter/physical infrastructure design",
+    "date": "2026-08-20T01:00:07+00:00"
+  },
+  "1818997587:26506": {
+    "verdict": "REJECT",
+    "reason": "wrong role: AI compute hardware engineer",
+    "date": "2026-08-20T01:00:07+00:00"
+  },
+  "1818997587:26505": {
+    "verdict": "REJECT",
+    "reason": "wrong role: solution architect (infrastructure)",
+    "date": "2026-08-20T01:00:07+00:00"
+  },
+  "1818997587:26504": {
+    "verdict": "REJECT",
+    "reason": "wrong role: software/data infrastructure engineer",
+    "date": "2026-08-20T01:00:07+00:00"
+  },
+  "1100655091:11315": {
+    "verdict": "REJECT",
+    "reason": "wrong role: IT department lead",
+    "date": "2026-08-20T08:41:05+00:00"
+  },
+  "1100655091:11314": {
+    "verdict": "REJECT",
+    "reason": "wrong role: IT department lead",
+    "date": "2026-08-20T08:36:21+00:00"
+  },
+  "1100655091:11313": {
+    "verdict": "REJECT",
+    "reason": "wrong role: social media manager; part-time",
+    "date": "2026-08-20T06:45:19+00:00"
+  },
+  "1100655091:11312": {
+    "verdict": "REJECT",
+    "reason": "wrong role: social media manager; part-time",
+    "date": "2026-08-20T06:40:36+00:00"
+  },
+  "1100655091:11311": {
+    "verdict": "REJECT",
+    "reason": "wrong role: social media manager; part-time",
+    "date": "2026-08-20T06:35:46+00:00"
+  },
+  "1100655091:11310": {
+    "verdict": "REJECT",
+    "reason": "wrong role: social media manager; part-time",
+    "date": "2026-08-20T06:31:21+00:00"
+  },
+  "1100655091:11309": {
+    "verdict": "REJECT",
+    "reason": "wrong role: social media manager; part-time",
+    "date": "2026-08-20T06:24:03+00:00"
+  },
+  "1796231867:3125": {
+    "verdict": "REJECT",
+    "reason": "not a vacancy: Bitrix24 product advertisement",
+    "date": "2026-08-20T07:37:30+00:00"
+  },
+  "1796231867:3124": {
+    "verdict": "REJECT",
+    "reason": "employment is contract, not full-time",
+    "date": "2026-08-19T13:36:52+00:00"
+  },
+  "1373050413:4771": {
+    "verdict": "REJECT",
+    "reason": "wrong role: photo retoucher/editor; freelance gig",
+    "date": "2026-08-19T11:52:15+00:00"
+  },
+  "1361592424:4700": {
+    "verdict": "REJECT",
+    "reason": "not a vacancy: candidate resume posting",
+    "date": "2026-08-20T08:07:00+00:00"
+  },
+  "1361592424:4699": {
+    "verdict": "REJECT",
+    "reason": "not a vacancy: candidate resume posting",
+    "date": "2026-08-19T20:48:58+00:00"
+  },
+  "1361592424:4698": {
+    "verdict": "REJECT",
+    "reason": "not a vacancy: candidate resume posting",
+    "date": "2026-08-19T13:00:38+00:00"
+  },
+  "1788647101:2051": {
+    "verdict": "REJECT",
+    "reason": "not a vacancy: career webinar advertisement",
+    "date": "2026-08-20T08:29:03+00:00"
+  },
+  "1788647101:2050": {
+    "verdict": "REJECT",
+    "reason": "wrong role: brand/graphic designer (beauty packaging)",
+    "date": "2026-08-20T07:02:25+00:00"
+  },
+  "1788647101:2049": {
+    "verdict": "REJECT",
+    "reason": "wrong role: head of user acquisition; part-time",
+    "date": "2026-08-19T12:25:56+00:00"
+  },
+  "1964574584:3841": {
+    "verdict": "REJECT",
+    "reason": "location is hybrid (Moscow), not remote",
+    "date": "2026-08-20T04:29:04+00:00"
+  },
+  "1052346215:10278": {
+    "verdict": "REJECT",
+    "reason": "wrong role: backend PHP engineer",
+    "date": "2026-08-20T09:58:30+00:00"
+  },
+  "1052346215:10277": {
+    "verdict": "REJECT",
+    "reason": "wrong role: head of PMO",
+    "date": "2026-08-20T07:58:30+00:00"
+  },
+  "1052346215:10276": {
+    "verdict": "REJECT",
+    "reason": "wrong role: partnerships director",
+    "date": "2026-08-19T14:58:30+00:00"
+  },
+  "1052346215:10275": {
+    "verdict": "REJECT",
+    "reason": "wrong role: product manager (growth/mobile)",
+    "date": "2026-08-19T13:33:04+00:00"
+  },
+  "1257927154:5649": {
+    "verdict": "REJECT",
+    "reason": "freelance platform; not full-time",
+    "date": "2026-08-19T17:46:06+00:00"
+  },
+  "1257927154:5648": {
+    "verdict": "REJECT",
+    "reason": "wrong role: graphic designer (gaming)",
+    "date": "2026-08-19T17:45:24+00:00"
+  },
+  "1257927154:5647": {
+    "verdict": "MAYBE",
+    "reason": "role fits (product designer, design system); grade/salary/location/employment not stated",
+    "date": "2026-08-19T13:32:00+00:00"
+  },
+  "1696221413:2337": {
+    "verdict": "REJECT",
+    "reason": "wrong role: PR manager",
+    "date": "2026-08-20T07:02:30+00:00"
+  },
+  "1696221413:2336": {
+    "verdict": "REJECT",
+    "reason": "wrong role: head of marketing",
+    "date": "2026-08-19T12:26:45+00:00"
+  },
+  "1696221413:2335": {
+    "verdict": "REJECT",
+    "reason": "not a vacancy: article about AI engineer skills",
+    "date": "2026-08-19T11:55:22+00:00"
+  },
+  "1702888054:3104": {
+    "verdict": "REJECT",
+    "reason": "wrong role: tokenomics/research analyst; office Moscow",
+    "date": "2026-08-20T10:12:10+00:00"
+  },
+  "1702888054:3103": {
+    "verdict": "REJECT",
+    "reason": "wrong role: business development manager",
+    "date": "2026-08-19T16:00:02+00:00"
+  },
+  "1702888054:3102": {
+    "verdict": "REJECT",
+    "reason": "wrong role: junior marketing manager; office Moscow",
+    "date": "2026-08-19T13:00:03+00:00"
   }
 }

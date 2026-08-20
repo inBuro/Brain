@@ -36,3 +36,7 @@
 Pipeline complete.
 
 **91 new messages scanned, 9 new MATCH/MAYBE pushed to Notion** (0 MATCH, 9 MAYBE, 82 REJECT; 0 dupes; Notion pool now 132).
+2026-08-20 run: fetched 1034, new 80 (76 REJECT / 4 MAYBE), in-batch dupes 0, already-in-Notion 0, pushed 4 MAYBE -> Notion; ledger 136 total
+Pipeline complete. All 8 steps ran: fetch → filter → classify (via subagents) → merge → dedupe → push → cleanup → report.
+
+**80 new messages scanned, 4 new MAYBE pushed to Notion** (76 REJECT; 0 dupes, 0 already-present). The 4 MAYBE: senior interface designer @ ВкусВилл (digest), Aviasales/Brele product designers (digest), Staff Product Designer @ Walrus, product designer @ Pragmatica/VK Video — all remote, salaries unstated. Notion pool now 136 rows; nothing awaiting your review beyond the tracker itself.
