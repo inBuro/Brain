@@ -8513,5 +8513,410 @@
     "verdict": "REJECT",
     "reason": "wrong role: junior marketing manager; office Moscow",
     "date": "2026-08-19T13:00:03+00:00"
+  },
+  "1151522902:6102": {
+    "verdict": "REJECT",
+    "reason": "SEO-специалист, офис в СПб - не дизайн-роль",
+    "date": "2026-08-20T15:00:03+00:00"
+  },
+  "1090349566:7640": {
+    "verdict": "REJECT",
+    "reason": "реклама курса AI Native Designer, не вакансия",
+    "date": "2026-08-21T10:42:15+00:00"
+  },
+  "1435567661:1337": {
+    "verdict": "MAYBE",
+    "reason": "дайджест: UX/UI middle remote и Product Designer senior remote, зарплата не указана",
+    "date": "2026-08-21T07:07:32+00:00"
+  },
+  "1512435004:3146": {
+    "verdict": "MAYBE",
+    "reason": "дайджест: Middle+ Product Designer Blink, удаленно, зарплата не указана",
+    "date": "2026-08-21T10:33:01+00:00"
+  },
+  "1512435004:3145": {
+    "verdict": "REJECT",
+    "reason": "Senior Talent Acquisition - HR, не дизайн",
+    "date": "2026-08-21T07:03:01+00:00"
+  },
+  "1230079882:1236": {
+    "verdict": "REJECT",
+    "reason": "веб-дизайнер фриланс, бюджет до 60к руб",
+    "date": "2026-08-21T07:08:01+00:00"
+  },
+  "1230079882:1235": {
+    "verdict": "REJECT",
+    "reason": "реклама стороннего дизайн-канала",
+    "date": "2026-08-20T13:30:40+00:00"
+  },
+  "1887365954:1081": {
+    "verdict": "REJECT",
+    "reason": "Influence Manager - не дизайн",
+    "date": "2026-08-21T07:03:01+00:00"
+  },
+  "1938067478:5091": {
+    "verdict": "REJECT",
+    "reason": "менеджер по соцсетям",
+    "date": "2026-08-21T10:10:11+00:00"
+  },
+  "1938067478:5090": {
+    "verdict": "REJECT",
+    "reason": "спам-гиг, не вакансия",
+    "date": "2026-08-21T09:41:41+00:00"
+  },
+  "1938067478:5089": {
+    "verdict": "REJECT",
+    "reason": "подозрительная гиг-задача",
+    "date": "2026-08-21T09:10:12+00:00"
+  },
+  "1938067478:5088": {
+    "verdict": "REJECT",
+    "reason": "редактор детских текстов",
+    "date": "2026-08-21T08:40:11+00:00"
+  },
+  "1938067478:5087": {
+    "verdict": "REJECT",
+    "reason": "специалист службы поддержки",
+    "date": "2026-08-21T08:10:13+00:00"
+  },
+  "1938067478:5086": {
+    "verdict": "REJECT",
+    "reason": "визуальный/бренд-дизайнер beauty, проектный формат",
+    "date": "2026-08-21T07:34:19+00:00"
+  },
+  "1938067478:5085": {
+    "verdict": "REJECT",
+    "reason": "редактор/контент-менеджер",
+    "date": "2026-08-21T06:40:14+00:00"
+  },
+  "1938067478:5084": {
+    "verdict": "REJECT",
+    "reason": "Level Artist геймдев, низкая ЗП руб",
+    "date": "2026-08-20T16:16:59+00:00"
+  },
+  "1938067478:5083": {
+    "verdict": "REJECT",
+    "reason": "3D Motion Designer",
+    "date": "2026-08-20T14:03:07+00:00"
+  },
+  "1277300882:6179": {
+    "verdict": "REJECT",
+    "reason": "Graphic and Motion Designer, гибрид Лондон",
+    "date": "2026-08-20T17:09:01+00:00"
+  },
+  "1277300882:6178": {
+    "verdict": "REJECT",
+    "reason": "ЗП 100-180к руб, ниже порога",
+    "date": "2026-08-20T15:30:54+00:00"
+  },
+  "1277300882:6177": {
+    "verdict": "REJECT",
+    "reason": "Principal Product Designer 2GIS, remote ограничен РФ",
+    "date": "2026-08-20T14:38:43+00:00"
+  },
+  "1277300882:6176": {
+    "verdict": "REJECT",
+    "reason": "UX/UI Designer GB2B, гибрид Варшава",
+    "date": "2026-08-20T14:18:06+00:00"
+  },
+  "1277300882:6175": {
+    "verdict": "MAYBE",
+    "reason": "Junior/Middle UI/UX дизайнер, remote, нет ЗП - уровень ниже желаемого",
+    "date": "2026-08-20T14:06:18+00:00"
+  },
+  "1277300882:6174": {
+    "verdict": "REJECT",
+    "reason": "Product Designer Design Systems, OpenAI, офис Сан-Франциско",
+    "date": "2026-08-20T13:49:03+00:00"
+  },
+  "2232544984:462": {
+    "verdict": "MAYBE",
+    "reason": "дайджест: Senior UX/UI дизайнер SM Lab, remote опция, нет ЗП",
+    "date": "2026-08-21T09:30:25+00:00"
+  },
+  "1818997587:26598": {
+    "verdict": "REJECT",
+    "reason": "Senior Intelligence Analyst",
+    "date": "2026-08-21T08:00:24+00:00"
+  },
+  "1818997587:26597": {
+    "verdict": "REJECT",
+    "reason": "Account Manager",
+    "date": "2026-08-21T08:00:24+00:00"
+  },
+  "1818997587:26596": {
+    "verdict": "REJECT",
+    "reason": "Senior Software Engineer Blockchain",
+    "date": "2026-08-21T08:00:24+00:00"
+  },
+  "1818997587:26595": {
+    "verdict": "REJECT",
+    "reason": "Intelligence Analyst Threat Hunter, офис Тель-Авив",
+    "date": "2026-08-21T08:00:24+00:00"
+  },
+  "1818997587:26594": {
+    "verdict": "REJECT",
+    "reason": "Intelligence Analyst Fraud Researcher, офис Тель-Авив",
+    "date": "2026-08-21T08:00:24+00:00"
+  },
+  "1818997587:26593": {
+    "verdict": "REJECT",
+    "reason": "Senior Backend Engineer",
+    "date": "2026-08-21T08:00:17+00:00"
+  },
+  "1818997587:26592": {
+    "verdict": "REJECT",
+    "reason": "Test Software Engineer",
+    "date": "2026-08-21T08:00:16+00:00"
+  },
+  "1818997587:26591": {
+    "verdict": "REJECT",
+    "reason": "Marketing Tech Savvy",
+    "date": "2026-08-21T08:00:16+00:00"
+  },
+  "1818997587:26590": {
+    "verdict": "REJECT",
+    "reason": "Social Media Manager, гибрид Вильнюс",
+    "date": "2026-08-21T08:00:16+00:00"
+  },
+  "1818997587:26589": {
+    "verdict": "REJECT",
+    "reason": "Founding Tech Lead",
+    "date": "2026-08-21T08:00:16+00:00"
+  },
+  "1818997587:26588": {
+    "verdict": "REJECT",
+    "reason": "Talent Investor, гибрид Лондон",
+    "date": "2026-08-21T08:00:09+00:00"
+  },
+  "1818997587:26587": {
+    "verdict": "REJECT",
+    "reason": "Studio Founding Engineer, гибрид Лондон",
+    "date": "2026-08-21T08:00:08+00:00"
+  },
+  "1818997587:26586": {
+    "verdict": "REJECT",
+    "reason": "Programme Coordinator, гибрид Лондон, низкая ЗП",
+    "date": "2026-08-21T08:00:08+00:00"
+  },
+  "1818997587:26585": {
+    "verdict": "REJECT",
+    "reason": "Co-Founder Green Energy",
+    "date": "2026-08-21T08:00:08+00:00"
+  },
+  "1818997587:26584": {
+    "verdict": "REJECT",
+    "reason": "Tech Talent Pool",
+    "date": "2026-08-21T08:00:08+00:00"
+  },
+  "1818997587:26583": {
+    "verdict": "REJECT",
+    "reason": "Blockchain Node Operations Specialist",
+    "date": "2026-08-21T08:00:01+00:00"
+  },
+  "1818997587:26582": {
+    "verdict": "REJECT",
+    "reason": "Information Systems Assistant, гибрид Токио",
+    "date": "2026-08-21T08:00:00+00:00"
+  },
+  "1818997587:26581": {
+    "verdict": "REJECT",
+    "reason": "Legal Assistant, гибрид Токио",
+    "date": "2026-08-21T08:00:00+00:00"
+  },
+  "1818997587:26580": {
+    "verdict": "REJECT",
+    "reason": "SEO Manager, гибрид Вильнюс",
+    "date": "2026-08-21T08:00:00+00:00"
+  },
+  "1818997587:26579": {
+    "verdict": "REJECT",
+    "reason": "Product Data Analyst, гибрид Вильнюс",
+    "date": "2026-08-21T08:00:00+00:00"
+  },
+  "1818997587:26578": {
+    "verdict": "REJECT",
+    "reason": "Mobile ASO/Paid, гибрид Вильнюс",
+    "date": "2026-08-21T01:00:21+00:00"
+  },
+  "1818997587:26577": {
+    "verdict": "REJECT",
+    "reason": "Senior PM Blockchain, гибрид Нью-Йорк",
+    "date": "2026-08-21T01:00:21+00:00"
+  },
+  "1818997587:26576": {
+    "verdict": "REJECT",
+    "reason": "Product Marketing Manager, гибрид Нью-Йорк",
+    "date": "2026-08-21T01:00:21+00:00"
+  },
+  "1818997587:26575": {
+    "verdict": "REJECT",
+    "reason": "Product Marketing Manager Cards, гибрид Нью-Йорк",
+    "date": "2026-08-21T01:00:21+00:00"
+  },
+  "1818997587:26574": {
+    "verdict": "REJECT",
+    "reason": "Technical Account Manager, Certora",
+    "date": "2026-08-21T01:00:21+00:00"
+  },
+  "1818997587:26573": {
+    "verdict": "REJECT",
+    "reason": "Software Development Engineer, Spektr",
+    "date": "2026-08-21T01:00:14+00:00"
+  },
+  "1818997587:26572": {
+    "verdict": "REJECT",
+    "reason": "Software Development Engineer, Spektr дубль",
+    "date": "2026-08-21T01:00:14+00:00"
+  },
+  "1818997587:26571": {
+    "verdict": "REJECT",
+    "reason": "AI Engineer, Spektr",
+    "date": "2026-08-21T01:00:14+00:00"
+  },
+  "1818997587:26570": {
+    "verdict": "REJECT",
+    "reason": "Security and Compliance Specialist, Qurable",
+    "date": "2026-08-21T01:00:13+00:00"
+  },
+  "1818997587:26569": {
+    "verdict": "MAYBE",
+    "reason": "Product Designer, Qurable, remote - уровень и ЗП не указаны",
+    "date": "2026-08-21T01:00:13+00:00"
+  },
+  "1818997587:26568": {
+    "verdict": "REJECT",
+    "reason": "Senior Claims Examiner",
+    "date": "2026-08-21T01:00:06+00:00"
+  },
+  "1818997587:26567": {
+    "verdict": "REJECT",
+    "reason": "Solutions Consultant Public Sector, гибрид Нью-Йорк",
+    "date": "2026-08-21T01:00:06+00:00"
+  },
+  "1818997587:26566": {
+    "verdict": "REJECT",
+    "reason": "Office Manager, офис Флорида",
+    "date": "2026-08-21T01:00:06+00:00"
+  },
+  "1818997587:26565": {
+    "verdict": "REJECT",
+    "reason": "Solutions Consultant Post Sales",
+    "date": "2026-08-21T01:00:06+00:00"
+  },
+  "1818997587:26564": {
+    "verdict": "REJECT",
+    "reason": "Actuary",
+    "date": "2026-08-21T01:00:05+00:00"
+  },
+  "1100655091:11317": {
+    "verdict": "REJECT",
+    "reason": "Account Executive, офис Нью-Йорк",
+    "date": "2026-08-20T14:26:50+00:00"
+  },
+  "1100655091:11316": {
+    "verdict": "REJECT",
+    "reason": "советы по интервью, не вакансия",
+    "date": "2026-08-20T12:06:16+00:00"
+  },
+  "1361592424:4703": {
+    "verdict": "REJECT",
+    "reason": "резюме кандидата Senior Product Designer",
+    "date": "2026-08-20T16:30:24+00:00"
+  },
+  "1361592424:4702": {
+    "verdict": "REJECT",
+    "reason": "резюме кандидата Middle UX/UI Designer",
+    "date": "2026-08-20T14:57:23+00:00"
+  },
+  "1361592424:4701": {
+    "verdict": "REJECT",
+    "reason": "резюме кандидата UX/UI Designer",
+    "date": "2026-08-20T13:28:32+00:00"
+  },
+  "1788647101:2054": {
+    "verdict": "MAYBE",
+    "reason": "дайджест: Senior Product Designer Tangem, InvestEngine, Infomediji и Product Designer Quadcode, remote, ЗП не указана",
+    "date": "2026-08-21T09:20:59+00:00"
+  },
+  "1788647101:2053": {
+    "verdict": "REJECT",
+    "reason": "Product Manager iGaming",
+    "date": "2026-08-21T07:02:11+00:00"
+  },
+  "1788647101:2052": {
+    "verdict": "REJECT",
+    "reason": "Product Owner Crypto Custody",
+    "date": "2026-08-20T13:01:01+00:00"
+  },
+  "1964574584:3845": {
+    "verdict": "REJECT",
+    "reason": "графический дизайнер печатных каталогов, фриланс",
+    "date": "2026-08-21T10:20:25+00:00"
+  },
+  "1964574584:3844": {
+    "verdict": "REJECT",
+    "reason": "редакционный комментарий об ИИ и дизайнерах",
+    "date": "2026-08-20T20:42:17+00:00"
+  },
+  "1964574584:3843": {
+    "verdict": "REJECT",
+    "reason": "фриланс-иллюстраторы для детских книг",
+    "date": "2026-08-20T19:00:41+00:00"
+  },
+  "1964574584:3842": {
+    "verdict": "MAYBE",
+    "reason": "Principal Product Designer 2GIS remote - вероятно ЗП в рублях, сумма не указана",
+    "date": "2026-08-20T15:25:08+00:00"
+  },
+  "1052346215:10283": {
+    "verdict": "REJECT",
+    "reason": "Learning and Development Lead, гибрид",
+    "date": "2026-08-21T10:04:10+00:00"
+  },
+  "1052346215:10282": {
+    "verdict": "REJECT",
+    "reason": "CTO, Wave",
+    "date": "2026-08-21T08:02:44+00:00"
+  },
+  "1052346215:10281": {
+    "verdict": "REJECT",
+    "reason": "разработчики, аналитик, Sales Manager PixelPlex",
+    "date": "2026-08-20T14:58:30+00:00"
+  },
+  "1052346215:10280": {
+    "verdict": "REJECT",
+    "reason": "Twitter/X Growth Strategist",
+    "date": "2026-08-20T13:28:30+00:00"
+  },
+  "1052346215:10279": {
+    "verdict": "REJECT",
+    "reason": "Director TPM Engineering Business Ops, гибрид Лондон",
+    "date": "2026-08-20T11:58:30+00:00"
+  },
+  "1257927154:5651": {
+    "verdict": "MAYBE",
+    "reason": "Middle/Senior Product Designer, Brele RU агентство - формат и ЗП не указаны",
+    "date": "2026-08-20T14:35:42+00:00"
+  },
+  "1257927154:5650": {
+    "verdict": "REJECT",
+    "reason": "редакционная статья о рынке дизайна и ИИ",
+    "date": "2026-08-20T11:31:57+00:00"
+  },
+  "1696221413:2338": {
+    "verdict": "REJECT",
+    "reason": "Business Development Manager",
+    "date": "2026-08-21T07:00:40+00:00"
+  },
+  "1553765875:1480": {
+    "verdict": "REJECT",
+    "reason": "Product Designer Design Systems, OpenAI, офис Сан-Франциско",
+    "date": "2026-08-20T13:49:32+00:00"
+  },
+  "1702888054:3105": {
+    "verdict": "REJECT",
+    "reason": "SEO-специалист, офис СПб",
+    "date": "2026-08-20T15:00:03+00:00"
   }
 }
