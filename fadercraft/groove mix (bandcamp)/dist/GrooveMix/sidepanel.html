@@ -87,9 +87,9 @@
     <!-- Debug: BPM-trend + sync-uptime summary, rendered by renderSyncMonitor(). Remove after sync investigation. -->
     <!-- Single shared nudge, not per-deck — the beat offset is one relative value between decks; per-deck controls would edit the same number. -->
     <div id="phaseNudgeRow" class="phaseNudgeRow phaseInactive">
-      <button class="phaseNudgeBtn" id="phaseNudgeLeft" title="Nudge beat-grid back 1/8">◀</button>
+      <button class="phaseNudgeBtn" id="phaseNudgeLeft" title="Nudge beat-grid back 1/8">◀︎</button>
       <span class="phaseNudgeGlyph" title="Manual beat-grid offset">♪</span>
-      <button class="phaseNudgeBtn" id="phaseNudgeRight" title="Nudge beat-grid forward 1/8">▶</button>
+      <button class="phaseNudgeBtn" id="phaseNudgeRight" title="Nudge beat-grid forward 1/8">▶︎</button>
     </div>
     <div id="syncMonitor" class="syncMonitor" hidden></div>
 
@@ -102,8 +102,8 @@
             <div class="deckThumbWrap">
               <div class="deckThumbClip">
                 <img class="deckThumb" id="deckThumbA" alt="" hidden>
-                <span class="deckEmptyHint" id="deckEmptyHintA" data-i18n="deckEmptyHintB" hidden>Open a YouTube tab with a track to start mixing</span>
-                <button class="tabPickBtn" id="tabPickA" title="Pick tab">▾</button>
+                <span class="deckEmptyHint" id="deckEmptyHintA" data-i18n="deckEmptyHintB" hidden>Open a YouTube or Bandcamp tab with a track to start mixing</span>
+                <button class="tabPickBtn" id="tabPickA" title="Pick tab"><svg class="tabPickIcon" viewBox="0 0 12 6" aria-hidden="true"><path d="M6 6L0 0H12L6 6Z" fill="currentColor" /></svg></button>
               </div>
               <div class="tabMenu" id="tabMenuA" hidden></div>
             </div>
@@ -128,12 +128,12 @@
             </div>
             <div class="knobWrap">
               <div class="knob" id="knobA_fx"><div class="knobPointer"></div></div>
-              <div class="knobLabelRow"><span class="knobLabel">FX</span><span class="knobLed" id="ledA_fx"></span></div>
+              <div class="knobLabelRow"><button class="fxTypeBtn" id="fxTypePrevA" type="button" title="Previous FX type">◀</button><span class="knobLabel fxTypeLabel" id="fxTypeLabelA">FILTER</span><button class="fxTypeBtn" id="fxTypeNextA" type="button" title="Next FX type">▶</button></div>
             </div>
             <div class="bottomRow">
-              <button class="skipBtn" id="skipPrevA" title="Restart / previous" disabled>⏮</button>
-              <button class="playBtn" id="playBtnA" title="Play/Pause Deck A">▶</button>
-              <button class="skipBtn" id="skipNextA" title="Next chapter / track">⏭</button>
+              <button class="skipBtn" id="skipPrevA" title="Restart / previous" disabled>⏮︎</button>
+              <button class="playBtn" id="playBtnA" title="Play/Pause Deck A">▶︎</button>
+              <button class="skipBtn" id="skipNextA" title="Next chapter / track">⏭︎</button>
             </div>
             <span class="clusterLabel a">A</span>
           </div>
@@ -142,9 +142,9 @@
         <div class="levelMetersCol">
           <!-- No manual "power on" state — decks connect themselves as soon as a tab is picked
                (see attemptAutoConnect in sidepanel.js). Disabled by default; only ever surfaces
-               as the swap-decks control, enabled as soon as either deck has a track (see
+               as the send-to-other-deck control, enabled as soon as either deck has a track (see
                updateConnectEnabled). -->
-          <button id="connect" title="Swap decks" disabled>⇄</button>
+          <button id="connect" title="Send track to other deck" disabled>⇄</button>
           <div class="levelMeters">
             <div class="levelMeter" id="levelTrackA"></div>
             <div class="levelMeter" id="levelTrackB"></div>
@@ -157,8 +157,8 @@
               <div class="deckThumbClip">
                 <img class="deckThumb" id="deckThumbB" alt="" hidden>
                 <!-- JS-toggled in updateDeckConnectedVisual, not CSS — visibility depends on both decks' state combined. -->
-                <span class="deckEmptyHint" id="deckEmptyHintB" data-i18n="deckEmptyHintB" hidden>Open a YouTube tab with a track to start mixing</span>
-                <button class="tabPickBtn" id="tabPickB" title="Pick tab">▾</button>
+                <span class="deckEmptyHint" id="deckEmptyHintB" data-i18n="deckEmptyHintB" hidden>Open a YouTube or Bandcamp tab with a track to start mixing</span>
+                <button class="tabPickBtn" id="tabPickB" title="Pick tab"><svg class="tabPickIcon" viewBox="0 0 12 6" aria-hidden="true"><path d="M6 6L0 0H12L6 6Z" fill="currentColor" /></svg></button>
               </div>
               <div class="tabMenu" id="tabMenuB" hidden></div>
             </div>
@@ -183,12 +183,12 @@
             </div>
             <div class="knobWrap">
               <div class="knob" id="knobB_fx"><div class="knobPointer"></div></div>
-              <div class="knobLabelRow"><span class="knobLabel">FX</span><span class="knobLed" id="ledB_fx"></span></div>
+              <div class="knobLabelRow"><button class="fxTypeBtn" id="fxTypePrevB" type="button" title="Previous FX type">◀</button><span class="knobLabel fxTypeLabel" id="fxTypeLabelB">FILTER</span><button class="fxTypeBtn" id="fxTypeNextB" type="button" title="Next FX type">▶</button></div>
             </div>
             <div class="bottomRow">
-              <button class="skipBtn" id="skipPrevB" title="Restart / previous" disabled>⏮</button>
-              <button class="playBtn" id="playBtnB" title="Play/Pause Deck B">▶</button>
-              <button class="skipBtn" id="skipNextB" title="Next chapter / track">⏭</button>
+              <button class="skipBtn" id="skipPrevB" title="Restart / previous" disabled>⏮︎</button>
+              <button class="playBtn" id="playBtnB" title="Play/Pause Deck B">▶︎</button>
+              <button class="skipBtn" id="skipNextB" title="Next chapter / track">⏭︎</button>
             </div>
             <span class="clusterLabel b">B</span>
           </div>
@@ -200,11 +200,11 @@
       </div>
       <!-- Device IDs from chrome-extension:// are origin-scoped; enumerating here produces IDs setSinkId() rejects on youtube.com — enumeration must happen from within the YouTube tab. Cue is a separate tap: a cued deck plays on both cue device and master simultaneously (see counterDJSetCue). -->
       <div class="outputRow" id="outputRow">
-        <button class="cueBtn" id="cueBtnA" data-deck="A" title="Cue Deck A to the selected device" disabled>🎧</button>
+        <button class="cueBtn" id="cueBtnA" data-deck="A" title="Cue Deck A to the selected device" disabled><svg class="cueIcon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 9.5V7a5 5 0 0 1 10 0v2.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /><rect class="cueIconCup" x="1.7" y="8.3" width="2.6" height="4" rx="1.1" /><rect class="cueIconCup" x="11.7" y="8.3" width="2.6" height="4" rx="1.1" /></svg></button>
         <div class="cueSourceGroup">
-          <button class="outputDeviceSelect" id="outputDeviceBtn" type="button">Pick cue device…</button>
+          <button class="outputDeviceSelect" id="outputDeviceBtn" type="button">Pick cue device</button>
         </div>
-        <button class="cueBtn" id="cueBtnB" data-deck="B" title="Cue Deck B to the selected device" disabled>🎧</button>
+        <button class="cueBtn" id="cueBtnB" data-deck="B" title="Cue Deck B to the selected device" disabled><svg class="cueIcon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 9.5V7a5 5 0 0 1 10 0v2.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /><rect class="cueIconCup" x="1.7" y="8.3" width="2.6" height="4" rx="1.1" /><rect class="cueIconCup" x="11.7" y="8.3" width="2.6" height="4" rx="1.1" /></svg></button>
       </div>
     </div>
 
@@ -221,7 +221,7 @@
         <div class="hintRow3"><span class="hintKeys hintKeysLeft hintKeyStep2"><kbd>A</kbd> / <kbd>S</kbd></span><span class="hintDesc" data-i18n="hintMid">mid</span><span class="hintKeys hintKeysRight hintKeyStep2"><kbd>L</kbd> / <kbd>;</kbd></span></div>
         <div class="hintRow3"><span class="hintKeys hintKeysLeft hintKeyStep3"><kbd>Z</kbd> / <kbd>X</kbd></span><span class="hintDesc" data-i18n="hintLow">low</span><span class="hintKeys hintKeysRight hintKeyStep3"><kbd>,</kbd> / <kbd>.</kbd></span></div>
         <div class="hintRow3"><span class="hintKeys hintKeysLeft hintKeyStep4"><kbd>C</kbd> / <kbd>V</kbd></span><span class="hintDesc" data-i18n="hintFx">fx</span><span class="hintKeys hintKeysRight hintKeyStep4"><kbd>N</kbd> / <kbd>M</kbd></span></div>
-        <div class="hintRow3"><span class="hintKeys hintKeysLeft hintKeyStep4"><kbd>E</kbd></span><span class="hintDesc" data-i18n="hintPlayPause">play / pause (or click ▶)</span><span class="hintKeys hintKeysRight hintKeyStep4"><kbd>O</kbd></span></div>
+        <div class="hintRow3"><span class="hintKeys hintKeysLeft hintKeyStep4"><kbd>E</kbd></span><span class="hintDesc" data-i18n="hintPlayPause">play / pause (or click ▶︎)</span><span class="hintKeys hintKeysRight hintKeyStep4"><kbd>O</kbd></span></div>
       </div>
       <div class="hintGroup">
         <div class="hintGroupTitle" data-i18n="hintKnobsTitle">Knobs</div>
@@ -243,6 +243,7 @@
       </div>
       <div class="hintNote" data-i18n="hintNote">Click anywhere in the panel to give it focus — that's what turns the hotkeys on.</div>
       <a id="coffeeLink" class="coffeeBtn" href="#" target="_blank" rel="noopener">Buy me a coffee</a>
+      <a id="rateLink" class="coffeeBtn rateBtn" href="#" target="_blank" rel="noopener" title="Rate GrooveMix on the Chrome Web Store">★★★★★</a>
     </div>
     <!-- deck-showcase:end -->
   </div>

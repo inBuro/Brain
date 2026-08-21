@@ -154,3 +154,122 @@ Explicit decision to set the whole FX-type/Delay effort aside rather than keep i
 ## 2026-08-11 — v0.4.9 uploaded and submitted for review
 
 Proof of v0.4.8 going live confirmed by the user, so the accumulated fixes since then (FX-type revert, cold-start tempo bar, narrow-panel overlap, tempo-column/track width fixes, `deck-render.js` extraction above) went out as v0.4.9: `dist/GrooveMix/` synced fresh from source (`sidepanel.html`, `sidepanel.js`, `styles.css`, `deck-render.js`, `manifest.json`, `background.js`, `_locales/en/messages.json` — the previously-built zip predated the tempo-track and `deck-render.js` changes, so it was rebuilt rather than reused, and its manifest/JS validated with `python3 -m json.tool` / `node -c` before zipping). Uploaded and published via the Chrome Web Store API (`~/.config/google/groovemix-cws-env`) — both calls returned `status: OK`.
+
+## 2026-08-21 — FX type selector rebuilt (Filter/Delay), density-based this time; dev-icon drift fixed
+
+Rebuilt the FX-type selector shelved on 2026-08-11 above — this time starting fresh per that
+entry's own instruction, not resurrecting the old attempt. Trigger: reverse-engineered a
+comparable Chrome extension ("Browser FX: Tab Audio Effects", unpacked its `.crx` to read
+`offscreen-effects.js`) for its working `DelayNode`+feedback-loop+equal-power-crossfade technique,
+then found the 2026-08-11 entries above documenting this exact feature had been built once and
+deliberately reverted — not lost to an accident as first assumed from `git log -S` finding nothing
+(the revert happened inside the same squashed backup commit as the original build, so the net
+diff was zero and only this log's prose survived).
+
+**What's different from the reverted attempt, addressing its own noted open question
+("the wet-mix-vs-rate question was never resolved"):** Delay's knob now controls **repeat
+density** (`delayTimeForKnob`: `2^(knobValue·3)` divisor against the deck's own detected BPM),
+not wet-mix level — fixed 50/50 equal-power dry/wet instead. A wet-amount-only knob is what made
+the original attempt (and, independently, a later user attempt) sound like a volume control
+rather than an echo — one repeat at a fixed rate barely reads as rhythm regardless of its level.
+
+**Architecture** (`counterDJSetup`/`counterDJSetParam`, `sidepanel.js`, YouTube deck only — Bandcamp
+out of scope, its offscreen engine has no FX-type bus): both Filter and Delay signal paths are
+built once at setup and left running permanently; switching types crossfades two output gates
+(`fxFilterGate`/`fxDelayGate`) over 50ms instead of disconnecting/reconnecting nodes — sidesteps
+the wrong-node-disconnect bug class the original `counterDJSetFxType` hit. New `counterDJSetFxType`
+injected function, `sendFxType`/`cycleFxType` in the side panel, `fxRange(deck)` resolving
+per-deck knob range (`FX_TYPES` table) through `PARAM_RESET`/`NUDGE_RANGE`/`KNOB_BANDS`/
+`fxToAngle`/`updateReadouts`. UI restored per the original design (◀/▶ + type name replacing the
+static "FX" label, `.fxTypeBtn` — same as `.skipBtn`/`.phaseNudgeBtn`). Stale pre-feature tabs
+self-heal to Filter-only (`eng.applyFxType`/`eng.applyFxValue` absent → old direct-insert fallback
+in both `counterDJSetup`'s reconnect branch and `counterDJSetParam`). Synced to `dist/GrooveMix/`
+(`sidepanel.js`, `sidepanel.html`, `styles.css`) — not yet uploaded, this is the local test build.
+
+**Not yet done:** live-listened verification (Filter unchanged, Delay audibly denser not louder,
+no click on type switch, BPM-lock re-syncs delay spacing, `sendTrackToOtherDeck` keeps type
+deck-bound) — see this session's chat, still pending as of this entry.
+
+**Separately found while syncing to `dist/`, unrelated to the above:** `dist/GrooveMix/icons/`
+held byte-identical copies of `icons/prod/*.png` (transparent-background store icons) under the
+dev-icon filenames — the deliberate black-background dev icon (`icons/icon-{16,48,128}.png`,
+what `manifest.json` actually points at) had silently stopped making it into the test build,
+losing the whole point of having a visually distinct dev icon (telling this unpacked build apart
+from the real Chrome Web Store one at a glance). `ARCHITECTURE.md`'s "Иконки" section only
+described the transparent/prod look and didn't mention `icons/prod/` existing at all — same
+undocumented-drift shape as the FX-type history above. Fixed: `dist/GrooveMix/icons/*.png`
+re-copied from `icons/` (verified via `shasum` match against the dev set, not prod); `ARCHITECTURE.md`
+rewritten to document both sets explicitly and the shasum check to catch this recurring.
+
+## 2026-08-21 — Rebased onto mainline v0.4.13 (direct request: "форкать нужно было 13ую версию")
+
+This fork had been sitting on a v0.4.9-era base since it split off (`3b26eddb`, 2026-08-14) —
+`fadercraft/groove mix/` kept moving (v0.4.10 → v0.4.13, published to the Chrome Web Store) with
+real fixes this fork never picked up, which is exactly why testing surfaced "outdated dropdown
+icon" and "clicking an empty deck doesn't open YouTube" earlier today: both were already fixed on
+mainline, just never ported here. Rather than diffing forward from the old fork point, diffed
+THIS fork's current `sidepanel.js`/`sidepanel.html`/`styles.css`/`manifest.json` directly against
+mainline's current versions (both already carry today's FX-type-selector work identically, so the
+diff was small and clean) and pulled in every genuine mainline-only difference:
+
+- `manifest.json`: version `0.4.12 → 0.4.13`. Description/permissions/host_permissions untouched
+  (this fork's Bandcamp-specific `tabCapture`/`offscreen`/`*.bandcamp.com` grants are still correct
+  and needed — mainline doesn't have them because it doesn't need them).
+- **Dropdown tab-picker icon** — the actual "outdated icon" the user saw: this fork had an older
+  stroked-chevron SVG (`viewBox 0 0 10 6`, `stroke`-based path) that mainline had already replaced
+  with a filled triangle (`viewBox 0 0 12 6`, `fill`-based path) plus a matching `.tabPickIcon`
+  size change (`0.625×0.375rem → 0.4375×0.25rem`). Ported both instances (deck A and B) plus the
+  CSS and its comment.
+- **Empty-deck click** now opens `https://www.youtube.com` (was: a blank new tab) — matches
+  mainline's fix and the "YouTube first, still the anchor use case" framing from this fork's own
+  original commit message.
+- **Header ⇄ button ↔ per-deck dropdown role swap** (mainline moved this 2026-08-14, same day this
+  fork branched off, so the fork kept the pre-swap roles): header `#connect` now does
+  `sendTrackToOtherDeck()` (stream only, deck-bound EQ/gain stay put) instead of `swapDecks()`;
+  the per-deck tab-menu dropdown item is now "Swap Decks" → `swapDecks()` (full state, was "Send
+  to Deck X" → `sendTrackToOtherDeck()`); the `Tab` hotkey follows the header button's new role.
+  Updated the button title, the dropdown item label, and both functions' doc comments to match.
+- Confirmed everything else the raw diff still flags (locale string wording, `setDeckThumb`'s
+  signature, `listYoutubeTabs()` vs `listEligibleTabs()`, direct `func: counterDJSkip` vs this
+  fork's `skipFunc`/`seekFunc` selection, `connectedTabId()`/`checkMicPermission()`) is this fork's
+  own necessary two-source generalization, already correct — not a missing mainline improvement.
+  `connectedTabId()`/`checkMicPermission()` in particular are byte-identical between the two files;
+  the diff only flagged them because of unrelated line-number drift elsewhere.
+
+`node --check`, `python3 -m json.tool`, and an HTML tag-balance check all passed. Synced to
+`dist/GrooveMix/` per the hard rule above (`diff` against source confirmed clean on all four
+touched files). Not yet zipped/uploaded — this is the local test build only.
+
+## 2026-08-21 — Added a star-rating link, and FX chain redesigned to run Filter+Delay in series
+
+**Star rating**: new `#rateLink` (★★★★★, `.coffeeBtn.rateBtn`) right under the existing Buy Me a
+Coffee link, pointing at the Chrome Web Store reviews tab (`CWS_REVIEW_URL`, id-only path —
+`.../detail/kiigcdfcmdanbpjpgilolmchobnpmjij/reviews`). Same click-tracking pattern as
+`coffeeLinkEl`. Applied identically to the mainline folder.
+
+**FX chain redesigned again — Filter and Delay both always live, in series (direct request):**
+full rationale and implementation detail in `fadercraft/groove mix/wiki/log.md`'s same-dated entry
+(this fork's version is byte-identical in every touched function, ported the same way the FX-type
+work itself was earlier today). Short version: `eqOut → Filter → Delay → fxBus`, no more
+`fxFilterGate`/`fxDelayGate` — Delay now taps Filter's OUTPUT and both process the signal
+permanently; `fxType` now means "which one the knob currently shows", not "which is on"; new
+`applyFxValueForType`/`filterValue`/`delayValue` let each hold its own value independently across
+switches. This fork's own `source === 'bandcamp'` guards around `sendFxType`/`cycleFxType` are
+untouched — Bandcamp still has no FX-type bus, unaffected.
+
+`node --check` passed; `dist/GrooveMix/` re-synced and diffed clean (both files).
+
+**Bug found live-testing the above: `chrome.scripting.executeScript` rejects `undefined` args**
+("Deck A error: ... Error at property 'args': Error at index 1: Value is unserializable"). Unlike
+a plain structured-clone boundary, `executeScript`'s `args` must be JSON-serializable — `undefined`
+isn't valid JSON and throws, unlike `null`. `sendFxType(deck, type)` (the plain type-switch call,
+from `cycleFxType`) passes `filterValue`/`delayValue` as `undefined` when omitted — fixed by
+coercing both to `null` at the call site (`args: [type, filterValue ?? null, delayValue ?? null]`);
+`counterDJSetFxType`'s `typeof x === 'number'` guard already treated `null` the same as
+`undefined` (skip), so no other change needed.
+
+**Also: `dist/GrooveMix/` is NOT a test build — corrected the "sync after every edit" rule above**
+(direct correction). The actual loaded-for-testing target is this repo's ROOT — `Load unpacked`
+points here directly. `dist/GrooveMix/` only gets built immediately before an actual Chrome Web
+Store submission, not after routine edits. `ARCHITECTURE.md`'s "Упаковка dist/" section rewritten
+to say this plainly; stop copying source into `dist/` as part of normal work from here on.

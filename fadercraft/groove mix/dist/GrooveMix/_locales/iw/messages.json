@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "לחץ בכל מקום בחלונית כדי למקד אותה — זה מה שמפעיל את מקשי הקיצור"
+  },
+  "deckEmptyHintB": {
+    "message": "הוסף רצועה שנייה כדי להתחיל מיקסינג"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (או לחץ על ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "כל זוג"
+  },
+  "hintLeftRightDesc": {
+    "message": "מקש שמאלי מוריד, מקש ימני מעלה — אותו סדר לכל זוג כפתורים שלמעלה"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "מתאפס (0dB / רווח יחידה)"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "חותך למינימום, לאחר שכבר באיפוס"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "עכבר למעלה/למטה, או משטח עקיבה בשתי אצבעות, מכוונן את הפרמטר"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "הזזה עדינה או החזק שמאלה/ימינה"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "לחץ וגרור את הרצועה, או החלקה בשתי אצבעות על משטח העקיבה"
+  },
+  "hintTabDesc": {
+    "message": "החלף איזו רצועה היא A/B (או כפתור הכותרת הגדול, לאחר חיבור)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "משותף בין הדקים, לא הגדרה לכל דק בנפרד"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "או גרור את הסרגל בין קריאות ה-BPM — ממזג קצב ומיישר מחדש אוטומטית גם את פאזת הביט, אין צורך בפעולת סנכרון נפרדת"
+  },
+  "trialBannerText": {
+    "message": "זמן הניסיון החינמי נגמר — GrooveMix ממשיך לעבוד, אך שקול לרכוש רישיון."
+  },
+  "trialBuyLink": {
+    "message": "קנה רישיון"
+  },
+  "licenseActivateBtn": {
+    "message": "הפעל"
+  },
+  "licenseChecking": {
+    "message": "בדיקה…"
+  },
+  "licenseActivated": {
+    "message": "ברישיון — תודה!"
+  },
+  "licenseInvalid": {
+    "message": "מפתח רישיון לא חוקי."
+  },
+  "feedbackPrompt": {
+    "message": "מה היית משפר/ת?"
+  },
+  "feedbackSubmit": {
+    "message": "שלח"
+  },
+  "feedbackSent": {
+    "message": "תודה — קיבלנו!"
+  },
+  "feedbackPlaceholder": {
+    "message": "תאר/י רעיון, בעיה או תכונה חסרה."
+  }
+}

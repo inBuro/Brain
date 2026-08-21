@@ -22,6 +22,11 @@ hotkey, two size modes, window shadows removed rather than baked in.
 
 ## Hard facts
 
+- **Never trim a `viewBox`.** Icons are taken from Figma exactly as exported — full frame,
+  untouched `viewBox`, padding included. The padding inside the frame is a design decision;
+  cropping it silently overrides the designer and makes their size edits in Figma have no
+  visible effect. Size is controlled in code (`icon.size`), never by reframing the artwork.
+
 - **Swift cannot build on this Mac.** CLT 26.2 landed on macOS 15.7 and its compiler
   (swiftlang 6.2.3.3.21) rejects every SDK on disk. The app is Objective-C for that reason
   — do not "modernise" it to Swift without a full Xcode install first.

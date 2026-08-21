@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "Clique em qualquer lugar do painel para focá-lo — é assim que os atalhos de teclado são ativados"
+  },
+  "deckEmptyHintB": {
+    "message": "Adicione uma segunda faixa para começar a mixar"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (ou clique em ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "Qualquer par"
+  },
+  "hintLeftRightDesc": {
+    "message": "tecla esquerda diminui, tecla direita aumenta — mesma ordem para cada par de botões acima"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "volta ao neutro (0dB / ganho unitário)"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "corta para o mínimo, quando já está no neutro"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "mouse para cima/baixo, ou trackpad com dois dedos, ajusta o parâmetro"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "ajuste fino ou segure esquerda/direita"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "clique e arraste a faixa, ou deslize com dois dedos no trackpad"
+  },
+  "hintTabDesc": {
+    "message": "troca qual faixa é A/B (ou o botão grande do cabeçalho, uma vez conectado)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "compartilhado entre os decks, não uma configuração por deck"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "ou arraste a barra entre as leituras de BPM — combina o andamento e realinha automaticamente a fase da batida, sem necessidade de ação de sincronização separada"
+  },
+  "trialBannerText": {
+    "message": "Tempo de teste gratuito esgotado — GrooveMix continua funcionando, mas considere adquirir uma licença."
+  },
+  "trialBuyLink": {
+    "message": "Comprar licença"
+  },
+  "licenseActivateBtn": {
+    "message": "Ativar"
+  },
+  "licenseChecking": {
+    "message": "Verificando…"
+  },
+  "licenseActivated": {
+    "message": "Licenciado — obrigado!"
+  },
+  "licenseInvalid": {
+    "message": "Chave de licença inválida."
+  },
+  "feedbackPrompt": {
+    "message": "O que você melhoraria?"
+  },
+  "feedbackSubmit": {
+    "message": "Enviar"
+  },
+  "feedbackSent": {
+    "message": "Obrigado — anotado!"
+  },
+  "feedbackPlaceholder": {
+    "message": "Descreva uma ideia, problema ou recurso ausente."
+  }
+}

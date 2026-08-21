@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "點擊面板任意處以啟用焦點 — 這樣即可開啟快捷鍵"
+  },
+  "deckEmptyHintB": {
+    "message": "新增第二條音軌即可開始混音"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (或點擊 ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "任何一對"
+  },
+  "hintLeftRightDesc": {
+    "message": "左鍵調低，右鍵調高 — 上方每個旋鈕對的順序都一樣"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "快速歸位 (0dB / 統一增益)"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "若已歸位，則切換至最小值"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "滑鼠上下捲動，或雙指觸控板，可調整參數"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "微調 或按住左/右"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "點擊並拖曳音軌，或雙指觸控板滑動"
+  },
+  "hintTabDesc": {
+    "message": "交換 A/B 音軌 (或連接後的大標題按鈕)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "在不同播放器之間共用，並非個別播放器設定"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "或拖曳 BPM 顯示之間的音量條 — 融合拍速並自動重新對齊節拍相位，無需單獨同步操作"
+  },
+  "trialBannerText": {
+    "message": "免費試用時間已用盡 — GrooveMix 仍可運作，但請考慮購買授權。"
+  },
+  "trialBuyLink": {
+    "message": "購買授權"
+  },
+  "licenseActivateBtn": {
+    "message": "啟用"
+  },
+  "licenseChecking": {
+    "message": "正在檢查…"
+  },
+  "licenseActivated": {
+    "message": "已授權 — 感謝！"
+  },
+  "licenseInvalid": {
+    "message": "無效的授權金鑰。"
+  },
+  "feedbackPrompt": {
+    "message": "您希望改進什麼？"
+  },
+  "feedbackSubmit": {
+    "message": "送出"
+  },
+  "feedbackSent": {
+    "message": "謝謝 — 已收到！"
+  },
+  "feedbackPlaceholder": {
+    "message": "描述一個想法、問題或缺少的功能。"
+  }
+}

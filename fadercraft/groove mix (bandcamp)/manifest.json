@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "default_locale": "en",
   "name": "GrooveMix",
-  "version": "0.4.12",
+  "version": "0.4.13",
   "description": "On-demand two-deck mixer for YouTube and Bandcamp",
   "icons": {
     "16": "icons/icon-16.png",

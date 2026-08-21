@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "Kısayol tuşlarını etkinleştirmek için panelde herhangi bir yere tıklayın."
+  },
+  "deckEmptyHintB": {
+    "message": "Karıştırmaya başlamak için ikinci bir parça ekleyin."
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (veya ▶ tuşuna tıklayın)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "Herhangi bir çift"
+  },
+  "hintLeftRightDesc": {
+    "message": "Sol tuş azaltır, sağ tuş artırır — yukarıdaki her düğme çifti için aynı sıra."
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "Nötre sıfırlar (0dB / birim kazanç)."
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "Zaten nötre ayarlanmışsa minimuma indirir."
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "Farenin yukarı/aşağı hareketi veya iki parmakla izleme dörtgeni parametreyi ayarlar."
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "hafifçe itme veya sol/sağ tuşlarını basılı tutun"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "Parçayı tıklayıp sürükleyin veya iki parmakla izleme dörtgeni kaydırma hareketi yapın."
+  },
+  "hintTabDesc": {
+    "message": "Hangi parçanın A/B olduğunu değiştirin (veya bağlandıktan sonra büyük başlık düğmesini kullanın)."
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "Deck'ler arasında paylaşılır, deck başına bir ayar değildir."
+  },
+  "hintTempoArrowsDesc": {
+    "message": "veya BPM göstergeleri arasındaki çubuğu sürükleyin — tempoyu harmanlar ve otomatik olarak vuruş fazını yeniden hizalar, ayrı bir senkronizasyon işlemine gerek yok."
+  },
+  "trialBannerText": {
+    "message": "Ücretsiz deneme süresi doldu — GrooveMix çalışmaya devam ediyor, ancak bir lisans almayı düşünebilirsiniz."
+  },
+  "trialBuyLink": {
+    "message": "Lisans al"
+  },
+  "licenseActivateBtn": {
+    "message": "Etkinleştir"
+  },
+  "licenseChecking": {
+    "message": "Kontrol ediliyor…"
+  },
+  "licenseActivated": {
+    "message": "Lisanslı — teşekkürler!"
+  },
+  "licenseInvalid": {
+    "message": "Geçersiz lisans anahtarı."
+  },
+  "feedbackPrompt": {
+    "message": "Neyi geliştirmek isterdiniz?"
+  },
+  "feedbackSubmit": {
+    "message": "Gönder"
+  },
+  "feedbackSent": {
+    "message": "Teşekkürler — aldık!"
+  },
+  "feedbackPlaceholder": {
+    "message": "Bir fikir, sorun veya eksik bir özelliği açıklayın."
+  }
+}

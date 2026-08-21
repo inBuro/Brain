@@ -23,6 +23,17 @@ reads instead of re-investigating.
 The whole thing is ImageIO/CoreGraphics — no dependency on homebrew Python, unlike the
 shell-script ancestors.
 
+## Icon assets
+
+`Resources/full-size.svg` and `ai-optimized.svg` come from the Figma file `App`
+(`4g32jWwsoHqygaPSVAvhln`, frames `2` and `1`), exported via the plugin API — the REST
+token in `~/.config/figma/env` is expired. They load straight into `NSImage`, which reads
+SVG natively, and run in template mode so macOS inverts them for a light menu bar.
+
+**Take the `viewBox` as exported. Never trim it.** Frame padding is part of the design: cut
+it, and the icon stretches to fill its box no matter what the designer does in Figma, so
+their size edits appear to do nothing. Scale belongs in `icon.size`, not in the artwork.
+
 ## Traps, all paid for once
 
 **Swift does not build here.** CLT 26.2 on macOS 15.7: SDKs on disk are built with
@@ -54,6 +65,12 @@ itself responsible: one grant, works everywhere.
 black in screenshots because the app blocks capture. Wrong. `kCGWindowSharingState` on its
 window is ReadOnly (not None), and `screencapture -l <id>` returns the full readable
 window. The black frames were only ever a missing TCC grant.
+
+**Command-click never reaches a status item.** macOS reserves it for dragging menu-bar
+items and consumes the event first — measured: a synthetic Command-click on the icon changes
+nothing, while a plain click opens the menu. Option-click is free and is what the mode
+toggle uses. Also note a status item with a permanently attached `menu` swallows clicks
+entirely; the menu has to be attached for the duration of the click and cleared after.
 
 **`-o` only affects window capture.** Measured on the same window: with shadow
 1654×2110 with 668 718 semi-transparent pixels; with `-o` 1430×1886 with 160 (the rounded

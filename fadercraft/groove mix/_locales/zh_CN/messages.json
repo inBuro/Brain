@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "点击面板任意位置聚焦，以启用热键。"
+  },
+  "deckEmptyHintB": {
+    "message": "添加第二首曲目以开始混音。"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause（或点击 ▶）"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "任意一对"
+  },
+  "hintLeftRightDesc": {
+    "message": "左键降低，右键升高 — 上方所有旋钮对均按此顺序。"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "快速归中（0dB / 统一增益）。"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "已在归中状态时，再次操作可切至最小值。"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "鼠标上下滚动，或双指触控板操作，可调整参数。"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "微调或按住左/右"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "点击并拖动音轨，或双指触控板滑动。"
+  },
+  "hintTabDesc": {
+    "message": "切换哪个音轨是 A/B（或连接后使用大标题按钮）。"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "牌组间共享，而非单个牌组设置。"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "或拖动 BPM 读数间的滑杆 — 融合拍速并自动重新对齐节拍相位，无需单独同步操作。"
+  },
+  "trialBannerText": {
+    "message": "免费试用时间已用完 — GrooveMix 仍可工作，但建议购买许可。"
+  },
+  "trialBuyLink": {
+    "message": "购买许可"
+  },
+  "licenseActivateBtn": {
+    "message": "激活"
+  },
+  "licenseChecking": {
+    "message": "正在检查…"
+  },
+  "licenseActivated": {
+    "message": "已许可 — 感谢！"
+  },
+  "licenseInvalid": {
+    "message": "无效许可密钥。"
+  },
+  "feedbackPrompt": {
+    "message": "有什么可以改进的？"
+  },
+  "feedbackSubmit": {
+    "message": "发送"
+  },
+  "feedbackSent": {
+    "message": "感谢，已收到！"
+  },
+  "feedbackPlaceholder": {
+    "message": "描述您的想法、遇到的问题或缺少的功能。"
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "คลิกตรงไหนก็ได้ในแผงนี้เพื่อให้มันอยู่ในโฟกัส — นั่นคือสิ่งที่เปิดใช้งานปุ่มลัด"
+  },
+  "deckEmptyHintB": {
+    "message": "เพิ่มแทร็กที่สองเพื่อเริ่มมิกซ์"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (หรือคลิก ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "คู่ไหนก็ได้"
+  },
+  "hintLeftRightDesc": {
+    "message": "ปุ่มซ้ายลด, ปุ่มขวาเพิ่ม — ใช้ลำดับเดียวกันกับปุ่มคู่ด้านบนทั้งหมด"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "กลับสู่ค่ากลางทันที (0dB / อัตราขยายเท่าเดิม)"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "ลดลงสู่ค่าต่ำสุด, เมื่ออยู่ในค่ากลางแล้ว"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "เมาส์ขึ้น/ลง, หรือแทร็คแพดสองนิ้ว, เพื่อปรับค่าพารามิเตอร์"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "ขยับทีละน้อย หรือกดปุ่มซ้าย/ขวาค้างไว้"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "คลิกแล้วลากแทร็ก, หรือปัดแทร็คแพดสองนิ้ว"
+  },
+  "hintTabDesc": {
+    "message": "สลับแทร็กที่อยู่ในตำแหน่ง A/B (หรือปุ่มส่วนหัวขนาดใหญ่, เมื่อเชื่อมต่อแล้ว)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "ใช้ร่วมกันระหว่างเด็ค, ไม่ใช่การตั้งค่าเฉพาะเด็ค"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "หรือลากแถบระหว่างค่า BPM — ผสมผสานจังหวะและปรับเฟสของบีทให้ตรงกันโดยอัตโนมัติด้วย, ไม่ต้องมีการซิงค์แยกต่างหาก"
+  },
+  "trialBannerText": {
+    "message": "เวลาทดลองใช้ฟรีหมดลงแล้ว — GrooveMix ยังคงทำงานได้, แต่โปรดพิจารณาซื้อใบอนุญาต"
+  },
+  "trialBuyLink": {
+    "message": "ซื้อใบอนุญาต"
+  },
+  "licenseActivateBtn": {
+    "message": "เปิดใช้งาน"
+  },
+  "licenseChecking": {
+    "message": "กำลังตรวจสอบ…"
+  },
+  "licenseActivated": {
+    "message": "ได้รับอนุญาตแล้ว — ขอบคุณ!"
+  },
+  "licenseInvalid": {
+    "message": "รหัสใบอนุญาตไม่ถูกต้อง"
+  },
+  "feedbackPrompt": {
+    "message": "มีอะไรให้ปรับปรุงบ้าง?"
+  },
+  "feedbackSubmit": {
+    "message": "ส่ง"
+  },
+  "feedbackSent": {
+    "message": "ขอบคุณ — รับเรื่องแล้ว!"
+  },
+  "feedbackPlaceholder": {
+    "message": "อธิบายแนวคิด, ปัญหา หรือฟีเจอร์ที่ขาดหายไป"
+  }
+}

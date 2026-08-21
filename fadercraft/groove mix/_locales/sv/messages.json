@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "Klicka var som helst i panelen för att fokusera den — det aktiverar snabbkommandon."
+  },
+  "deckEmptyHintB": {
+    "message": "Lägg till ett andra spår för att börja mixa."
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (eller klicka på ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "Vilket par som helst"
+  },
+  "hintLeftRightDesc": {
+    "message": "vänster tangent sänker, höger tangent höjer — samma ordning för alla rattpar ovan."
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "snäpper till neutral (0dB / unity gain)."
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "klipper till minimum, när den redan är neutral."
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "mus upp/ner, eller tvåfingers-styrplatta, justerar parametern."
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "nudda eller håll vänster/höger"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "klicka-dra spåret, eller svep med två fingrar på styrplattan."
+  },
+  "hintTabDesc": {
+    "message": "byt vilket spår som är A/B (eller den stora rubrikknappen, när ansluten)."
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "delas mellan däcken, inte en inställning per däck."
+  },
+  "hintTempoArrowsDesc": {
+    "message": "eller dra fältet mellan BPM-avläsningarna — blandar tempo och justerar automatiskt beatfasen också, ingen separat synkronisering behövs."
+  },
+  "trialBannerText": {
+    "message": "Gratis provperiod slut — GrooveMix fungerar fortfarande, men överväg att skaffa en licens."
+  },
+  "trialBuyLink": {
+    "message": "Köp licens"
+  },
+  "licenseActivateBtn": {
+    "message": "Aktivera"
+  },
+  "licenseChecking": {
+    "message": "Kontrollerar…"
+  },
+  "licenseActivated": {
+    "message": "Licensierad — tack!"
+  },
+  "licenseInvalid": {
+    "message": "Ogiltig licensnyckel."
+  },
+  "feedbackPrompt": {
+    "message": "Vad skulle du förbättra?"
+  },
+  "feedbackSubmit": {
+    "message": "Skicka"
+  },
+  "feedbackSent": {
+    "message": "Tack – har fått det!"
+  },
+  "feedbackPlaceholder": {
+    "message": "Beskriv en idé, ett problem eller en saknad funktion."
+  }
+}

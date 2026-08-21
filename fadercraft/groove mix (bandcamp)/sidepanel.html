@@ -39,6 +39,11 @@
     <div class="headerBtns">
       <button id="zoomOut" class="ghostBtn" title="Smaller UI">−</button>
       <button id="zoomIn" class="ghostBtn" title="Bigger UI">+</button>
+      <!-- Debug only — remove before shipping. Manual chrome.runtime.reload() trigger, same
+           action as the Cmd/Ctrl+Shift+9 command in manifest.json — that OS-level shortcut is
+           bound per unpacked-install path and can silently go unbound after a reload/path change,
+           this button works regardless. -->
+      <button id="reloadExtBtn" class="ghostBtn" type="button" title="Reload extension (Cmd/Ctrl+Shift+9)">⟲</button>
       <!-- Force-applies _locales/en; second click reverts. Hidden when browser already resolved to English — see sidepanel.js. -->
       <button id="langToggle" class="ghostBtn" type="button" title="Show interface in English">EN</button>
       <!-- Debug only — remove before shipping. Lists every _locales/ dir and force-applies the picked locale, same override mechanism as #langToggle. -->
@@ -103,7 +108,7 @@
               <div class="deckThumbClip">
                 <img class="deckThumb" id="deckThumbA" alt="" hidden>
                 <span class="deckEmptyHint" id="deckEmptyHintA" data-i18n="deckEmptyHintB" hidden>Open a YouTube or Bandcamp tab with a track to start mixing</span>
-                <button class="tabPickBtn" id="tabPickA" title="Pick tab"><svg class="tabPickIcon" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1L5 5L9 1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+                <button class="tabPickBtn" id="tabPickA" title="Pick tab"><svg class="tabPickIcon" viewBox="0 0 12 6" aria-hidden="true"><path d="M6 6L0 0H12L6 6Z" fill="currentColor" /></svg></button>
               </div>
               <div class="tabMenu" id="tabMenuA" hidden></div>
             </div>
@@ -128,7 +133,7 @@
             </div>
             <div class="knobWrap">
               <div class="knob" id="knobA_fx"><div class="knobPointer"></div></div>
-              <div class="knobLabelRow"><span class="knobLabel">FX</span><span class="knobLed" id="ledA_fx"></span></div>
+              <div class="knobLabelRow"><button class="fxTypeBtn" id="fxTypePrevA" type="button" title="Previous FX type">◀</button><span class="knobLabel fxTypeLabel" id="fxTypeLabelA">FILTER</span><button class="fxTypeBtn" id="fxTypeNextA" type="button" title="Next FX type">▶</button></div>
             </div>
             <div class="bottomRow">
               <button class="skipBtn" id="skipPrevA" title="Restart / previous" disabled>⏮︎</button>
@@ -142,9 +147,9 @@
         <div class="levelMetersCol">
           <!-- No manual "power on" state — decks connect themselves as soon as a tab is picked
                (see attemptAutoConnect in sidepanel.js). Disabled by default; only ever surfaces
-               as the swap-decks control, enabled as soon as either deck has a track (see
+               as the send-to-other-deck control, enabled as soon as either deck has a track (see
                updateConnectEnabled). -->
-          <button id="connect" title="Swap decks" disabled>⇄</button>
+          <button id="connect" title="Send track to other deck" disabled>⇄</button>
           <div class="levelMeters">
             <div class="levelMeter" id="levelTrackA"></div>
             <div class="levelMeter" id="levelTrackB"></div>
@@ -158,7 +163,7 @@
                 <img class="deckThumb" id="deckThumbB" alt="" hidden>
                 <!-- JS-toggled in updateDeckConnectedVisual, not CSS — visibility depends on both decks' state combined. -->
                 <span class="deckEmptyHint" id="deckEmptyHintB" data-i18n="deckEmptyHintB" hidden>Open a YouTube or Bandcamp tab with a track to start mixing</span>
-                <button class="tabPickBtn" id="tabPickB" title="Pick tab"><svg class="tabPickIcon" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1L5 5L9 1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+                <button class="tabPickBtn" id="tabPickB" title="Pick tab"><svg class="tabPickIcon" viewBox="0 0 12 6" aria-hidden="true"><path d="M6 6L0 0H12L6 6Z" fill="currentColor" /></svg></button>
               </div>
               <div class="tabMenu" id="tabMenuB" hidden></div>
             </div>
@@ -183,7 +188,7 @@
             </div>
             <div class="knobWrap">
               <div class="knob" id="knobB_fx"><div class="knobPointer"></div></div>
-              <div class="knobLabelRow"><span class="knobLabel">FX</span><span class="knobLed" id="ledB_fx"></span></div>
+              <div class="knobLabelRow"><button class="fxTypeBtn" id="fxTypePrevB" type="button" title="Previous FX type">◀</button><span class="knobLabel fxTypeLabel" id="fxTypeLabelB">FILTER</span><button class="fxTypeBtn" id="fxTypeNextB" type="button" title="Next FX type">▶</button></div>
             </div>
             <div class="bottomRow">
               <button class="skipBtn" id="skipPrevB" title="Restart / previous" disabled>⏮︎</button>
@@ -243,6 +248,7 @@
       </div>
       <div class="hintNote" data-i18n="hintNote">Click anywhere in the panel to give it focus — that's what turns the hotkeys on.</div>
       <a id="coffeeLink" class="coffeeBtn" href="#" target="_blank" rel="noopener">Buy me a coffee</a>
+      <a id="rateLink" class="coffeeBtn rateBtn" href="#" target="_blank" rel="noopener" title="Rate GrooveMix on the Chrome Web Store"><span class="rateStar">★</span><span class="rateStar">★</span><span class="rateStar">★</span><span class="rateStar">★</span><span class="rateStar">★</span></a>
     </div>
     <!-- deck-showcase:end -->
   </div>

@@ -25,7 +25,14 @@ function counterDJSetup(initial) {
       if (typeof initial.high === 'number') eng.high.gain.value = dbToGain(initial.high);
       if (typeof initial.gain === 'number') eng.gain.gain.value = initial.gain;
       if (typeof initial.rate === 'number') eng.video.playbackRate = initial.rate;
-      if (typeof initial.fx === 'number') {
+      // eng.applyFxType only exists on a graph built by this-or-later extension version — a tab
+      // reconnecting from before the FX-type feature landed keeps its old direct fx insert and
+      // can only ever run Filter (same self-heal precedent as cueAudioEl above).
+      if (eng.applyFxType && eng.applyFxValueForType) {
+        if (typeof initial.filterValue === 'number') eng.applyFxValueForType('filter', initial.filterValue);
+        if (typeof initial.delayValue === 'number') eng.applyFxValueForType('delay', initial.delayValue);
+        if (typeof initial.fxType === 'string') eng.applyFxType(initial.fxType);
+      } else if (typeof initial.fx === 'number') {
         if (initial.fx < 0) {
           eng.fx.type = 'lowpass';
           eng.fx.frequency.value = 20000 * Math.pow(100 / 20000, -initial.fx);
@@ -45,6 +52,7 @@ function counterDJSetup(initial) {
       playing: !eng.video.paused,
       muted: eng.video.muted,
       ctxState: eng.ctx.state,
+      hasFxTypes: !!eng.applyFxType,
     };
   }
   const videos = Array.from(document.querySelectorAll('video'));
@@ -95,7 +103,7 @@ function counterDJSetup(initial) {
   // since window.__counterDJ__ (the "already set up" guard) is only assigned at the very end.
   // Caching the pair on the element itself lets a retry reuse what the last attempt already
   // created instead of re-triggering the one-shot operation (2026-08-09).
-  let ctx, source;
+  let ctx, source, eng;
   if (video.__counterDJPending__) {
     ({ ctx, source } = video.__counterDJPending__);
   } else {
@@ -136,12 +144,94 @@ function counterDJSetup(initial) {
   mid.connect(eqOut);
   high.connect(eqOut);
 
-  // FX/filter: single bipolar node, post-EQ/pre-gain. Starts wide open (lowpass @ 20kHz) so a
-  // fresh connect is transparent. Non-resonant (same Butterworth Q as the crossover stages).
+  // FX chain: Filter and Delay are both PERMANENTLY in series (eqOut -> Filter -> Delay -> bus),
+  // each holding its own independent value at all times — not a switched/exclusive slot. The
+  // ◀/▶ knob-type selector only changes which one the single physical knob currently shows and
+  // edits; the other keeps running exactly as last set. This is what lets you dial in a filter
+  // sweep, page to Delay, and have the echo apply to the already-filtered signal (direct
+  // request) — not an either/or effect slot, so there's no gate/crossfade here at all.
+  // Filter starts wide open (lowpass @ 20kHz) so a fresh connect is transparent. Non-resonant
+  // (same Butterworth Q as the crossover stages).
   const fx = ctx.createBiquadFilter();
   fx.type = 'lowpass';
   fx.frequency.value = 20000;
   fx.Q.value = Math.SQRT1_2;
+
+  // Delay taps FILTER'S OUTPUT (not eqOut) — it's downstream in the chain, so it echoes whatever
+  // Filter just did to the signal. Dry stays permanently at full (adds echo on top, doesn't
+  // replace the signal); only the wet (repeats) level and density come from Delay's own knob
+  // value, independent of whatever Filter's knob currently reads.
+  const fxDelayDry = ctx.createGain();
+  const fxDelayWet = ctx.createGain();
+  fxDelayDry.gain.value = 1;
+  fxDelayWet.gain.value = 0; // set by applyFxValue below, based on Delay's own value
+  const fxDelayLine = ctx.createDelay(2.0);
+  const fxDelayFeedback = ctx.createGain();
+  fxDelayFeedback.gain.value = 0.35; // fixed — one physical knob per deck, not exposed separately
+  fxDelayLine.delayTime.value = 0.3; // replaced below once initial/knob value is known
+  const DELAY_WET_MAX = 0.7; // ceiling at full knob — stays a layer under the dry track, not a replacement
+
+  const fxBus = ctx.createGain();
+
+  fx.connect(fxDelayDry);
+  fx.connect(fxDelayLine);
+  fxDelayDry.connect(fxBus);
+  fxDelayLine.connect(fxDelayFeedback);
+  fxDelayFeedback.connect(fxDelayLine);
+  fxDelayLine.connect(fxDelayWet);
+  fxDelayWet.connect(fxBus);
+
+  // Tracks which type the physical knob currently shows/edits — NOT which effect is "on" (both
+  // always are). Only routes an incoming knob value (applyFxValue) to the right node.
+  let fxType = 'filter';
+
+  // BPM-synced delay time from repeat density: knob=0 -> sparse quarter-note echoes, knob=1 ->
+  // dense eighth-of-a-beat stutter. Falls back to 120bpm before any lock (matches the beat
+  // detector's own convergence — a brand new connect never has eng.detectedBpm yet).
+  function delayTimeForKnob(knobValue, bpm) {
+    const quarterNote = 60 / (bpm || 120);
+    const divisor = Math.pow(2, knobValue * 3); // 1x..8x
+    return Math.min(1.5, Math.max(0.04, quarterNote / divisor));
+  }
+
+  // Routes an incoming knob value to whichever type is CURRENTLY tracked as fxType — used both
+  // for live knob turns and (via applyFxValueForType below) for seeding either node explicitly
+  // regardless of which one the panel currently shows. Delay's own value is unipolar (0..1) and
+  // drives both dimensions together — density (see delayTimeForKnob) AND wet level (fxDelayWet),
+  // so turning it up reads as "more/denser echo", not just "louder": at 0 both bottom out, a
+  // true, inaudible bypass. Filter's value stays the existing bipolar lowpass/highpass sweep.
+  // Neither node is touched by the OTHER type's updates — each keeps whatever was last set here
+  // even while the panel is showing the other one.
+  function applyFxValue(value) {
+    if (fxType === 'delay') {
+      fxDelayLine.delayTime.value = delayTimeForKnob(value, eng ? eng.detectedBpm : null);
+      fxDelayWet.gain.value = value * DELAY_WET_MAX;
+    } else if (value <= 0) {
+      fx.type = 'lowpass';
+      fx.frequency.value = 20000 * Math.pow(100 / 20000, -value);
+    } else {
+      fx.type = 'highpass';
+      fx.frequency.value = 20 * Math.pow(8000 / 20, value);
+    }
+  }
+
+  // Applies a value to a SPECIFIC type's node regardless of which one is currently displayed —
+  // temporarily borrows applyFxValue's routing rather than duplicating it. Used to seed both
+  // nodes independently at connect time and to resync both on demand (see counterDJSetFxType).
+  function applyFxValueForType(type, value) {
+    const savedType = fxType;
+    fxType = type;
+    applyFxValue(value);
+    fxType = savedType;
+  }
+
+  // Switches which type the knob shows/edits. Purely a UI-focus change — both Filter and Delay
+  // stay live in the signal path regardless, so this never touches any audio param itself: no
+  // ramp needed, nothing to click, nothing to resync.
+  function applyFxType(type) {
+    fxType = type;
+    if (eng) eng.fxType = type;
+  }
 
   const gain = ctx.createGain();
   const cross = ctx.createGain();
@@ -156,18 +246,15 @@ function counterDJSetup(initial) {
     if (typeof initial.high === 'number') high.gain.value = dbToGain(initial.high);
     if (typeof initial.gain === 'number') gain.gain.value = initial.gain;
     if (typeof initial.rate === 'number') video.playbackRate = initial.rate;
-    if (typeof initial.fx === 'number' && initial.fx !== 0) {
-      if (initial.fx < 0) {
-        fx.type = 'lowpass';
-        fx.frequency.value = 20000 * Math.pow(100 / 20000, -initial.fx);
-      } else {
-        fx.type = 'highpass';
-        fx.frequency.value = 20 * Math.pow(8000 / 20, initial.fx);
-      }
-    }
+    // Seed BOTH nodes independently — Filter and Delay are always live, not a switched slot —
+    // then set which one the knob actually shows.
+    if (typeof initial.filterValue === 'number') applyFxValueForType('filter', initial.filterValue);
+    if (typeof initial.delayValue === 'number') applyFxValueForType('delay', initial.delayValue);
+    fxType = typeof initial.fxType === 'string' ? initial.fxType : 'filter';
   }
 
-  eqOut.connect(fx).connect(gain).connect(cross).connect(ctx.destination);
+  eqOut.connect(fx);
+  fxBus.connect(gain).connect(cross).connect(ctx.destination);
   if (ctx.state === 'suspended') ctx.resume();
   // safety net: if resume() above was blocked, a genuine click on the page will unblock it
   document.addEventListener('click', () => { if (ctx.state === 'suspended') ctx.resume(); }, { capture: true });
@@ -223,8 +310,12 @@ function counterDJSetup(initial) {
   // navigation start — useless for comparing timing across two tabs, which phase sync needs).
   // recentOnsets is kept as a cheap rolling history for diagnostics; the phase-sync path now
   // feeds lastOnsetWallClock straight into the Kalman filter (see kalmanPhaseUpdate).
-  window.__counterDJ__ = { ctx, low, mid, high, fx, gain, cross, video, analyser, levelAnalyser, cueAudioEl, detectedBpm: null, beatCount: 0, lastOnsetWallClock: null, recentOnsets: [] };
-  const eng = window.__counterDJ__;
+  window.__counterDJ__ = {
+    ctx, low, mid, high, fx, gain, cross, video, analyser, levelAnalyser, cueAudioEl,
+    detectedBpm: null, beatCount: 0, lastOnsetWallClock: null, recentOnsets: [],
+    fxType, fxDelayLine, applyFxType, applyFxValue, applyFxValueForType,
+  };
+  eng = window.__counterDJ__;
   // Rolling self-timing for the beat-detection callback only — not browser CPU overall
   // (dominated by YouTube's own video decode). Read via counterDJPerfStats() from the side panel.
   eng.perfStats = { count: 0, totalMs: 0, maxMs: 0, bufferSize: BEAT_PROCESSOR_BUFFER_SIZE, sampleRate: ctx.sampleRate };
@@ -368,6 +459,7 @@ function counterDJSetup(initial) {
     playing: !video.paused,
     muted: video.muted,
     ctxState: ctx.state,
+    hasFxTypes: true,
   };
   } catch (e) {
     return { ok: false, error: String((e && e.message) || e), exception: true };
@@ -408,10 +500,14 @@ function counterDJSetParam(param, value) {
     eng[param].gain.value = value <= -40 ? 0 : Math.pow(10, value / 20);
   }
   else if (param === 'fx') {
-    // Negative sweeps lowpass down from 20kHz, positive sweeps highpass up from 20Hz.
-    // Exponential curve — frequency perception is logarithmic; linear Hz sweep is inaudible
-    // near the wide-open end and too fast near the closed end.
-    if (value <= 0) {
+    // eng.applyFxValue (built in counterDJSetup) knows which type is active: bipolar lowpass/
+    // highpass sweep for Filter (negative sweeps lowpass down from 20kHz, positive sweeps highpass
+    // up from 20Hz — exponential curve since frequency perception is logarithmic), or unipolar
+    // repeat-density for Delay. A stale pre-FX-type tab has no applyFxValue — fall back to the old
+    // direct filter-only behavior so it still works until the tab is reloaded.
+    if (eng.applyFxValue) {
+      eng.applyFxValue(value);
+    } else if (value <= 0) {
       eng.fx.type = 'lowpass';
       eng.fx.frequency.value = 20000 * Math.pow(100 / 20000, -value);
     } else {
@@ -427,6 +523,27 @@ function counterDJSetParam(param, value) {
     eng.video.playbackRate = value;
   }
   else return { ok: false, error: 'unknown param ' + param };
+  return { ok: true };
+}
+
+// Switches the FX slot's active type (Filter/Delay), applying the new type's own knob value
+// immediately so the switch is audible right away — not silent until the knob is next touched.
+// No early-return on "already this type": sendTrackToOtherDeck always re-applies even when the
+// type isn't changing, since the tab that just inherited the box may still carry the OTHER box's
+// old fx routing state.
+function counterDJSetFxType(displayType, filterValue, delayValue) {
+  const eng = window.__counterDJ__;
+  if (!eng) return { ok: false, error: 'not connected' };
+  if (eng.ctx.state === 'suspended') eng.ctx.resume();
+  if (!eng.applyFxType || !eng.applyFxValueForType) {
+    return { ok: false, error: 'FX bus missing — reconnect this deck to pick up FX types' };
+  }
+  // filterValue/delayValue are optional — omitted on a plain type-switch, since both nodes
+  // are always live and already hold whatever was last set; only a fresh connect or an explicit
+  // resync (e.g. after a track swap) needs to push both values again.
+  if (typeof filterValue === 'number') eng.applyFxValueForType('filter', filterValue);
+  if (typeof delayValue === 'number') eng.applyFxValueForType('delay', delayValue);
+  eng.applyFxType(displayType);
   return { ok: true };
 }
 
@@ -703,6 +820,139 @@ function counterDJPoll() {
   };
 }
 
+// ---- functions injected into the Bandcamp tab (MAIN world) ----
+// Transport-only — unlike counterDJSetup above, no audio graph is built here. Bandcamp's <audio>
+// streams cross-origin from bcbits.com with no CORS headers, so createMediaElementSource is
+// silent on it; the actual EQ/FX/gain/cross graph lives in offscreen.js, fed by a
+// chrome.tabCapture stream. These functions only control Bandcamp's own player UI and report
+// its state back — same request/response pattern as the counterDJ* functions above. Must stay
+// self-contained per function (no cross-calls between injected functions, see note at top of file).
+//
+// Selectors verified live against a real Bandcamp album page (2026-08-14): the persistent player
+// bar exposes stable ARIA labels ([aria-label="Play/pause"], "Previous track", "Next track") —
+// far more robust than Bandcamp's CSS classes, which aren't consistently present on these
+// controls. <audio> elements are created dynamically by Bandcamp's player JS (absent from the
+// initial page load) and there can be more than one on an album page — pick whichever is
+// currently playing, else whichever has a src, else the first found.
+
+function bandcampGetMetadata() {
+  try {
+    const ogImageEl = document.querySelector('meta[property="og:image"]');
+    const artworkUrl = (ogImageEl && ogImageEl.content) || null;
+
+    // The currently-playing track's name shows as a link near the persistent Play/pause control,
+    // distinct from .trackTitle (which is the ALBUM title on an album page, not the active
+    // track). Walk up from the button through a few ancestor levels looking for the first link.
+    let nowPlayingTitle = null;
+    const playBtn = document.querySelector('[aria-label="Play/pause"]');
+    if (playBtn) {
+      let scope = playBtn.closest('div');
+      for (let i = 0; i < 4 && scope && !nowPlayingTitle; i++) {
+        const link = scope.querySelector('a');
+        if (link && link.textContent.trim()) nowPlayingTitle = link.textContent.trim();
+        scope = scope.parentElement;
+      }
+    }
+
+    const albumTitleEl = document.querySelector('.trackTitle');
+    const albumTitle = (albumTitleEl && albumTitleEl.textContent.trim()) || null;
+
+    // #band-name-location holds "Artist\n        City, Region" concatenated — first line only.
+    const artistEl = document.getElementById('band-name-location');
+    const artist = artistEl ? artistEl.textContent.trim().split('\n')[0].trim() : null;
+
+    return { ok: true, title: nowPlayingTitle || albumTitle || document.title || null, artist, artworkUrl };
+  } catch (e) {
+    return { ok: false, error: `${e.name}: ${e.message}` };
+  }
+}
+
+// action: 'restart' | 'pause'. Play/pause is a single toggle button on Bandcamp (not separate
+// play/pause controls), so this only clicks it when the current state doesn't already match the
+// requested one. Bandcamp's player updates .paused asynchronously after the click — a fresh
+// executeScript resolving doesn't mean the in-page action actually took (same bug class as
+// counterDJTransport not awaiting .play() — see ARCHITECTURE.md), so this polls briefly for real
+// confirmation instead of assuming success.
+async function bandcampTransport(action) {
+  try {
+    if (action !== 'restart' && action !== 'pause') return { ok: false, error: 'unknown action ' + action };
+    const btn = document.querySelector('[aria-label="Play/pause"]');
+    if (!btn) return { ok: false, error: 'no Bandcamp player controls found on this tab' };
+    const wantPlaying = action === 'restart';
+    const isPlayingNow = () => {
+      const all = Array.from(document.querySelectorAll('audio'));
+      const active = all.find((a) => !a.paused) || all.find((a) => a.src || a.currentSrc) || all[0];
+      return !!active && !active.paused;
+    };
+    if (isPlayingNow() === wantPlaying) return { ok: true, playing: wantPlaying };
+    btn.click();
+    for (let i = 0; i < 20; i++) {
+      await new Promise((r) => setTimeout(r, 100));
+      if (isPlayingNow() === wantPlaying) return { ok: true, playing: wantPlaying };
+    }
+    return { ok: false, error: `Play/pause click did not reach ${wantPlaying ? 'playing' : 'paused'} state` };
+  } catch (e) {
+    return { ok: false, error: `${e.name}: ${e.message}` };
+  }
+}
+
+// Polled every 1s (mirrors counterDJPoll) — no chapter/BPM/onset data, Bandcamp v1 has none of that.
+function bandcampPoll() {
+  try {
+    const all = Array.from(document.querySelectorAll('audio'));
+    const active = all.find((a) => !a.paused) || all.find((a) => a.src || a.currentSrc) || all[0];
+    return {
+      ok: true,
+      connected: !!document.querySelector('[aria-label="Play/pause"]'),
+      playing: active ? !active.paused : false,
+      currentTime: active ? active.currentTime : null,
+    };
+  } catch (e) {
+    return { ok: false, connected: false, error: `${e.name}: ${e.message}` };
+  }
+}
+
+// direction: 'next' | 'prev'. Standalone (non-album) track pages may not have these controls —
+// no-op gracefully (skipped:false), matching how counterDJSkip already falls back gracefully.
+// Smart-previous: first press restarts the current track, second press (if pressed again near
+// the start) goes to the actual previous track — mirrors counterDJSkip's chapter behavior.
+function bandcampSkip(direction) {
+  try {
+    if (direction === 'next') {
+      const btn = document.querySelector('[aria-label="Next track"]');
+      if (btn) { btn.click(); return { ok: true }; }
+      return { ok: true, skipped: false };
+    }
+    if (direction === 'prev') {
+      const all = Array.from(document.querySelectorAll('audio'));
+      const active = all.find((a) => !a.paused) || all.find((a) => a.src || a.currentSrc) || all[0];
+      if (active && active.currentTime > 3) {
+        active.currentTime = 0;
+        return { ok: true };
+      }
+      const btn = document.querySelector('[aria-label="Previous track"]');
+      if (btn) { btn.click(); return { ok: true }; }
+      if (active) { active.currentTime = 0; return { ok: true }; }
+      return { ok: true, skipped: false };
+    }
+    return { ok: false, error: 'unknown direction ' + direction };
+  } catch (e) {
+    return { ok: false, error: `${e.name}: ${e.message}` };
+  }
+}
+
+function bandcampSeekBy(deltaSeconds) {
+  try {
+    const all = Array.from(document.querySelectorAll('audio'));
+    const active = all.find((a) => !a.paused) || all.find((a) => a.src || a.currentSrc) || all[0];
+    if (!active) return { ok: false, error: 'no active Bandcamp audio element found' };
+    active.currentTime = Math.max(0, active.currentTime + deltaSeconds);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: `${e.name}: ${e.message}` };
+  }
+}
+
 // ---- side panel logic ----
 
 // ---- UI strings — editable wording without shipping a new extension version ----
@@ -712,10 +962,10 @@ function counterDJPoll() {
 // Only wording lives here — deck letters and raw error text from the page/mixer are passed as
 // {vars}, never baked into the template, so the source of truth for *facts* stays in the code.
 const DEFAULT_STRINGS = {
-  'status.noTabsOpen': 'Open YouTube tabs to start mixing',
+  'status.noTabsOpen': 'Open YouTube or Bandcamp tabs to start mixing',
   'status.pickATab': 'Pick a tab for at least one deck',
   'status.sameTabError': 'Deck A and Deck B must be different tabs',
-  'status.noOtherTab': 'No other YouTube tab open for Deck {deck}',
+  'status.noOtherTab': 'No other tab open for Deck {deck}',
   'status.alreadyConnected': 'Already connected',
   'status.connecting': 'Connecting…',
   'status.connectFailed': 'Connect failed: {reason}',
@@ -735,8 +985,9 @@ const DEFAULT_STRINGS = {
   'status.noResult': 'no result',
   'status.transportFailed': 'transport failed',
   'status.injectionFailed': 'injection failed',
-  'menu.noTabsOpen': 'No YouTube tabs open',
+  'menu.noTabsOpen': 'No YouTube or Bandcamp tabs open',
   'menu.noOtherTabs': 'No other tabs available',
+  'status.bandcampCaptureError': 'Deck {deck}: Bandcamp audio capture failed — {reason}',
 };
 // Keys whose current wording marks a transitional/expected state, not a problem — kept as keys
 // (not literal text) so a remote reword of e.g. "Connecting…" can't silently break the match.
@@ -779,6 +1030,20 @@ const GAIN_MIN = 0, GAIN_MAX = 1.5, GAIN_STEP = 0.05;
 // FX: bipolar filter knob, 0 = bypass. Negative = lowpass sweep down, positive = highpass up.
 // See counterDJSetParam's 'fx' branch for the exponential frequency curve.
 const FX_MIN = -1, FX_MAX = 1, FX_STEP = 0.1;
+// Delay's own knob range: unipolar 0..1, drives both wet level and repeat density together (see
+// counterDJSetup's applyFxValue) — reset at 0 is a genuine bypass (silent), same convention as
+// Filter's own reset: turning the knob up from rest is what makes the effect audible, at 12
+// o'clock/rest neither type colors the sound (direct request).
+const FX_TYPES = {
+  filter: { label: 'FILTER', min: FX_MIN, max: FX_MAX, step: FX_STEP, reset: 0 },
+  delay: { label: 'DELAY', min: 0, max: 1, step: 0.1, reset: 0 },
+};
+const FX_TYPE_ORDER = ['filter', 'delay'];
+// One physical knob per deck serves whichever type is active — every place that used to read the
+// static FX_MIN/MAX/STEP now resolves it per-deck through this.
+function fxRange(deck) {
+  return FX_TYPES[state.decks[deck].fxType] || FX_TYPES.filter;
+}
 const CROSS_STEP = 0.05; // must evenly divide 0.5 so the center (50%) is always reachable
 // A fully EQ-killed or crossfader-cut deck is inaudible and excluded from beatmatching.
 // Split into two functions so the sync UI can distinguish the two cases (crossfader-out is a
@@ -863,11 +1128,14 @@ const TRIAL_LIMIT_MS = 5 * 60 * 60 * 1000;
 // TODO: replace with the real Gumroad listing URL once it exists.
 const GUMROAD_PRODUCT_URL = 'https://fadercraft.gumroad.com/l/groove-mix';
 const GUMROAD_COFFEE_URL = 'https://fadercraft.gumroad.com/coffee';
+// id-only path (no slug) — Chrome Web Store resolves this reliably regardless of the listing's
+// display name; /reviews opens straight to the reviews tab instead of the top of the listing.
+const CWS_REVIEW_URL = 'https://chromewebstore.google.com/detail/kiigcdfcmdanbpjpgilolmchobnpmjij/reviews';
 
 const state = {
   decks: {
-    A: { tabId: null, connected: false, high: 0, mid: 0, low: 0, fx: 0, gain: 1, playing: null, rate: 1, detectedBpm: null, beatCount: 0, recentOnsets: [], cued: false, hasPlayedOnce: false },
-    B: { tabId: null, connected: false, high: EQ_MIN, mid: EQ_MIN, low: EQ_MIN, fx: 0, gain: 1, playing: null, rate: 1, detectedBpm: null, beatCount: 0, recentOnsets: [], cued: false, hasPlayedOnce: false },
+    A: { tabId: null, connected: false, high: 0, mid: 0, low: 0, fx: 0, fxType: 'filter', filterValue: 0, delayValue: 0, gain: 1, playing: null, rate: 1, detectedBpm: null, beatCount: 0, recentOnsets: [], cued: false, hasPlayedOnce: false, source: 'youtube', artworkUrl: null, bandcampUrl: null },
+    B: { tabId: null, connected: false, high: EQ_MIN, mid: EQ_MIN, low: EQ_MIN, fx: 0, fxType: 'filter', filterValue: 0, delayValue: 0, gain: 1, playing: null, rate: 1, detectedBpm: null, beatCount: 0, recentOnsets: [], cued: false, hasPlayedOnce: false, source: 'youtube', artworkUrl: null, bandcampUrl: null },
   },
   cross: 0.5, // 0 = full A, 1 = full B
   // null = disengaged. 0 = A native/B matches A. 1 = mirrored. 0.5 = both bend to shared midpoint.
@@ -943,6 +1211,13 @@ coffeeLinkEl.href = GUMROAD_COFFEE_URL;
 coffeeLinkEl.addEventListener('click', () => {
   addBreadcrumb('button_click: buy_coffee');
   if (window.posthog) posthog.capture('button_click', { button: 'buy_coffee' });
+});
+
+const rateLinkEl = document.getElementById('rateLink');
+rateLinkEl.href = CWS_REVIEW_URL;
+rateLinkEl.addEventListener('click', () => {
+  addBreadcrumb('button_click: rate_extension');
+  if (window.posthog) posthog.capture('button_click', { button: 'rate_extension' });
 });
 
 // Banner suppressed (deferred feature) — usage/license tracking still runs, only the nag is hidden.
@@ -1022,19 +1297,53 @@ function getVideoId(url) {
   }
 }
 
+function isBandcampUrl(url) {
+  try {
+    return new URL(url).hostname.endsWith('.bandcamp.com');
+  } catch {
+    return false;
+  }
+}
+
+async function listBandcampTabs() {
+  return chrome.tabs.query({ url: '*://*.bandcamp.com/*' });
+}
+
+// Merged, source-tagged tab list used everywhere a deck picker needs to see both YouTube and
+// Bandcamp candidates. YouTube first (still the anchor use case), audible-first within each group.
+async function listEligibleTabs() {
+  const [ytTabs, bcTabs] = await Promise.all([listYoutubeTabs(), listBandcampTabs()]);
+  const tag = (tabs, source) => tabs.map((t) => ({ ...t, source }));
+  return [...tag(ytTabs, 'youtube'), ...tag(bcTabs, 'bandcamp')]
+    .sort((a, b) => (b.audible ? 1 : 0) - (a.audible ? 1 : 0));
+}
+
+function ytThumbUrl(videoId) {
+  return videoId ? `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg` : null;
+}
+
+// Source-aware artwork URL for a deck's current state — YouTube derives it from videoId,
+// Bandcamp carries a scraped og:image URL directly (see bandcampGetMetadata).
+function deckThumbUrl(d) {
+  return d.source === 'bandcamp' ? d.artworkUrl : ytThumbUrl(d.videoId);
+}
+
 // The placeholder backdrop for "no tab picked" lives on .deckThumbClip (background, see
 // styles.css), not on this <img> — so the img itself can be fully hidden while empty without
 // collapsing the box the ▾ picker arrow rests on. Hidden, not just faded: opacity alone still let
 // a stray browser broken-image glyph render through from a request that errored right as the tab
 // closed (2026-08-13, direct report — glyph persisting after closing the deck's tab).
-function setDeckThumb(deckKey, videoId) {
+// Takes a full artwork URL (not a videoId) so it works for both sources — YouTube call sites
+// compute the ytimg.com URL themselves via ytThumbUrl(), Bandcamp call sites pass the scraped
+// og:image URL directly.
+function setDeckThumb(deckKey, artworkSrc) {
   const img = document.getElementById(`deckThumb${deckKey}`);
   // Use removeAttribute, NOT src='': img.src='' resolves against the page's own URL, fails to
   // load, and renders the browser's broken-image icon. removeAttribute falls back to .deckThumb's
   // background-color with no network request.
-  if (videoId) {
+  if (artworkSrc) {
     img.hidden = false;
-    img.src = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+    img.src = artworkSrc;
   } else {
     img.removeAttribute('src');
     img.hidden = true;
@@ -1078,8 +1387,14 @@ function pickTab(deck, tab) {
   state.decks[deck].tabId = tab.id;
   state.decks[deck].staticTitle = tab.title || tab.url;
   state.decks[deck].videoId = getVideoId(tab.url);
+  const isBandcamp = isBandcampUrl(tab.url);
+  state.decks[deck].source = isBandcamp ? 'bandcamp' : 'youtube';
+  state.decks[deck].bandcampUrl = isBandcamp ? tab.url : null;
+  // Bandcamp artwork isn't known until connect scrapes og:image — starts null, picker shows the
+  // plain placeholder until then.
+  state.decks[deck].artworkUrl = null;
   document.getElementById(`title${deck}`).textContent = state.decks[deck].staticTitle;
-  setDeckThumb(deck, state.decks[deck].videoId);
+  setDeckThumb(deck, deckThumbUrl(state.decks[deck]));
   closeTabMenu(deck);
   refreshTitleWhenResolved(deck, tab.id, tab.url);
   // Picking a new tab invalidates this deck's graph — its sibling stays untouched.
@@ -1119,7 +1434,7 @@ function closeAllTabMenus() {
 
 async function openTabMenu(deck) {
   closeTabMenu(deck === 'A' ? 'B' : 'A');
-  const tabs = await listYoutubeTabs();
+  const tabs = await listEligibleTabs();
   const otherTabId = state.decks[deck === 'A' ? 'B' : 'A'].tabId;
   const available = tabs.filter((t) => t.id !== otherTabId && t.id !== state.decks[deck].tabId);
   const menu = document.getElementById(`tabMenu${deck}`);
@@ -1133,7 +1448,7 @@ async function openTabMenu(deck) {
     available.forEach((t) => {
       const item = document.createElement('button');
       item.className = 'tabMenuItem ph-no-capture'; // track title — excluded from PostHog autocapture
-      item.textContent = (t.audible ? '\u{1F50A} ' : '') + (t.title || t.url).slice(0, 40);
+      item.textContent = (t.audible ? '\u{1F50A} ' : '') + (t.source === 'bandcamp' ? '\u{1F3B5} ' : '') + (t.title || t.url).slice(0, 40);
       // Focus is manual-pick only — not inside pickTab() itself, which also runs on the
       // automatic on-load default pairing (refreshTabs), where stealing focus would be wrong.
       item.addEventListener('click', () => {
@@ -1143,8 +1458,9 @@ async function openTabMenu(deck) {
       menu.appendChild(item);
     });
   }
-  // "Send to Deck X" — relocates THIS deck's track to the other box, knobs stay put (2026-08-07,
-  // direct request). Only shown when there's actually a track here to send.
+  // "Swap Decks" — trades the two decks' full state (track + EQ/gain, encoders move with the
+  // track); the header ⇄ button used to own this, now owns the deck-bound send instead (see
+  // connectBtn's click handler). Only shown when there's actually a track here to swap.
   if (state.decks[deck].tabId) {
     const otherDeck = deck === 'A' ? 'B' : 'A';
     const sendItem = document.createElement('button');
@@ -1153,13 +1469,13 @@ async function openTabMenu(deck) {
     // move, and stays pinned to that edge with the label on the opposite side (2026-08-07).
     const arrowRight = otherDeck === 'B';
     const label = document.createElement('span');
-    label.textContent = `Send to Deck ${otherDeck}`;
+    label.textContent = 'Swap Decks';
     const arrow = document.createElement('span');
     arrow.textContent = arrowRight ? '→' : '←';
     sendItem.append(...(arrowRight ? [label, arrow] : [arrow, label]));
     sendItem.addEventListener('click', () => {
       closeTabMenu(deck);
-      sendTrackToOtherDeck();
+      swapDecks();
     });
     menu.appendChild(sendItem);
   }
@@ -1179,7 +1495,7 @@ document.addEventListener('click', closeAllTabMenus); // click anywhere else clo
 // Polls for eligible YouTube tabs on an interval (not chrome.tabs.onUpdated — SPA nav doesn't
 // fire it reliably). Auto-fills empty deck slots A before B; never steals browser focus.
 async function refreshTabs() {
-  const tabs = await listYoutubeTabs();
+  const tabs = await listEligibleTabs();
   // Catches a picked-but-not-yet-connected deck whose tab got closed (2026-08-07, direct report
   // — stale cover art stuck showing forever). pollOneDeckStatus only watches CONNECTED decks (its
   // own connected guard exists to stop it tearing down a fresh pick before Connect can run) — an
@@ -1191,9 +1507,10 @@ async function refreshTabs() {
       disconnectDeck(deck, 'tab closed');
     }
   }
-  const eligible = tabs
-    .filter((t) => getVideoId(t.url) && t.id !== state.decks.A.tabId && t.id !== state.decks.B.tabId)
-    .sort((a, b) => (b.audible ? 1 : 0) - (a.audible ? 1 : 0));
+  // listEligibleTabs() already restricts to youtube.com/bandcamp.com origins and is
+  // audible-first sorted — just exclude tabs already assigned to a deck. (getVideoId(t.url) alone
+  // would exclude every Bandcamp tab, which never has a YouTube-style ?v= param.)
+  const eligible = tabs.filter((t) => t.id !== state.decks.A.tabId && t.id !== state.decks.B.tabId);
   const picked = [];
   if (!state.decks.A.tabId && eligible.length) { pickTab('A', eligible.shift()); picked.push('A'); }
   if (!state.decks.B.tabId && eligible.length) { pickTab('B', eligible.shift()); picked.push('B'); }
@@ -1256,8 +1573,13 @@ function dbToAngle(v) {
 function gainToAngle(g) {
   return DeckRender.tieredAngle(g - 1, GAIN_MIN - 1, GAIN_MAX - 1);
 }
-function fxToAngle(v) {
-  return DeckRender.tieredAngle(v, FX_MIN, FX_MAX);
+function fxToAngle(v, deck) {
+  // Shifted by the active type's own reset/neutral value — same trick as gainToAngle above.
+  // tieredAngle always puts its own zero at 12 o'clock; both types currently reset to their own
+  // min (0), so this is a no-op today, but keeps the knob correctly centered if a future type's
+  // neutral point ever isn't its minimum (a real bug here once, when Delay's reset was 0.5).
+  const r = fxRange(deck);
+  return DeckRender.tieredAngle(v - r.reset, r.min - r.reset, r.max - r.reset);
 }
 
 function updateReadouts() {
@@ -1279,12 +1601,19 @@ function updateReadouts() {
     gainKnob.title = `GAIN: ${g.toFixed(2)}`;
     document.getElementById(`led${deck}_gain`).classList.toggle('lit', Math.abs(g - 1) > 0.05);
     const fxV = state.decks[deck].fx;
-    const fxAngle = fxToAngle(fxV);
+    const fxT = state.decks[deck].fxType;
+    const range = fxRange(deck);
+    const fxAngle = fxToAngle(fxV, deck);
     const fxKnob = document.getElementById(`knob${deck}_fx`);
     fxKnob.querySelector('.knobPointer').style.transform = `translateX(-50%) rotate(${fxAngle}deg)`;
-    DeckRender.setKnobArc(fxKnob, fxAngle, fxToAngle(0));
-    fxKnob.title = fxV === 0 ? 'FX: bypass' : `FX: ${fxV < 0 ? 'lowpass' : 'highpass'} ${Math.abs(fxV * 100).toFixed(0)}%`;
-    document.getElementById(`led${deck}_fx`).classList.toggle('lit', Math.abs(fxV) > 0.02);
+    DeckRender.setKnobArc(fxKnob, fxAngle, fxToAngle(range.reset, deck));
+    const fxTypeLabel = document.getElementById(`fxTypeLabel${deck}`);
+    if (fxTypeLabel) fxTypeLabel.textContent = range.label;
+    if (fxT === 'delay') {
+      fxKnob.title = `DELAY: ${Math.round(fxV * 100)}% density`;
+    } else {
+      fxKnob.title = fxV === 0 ? 'FILTER: bypass' : `FILTER: ${fxV < 0 ? 'lowpass' : 'highpass'} ${Math.abs(fxV * 100).toFixed(0)}%`;
+    }
     document.getElementById(`playBtn${deck}`).classList.toggle('isPlaying', state.decks[deck].playing === true);
   }
   const pct = Math.round(state.cross * 100);
@@ -1299,6 +1628,20 @@ async function sendParam(deckKey, param, value) {
   // cryptic native error instead of failing gracefully.
   if (typeof value === 'number' && !Number.isFinite(value)) {
     setStatus(t('status.nonFiniteValue', { deck: deckKey, param, value }));
+    return;
+  }
+  if (state.decks[deckKey].source === 'bandcamp') {
+    // rate is a no-op — BPM/tempo sync is out of scope for Bandcamp v1 (see offscreen.js's
+    // bcSetParam, which also no-ops it — kept here too so the round trip is skipped entirely).
+    if (param === 'rate') return;
+    try {
+      const res = await chrome.runtime.sendMessage({ target: 'offscreen', type: 'bcSetParam', deckKey, param, value });
+      if (!res || !res.ok) {
+        setStatus(t('status.paramError', { deck: deckKey, param, reason: (res && res.error) || t('status.noResult') }));
+      }
+    } catch (e) {
+      setStatus(t('status.deckError', { deck: deckKey, reason: cleanErrorReason(e.message) }));
+    }
     return;
   }
   try {
@@ -1324,9 +1667,53 @@ async function sendParam(deckKey, param, value) {
   }
 }
 
+// Switches a deck's active FX type. YouTube only (Bandcamp's offscreen engine has no FX-type
+// bus — see offscreen.js). Returns success so cycleFxType can roll the UI back on failure instead
+// of showing a switch that never actually happened tab-side. filterValue/delayValue are optional —
+// pass them to force-resync both nodes (fresh connect, track swap); omit for a plain type-switch,
+// since both stay live and already hold whatever was last set.
+async function sendFxType(deckKey, type, filterValue, delayValue) {
+  const tabId = state.decks[deckKey].tabId;
+  if (!tabId || !state.decks[deckKey].connected) return false;
+  try {
+    const res = await chrome.scripting.executeScript({
+      target: { tabId },
+      world: 'MAIN',
+      func: counterDJSetFxType,
+      args: [type, filterValue, delayValue],
+    });
+    const result = res && res[0] && res[0].result;
+    if (!result || !result.ok) {
+      setStatus(t('status.paramError', { deck: deckKey, param: 'fxType', reason: result ? result.error : t('status.noResult') }));
+      return false;
+    }
+    return true;
+  } catch (e) {
+    if (/no tab with id/i.test(e.message || '')) {
+      disconnectDeck(deckKey, 'tab closed');
+    } else {
+      setStatus(t('status.deckError', { deck: deckKey, reason: cleanErrorReason(e.message) }));
+    }
+    return false;
+  }
+}
+
 async function sendCue(deckKey, deviceId, active) {
   const tabId = state.decks[deckKey].tabId;
   if (!tabId) return;
+  if (state.decks[deckKey].source === 'bandcamp') {
+    try {
+      const res = await chrome.runtime.sendMessage({ target: 'offscreen', type: 'bcSetCue', deckKey, deviceId, active });
+      if (!res || !res.ok) {
+        setStatus(t('status.deckCue', { deck: deckKey, reason: (res && res.error) || t('status.noResult') }));
+        return false;
+      }
+      return true;
+    } catch (e) {
+      setStatus(t('status.deckCueError', { deck: deckKey, reason: cleanErrorReason(e.message) }));
+      return false;
+    }
+  }
   try {
     const res = await chrome.scripting.executeScript({
       target: { tabId },
@@ -1350,11 +1737,12 @@ async function sendSkip(deckKey, direction) {
   const tabId = state.decks[deckKey].tabId;
   if (!tabId) return;
   chrome.tabs.update(tabId, { active: true });
+  const skipFunc = state.decks[deckKey].source === 'bandcamp' ? bandcampSkip : counterDJSkip;
   try {
     const res = await chrome.scripting.executeScript({
       target: { tabId },
       world: 'MAIN',
-      func: counterDJSkip,
+      func: skipFunc,
       args: [direction],
     });
     const result = res && res[0] && res[0].result;
@@ -1403,6 +1791,28 @@ function applyCrossfader() {
 async function sendTransport(deckKey, action) {
   const tabId = state.decks[deckKey].tabId;
   if (!tabId || !state.decks[deckKey].connected) return;
+  if (state.decks[deckKey].source === 'bandcamp') {
+    try {
+      if (action === 'restart') {
+        // Resume the offscreen AudioContext before asking the tab to play — a fresh context can
+        // start suspended the same way counterDJSetup's does (see comment there).
+        await chrome.runtime.sendMessage({ target: 'offscreen', type: 'bcResumeCtx', deckKey }).catch(() => {});
+      }
+      const res = await chrome.scripting.executeScript({
+        target: { tabId }, world: 'MAIN', func: bandcampTransport, args: [action],
+      });
+      const result = res && res[0] && res[0].result;
+      if (!result || !result.ok) {
+        setStatus(t('status.deckTransport', { deck: deckKey, reason: result ? result.error : t('status.transportFailed') }));
+        return;
+      }
+      state.decks[deckKey].playing = result.playing;
+      updateReadouts();
+    } catch (e) {
+      setStatus(t('status.deckError', { deck: deckKey, reason: cleanErrorReason(e.message) }));
+    }
+    return;
+  }
   try {
     const res = await chrome.scripting.executeScript({
       target: { tabId },
@@ -1427,11 +1837,12 @@ async function sendTransport(deckKey, action) {
 async function sendSeekBy(deckKey, deltaSeconds) {
   const tabId = state.decks[deckKey].tabId;
   if (!tabId) return;
+  const seekFunc = state.decks[deckKey].source === 'bandcamp' ? bandcampSeekBy : counterDJSeekBy;
   try {
     await chrome.scripting.executeScript({
       target: { tabId },
       world: 'MAIN',
-      func: counterDJSeekBy,
+      func: seekFunc,
       args: [deltaSeconds],
     });
   } catch (e) {
@@ -1454,6 +1865,59 @@ function updateConnectEnabled() {
 // auto-picking a tab into an empty slot left Play sitting disabled, since picking alone was
 // never enough; only this injection step actually makes a deck playable). Returns false (and
 // sets a status message) on injection failure, true on success.
+// Bandcamp side of connectDecks() — metadata scrape + tabCapture/offscreen wiring instead of the
+// in-tab counterDJSetup injection. See offscreen.js for the actual EQ/FX/gain/cross graph.
+async function connectBandcampDeck(key, tabInfo) {
+  try {
+    const metaRes = await chrome.scripting.executeScript({
+      target: { tabId: state.decks[key].tabId }, world: 'MAIN', func: bandcampGetMetadata,
+    });
+    const meta = metaRes && metaRes[0] && metaRes[0].result;
+    if (meta && meta.ok) {
+      state.decks[key].staticTitle = meta.title || state.decks[key].staticTitle;
+      state.decks[key].artworkUrl = meta.artworkUrl || null;
+      document.getElementById(`title${key}`).textContent = state.decks[key].staticTitle;
+      setDeckThumb(key, deckThumbUrl(state.decks[key]));
+    }
+  } catch (e) { /* metadata is best-effort — the audio path below is what actually matters */ }
+
+  state.decks[key].bandcampUrl = tabInfo.url;
+
+  const bgRes = await chrome.runtime.sendMessage({
+    target: 'background', type: 'bandcampConnect', deckKey: key, tabId: state.decks[key].tabId,
+  }).catch((e) => ({ ok: false, error: String((e && e.message) || e) }));
+  if (!bgRes || !bgRes.ok) {
+    setStatus(t('status.bandcampCaptureError', { deck: key, reason: (bgRes && bgRes.error) || t('status.noResult') }));
+    return false;
+  }
+
+  const offRes = await chrome.runtime.sendMessage({
+    target: 'offscreen', type: 'bcSetup', deckKey: key, streamId: bgRes.streamId,
+    initial: {
+      low: state.decks[key].low, mid: state.decks[key].mid, high: state.decks[key].high,
+      gain: state.decks[key].gain, fx: state.decks[key].fx,
+    },
+  }).catch((e) => ({ ok: false, error: String((e && e.message) || e) }));
+  if (!offRes || !offRes.ok) {
+    setStatus(t('status.bandcampCaptureError', { deck: key, reason: (offRes && offRes.error) || t('status.noResult') }));
+    chrome.runtime.sendMessage({ target: 'background', type: 'bandcampDisconnect', deckKey: key }).catch(() => {});
+    return false;
+  }
+
+  // Fresh connect always starts paused — same "DJ decides when it starts" convention as
+  // counterDJSetup's cue-on-connect, simplified: Bandcamp tabs don't autoplay the way a
+  // just-opened YouTube tab can, so there's no "walked in on an already-running guest deck"
+  // case worth the extra branching here (unlike counterDJSetup's forceCue logic).
+  await chrome.scripting.executeScript({
+    target: { tabId: state.decks[key].tabId }, world: 'MAIN', func: bandcampTransport, args: ['pause'],
+  }).catch(() => {});
+
+  state.decks[key].playing = false;
+  state.decks[key].hasPlayedOnce = false;
+  state.decks[key].connected = true;
+  return true;
+}
+
 async function connectDecks(keys) {
   for (const key of keys) {
     const tabInfo = await chrome.tabs.get(state.decks[key].tabId);
@@ -1461,8 +1925,8 @@ async function connectDecks(keys) {
     state.decks[key].staticTitle = tabInfo.title || tabInfo.url;
     state.decks[key].videoId = getVideoId(tabInfo.url);
     document.getElementById(`title${key}`).textContent = state.decks[key].staticTitle;
-    refreshTitleWhenResolved(key, state.decks[key].tabId, tabInfo.url);
-    setDeckThumb(key, state.decks[key].videoId);
+    if (state.decks[key].source !== 'bandcamp') refreshTitleWhenResolved(key, state.decks[key].tabId, tabInfo.url);
+    setDeckThumb(key, deckThumbUrl(state.decks[key]));
 
     // Guest deck (joining while sibling is already playing) starts EQ-cut; anchor stays at its
     // current levels. Determined by which one's ALREADY playing, not by letter (A/B).
@@ -1470,6 +1934,9 @@ async function connectDecks(keys) {
     const otherAlreadyPlaying = state.decks[otherKey].connected && state.decks[otherKey].playing;
     state.decks[key].high = state.decks[key].mid = state.decks[key].low = otherAlreadyPlaying ? EQ_MIN : 0;
     state.decks[key].fx = 0;
+    state.decks[key].fxType = 'filter';
+    state.decks[key].filterValue = 0;
+    state.decks[key].delayValue = 0;
     state.decks[key].gain = 1;
     state.decks[key].rate = 1;
     resetPhaseIntegral(key);
@@ -1478,6 +1945,10 @@ async function connectDecks(keys) {
     state.decks[key].beatCount = 0;
     state.decks[key].recentOnsets = [];
 
+    if (state.decks[key].source === 'bandcamp') {
+      const connected = await connectBandcampDeck(key, tabInfo);
+      if (!connected) return false;
+    } else {
     const res = await chrome.scripting.executeScript({
       target: { tabId: state.decks[key].tabId },
       world: 'MAIN',
@@ -1491,6 +1962,9 @@ async function connectDecks(keys) {
         gain: state.decks[key].gain,
         rate: state.decks[key].rate,
         fx: state.decks[key].fx,
+        fxType: state.decks[key].fxType,
+        filterValue: state.decks[key].filterValue,
+        delayValue: state.decks[key].delayValue,
         // Guest deck always lands cued regardless of its own tab's playback state — a freshly
         // opened YouTube tab autoplays by default, same outward signal as a genuinely mid-set
         // track, so video.paused alone can't tell "anchor already running a set" apart from
@@ -1520,15 +1994,24 @@ async function connectDecks(keys) {
     state.decks[key].playing = result.playing && !result.muted && result.ctxState === 'running';
     state.decks[key].hasPlayedOnce = state.decks[key].playing;
     state.decks[key].connected = true;
+    // A stale SPA-persisted tab from before the FX-type feature landed reconnects with its old
+    // direct filter-only graph (see counterDJSetup's reconnect branch) — Filter still works on it,
+    // but Delay silently wouldn't, so don't let the UI offer/keep a type the tab can't run.
+    if (!result.hasFxTypes) state.decks[key].fxType = 'filter';
+    }
     addBreadcrumb(`track_loaded: ${key} (connect)`);
-    if (window.posthog) posthog.capture('track_loaded', { deck: key, via: 'connect' });
+    if (window.posthog) posthog.capture('track_loaded', { deck: key, via: 'connect', source: state.decks[key].source });
     updateDeckConnectedVisual(key);
     await sendParam(key, 'gain', state.decks[key].gain);
     await sendParam(key, 'rate', state.decks[key].rate);
     await sendParam(key, 'low', state.decks[key].low);
     await sendParam(key, 'mid', state.decks[key].mid);
     await sendParam(key, 'high', state.decks[key].high);
-    await sendParam(key, 'fx', state.decks[key].fx);
+    if (state.decks[key].source === 'bandcamp') {
+      await sendParam(key, 'fx', state.decks[key].fx);
+    } else {
+      await sendFxType(key, state.decks[key].fxType, state.decks[key].filterValue, state.decks[key].delayValue);
+    }
   }
   state.cross = 0.5;
   applyCrossfader();
@@ -1575,9 +2058,9 @@ async function attemptAutoConnect() {
 // #connect is disabled (see setConnected) until both decks are live — by the time a click can
 // land, the only thing left for it to do is swap.
 connectBtn.addEventListener('click', () => {
-  addBreadcrumb('button_click: swap_decks');
-  if (window.posthog) posthog.capture('button_click', { button: 'swap_decks' });
-  swapDecks();
+  addBreadcrumb('button_click: send_to_other_deck');
+  if (window.posthog) posthog.capture('button_click', { button: 'send_to_other_deck' });
+  sendTrackToOtherDeck();
   mixerEl.focus();
 });
 
@@ -1604,7 +2087,7 @@ function startPerfMonitor() {
   perfMonitorTimer = setInterval(async () => {
     for (const deck of ['A', 'B']) {
       const tabId = state.decks[deck].tabId;
-      if (!tabId) continue;
+      if (!tabId || state.decks[deck].source === 'bandcamp') continue; // no beat processor to report on
       try {
         const res = await chrome.scripting.executeScript({ target: { tabId }, world: 'MAIN', func: counterDJPerfStats });
         const stats = res && res[0] && res[0].result;
@@ -1667,8 +2150,15 @@ function startLevelsPoll() {
       const tabId = state.decks[deck].tabId;
       if (!tabId) continue;
       try {
-        const res = await chrome.scripting.executeScript({ target: { tabId }, world: 'MAIN', func: counterDJLevel });
-        const rawDb = res && res[0] && res[0].result;
+        let rawDb;
+        if (state.decks[deck].source === 'bandcamp') {
+          if (!state.decks[deck].connected) continue;
+          const res = await chrome.runtime.sendMessage({ target: 'offscreen', type: 'bcGetLevel', deckKey: deck }).catch(() => null);
+          rawDb = res ? res.db : null;
+        } else {
+          const res = await chrome.scripting.executeScript({ target: { tabId }, world: 'MAIN', func: counterDJLevel });
+          rawDb = res && res[0] && res[0].result;
+        }
         const prev = levelSmoothedDb[deck];
         const smoothed = rawDb == null ? prev : Math.max(rawDb, prev - DECAY_DB_PER_SEC * elapsedSec);
         levelSmoothedDb[deck] = smoothed;
@@ -1696,6 +2186,16 @@ function disconnectDeck(deck, reason) {
   state.decks[deck].detectedBpm = null;
   state.decks[deck].beatCount = 0;
   state.decks[deck].recentOnsets = [];
+  // Release the offscreen audio graph and tell background.js to drop this deck from its
+  // connected-count (closes the offscreen document once no Bandcamp deck remains). Best-effort:
+  // if the tab's already gone these can fail harmlessly.
+  if (state.decks[deck].source === 'bandcamp') {
+    chrome.runtime.sendMessage({ target: 'offscreen', type: 'bcDisconnect', deckKey: deck }).catch(() => {});
+    chrome.runtime.sendMessage({ target: 'background', type: 'bandcampDisconnect', deckKey: deck }).catch(() => {});
+  }
+  state.decks[deck].source = 'youtube';
+  state.decks[deck].artworkUrl = null;
+  state.decks[deck].bandcampUrl = null;
   // Clear stale cover art and title left over from the closed tab.
   document.getElementById(`title${deck}`).textContent = '—';
   setDeckThumb(deck, null);
@@ -1913,6 +2413,43 @@ async function pollOneDeckStatus(deck) {
   // would find __counterDJ__ missing on the freshly-picked tab, rack up missedPolls, and
   // auto-disconnect before the user can click Connect.
   if (!tabId || !state.decks[deck].connected) return;
+  if (state.decks[deck].source === 'bandcamp') {
+    // Bandcamp track changes are full page reloads, not SPA navigation — window.__counterDJ__-
+    // style in-page state can't survive them the way YouTube's does. Detect via URL change,
+    // disconnect, and let refreshTabs()/attemptAutoConnect() reconnect fresh (new tabCapture
+    // stream, new offscreen graph, new metadata read) rather than trying to patch the old one.
+    try {
+      const tab = await chrome.tabs.get(tabId);
+      if (tab.url !== state.decks[deck].bandcampUrl) {
+        disconnectDeck(deck, isBandcampUrl(tab.url) ? 'page reloaded or navigated away' : 'tab navigated away from Bandcamp');
+        return;
+      }
+      const res = await chrome.scripting.executeScript({ target: { tabId }, world: 'MAIN', func: bandcampPoll });
+      const result = res && res[0] && res[0].result;
+      if (!result || !result.connected) {
+        state.decks[deck].missedPolls = (state.decks[deck].missedPolls || 0) + 1;
+        if (state.decks[deck].missedPolls >= 2) disconnectDeck(deck, 'page reloaded or navigated away');
+        return;
+      }
+      state.decks[deck].missedPolls = 0;
+      const offRes = await chrome.runtime.sendMessage({ target: 'offscreen', type: 'bcPoll', deckKey: deck }).catch(() => null);
+      const ctxState = offRes ? offRes.ctxState : 'unknown';
+      const reallyPlaying = !!result.playing && ctxState === 'running';
+      if (state.decks[deck].playing !== reallyPlaying) {
+        state.decks[deck].playing = reallyPlaying;
+        updateReadouts();
+      }
+      if (reallyPlaying && !state.decks[deck].hasPlayedOnce) {
+        state.decks[deck].hasPlayedOnce = true;
+        updateSkipBtnEnabled(deck);
+      }
+      // No BPM/chapter/auto-beatmatch for Bandcamp — detectedBpm stays null, so the tempo-sync
+      // gates below (which key off it) no-op naturally; nothing else to do here.
+    } catch (e) {
+      disconnectDeck(deck, cleanErrorReason(e.message) || 'tab closed');
+    }
+    return;
+  }
   try {
       // SPA navigation doesn't reload: __counterDJ__ survives, tab.url/title change. Chapter
       // changes inside the same video don't change the URL, so this won't fight chapterTitle.
@@ -1930,7 +2467,7 @@ async function pollOneDeckStatus(deck) {
         // finishing and the next one starting inside the same tab) didn't (direct report — stuck
         // showing "YouTube" instead of the new track's title/chapter).
         refreshTitleWhenResolved(deck, tabId, tab.url);
-        setDeckThumb(deck, videoId);
+        setDeckThumb(deck, ytThumbUrl(videoId));
         // Same asymmetric EQ reset as initial Connect: anchor (A) stays flat, guest (B) cuts in.
         const resetEq = deck === 'A' ? 0 : EQ_MIN;
         state.decks[deck].high = state.decks[deck].mid = state.decks[deck].low = resetEq;
@@ -2002,6 +2539,11 @@ async function pollOneDeckStatus(deck) {
         state.decks[deck].detectedBpm = (bpm == null || Number.isFinite(bpm)) ? bpm : null;
         state.decks[deck].beatCount = result.beatCount;
         updateTempoStatus();
+        // Delay's density knob is BPM-synced (see counterDJSetup's delayTimeForKnob) but the tab
+        // only recomputes the actual delay time when the knob value is (re)applied — re-send the
+        // current value as BPM converges so the echo spacing tightens up to match, not just
+        // whatever tempo happened to be locked in when the knob was last touched.
+        if (bpmChanged && state.decks[deck].fxType === 'delay') sendParam(deck, 'fx', state.decks[deck].fx);
       }
       // Auto-beatmatch the first time both decks have a BPM and are both playing.
       // tempoBlend == null is the once-only guard; a later manual bar touch re-engages normally.
@@ -2020,11 +2562,18 @@ async function pollOneDeckStatus(deck) {
 }
 
 // Swaps the entire deck state (including EQ/gain) — controls keep addressing "left box".
-// The deck-bound variant (only stream moves) is sendTrackToOtherDeck().
+// The deck-bound variant (only stream moves) is sendTrackToOtherDeck(). Reachable from each
+// deck's own tab-picker dropdown as "Swap Decks" (moved here from the header button 2026-08-14).
 function swapDecks() {
   const tmp = state.decks.A;
   state.decks.A = state.decks.B;
   state.decks.B = tmp;
+  // The offscreen document's A/B graphs are keyed by deck letter too — rename them in place so
+  // the sendParam('cross', ...) calls below (via applyCrossfader) land on the right graph. Must
+  // happen before applyCrossfader(), which is why it's here rather than at the end.
+  if (state.decks.A.source === 'bandcamp' || state.decks.B.source === 'bandcamp') {
+    chrome.runtime.sendMessage({ target: 'offscreen', type: 'bcSwapDecks' }).catch(() => {});
+  }
   // levelSmoothedDb is keyed by deck letter, not tabId — the stream moved, so the meter reading
   // has to move with it, same as sendTrackToOtherDeck() already does below (2026-08-10, direct
   // report — gain/level LEDs stayed lit on a slot after swapping instead of following the track).
@@ -2038,8 +2587,8 @@ function swapDecks() {
   titleB.textContent = tmpTitle;
   // Route through setDeckThumb, not img.src: reading .src on an img with no src attribute
   // returns '' and writing '' back resolves against the page URL, causing a broken-image glyph.
-  setDeckThumb('A', state.decks.A.videoId);
-  setDeckThumb('B', state.decks.B.videoId);
+  setDeckThumb('A', deckThumbUrl(state.decks.A));
+  setDeckThumb('B', deckThumbUrl(state.decks.B));
   state.cross = 1 - state.cross; // invert so the same position still points at the same track
   applyCrossfader();
   updateReadouts();
@@ -2064,14 +2613,16 @@ function swapDecks() {
   updateConnectEnabled();
 }
 
-// Reachable from each deck's own tab-picker dropdown as "Send to Deck X" (2026-08-07, direct
-// request). Unlike swapDecks(), only the STREAM moves — tabId + everything identifying it; EQ/
-// gain/crossfader stay deck-bound (fixed to the box). Same underlying swap regardless of which
-// side triggered it: sending A's track to an empty B just means B inherits it and A ends up with
-// B's (empty) fields — no separate "move to empty slot" case needed.
+// Reachable from the header ⇄ button and the Tab key (moved here from the dropdown 2026-08-14,
+// which now owns the full swapDecks() instead). Unlike swapDecks(), only the STREAM moves —
+// tabId + everything identifying it; EQ/gain/crossfader stay deck-bound (fixed to the box). Same
+// underlying swap regardless of which side triggered it: sending A's track to an empty B just
+// means B inherits it and A ends up with B's (empty) fields — no separate "move to empty slot"
+// case needed.
 const TRACK_BOUND_FIELDS = [
   'tabId', 'connected', 'videoId', 'staticTitle', 'playing', 'hasPlayedOnce', 'cued',
   'detectedBpm', 'beatCount', 'recentOnsets', 'rate', 'missedPolls',
+  'source', 'artworkUrl', 'bandcampUrl',
 ];
 function sendTrackToOtherDeck() {
   const a = state.decks.A, b = state.decks.B;
@@ -2079,6 +2630,11 @@ function sendTrackToOtherDeck() {
     const tmp = a[field];
     a[field] = b[field];
     b[field] = tmp;
+  }
+  // Same offscreen A/B graph rename as swapDecks() — must happen before the sendParam resync
+  // below lands on the (now correctly reassigned) decks.
+  if (state.decks.A.source === 'bandcamp' || state.decks.B.source === 'bandcamp') {
+    chrome.runtime.sendMessage({ target: 'offscreen', type: 'bcSwapDecks' }).catch(() => {});
   }
   // levelSmoothedDb is keyed by deck letter, not tabId — the stream moved, so the meter reading
   // has to move with it, or the box that just inherited a loud track reads silent (decaying from
@@ -2091,8 +2647,8 @@ function sendTrackToOtherDeck() {
   const tmpTitle = titleA.textContent;
   titleA.textContent = titleB.textContent;
   titleB.textContent = tmpTitle;
-  setDeckThumb('A', state.decks.A.videoId);
-  setDeckThumb('B', state.decks.B.videoId);
+  setDeckThumb('A', deckThumbUrl(state.decks.A));
+  setDeckThumb('B', deckThumbUrl(state.decks.B));
   // gain/EQ deliberately untouched (deck-bound) — but the tab now plugged into each box is a
   // DIFFERENT tab than before, and its own graph still carries the PREVIOUS box's dial settings
   // until these are resent.
@@ -2101,7 +2657,14 @@ function sendTrackToOtherDeck() {
     sendParam(deck, 'low', state.decks[deck].low);
     sendParam(deck, 'mid', state.decks[deck].mid);
     sendParam(deck, 'high', state.decks[deck].high);
-    sendParam(deck, 'fx', state.decks[deck].fx);
+    // fx is deck/box-bound like gain/EQ (not in TRACK_BOUND_FIELDS), but the tab that just landed
+    // in this box may still be running whichever Filter/Delay values it had before — resend both
+    // plus which one the knob shows, or the new tab's own graph would keep its previous values.
+    if (state.decks[deck].source === 'bandcamp') {
+      sendParam(deck, 'fx', state.decks[deck].fx);
+    } else {
+      sendFxType(deck, state.decks[deck].fxType, state.decks[deck].filterValue, state.decks[deck].delayValue);
+    }
   }
   applyCrossfader();
   updateReadouts();
@@ -2170,6 +2733,11 @@ for (const deck of ['A', 'B']) {
     if (window.posthog) posthog.capture('track_skip', { direction: 'prev' });
     sendSkip(deck, 'prev');
   });
+}
+
+for (const deck of ['A', 'B']) {
+  document.getElementById(`fxTypePrev${deck}`).addEventListener('click', () => cycleFxType(deck, -1));
+  document.getElementById(`fxTypeNext${deck}`).addEventListener('click', () => cycleFxType(deck, 1));
 }
 
 // One eighth of the lead beat per click, wrapped 0..7. Seeks the follower immediately (background
@@ -2248,6 +2816,9 @@ const BPM_DETECT_BEATS = 5; // matches in-page detector's first-lock floor (see 
 function bpmLabel(d) {
   if (d.detectedBpm) return `${d.detectedBpm.toFixed(1)} BPM`; // 1 decimal so 127.6 and 128.4 stay distinct
   if (!d.tabId) return 'BPM'; // cold, no track picked yet — no dash placeholder to read as a value
+  // BPM detection is out of scope for Bandcamp v1 — beatCount never increments, so the "waiting"
+  // progress readout below would sit at (0/N) forever. Blank reads cleaner than a dead indicator.
+  if (d.source === 'bandcamp') return '';
   return `BPM … (${Math.min(d.beatCount, BPM_DETECT_BEATS)}/${BPM_DETECT_BEATS})`;
 }
 
@@ -2409,6 +2980,11 @@ function currentPhaseOffsetMs(periodMs) {
 // which isn't comparable across tabs). Dead zone is beat-fraction-relative (see saturationBeatFraction).
 async function syncPhase() {
   if (!state.decks.A.connected || !state.decks.B.connected) return;
+  // BPM detection/tempo sync is out of scope for Bandcamp v1 — a Bandcamp deck has no
+  // window.__counterDJ__ to inject counterDJPhaseInfo into below, so bail before that call
+  // rather than let it fail. (applyTempoBlend already no-ops naturally since detectedBpm stays
+  // null for Bandcamp decks; this function needs the explicit guard.)
+  if (state.decks.A.source === 'bandcamp' || state.decks.B.source === 'bandcamp') return;
   // Release and reset if paused or silent — nothing real to phase-lock against.
   if (!state.decks.A.playing || !state.decks.B.playing || isDeckSilent('A') || isDeckSilent('B')) {
     releasePhaseTrim('A');
@@ -2538,25 +3114,52 @@ tempoTrackEl.addEventListener('wheel', (e) => {
 
 // Two-stage isolator: off-neutral → snap to neutral; already at neutral → kill to MIN.
 // Shared by knob double-click and key-pair hold so both do exactly the same thing.
-// fx "kill" lands on FX_MIN (full lowpass sweep) — no hard-mute equivalent for a filter.
+// fx "kill" lands on that type's own min (full lowpass sweep for Filter, silence for Delay) —
+// no hard-mute equivalent for Filter itself, but Delay's min=0 genuinely is "off".
 const PARAM_RESET = {
   gain: { min: GAIN_MIN, reset: 1 },
-  fx: { min: FX_MIN, reset: 0 },
 };
 function resetOrKill(deck, param) {
   const d = state.decks[deck];
   if (!d.tabId) return;
-  const { min, reset: resetValue } = PARAM_RESET[param] || { min: EQ_MIN, reset: 0 };
+  const { min, reset: resetValue } = param === 'fx' ? fxRange(deck) : (PARAM_RESET[param] || { min: EQ_MIN, reset: 0 });
   d[param] = d[param] === resetValue ? min : resetValue;
   sendParam(deck, param, d[param]);
   updateReadouts();
+}
+
+// ◀/▶ FX type cycle. YouTube only — Bandcamp's offscreen engine has no FX-type bus (see
+// offscreen.js's bcSetParam, single filter-only 'fx' param). Optimistic UI update rolled back on
+// failure so the panel can never show a switch that didn't actually happen tab-side (e.g. a stale
+// pre-FX-type tab, see counterDJSetFxType's guard).
+async function cycleFxType(deck, dir) {
+  const d = state.decks[deck];
+  if (!d.tabId || d.source === 'bandcamp') return;
+  trackEngagementOnce('used_fx_type_switch');
+  const currentIndex = FX_TYPE_ORDER.indexOf(d.fxType);
+  const nextType = FX_TYPE_ORDER[(currentIndex + dir + FX_TYPE_ORDER.length) % FX_TYPE_ORDER.length];
+  // Filter and Delay are both always live, in series — switching only changes which one the
+  // knob shows. Stash the outgoing type's current value under its own name, restore the
+  // incoming type's own value (not a reset) — neither effect's actual sound changes here.
+  const prevType = d.fxType;
+  const prevTypeValue = d.fx;
+  d[`${prevType}Value`] = prevTypeValue;
+  d.fxType = nextType;
+  d.fx = d[`${nextType}Value`];
+  updateReadouts();
+  const ok = await sendFxType(deck, nextType);
+  if (!ok) {
+    d.fxType = prevType;
+    d.fx = prevTypeValue;
+    updateReadouts();
+  }
 }
 
 mixerEl.addEventListener('keydown', (e) => {
   trackEngagementOnce('used_hotkeys');
   if (e.key === 'Tab') {
     e.preventDefault();
-    swapDecks();
+    sendTrackToOtherDeck(); // mirrors the header button — see connectBtn's click handler
     return;
   }
   const mult = e.shiftKey ? 10 : 1; // Shift = 10× speed on step-based nudges
@@ -2585,9 +3188,8 @@ mixerEl.addEventListener('keydown', (e) => {
 
   const NUDGE_RANGE = {
     gain: { min: GAIN_MIN, max: GAIN_MAX, step: GAIN_STEP, reset: 1 },
-    fx: { min: FX_MIN, max: FX_MAX, step: FX_STEP, reset: 0 },
   };
-  const range = NUDGE_RANGE[param] || { min: EQ_MIN, max: EQ_MAX, step: EQ_STEP, reset: 0 };
+  const range = param === 'fx' ? fxRange(deck) : (NUDGE_RANGE[param] || { min: EQ_MIN, max: EQ_MAX, step: EQ_STEP, reset: 0 });
   const min = range.min;
   const max = range.max;
   const step = range.step * mult;
@@ -2882,6 +3484,29 @@ function connectedTabId() {
   return null;
 }
 
+// Where to enumerate cue output devices from. MediaDevice deviceIds are scoped per top-level
+// origin (see counterDJEnumerateOutputs's comment) — a YouTube deck's device IDs only work for
+// setSinkId() calls made inside that same youtube.com tab, and a Bandcamp deck's cue element
+// lives in the offscreen document (chrome-extension:// origin), a different scope again. Prefers
+// a connected YouTube deck (existing behavior/device-ID scope) and falls back to the offscreen
+// document only when every connected deck is Bandcamp.
+// Known v1 limitation: a mixed YouTube+Bandcamp session enumerates from the YouTube tab, so the
+// Bandcamp deck's cue will likely fail with NotFoundError (surfaced via setStatus, not silent) —
+// fixing this needs matching devices by label across origins, out of scope for this pass.
+function cueEnumerationContext() {
+  for (const deck of ['A', 'B']) {
+    if (state.decks[deck].connected && state.decks[deck].source === 'youtube' && state.decks[deck].tabId) {
+      return { type: 'tab', tabId: state.decks[deck].tabId };
+    }
+  }
+  for (const deck of ['A', 'B']) {
+    if (state.decks[deck].connected && state.decks[deck].source === 'bandcamp') {
+      return { type: 'offscreen' };
+    }
+  }
+  return null;
+}
+
 // `matched` = selectedCueDeviceId is present in THIS session's enumerated list. A stale id
 // (deviceIds aren't stable across restarts) left no <option> selected so the browser silently
 // auto-picked the first device — do not treat a truthy id as matched without confirming it.
@@ -2893,13 +3518,15 @@ function placeholderOption(matched) {
 
 let labelsUnlockAttempted = false;
 async function renderFallbackOptions() {
-  const tabId = connectedTabId();
-  if (!tabId) {
+  const ctx = cueEnumerationContext();
+  if (!ctx) {
     select.disabled = true;
     select.replaceChildren(placeholderOption(false));
     return;
   }
-  const res = await fetchOutputs(tabId);
+  const res = ctx.type === 'offscreen'
+    ? await chrome.runtime.sendMessage({ target: 'offscreen', type: 'bcEnumerateOutputs' }).catch((e) => ({ ok: false, error: String((e && e.message) || e) }))
+    : await fetchOutputs(ctx.tabId);
   if (!res.ok || !res.outputs.length) {
     select.disabled = true;
     select.replaceChildren(placeholderOption(false));
@@ -2926,19 +3553,24 @@ refreshCueDeviceOptions = renderFallbackOptions;
 // the side panel, so if it's backgrounded the user misses it. Skip if already granted.
 select.addEventListener('mousedown', async () => {
   if (labelsUnlockAttempted) return;
-  const tabId = connectedTabId();
-  if (!tabId) return;
+  const ctx = cueEnumerationContext();
+  if (!ctx) return;
   labelsUnlockAttempted = true;
-  const permissionState = await checkMicPermission(tabId);
-  if (permissionState !== 'granted') {
-    try {
-      await chrome.tabs.update(tabId, { active: true });
-    } catch (e) { /* tab may already be gone — sendUnlockMic below fails loudly if so */ }
-  }
-  const res = await sendUnlockMic(tabId);
-  if (!res.ok) {
-    setStatus(t('status.micPermissionNeeded', { reason: res.error }));
-    labelsUnlockAttempted = false; // let a retry re-trigger the prompt after a real failure
+  // Offscreen-document device enumeration needs no mic-unlock dance — that's a youtube.com-tab-
+  // origin quirk (see counterDJEnumerateOutputs's comment); an extension page has broader device
+  // access already.
+  if (ctx.type === 'tab') {
+    const permissionState = await checkMicPermission(ctx.tabId);
+    if (permissionState !== 'granted') {
+      try {
+        await chrome.tabs.update(ctx.tabId, { active: true });
+      } catch (e) { /* tab may already be gone — sendUnlockMic below fails loudly if so */ }
+    }
+    const res = await sendUnlockMic(ctx.tabId);
+    if (!res.ok) {
+      setStatus(t('status.micPermissionNeeded', { reason: res.error }));
+      labelsUnlockAttempted = false; // let a retry re-trigger the prompt after a real failure
+    }
   }
   await renderFallbackOptions();
 });
@@ -3011,10 +3643,14 @@ for (const deck of ['A', 'B']) {
       knob.setPointerCapture(e.pointerId);
       const startY = e.clientY;
       const startValue = state.decks[deck][band];
+      // fx's range depends on which type is currently active on this deck — resolve fresh at
+      // drag start rather than using the static min/max this band's KNOB_BANDS entry captured
+      // (those are Filter's, and would clamp/misinterpret a Delay density drag).
+      const dragRange = band === 'fx' ? fxRange(deck) : { min, max };
       const onMove = (moveEvent) => {
         const delta = (startY - moveEvent.clientY) / px;
-        const raw = clamp(startValue + delta, min, max);
-        state.decks[deck][band] = detent ? applyDetent(raw, min, max) : raw;
+        const raw = clamp(startValue + delta, dragRange.min, dragRange.max);
+        state.decks[deck][band] = detent ? applyDetent(raw, dragRange.min, dragRange.max) : raw;
         sendParam(deck, band, state.decks[deck][band]);
         updateReadouts();
       };
@@ -3032,6 +3668,7 @@ for (const deck of ['A', 'B']) {
       // 200ms timer resets axis lock and raw accumulator between gestures.
       clearTimeout(wheelAxisTimer);
       wheelAxisTimer = setTimeout(() => { wheelAxis = null; wheelRawValue = null; }, 200);
+      const dragRange = band === 'fx' ? fxRange(deck) : { min, max };
       if (wheelAxis == null) {
         wheelAxis = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? 'y' : 'x';
         wheelRawValue = state.decks[deck][band]; // seed from displayed value once per gesture
@@ -3041,8 +3678,8 @@ for (const deck of ['A', 'B']) {
       trackEngagementOnce(BAND_ENGAGEMENT_FLAG[band]);
       e.preventDefault();
       e.stopPropagation(); // prevent #mixer's crossfader wheel listener from also firing
-      wheelRawValue = clamp(wheelRawValue + e.deltaY / px, min, max);
-      state.decks[deck][band] = detent ? applyDetent(wheelRawValue, min, max) : wheelRawValue;
+      wheelRawValue = clamp(wheelRawValue + e.deltaY / px, dragRange.min, dragRange.max);
+      state.decks[deck][band] = detent ? applyDetent(wheelRawValue, dragRange.min, dragRange.max) : wheelRawValue;
       sendParam(deck, band, state.decks[deck][band]);
       updateReadouts();
     }, { passive: false });

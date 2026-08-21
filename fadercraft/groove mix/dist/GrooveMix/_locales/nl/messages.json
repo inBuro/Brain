@@ -1,0 +1,119 @@
+{
+  "hintNote": {
+    "message": "Klik ergens in het paneel om het focus te geven — zo worden de sneltoetsen geactiveerd"
+  },
+  "deckEmptyHintB": {
+    "message": "Voeg een tweede nummer toe om te beginnen met mixen"
+  },
+  "hintDeckA": {
+    "message": "A"
+  },
+  "hintDeckLabel": {
+    "message": "Deck"
+  },
+  "hintDeckB": {
+    "message": "B"
+  },
+  "hintGain": {
+    "message": "Gain"
+  },
+  "hintHigh": {
+    "message": "High"
+  },
+  "hintMid": {
+    "message": "Mid"
+  },
+  "hintLow": {
+    "message": "Low"
+  },
+  "hintFx": {
+    "message": "Fx"
+  },
+  "hintPlayPause": {
+    "message": "Play/pause (of klik op ▶)"
+  },
+  "hintKnobsTitle": {
+    "message": "Knobs"
+  },
+  "hintLeftRight": {
+    "message": "Elk paar"
+  },
+  "hintLeftRightDesc": {
+    "message": "linkertoets verlaagt, rechtertoets verhoogt — dezelfde volgorde voor elk knoppaar hierboven"
+  },
+  "hintBothKeys": {
+    "message": "Both keys"
+  },
+  "hintBothKeysDesc": {
+    "message": "springt naar neutraal (0dB / unity gain)"
+  },
+  "hintBothAgain": {
+    "message": "Both again"
+  },
+  "hintBothAgainDesc": {
+    "message": "snijdt naar minimum, eenmaal reeds op neutraal"
+  },
+  "hintDragScroll": {
+    "message": "Drag / scroll"
+  },
+  "hintDragScrollDesc": {
+    "message": "muis omhoog/omlaag, of twee vingers op de trackpad, past de parameter aan"
+  },
+  "hintCrossfaderTitle": {
+    "message": "Crossfader"
+  },
+  "hintCrossNudgeDesc": {
+    "message": "nudge of houd links/rechts ingedrukt"
+  },
+  "hintDragSwipe": {
+    "message": "Drag / swipe"
+  },
+  "hintCrossDragDesc": {
+    "message": "klik-sleep de track, of veeg met twee vingers op de trackpad"
+  },
+  "hintTabDesc": {
+    "message": "wissel welke track A/B is (of de grote headerknop, eenmaal verbonden)"
+  },
+  "hintTempoTitle": {
+    "message": "Tempo"
+  },
+  "hintAlwaysOn": {
+    "message": "Always on"
+  },
+  "hintAlwaysOnDesc": {
+    "message": "gedeeld tussen decks, geen instelling per deck"
+  },
+  "hintTempoArrowsDesc": {
+    "message": "of sleep de balk tussen de BPM-aflezingen — mengt tempo en lijnt de beatfase automatisch opnieuw uit, geen aparte sync-actie nodig"
+  },
+  "trialBannerText": {
+    "message": "Gratis proefperiode verbruikt — GrooveMix blijft werken, maar overweeg een licentie aan te schaffen."
+  },
+  "trialBuyLink": {
+    "message": "Licentie kopen"
+  },
+  "licenseActivateBtn": {
+    "message": "Activeren"
+  },
+  "licenseChecking": {
+    "message": "Controleren…"
+  },
+  "licenseActivated": {
+    "message": "Gelicentieerd — bedankt!"
+  },
+  "licenseInvalid": {
+    "message": "Ongeldige licentiesleutel."
+  },
+  "feedbackPrompt": {
+    "message": "Wat zou je verbeteren?"
+  },
+  "feedbackSubmit": {
+    "message": "Verzenden"
+  },
+  "feedbackSent": {
+    "message": "Bedankt — ontvangen!"
+  },
+  "feedbackPlaceholder": {
+    "message": "Beschrijf een idee, probleem of ontbrekende functie."
+  }
+}

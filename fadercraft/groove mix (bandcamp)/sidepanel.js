@@ -25,7 +25,14 @@ function counterDJSetup(initial) {
       if (typeof initial.high === 'number') eng.high.gain.value = dbToGain(initial.high);
       if (typeof initial.gain === 'number') eng.gain.gain.value = initial.gain;
       if (typeof initial.rate === 'number') eng.video.playbackRate = initial.rate;
-      if (typeof initial.fx === 'number') {
+      // eng.applyFxType only exists on a graph built by this-or-later extension version — a tab
+      // reconnecting from before the FX-type feature landed keeps its old direct fx insert and
+      // can only ever run Filter (same self-heal precedent as cueAudioEl above).
+      if (eng.applyFxType && eng.applyFxValueForType) {
+        if (typeof initial.filterValue === 'number') eng.applyFxValueForType('filter', initial.filterValue);
+        if (typeof initial.delayValue === 'number') eng.applyFxValueForType('delay', initial.delayValue);
+        if (typeof initial.fxType === 'string') eng.applyFxType(initial.fxType);
+      } else if (typeof initial.fx === 'number') {
         if (initial.fx < 0) {
           eng.fx.type = 'lowpass';
           eng.fx.frequency.value = 20000 * Math.pow(100 / 20000, -initial.fx);
@@ -45,6 +52,7 @@ function counterDJSetup(initial) {
       playing: !eng.video.paused,
       muted: eng.video.muted,
       ctxState: eng.ctx.state,
+      hasFxTypes: !!eng.applyFxType,
     };
   }
   const videos = Array.from(document.querySelectorAll('video'));
@@ -95,7 +103,7 @@ function counterDJSetup(initial) {
   // since window.__counterDJ__ (the "already set up" guard) is only assigned at the very end.
   // Caching the pair on the element itself lets a retry reuse what the last attempt already
   // created instead of re-triggering the one-shot operation (2026-08-09).
-  let ctx, source;
+  let ctx, source, eng;
   if (video.__counterDJPending__) {
     ({ ctx, source } = video.__counterDJPending__);
   } else {
@@ -136,12 +144,94 @@ function counterDJSetup(initial) {
   mid.connect(eqOut);
   high.connect(eqOut);
 
-  // FX/filter: single bipolar node, post-EQ/pre-gain. Starts wide open (lowpass @ 20kHz) so a
-  // fresh connect is transparent. Non-resonant (same Butterworth Q as the crossover stages).
+  // FX chain: Filter and Delay are both PERMANENTLY in series (eqOut -> Filter -> Delay -> bus),
+  // each holding its own independent value at all times — not a switched/exclusive slot. The
+  // ◀/▶ knob-type selector only changes which one the single physical knob currently shows and
+  // edits; the other keeps running exactly as last set. This is what lets you dial in a filter
+  // sweep, page to Delay, and have the echo apply to the already-filtered signal (direct
+  // request) — not an either/or effect slot, so there's no gate/crossfade here at all.
+  // Filter starts wide open (lowpass @ 20kHz) so a fresh connect is transparent. Non-resonant
+  // (same Butterworth Q as the crossover stages).
   const fx = ctx.createBiquadFilter();
   fx.type = 'lowpass';
   fx.frequency.value = 20000;
   fx.Q.value = Math.SQRT1_2;
+
+  // Delay taps FILTER'S OUTPUT (not eqOut) — it's downstream in the chain, so it echoes whatever
+  // Filter just did to the signal. Dry stays permanently at full (adds echo on top, doesn't
+  // replace the signal); only the wet (repeats) level and density come from Delay's own knob
+  // value, independent of whatever Filter's knob currently reads.
+  const fxDelayDry = ctx.createGain();
+  const fxDelayWet = ctx.createGain();
+  fxDelayDry.gain.value = 1;
+  fxDelayWet.gain.value = 0; // set by applyFxValue below, based on Delay's own value
+  const fxDelayLine = ctx.createDelay(2.0);
+  const fxDelayFeedback = ctx.createGain();
+  fxDelayFeedback.gain.value = 0.35; // fixed — one physical knob per deck, not exposed separately
+  fxDelayLine.delayTime.value = 0.3; // replaced below once initial/knob value is known
+  const DELAY_WET_MAX = 0.7; // ceiling at full knob — stays a layer under the dry track, not a replacement
+
+  const fxBus = ctx.createGain();
+
+  fx.connect(fxDelayDry);
+  fx.connect(fxDelayLine);
+  fxDelayDry.connect(fxBus);
+  fxDelayLine.connect(fxDelayFeedback);
+  fxDelayFeedback.connect(fxDelayLine);
+  fxDelayLine.connect(fxDelayWet);
+  fxDelayWet.connect(fxBus);
+
+  // Tracks which type the physical knob currently shows/edits — NOT which effect is "on" (both
+  // always are). Only routes an incoming knob value (applyFxValue) to the right node.
+  let fxType = 'filter';
+
+  // BPM-synced delay time from repeat density: knob=0 -> sparse quarter-note echoes, knob=1 ->
+  // dense eighth-of-a-beat stutter. Falls back to 120bpm before any lock (matches the beat
+  // detector's own convergence — a brand new connect never has eng.detectedBpm yet).
+  function delayTimeForKnob(knobValue, bpm) {
+    const quarterNote = 60 / (bpm || 120);
+    const divisor = Math.pow(2, knobValue * 3); // 1x..8x
+    return Math.min(1.5, Math.max(0.04, quarterNote / divisor));
+  }
+
+  // Routes an incoming knob value to whichever type is CURRENTLY tracked as fxType — used both
+  // for live knob turns and (via applyFxValueForType below) for seeding either node explicitly
+  // regardless of which one the panel currently shows. Delay's own value is unipolar (0..1) and
+  // drives both dimensions together — density (see delayTimeForKnob) AND wet level (fxDelayWet),
+  // so turning it up reads as "more/denser echo", not just "louder": at 0 both bottom out, a
+  // true, inaudible bypass. Filter's value stays the existing bipolar lowpass/highpass sweep.
+  // Neither node is touched by the OTHER type's updates — each keeps whatever was last set here
+  // even while the panel is showing the other one.
+  function applyFxValue(value) {
+    if (fxType === 'delay') {
+      fxDelayLine.delayTime.value = delayTimeForKnob(value, eng ? eng.detectedBpm : null);
+      fxDelayWet.gain.value = value * DELAY_WET_MAX;
+    } else if (value <= 0) {
+      fx.type = 'lowpass';
+      fx.frequency.value = 20000 * Math.pow(100 / 20000, -value);
+    } else {
+      fx.type = 'highpass';
+      fx.frequency.value = 20 * Math.pow(8000 / 20, value);
+    }
+  }
+
+  // Applies a value to a SPECIFIC type's node regardless of which one is currently displayed —
+  // temporarily borrows applyFxValue's routing rather than duplicating it. Used to seed both
+  // nodes independently at connect time and to resync both on demand (see counterDJSetFxType).
+  function applyFxValueForType(type, value) {
+    const savedType = fxType;
+    fxType = type;
+    applyFxValue(value);
+    fxType = savedType;
+  }
+
+  // Switches which type the knob shows/edits. Purely a UI-focus change — both Filter and Delay
+  // stay live in the signal path regardless, so this never touches any audio param itself: no
+  // ramp needed, nothing to click, nothing to resync.
+  function applyFxType(type) {
+    fxType = type;
+    if (eng) eng.fxType = type;
+  }
 
   const gain = ctx.createGain();
   const cross = ctx.createGain();
@@ -156,18 +246,15 @@ function counterDJSetup(initial) {
     if (typeof initial.high === 'number') high.gain.value = dbToGain(initial.high);
     if (typeof initial.gain === 'number') gain.gain.value = initial.gain;
     if (typeof initial.rate === 'number') video.playbackRate = initial.rate;
-    if (typeof initial.fx === 'number' && initial.fx !== 0) {
-      if (initial.fx < 0) {
-        fx.type = 'lowpass';
-        fx.frequency.value = 20000 * Math.pow(100 / 20000, -initial.fx);
-      } else {
-        fx.type = 'highpass';
-        fx.frequency.value = 20 * Math.pow(8000 / 20, initial.fx);
-      }
-    }
+    // Seed BOTH nodes independently — Filter and Delay are always live, not a switched slot —
+    // then set which one the knob actually shows.
+    if (typeof initial.filterValue === 'number') applyFxValueForType('filter', initial.filterValue);
+    if (typeof initial.delayValue === 'number') applyFxValueForType('delay', initial.delayValue);
+    fxType = typeof initial.fxType === 'string' ? initial.fxType : 'filter';
   }
 
-  eqOut.connect(fx).connect(gain).connect(cross).connect(ctx.destination);
+  eqOut.connect(fx);
+  fxBus.connect(gain).connect(cross).connect(ctx.destination);
   if (ctx.state === 'suspended') ctx.resume();
   // safety net: if resume() above was blocked, a genuine click on the page will unblock it
   document.addEventListener('click', () => { if (ctx.state === 'suspended') ctx.resume(); }, { capture: true });
@@ -223,8 +310,12 @@ function counterDJSetup(initial) {
   // navigation start — useless for comparing timing across two tabs, which phase sync needs).
   // recentOnsets is kept as a cheap rolling history for diagnostics; the phase-sync path now
   // feeds lastOnsetWallClock straight into the Kalman filter (see kalmanPhaseUpdate).
-  window.__counterDJ__ = { ctx, low, mid, high, fx, gain, cross, video, analyser, levelAnalyser, cueAudioEl, detectedBpm: null, beatCount: 0, lastOnsetWallClock: null, recentOnsets: [] };
-  const eng = window.__counterDJ__;
+  window.__counterDJ__ = {
+    ctx, low, mid, high, fx, gain, cross, video, analyser, levelAnalyser, cueAudioEl,
+    detectedBpm: null, beatCount: 0, lastOnsetWallClock: null, recentOnsets: [],
+    fxType, fxDelayLine, applyFxType, applyFxValue, applyFxValueForType,
+  };
+  eng = window.__counterDJ__;
   // Rolling self-timing for the beat-detection callback only — not browser CPU overall
   // (dominated by YouTube's own video decode). Read via counterDJPerfStats() from the side panel.
   eng.perfStats = { count: 0, totalMs: 0, maxMs: 0, bufferSize: BEAT_PROCESSOR_BUFFER_SIZE, sampleRate: ctx.sampleRate };
@@ -368,6 +459,7 @@ function counterDJSetup(initial) {
     playing: !video.paused,
     muted: video.muted,
     ctxState: ctx.state,
+    hasFxTypes: true,
   };
   } catch (e) {
     return { ok: false, error: String((e && e.message) || e), exception: true };
@@ -408,10 +500,14 @@ function counterDJSetParam(param, value) {
     eng[param].gain.value = value <= -40 ? 0 : Math.pow(10, value / 20);
   }
   else if (param === 'fx') {
-    // Negative sweeps lowpass down from 20kHz, positive sweeps highpass up from 20Hz.
-    // Exponential curve — frequency perception is logarithmic; linear Hz sweep is inaudible
-    // near the wide-open end and too fast near the closed end.
-    if (value <= 0) {
+    // eng.applyFxValue (built in counterDJSetup) knows which type is active: bipolar lowpass/
+    // highpass sweep for Filter (negative sweeps lowpass down from 20kHz, positive sweeps highpass
+    // up from 20Hz — exponential curve since frequency perception is logarithmic), or unipolar
+    // repeat-density for Delay. A stale pre-FX-type tab has no applyFxValue — fall back to the old
+    // direct filter-only behavior so it still works until the tab is reloaded.
+    if (eng.applyFxValue) {
+      eng.applyFxValue(value);
+    } else if (value <= 0) {
       eng.fx.type = 'lowpass';
       eng.fx.frequency.value = 20000 * Math.pow(100 / 20000, -value);
     } else {
@@ -427,6 +523,27 @@ function counterDJSetParam(param, value) {
     eng.video.playbackRate = value;
   }
   else return { ok: false, error: 'unknown param ' + param };
+  return { ok: true };
+}
+
+// Switches the FX slot's active type (Filter/Delay), applying the new type's own knob value
+// immediately so the switch is audible right away — not silent until the knob is next touched.
+// No early-return on "already this type": sendTrackToOtherDeck always re-applies even when the
+// type isn't changing, since the tab that just inherited the box may still carry the OTHER box's
+// old fx routing state.
+function counterDJSetFxType(displayType, filterValue, delayValue) {
+  const eng = window.__counterDJ__;
+  if (!eng) return { ok: false, error: 'not connected' };
+  if (eng.ctx.state === 'suspended') eng.ctx.resume();
+  if (!eng.applyFxType || !eng.applyFxValueForType) {
+    return { ok: false, error: 'FX bus missing — reconnect this deck to pick up FX types' };
+  }
+  // filterValue/delayValue are optional — omitted on a plain type-switch, since both nodes
+  // are always live and already hold whatever was last set; only a fresh connect or an explicit
+  // resync (e.g. after a track swap) needs to push both values again.
+  if (typeof filterValue === 'number') eng.applyFxValueForType('filter', filterValue);
+  if (typeof delayValue === 'number') eng.applyFxValueForType('delay', delayValue);
+  eng.applyFxType(displayType);
   return { ok: true };
 }
 
@@ -913,6 +1030,20 @@ const GAIN_MIN = 0, GAIN_MAX = 1.5, GAIN_STEP = 0.05;
 // FX: bipolar filter knob, 0 = bypass. Negative = lowpass sweep down, positive = highpass up.
 // See counterDJSetParam's 'fx' branch for the exponential frequency curve.
 const FX_MIN = -1, FX_MAX = 1, FX_STEP = 0.1;
+// Delay's own knob range: unipolar 0..1, drives both wet level and repeat density together (see
+// counterDJSetup's applyFxValue) — reset at 0 is a genuine bypass (silent), same convention as
+// Filter's own reset: turning the knob up from rest is what makes the effect audible, at 12
+// o'clock/rest neither type colors the sound (direct request).
+const FX_TYPES = {
+  filter: { label: 'FILTER', min: FX_MIN, max: FX_MAX, step: FX_STEP, reset: 0 },
+  delay: { label: 'DELAY', min: 0, max: 1, step: 0.1, reset: 0 },
+};
+const FX_TYPE_ORDER = ['filter', 'delay'];
+// One physical knob per deck serves whichever type is active — every place that used to read the
+// static FX_MIN/MAX/STEP now resolves it per-deck through this.
+function fxRange(deck) {
+  return FX_TYPES[state.decks[deck].fxType] || FX_TYPES.filter;
+}
 const CROSS_STEP = 0.05; // must evenly divide 0.5 so the center (50%) is always reachable
 // A fully EQ-killed or crossfader-cut deck is inaudible and excluded from beatmatching.
 // Split into two functions so the sync UI can distinguish the two cases (crossfader-out is a
@@ -997,11 +1128,14 @@ const TRIAL_LIMIT_MS = 5 * 60 * 60 * 1000;
 // TODO: replace with the real Gumroad listing URL once it exists.
 const GUMROAD_PRODUCT_URL = 'https://fadercraft.gumroad.com/l/groove-mix';
 const GUMROAD_COFFEE_URL = 'https://fadercraft.gumroad.com/coffee';
+// id-only path (no slug) — Chrome Web Store resolves this reliably regardless of the listing's
+// display name; /reviews opens straight to the reviews tab instead of the top of the listing.
+const CWS_REVIEW_URL = 'https://chromewebstore.google.com/detail/kiigcdfcmdanbpjpgilolmchobnpmjij/reviews';
 
 const state = {
   decks: {
-    A: { tabId: null, connected: false, high: 0, mid: 0, low: 0, fx: 0, gain: 1, playing: null, rate: 1, detectedBpm: null, beatCount: 0, recentOnsets: [], cued: false, hasPlayedOnce: false, source: 'youtube', artworkUrl: null, bandcampUrl: null },
-    B: { tabId: null, connected: false, high: EQ_MIN, mid: EQ_MIN, low: EQ_MIN, fx: 0, gain: 1, playing: null, rate: 1, detectedBpm: null, beatCount: 0, recentOnsets: [], cued: false, hasPlayedOnce: false, source: 'youtube', artworkUrl: null, bandcampUrl: null },
+    A: { tabId: null, connected: false, high: 0, mid: 0, low: 0, fx: 0, fxType: 'filter', filterValue: 0, delayValue: 0, gain: 1, playing: null, rate: 1, detectedBpm: null, beatCount: 0, recentOnsets: [], cued: false, hasPlayedOnce: false, source: 'youtube', artworkUrl: null, bandcampUrl: null },
+    B: { tabId: null, connected: false, high: EQ_MIN, mid: EQ_MIN, low: EQ_MIN, fx: 0, fxType: 'filter', filterValue: 0, delayValue: 0, gain: 1, playing: null, rate: 1, detectedBpm: null, beatCount: 0, recentOnsets: [], cued: false, hasPlayedOnce: false, source: 'youtube', artworkUrl: null, bandcampUrl: null },
   },
   cross: 0.5, // 0 = full A, 1 = full B
   // null = disengaged. 0 = A native/B matches A. 1 = mirrored. 0.5 = both bend to shared midpoint.
@@ -1078,6 +1212,19 @@ coffeeLinkEl.addEventListener('click', () => {
   addBreadcrumb('button_click: buy_coffee');
   if (window.posthog) posthog.capture('button_click', { button: 'buy_coffee' });
 });
+
+// Guarded (unlike coffeeLinkEl above) — new element, added same day as several HTML/JS edits;
+// a stale already-open side panel that picked up new JS against old HTML (chrome.runtime.reload()
+// doesn't always re-navigate an already-open panel) would otherwise throw here and silently kill
+// every initializer after this line (same bug class noted in ARCHITECTURE.md's bug-class list).
+const rateLinkEl = document.getElementById('rateLink');
+if (rateLinkEl) {
+  rateLinkEl.href = CWS_REVIEW_URL;
+  rateLinkEl.addEventListener('click', () => {
+    addBreadcrumb('button_click: rate_extension');
+    if (window.posthog) posthog.capture('button_click', { button: 'rate_extension' });
+  });
+}
 
 // Banner suppressed (deferred feature) — usage/license tracking still runs, only the nag is hidden.
 // To re-enable: trialBannerEl.hidden = licensed || usageMs < TRIAL_LIMIT_MS;
@@ -1232,8 +1379,8 @@ for (const deck of ['A', 'B']) {
   document.getElementById(`deckCover${deck}`).addEventListener('click', () => {
     const tabId = state.decks[deck].tabId;
     if (!tabId) {
-      addBreadcrumb(`empty_deck_click_open_new_tab: ${deck}`);
-      chrome.tabs.create({});
+      addBreadcrumb(`empty_deck_click_open_youtube: ${deck}`);
+      chrome.tabs.create({ url: 'https://www.youtube.com' });
       return;
     }
     addBreadcrumb(`thumb_click_focus_tab: ${deck}`);
@@ -1317,8 +1464,9 @@ async function openTabMenu(deck) {
       menu.appendChild(item);
     });
   }
-  // "Send to Deck X" — relocates THIS deck's track to the other box, knobs stay put (2026-08-07,
-  // direct request). Only shown when there's actually a track here to send.
+  // "Swap Decks" — trades the two decks' full state (track + EQ/gain, encoders move with the
+  // track); the header ⇄ button used to own this, now owns the deck-bound send instead (see
+  // connectBtn's click handler). Only shown when there's actually a track here to swap.
   if (state.decks[deck].tabId) {
     const otherDeck = deck === 'A' ? 'B' : 'A';
     const sendItem = document.createElement('button');
@@ -1327,13 +1475,13 @@ async function openTabMenu(deck) {
     // move, and stays pinned to that edge with the label on the opposite side (2026-08-07).
     const arrowRight = otherDeck === 'B';
     const label = document.createElement('span');
-    label.textContent = `Send to Deck ${otherDeck}`;
+    label.textContent = 'Swap Decks';
     const arrow = document.createElement('span');
     arrow.textContent = arrowRight ? '→' : '←';
     sendItem.append(...(arrowRight ? [label, arrow] : [arrow, label]));
     sendItem.addEventListener('click', () => {
       closeTabMenu(deck);
-      sendTrackToOtherDeck();
+      swapDecks();
     });
     menu.appendChild(sendItem);
   }
@@ -1431,8 +1579,13 @@ function dbToAngle(v) {
 function gainToAngle(g) {
   return DeckRender.tieredAngle(g - 1, GAIN_MIN - 1, GAIN_MAX - 1);
 }
-function fxToAngle(v) {
-  return DeckRender.tieredAngle(v, FX_MIN, FX_MAX);
+function fxToAngle(v, deck) {
+  // Shifted by the active type's own reset/neutral value — same trick as gainToAngle above.
+  // tieredAngle always puts its own zero at 12 o'clock; both types currently reset to their own
+  // min (0), so this is a no-op today, but keeps the knob correctly centered if a future type's
+  // neutral point ever isn't its minimum (a real bug here once, when Delay's reset was 0.5).
+  const r = fxRange(deck);
+  return DeckRender.tieredAngle(v - r.reset, r.min - r.reset, r.max - r.reset);
 }
 
 function updateReadouts() {
@@ -1454,12 +1607,19 @@ function updateReadouts() {
     gainKnob.title = `GAIN: ${g.toFixed(2)}`;
     document.getElementById(`led${deck}_gain`).classList.toggle('lit', Math.abs(g - 1) > 0.05);
     const fxV = state.decks[deck].fx;
-    const fxAngle = fxToAngle(fxV);
+    const fxT = state.decks[deck].fxType;
+    const range = fxRange(deck);
+    const fxAngle = fxToAngle(fxV, deck);
     const fxKnob = document.getElementById(`knob${deck}_fx`);
     fxKnob.querySelector('.knobPointer').style.transform = `translateX(-50%) rotate(${fxAngle}deg)`;
-    DeckRender.setKnobArc(fxKnob, fxAngle, fxToAngle(0));
-    fxKnob.title = fxV === 0 ? 'FX: bypass' : `FX: ${fxV < 0 ? 'lowpass' : 'highpass'} ${Math.abs(fxV * 100).toFixed(0)}%`;
-    document.getElementById(`led${deck}_fx`).classList.toggle('lit', Math.abs(fxV) > 0.02);
+    DeckRender.setKnobArc(fxKnob, fxAngle, fxToAngle(range.reset, deck));
+    const fxTypeLabel = document.getElementById(`fxTypeLabel${deck}`);
+    if (fxTypeLabel) fxTypeLabel.textContent = range.label;
+    if (fxT === 'delay') {
+      fxKnob.title = `DELAY: ${Math.round(fxV * 100)}% density`;
+    } else {
+      fxKnob.title = fxV === 0 ? 'FILTER: bypass' : `FILTER: ${fxV < 0 ? 'lowpass' : 'highpass'} ${Math.abs(fxV * 100).toFixed(0)}%`;
+    }
     document.getElementById(`playBtn${deck}`).classList.toggle('isPlaying', state.decks[deck].playing === true);
   }
   const pct = Math.round(state.cross * 100);
@@ -1510,6 +1670,37 @@ async function sendParam(deckKey, param, value) {
     } else {
       setStatus(t('status.deckError', { deck: deckKey, reason: cleanErrorReason(e.message) }));
     }
+  }
+}
+
+// Switches a deck's active FX type. YouTube only (Bandcamp's offscreen engine has no FX-type
+// bus — see offscreen.js). Returns success so cycleFxType can roll the UI back on failure instead
+// of showing a switch that never actually happened tab-side. filterValue/delayValue are optional —
+// pass them to force-resync both nodes (fresh connect, track swap); omit for a plain type-switch,
+// since both stay live and already hold whatever was last set.
+async function sendFxType(deckKey, type, filterValue, delayValue) {
+  const tabId = state.decks[deckKey].tabId;
+  if (!tabId || !state.decks[deckKey].connected) return false;
+  try {
+    const res = await chrome.scripting.executeScript({
+      target: { tabId },
+      world: 'MAIN',
+      func: counterDJSetFxType,
+      args: [type, filterValue ?? null, delayValue ?? null],
+    });
+    const result = res && res[0] && res[0].result;
+    if (!result || !result.ok) {
+      setStatus(t('status.paramError', { deck: deckKey, param: 'fxType', reason: result ? result.error : t('status.noResult') }));
+      return false;
+    }
+    return true;
+  } catch (e) {
+    if (/no tab with id/i.test(e.message || '')) {
+      disconnectDeck(deckKey, 'tab closed');
+    } else {
+      setStatus(t('status.deckError', { deck: deckKey, reason: cleanErrorReason(e.message) }));
+    }
+    return false;
   }
 }
 
@@ -1749,6 +1940,9 @@ async function connectDecks(keys) {
     const otherAlreadyPlaying = state.decks[otherKey].connected && state.decks[otherKey].playing;
     state.decks[key].high = state.decks[key].mid = state.decks[key].low = otherAlreadyPlaying ? EQ_MIN : 0;
     state.decks[key].fx = 0;
+    state.decks[key].fxType = 'filter';
+    state.decks[key].filterValue = 0;
+    state.decks[key].delayValue = 0;
     state.decks[key].gain = 1;
     state.decks[key].rate = 1;
     resetPhaseIntegral(key);
@@ -1774,6 +1968,9 @@ async function connectDecks(keys) {
         gain: state.decks[key].gain,
         rate: state.decks[key].rate,
         fx: state.decks[key].fx,
+        fxType: state.decks[key].fxType,
+        filterValue: state.decks[key].filterValue,
+        delayValue: state.decks[key].delayValue,
         // Guest deck always lands cued regardless of its own tab's playback state — a freshly
         // opened YouTube tab autoplays by default, same outward signal as a genuinely mid-set
         // track, so video.paused alone can't tell "anchor already running a set" apart from
@@ -1803,6 +2000,10 @@ async function connectDecks(keys) {
     state.decks[key].playing = result.playing && !result.muted && result.ctxState === 'running';
     state.decks[key].hasPlayedOnce = state.decks[key].playing;
     state.decks[key].connected = true;
+    // A stale SPA-persisted tab from before the FX-type feature landed reconnects with its old
+    // direct filter-only graph (see counterDJSetup's reconnect branch) — Filter still works on it,
+    // but Delay silently wouldn't, so don't let the UI offer/keep a type the tab can't run.
+    if (!result.hasFxTypes) state.decks[key].fxType = 'filter';
     }
     addBreadcrumb(`track_loaded: ${key} (connect)`);
     if (window.posthog) posthog.capture('track_loaded', { deck: key, via: 'connect', source: state.decks[key].source });
@@ -1812,7 +2013,11 @@ async function connectDecks(keys) {
     await sendParam(key, 'low', state.decks[key].low);
     await sendParam(key, 'mid', state.decks[key].mid);
     await sendParam(key, 'high', state.decks[key].high);
-    await sendParam(key, 'fx', state.decks[key].fx);
+    if (state.decks[key].source === 'bandcamp') {
+      await sendParam(key, 'fx', state.decks[key].fx);
+    } else {
+      await sendFxType(key, state.decks[key].fxType, state.decks[key].filterValue, state.decks[key].delayValue);
+    }
   }
   state.cross = 0.5;
   applyCrossfader();
@@ -1859,9 +2064,9 @@ async function attemptAutoConnect() {
 // #connect is disabled (see setConnected) until both decks are live — by the time a click can
 // land, the only thing left for it to do is swap.
 connectBtn.addEventListener('click', () => {
-  addBreadcrumb('button_click: swap_decks');
-  if (window.posthog) posthog.capture('button_click', { button: 'swap_decks' });
-  swapDecks();
+  addBreadcrumb('button_click: send_to_other_deck');
+  if (window.posthog) posthog.capture('button_click', { button: 'send_to_other_deck' });
+  sendTrackToOtherDeck();
   mixerEl.focus();
 });
 
@@ -2340,6 +2545,11 @@ async function pollOneDeckStatus(deck) {
         state.decks[deck].detectedBpm = (bpm == null || Number.isFinite(bpm)) ? bpm : null;
         state.decks[deck].beatCount = result.beatCount;
         updateTempoStatus();
+        // Delay's density knob is BPM-synced (see counterDJSetup's delayTimeForKnob) but the tab
+        // only recomputes the actual delay time when the knob value is (re)applied — re-send the
+        // current value as BPM converges so the echo spacing tightens up to match, not just
+        // whatever tempo happened to be locked in when the knob was last touched.
+        if (bpmChanged && state.decks[deck].fxType === 'delay') sendParam(deck, 'fx', state.decks[deck].fx);
       }
       // Auto-beatmatch the first time both decks have a BPM and are both playing.
       // tempoBlend == null is the once-only guard; a later manual bar touch re-engages normally.
@@ -2358,7 +2568,8 @@ async function pollOneDeckStatus(deck) {
 }
 
 // Swaps the entire deck state (including EQ/gain) — controls keep addressing "left box".
-// The deck-bound variant (only stream moves) is sendTrackToOtherDeck().
+// The deck-bound variant (only stream moves) is sendTrackToOtherDeck(). Reachable from each
+// deck's own tab-picker dropdown as "Swap Decks" (moved here from the header button 2026-08-14).
 function swapDecks() {
   const tmp = state.decks.A;
   state.decks.A = state.decks.B;
@@ -2408,11 +2619,12 @@ function swapDecks() {
   updateConnectEnabled();
 }
 
-// Reachable from each deck's own tab-picker dropdown as "Send to Deck X" (2026-08-07, direct
-// request). Unlike swapDecks(), only the STREAM moves — tabId + everything identifying it; EQ/
-// gain/crossfader stay deck-bound (fixed to the box). Same underlying swap regardless of which
-// side triggered it: sending A's track to an empty B just means B inherits it and A ends up with
-// B's (empty) fields — no separate "move to empty slot" case needed.
+// Reachable from the header ⇄ button and the Tab key (moved here from the dropdown 2026-08-14,
+// which now owns the full swapDecks() instead). Unlike swapDecks(), only the STREAM moves —
+// tabId + everything identifying it; EQ/gain/crossfader stay deck-bound (fixed to the box). Same
+// underlying swap regardless of which side triggered it: sending A's track to an empty B just
+// means B inherits it and A ends up with B's (empty) fields — no separate "move to empty slot"
+// case needed.
 const TRACK_BOUND_FIELDS = [
   'tabId', 'connected', 'videoId', 'staticTitle', 'playing', 'hasPlayedOnce', 'cued',
   'detectedBpm', 'beatCount', 'recentOnsets', 'rate', 'missedPolls',
@@ -2451,7 +2663,14 @@ function sendTrackToOtherDeck() {
     sendParam(deck, 'low', state.decks[deck].low);
     sendParam(deck, 'mid', state.decks[deck].mid);
     sendParam(deck, 'high', state.decks[deck].high);
-    sendParam(deck, 'fx', state.decks[deck].fx);
+    // fx is deck/box-bound like gain/EQ (not in TRACK_BOUND_FIELDS), but the tab that just landed
+    // in this box may still be running whichever Filter/Delay values it had before — resend both
+    // plus which one the knob shows, or the new tab's own graph would keep its previous values.
+    if (state.decks[deck].source === 'bandcamp') {
+      sendParam(deck, 'fx', state.decks[deck].fx);
+    } else {
+      sendFxType(deck, state.decks[deck].fxType, state.decks[deck].filterValue, state.decks[deck].delayValue);
+    }
   }
   applyCrossfader();
   updateReadouts();
@@ -2520,6 +2739,11 @@ for (const deck of ['A', 'B']) {
     if (window.posthog) posthog.capture('track_skip', { direction: 'prev' });
     sendSkip(deck, 'prev');
   });
+}
+
+for (const deck of ['A', 'B']) {
+  document.getElementById(`fxTypePrev${deck}`).addEventListener('click', () => cycleFxType(deck, -1));
+  document.getElementById(`fxTypeNext${deck}`).addEventListener('click', () => cycleFxType(deck, 1));
 }
 
 // One eighth of the lead beat per click, wrapped 0..7. Seeks the follower immediately (background
@@ -2896,25 +3120,52 @@ tempoTrackEl.addEventListener('wheel', (e) => {
 
 // Two-stage isolator: off-neutral → snap to neutral; already at neutral → kill to MIN.
 // Shared by knob double-click and key-pair hold so both do exactly the same thing.
-// fx "kill" lands on FX_MIN (full lowpass sweep) — no hard-mute equivalent for a filter.
+// fx "kill" lands on that type's own min (full lowpass sweep for Filter, silence for Delay) —
+// no hard-mute equivalent for Filter itself, but Delay's min=0 genuinely is "off".
 const PARAM_RESET = {
   gain: { min: GAIN_MIN, reset: 1 },
-  fx: { min: FX_MIN, reset: 0 },
 };
 function resetOrKill(deck, param) {
   const d = state.decks[deck];
   if (!d.tabId) return;
-  const { min, reset: resetValue } = PARAM_RESET[param] || { min: EQ_MIN, reset: 0 };
+  const { min, reset: resetValue } = param === 'fx' ? fxRange(deck) : (PARAM_RESET[param] || { min: EQ_MIN, reset: 0 });
   d[param] = d[param] === resetValue ? min : resetValue;
   sendParam(deck, param, d[param]);
   updateReadouts();
+}
+
+// ◀/▶ FX type cycle. YouTube only — Bandcamp's offscreen engine has no FX-type bus (see
+// offscreen.js's bcSetParam, single filter-only 'fx' param). Optimistic UI update rolled back on
+// failure so the panel can never show a switch that didn't actually happen tab-side (e.g. a stale
+// pre-FX-type tab, see counterDJSetFxType's guard).
+async function cycleFxType(deck, dir) {
+  const d = state.decks[deck];
+  if (!d.tabId || d.source === 'bandcamp') return;
+  trackEngagementOnce('used_fx_type_switch');
+  const currentIndex = FX_TYPE_ORDER.indexOf(d.fxType);
+  const nextType = FX_TYPE_ORDER[(currentIndex + dir + FX_TYPE_ORDER.length) % FX_TYPE_ORDER.length];
+  // Filter and Delay are both always live, in series — switching only changes which one the
+  // knob shows. Stash the outgoing type's current value under its own name, restore the
+  // incoming type's own value (not a reset) — neither effect's actual sound changes here.
+  const prevType = d.fxType;
+  const prevTypeValue = d.fx;
+  d[`${prevType}Value`] = prevTypeValue;
+  d.fxType = nextType;
+  d.fx = d[`${nextType}Value`];
+  updateReadouts();
+  const ok = await sendFxType(deck, nextType);
+  if (!ok) {
+    d.fxType = prevType;
+    d.fx = prevTypeValue;
+    updateReadouts();
+  }
 }
 
 mixerEl.addEventListener('keydown', (e) => {
   trackEngagementOnce('used_hotkeys');
   if (e.key === 'Tab') {
     e.preventDefault();
-    swapDecks();
+    sendTrackToOtherDeck(); // mirrors the header button — see connectBtn's click handler
     return;
   }
   const mult = e.shiftKey ? 10 : 1; // Shift = 10× speed on step-based nudges
@@ -2943,9 +3194,8 @@ mixerEl.addEventListener('keydown', (e) => {
 
   const NUDGE_RANGE = {
     gain: { min: GAIN_MIN, max: GAIN_MAX, step: GAIN_STEP, reset: 1 },
-    fx: { min: FX_MIN, max: FX_MAX, step: FX_STEP, reset: 0 },
   };
-  const range = NUDGE_RANGE[param] || { min: EQ_MIN, max: EQ_MAX, step: EQ_STEP, reset: 0 };
+  const range = param === 'fx' ? fxRange(deck) : (NUDGE_RANGE[param] || { min: EQ_MIN, max: EQ_MAX, step: EQ_STEP, reset: 0 });
   const min = range.min;
   const max = range.max;
   const step = range.step * mult;
@@ -3204,6 +3454,12 @@ document.getElementById('zoomOut').addEventListener('click', () => {
   applyZoom();
 });
 
+// chrome.runtime.reload() is callable from any extension page, not just the service worker —
+// no message round-trip to background.js needed. Guarded: see rateLinkEl's comment above — a
+// stale already-open panel running new JS against old HTML must not throw here.
+const reloadExtBtnEl = document.getElementById('reloadExtBtn');
+if (reloadExtBtnEl) reloadExtBtnEl.addEventListener('click', () => chrome.runtime.reload());
+
 // Cue routing: one globally-selected device + per-deck toggle. Cue taps the signal post-gain
 // pre-crossfader (see counterDJSetup cueDest/cueAudioEl); master output is never muted.
 let selectedCueDeviceId = null;
@@ -3399,10 +3655,14 @@ for (const deck of ['A', 'B']) {
       knob.setPointerCapture(e.pointerId);
       const startY = e.clientY;
       const startValue = state.decks[deck][band];
+      // fx's range depends on which type is currently active on this deck — resolve fresh at
+      // drag start rather than using the static min/max this band's KNOB_BANDS entry captured
+      // (those are Filter's, and would clamp/misinterpret a Delay density drag).
+      const dragRange = band === 'fx' ? fxRange(deck) : { min, max };
       const onMove = (moveEvent) => {
         const delta = (startY - moveEvent.clientY) / px;
-        const raw = clamp(startValue + delta, min, max);
-        state.decks[deck][band] = detent ? applyDetent(raw, min, max) : raw;
+        const raw = clamp(startValue + delta, dragRange.min, dragRange.max);
+        state.decks[deck][band] = detent ? applyDetent(raw, dragRange.min, dragRange.max) : raw;
         sendParam(deck, band, state.decks[deck][band]);
         updateReadouts();
       };
@@ -3420,6 +3680,7 @@ for (const deck of ['A', 'B']) {
       // 200ms timer resets axis lock and raw accumulator between gestures.
       clearTimeout(wheelAxisTimer);
       wheelAxisTimer = setTimeout(() => { wheelAxis = null; wheelRawValue = null; }, 200);
+      const dragRange = band === 'fx' ? fxRange(deck) : { min, max };
       if (wheelAxis == null) {
         wheelAxis = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? 'y' : 'x';
         wheelRawValue = state.decks[deck][band]; // seed from displayed value once per gesture
@@ -3429,8 +3690,8 @@ for (const deck of ['A', 'B']) {
       trackEngagementOnce(BAND_ENGAGEMENT_FLAG[band]);
       e.preventDefault();
       e.stopPropagation(); // prevent #mixer's crossfader wheel listener from also firing
-      wheelRawValue = clamp(wheelRawValue + e.deltaY / px, min, max);
-      state.decks[deck][band] = detent ? applyDetent(wheelRawValue, min, max) : wheelRawValue;
+      wheelRawValue = clamp(wheelRawValue + e.deltaY / px, dragRange.min, dragRange.max);
+      state.decks[deck][band] = detent ? applyDetent(wheelRawValue, dragRange.min, dragRange.max) : wheelRawValue;
       sendParam(deck, band, state.decks[deck][band]);
       updateReadouts();
     }, { passive: false });
