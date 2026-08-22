@@ -1,45 +1,45 @@
 slug	video
-00-start-setup	1. Старт. Доступ, среда и инструменты/lesson_0.1 .mp4
-m1-01-antigravity	2. AI Strategist/1. Antigravity — среда для работы с агентами/1. Antigravity — среда для работы с агентами.mp4
-m1-01b-product-thinking	2. AI Strategist/1. Antigravity — среда для работы с агентами/1.1 Зачем дизайнеру продуктовое мышление.mp4
-m1-02-recursive-briefing	2. AI Strategist/2. Рекурсивный брифинг/2. Рекурсивный брифинг.mp4
-m1-03-deep-research	2. AI Strategist/3. Deep Research через агента/3. Deep Research через агента.mp4
-m1-04-competitive-analysis	2. AI Strategist/4. Конкурентный анализ/4. Конкурентный анализ.mp4
-m1-05-ux-audit	2. AI Strategist/5. AI-аудит существующего продукта/5. AI-аудит существующего продукта.mp4
-m1-06-personas	2. AI Strategist/6. Синтетические персоны/6. Синтетические персоны.mp4
-m1-07-simulated-interview	2. AI Strategist/7. Симуляция интервью/7. Симуляция интервью.mp4
-m1-08-scope-prioritization	2. AI Strategist/8. Scope и приоритизация фич/8. Scope и приоритизация фич.mp4
-m1-09-prd	2. AI Strategist/9. PRD — финальный документ/9. PRD — финальный документ.mp4
-m1-10-module-wrapup	2. AI Strategist/10. Итоги модуля и курсовой проект/10. Итоги модуля и курсовой проект.mp4
-m2-01-why-architecture	3. System Architect/2.1. Зачем архитектура, если есть макеты/2.1. Зачем архитектура, если есть макеты.mp4
-m2-02-figma-mcp	3. System Architect/2.2. Подключение Figma MCP/2.2. Подключение Figma MCP.mp4
-m2-03-sitemap-userflow	3. System Architect/2.3. Sitemap и user flow на FigJam через агента/2.3. Sitemap и user flow на FigJam через агента.mp4
-m2-04-wireframes	3. System Architect/2.4. Wireframes через MCP/2.4. Wireframes через MCP.mp4
-m2-05-design-system	3. System Architect/2.5. Ставим дизайн-систему — три сценария/2.5. Ставим дизайн-систему — три сценария.mp4
-m2-06-ui-kit	3. System Architect/2.6. UI-кит — расширяем библиотеку/2.6. UI-кит — расширяем библиотеку.mp4
-m2-07-variants-states	3. System Architect/2.7. Variants и состояния/2.7. Variants и состояния.mp4
-m2-08-final-screens	3. System Architect/2.8. Сборка финальных экранов/2.8. Сборка финальных экранов.mp4
-m2-09-claude-design-landing	3. System Architect/2.9. Claude Design — визуальная страница на нашей ДС/2.9. Claude Design — визуальная страница на нашей ДС.mp4
-m2-10-screens-audit	3. System Architect/2.10. Аудит и консистентность между экранами/2.10. Аудит и консистентность между экранами.mp4
-m2-11-module-final	3. System Architect/2.11. Финал модуля и курсовой проект/2.11. Финал модуля и курсовой проект.mp4
-m3-01-what-is-visual-engineering	4. Visual Engineer/3.1. Что такое визуальная инженерия и что соберём в модуле/3.1. Что такое визуальная инженерия и что соберём в модуле.mp4
-m3-02-generative-models	4. Visual Engineer/3.2. Как устроены генеративные модели/3.2. Как устроены генеративные модели.mp4
-m3-03-generation-approaches	4. Visual Engineer/3.3. Базовые подходы к генерации/3.3. Базовые подходы к генерации.mp4
-m3-04-prompt-anatomy	4. Visual Engineer/3.4. Анатомия промпта/3.4. Анатомия промпта.mp4
-m3-05-json-prompts	4. Visual Engineer/3.5. JSON-промпты для серий и воспроизводимости/3.5. JSON-промпты для серий и воспроизводимости.mp4
-m3-06-midjourney	4. Visual Engineer/3.6. Midjourney — карта инструмента и сборка собственного стиля/3.6. Midjourney — карта инструмента и сборка собственного стиля .mp4
-m3-07-krea	4. Visual Engineer/3.7. Krea — мульти-инструмент модуля/3.7. Krea — мульти-инструмент модуля.mp4
-m3-08-upscale	4. Visual Engineer/3.8. Апскейл — модели, настройки и пайплайн-/3.8. Апскейл — модели, настройки и пайплайн.mp4
-m3-09-video-generation	4. Visual Engineer/3.9. Видео-генерация- пайплайн и консистентные кадры/3.9. Видео-генерация- пайплайн и консистентные кадры.mp4
-m3-10-node-generation-weave	4. Visual Engineer/3.10. Принцип нодовой генерации + Figma Weave/3.10. Принцип нодовой генерации + Figma Weave.mp4
-m3-11-final-pipeline	4. Visual Engineer/3.11. Финальный пайплайн + курсовой проект/3.11. Финальный пайплайн + курсовой проект.mp4
-m4-01-intro	5. AI Prototyper & Agents/4.1. Введение/4.1. Введение.mp4
-m4-02-dev-basics	5. AI Prototyper & Agents/4.2. Основа разработки/4.2. Основа разработки .mp4
-m4-03-ds-to-react	5. AI Prototyper & Agents/4.3. Из дизайн-системы в React_ проект и компонентная база/4.3. Из дизайн-системы в React_ проект и компонентная база .mp4
-m4-04-storybook-github	5. AI Prototyper & Agents/4.4. Storybook и передача на GitHub/4.4. Storybook и передача на GitHub .mp4
-m4-05-screens	5. AI Prototyper & Agents/4.5. Сборка экранов/4.5. Сборка экранов.mp4
-m4-06-wiring	5. AI Prototyper & Agents/4.6. Оживление/4.6. Оживление.mp4
-m4-07-deploy	5. AI Prototyper & Agents/4.7. Публикация и деплой/4.7. Публикация и деплой .mp4
-m4-08-ut-dashboard	5. AI Prototyper & Agents/4.8. Дашборд юзер-тестов/4.8. Дашборд юзер-тестов .mp4
-m4-09-release-environment	5. AI Prototyper & Agents/4.9. Финальная директива — собираем среду/4.9. Финальная директива — собираем среду .mp4
-m4-10-outcomes	5. AI Prototyper & Agents/4.10. Итоги – что ты теперь умеешь/4.10. Итоги – что ты теперь умеешь .mp4
+00-start-setup	0. Старт. Доступ, среда и инструменты/0. Старт. Доступ, среда и инструменты.mp4
+m1-01-antigravity	1. AI Strategist/1.1-доп. Antigravity — среда для работы с агентами/1.1-доп. Antigravity — среда для работы с агентами.mp4
+m1-01b-product-thinking	1. AI Strategist/1.1-доп. Antigravity — среда для работы с агентами/1.1. Зачем дизайнеру продуктовое мышление.mp4
+m1-02-recursive-briefing	1. AI Strategist/1.2. Рекурсивный брифинг/1.2. Рекурсивный брифинг.mp4
+m1-03-deep-research	1. AI Strategist/1.3. Deep Research через агента/1.3. Deep Research через агента.mp4
+m1-04-competitive-analysis	1. AI Strategist/1.4. Конкурентный анализ/1.4. Конкурентный анализ.mp4
+m1-05-ux-audit	1. AI Strategist/1.5. AI-аудит существующего продукта/1.5. AI-аудит существующего продукта.mp4
+m1-06-personas	1. AI Strategist/1.6. Синтетические персоны/1.6. Синтетические персоны.mp4
+m1-07-simulated-interview	1. AI Strategist/1.7. Симуляция интервью/1.7. Симуляция интервью.mp4
+m1-08-scope-prioritization	1. AI Strategist/1.8. Scope и приоритизация фич/1.8. Scope и приоритизация фич.mp4
+m1-09-prd	1. AI Strategist/1.9. PRD — финальный документ/1.9. PRD — финальный документ.mp4
+m1-10-module-wrapup	1. AI Strategist/1.10. Итоги модуля и курсовой проект/1.10. Итоги модуля и курсовой проект.mp4
+m2-01-why-architecture	2. System Architect/2.1. Зачем архитектура, если есть макеты/2.1. Зачем архитектура, если есть макеты.mp4
+m2-02-figma-mcp	2. System Architect/2.2. Подключение Figma MCP/2.2. Подключение Figma MCP.mp4
+m2-03-sitemap-userflow	2. System Architect/2.3. Sitemap и user flow на FigJam через агента/2.3. Sitemap и user flow на FigJam через агента.mp4
+m2-04-wireframes	2. System Architect/2.4. Wireframes через MCP/2.4. Wireframes через MCP.mp4
+m2-05-design-system	2. System Architect/2.5. Ставим дизайн-систему — три сценария/2.5. Ставим дизайн-систему — три сценария.mp4
+m2-06-ui-kit	2. System Architect/2.6. UI-кит — расширяем библиотеку/2.6. UI-кит — расширяем библиотеку.mp4
+m2-07-variants-states	2. System Architect/2.7. Variants и состояния/2.7. Variants и состояния.mp4
+m2-08-final-screens	2. System Architect/2.8. Сборка финальных экранов/2.8. Сборка финальных экранов.mp4
+m2-09-claude-design-landing	2. System Architect/2.9. Claude Design — визуальная страница на нашей ДС/2.9. Claude Design — визуальная страница на нашей ДС.mp4
+m2-10-screens-audit	2. System Architect/2.10. Аудит и консистентность между экранами/2.10. Аудит и консистентность между экранами.mp4
+m2-11-module-final	2. System Architect/2.11. Финал модуля и курсовой проект/2.11. Финал модуля и курсовой проект.mp4
+m3-01-what-is-visual-engineering	3. Visual Engineer/3.1. Что такое визуальная инженерия и что соберём в модуле/3.1. Что такое визуальная инженерия и что соберём в модуле.mp4
+m3-02-generative-models	3. Visual Engineer/3.2. Как устроены генеративные модели/3.2. Как устроены генеративные модели.mp4
+m3-03-generation-approaches	3. Visual Engineer/3.3. Базовые подходы к генерации/3.3. Базовые подходы к генерации.mp4
+m3-04-prompt-anatomy	3. Visual Engineer/3.4. Анатомия промпта/3.4. Анатомия промпта.mp4
+m3-05-json-prompts	3. Visual Engineer/3.5. JSON-промпты для серий и воспроизводимости/3.5. JSON-промпты для серий и воспроизводимости.mp4
+m3-06-midjourney	3. Visual Engineer/3.6. Midjourney — карта инструмента и сборка собственного стиля/3.6. Midjourney — карта инструмента и сборка собственного стиля .mp4
+m3-07-krea	3. Visual Engineer/3.7. Krea — мульти-инструмент модуля/3.7. Krea — мульти-инструмент модуля.mp4
+m3-08-upscale	3. Visual Engineer/3.8. Апскейл — модели, настройки и пайплайн-/3.8. Апскейл — модели, настройки и пайплайн.mp4
+m3-09-video-generation	3. Visual Engineer/3.9. Видео-генерация- пайплайн и консистентные кадры/3.9. Видео-генерация- пайплайн и консистентные кадры.mp4
+m3-10-node-generation-weave	3. Visual Engineer/3.10. Принцип нодовой генерации + Figma Weave/3.10. Принцип нодовой генерации + Figma Weave.mp4
+m3-11-final-pipeline	3. Visual Engineer/3.11. Финальный пайплайн + курсовой проект/3.11. Финальный пайплайн + курсовой проект.mp4
+m4-01-intro	4. AI Prototyper & Agents/4.1. Введение/4.1. Введение.mp4
+m4-02-dev-basics	4. AI Prototyper & Agents/4.2. Основа разработки/4.2. Основа разработки .mp4
+m4-03-ds-to-react	4. AI Prototyper & Agents/4.3. Из дизайн-системы в React_ проект и компонентная база/4.3. Из дизайн-системы в React_ проект и компонентная база .mp4
+m4-04-storybook-github	4. AI Prototyper & Agents/4.4. Storybook и передача на GitHub/4.4. Storybook и передача на GitHub .mp4
+m4-05-screens	4. AI Prototyper & Agents/4.5. Сборка экранов/4.5. Сборка экранов.mp4
+m4-06-wiring	4. AI Prototyper & Agents/4.6. Оживление/4.6. Оживление.mp4
+m4-07-deploy	4. AI Prototyper & Agents/4.7. Публикация и деплой/4.7. Публикация и деплой .mp4
+m4-08-ut-dashboard	4. AI Prototyper & Agents/4.8. Дашборд юзер-тестов/4.8. Дашборд юзер-тестов .mp4
+m4-09-release-environment	4. AI Prototyper & Agents/4.9. Финальная директива — собираем среду/4.9. Финальная директива — собираем среду .mp4
+m4-10-outcomes	4. AI Prototyper & Agents/4.10. Итоги – что ты теперь умеешь/4.10. Итоги – что ты теперь умеешь .mp4

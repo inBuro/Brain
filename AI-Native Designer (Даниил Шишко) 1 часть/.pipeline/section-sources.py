@@ -10,11 +10,11 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 MARK = "Уроки: "
 
 FOLDER = {  # модуль в адресе -> номер папки на диске и короткое имя
-    "0": (1, "Старт"),
-    "1": (2, "AI Strategist"),
-    "2": (3, "System Architect"),
-    "3": (4, "Visual Engineer"),
-    "4": (5, "AI Prototyper & Agents"),
+    "0": (0, "Старт"),
+    "1": (1, "AI Strategist"),
+    "2": (2, "System Architect"),
+    "3": (3, "Visual Engineer"),
+    "4": (4, "AI Prototyper & Agents"),
 }
 
 def order(a):
