@@ -327,8 +327,53 @@ Pre-existing = PostHog templates only: Web Analytics starter dashboard **1680409
 
 **DLT JSON-wrapping note:** The leads source stores ONE record per ClickHouse row (`JSONExtractString(data, 1, 'field')`). The comments source stores ALL records in ONE row (must use ARRAY JOIN). Different endpoint pagination patterns cause different DLT behavior.
 
+## F5Bot Data Warehouse source (PLANNED 2026-08-22, pending execution)
+
+### custom.f5bot.hits (Reddit miner via F5Bot, PENDING CREATION)
+- `base_url: https://fadercraft-f5bot.hellokbbureau.workers.dev`, path `/export`, auth Bearer (token at `~/.config/cloudflare/f5bot-run-token`)
+- Prefix `f5bot_`, HogQL name: **`custom.f5bot.hits`**, physical CH table: `f5bot_custom_hits` (verify after first sync)
+- Same single-blob storage pattern as `custom.cm.comments`: endpoint returns ALL records in ONE response, DLT stores entire `data` array as ONE ClickHouse row
+- Column structure: `data JSON` — one row. Unwrap with ARRAY JOIN (same as cm.comments):
+  ```sql
+  SELECT arrayJoin(JSONExtractArrayRaw(assumeNotNull(data))) AS hit
+  FROM custom.f5bot.hits WHERE data IS NOT NULL
+  ```
+- Fields per record: `created_time` (string "YYYY-MM-DD HH:MM:SS"), `title`, `text`, `product` (Control XL / Sends Follower / Dynamic Focus / Other), `reason`, `author`, `keyword` (comma-joined if multiple F5Bot keywords), `subreddit` (e.g. "/r/Elektron/"), `source` ("Reddit Posts" or "Reddit Comments"), `url` (direct Reddit link), `status` (plain string: `"worth_reply"` or `"skip"` — NOT a comma-joined multi_select like YouTube's status)
+- Primary key: `url` (unique Reddit hit URL)
+- **15 records as of 2026-08-22**: status=1 worth_reply / 14 skip; product=all Control XL; dates 2026-08-16 to 2026-08-22
+- Source type: Custom REST (PostHog ExternalDataSource `source_type="Custom"`)
+- Manifest format (for recreation): `{"client":{"base_url":"...","auth":{"type":"bearer"}},"resources":[{"name":"hits","primary_key":"url","endpoint":{"path":"/export","data_selector":"data"}}]}`
+- Auth token goes in `payload.auth_token`, NOT in the manifest inline
+- **Flat view**: `f5bot_hits_flat` (warehouse_saved_query) — unwraps the blob into one-row-per-hit with all columns labelled; see `setup-posthog-f5bot.py`
+- **Script**: `/Users/Kirill/Projects/Projects/fadercraft/worker-f5bot/setup-posthog-f5bot.py` — creates source + view + updates both insights; needs `POSTHOG_API_KEY` env var
+
+### Insights updated 2026-08-22 to include Reddit data (UNION with custom.cm.comments)
+Both existing insights updated to UNION YouTube + Reddit data, source-agnostic flat merge:
+
+**Mq5FXm5W SQL (updated)**:
+```sql
+SELECT
+  count() AS total,
+  countIf(status LIKE '%Replied%' OR status = 'worth_reply') AS replied
+FROM (
+  SELECT JSONExtractString(comment, 'status') AS status
+  FROM (SELECT arrayJoin(JSONExtractArrayRaw(assumeNotNull(data))) AS comment FROM custom.cm.comments WHERE data IS NOT NULL)
+  WHERE JSONExtractString(comment, 'created_time') != ''
+  UNION ALL
+  SELECT JSONExtractString(hit, 'status') AS status
+  FROM (SELECT arrayJoin(JSONExtractArrayRaw(assumeNotNull(data))) AS hit FROM custom.f5bot.hits WHERE data IS NOT NULL)
+  WHERE JSONExtractString(hit, 'created_time') != ''
+)
+```
+Semantic note: "replied" = YT rows with Notion tag "Replied" + Reddit rows with status "worth_reply" (different semantics but owner-confirmed combined column).
+Expected counts after sync: total=137, replied=17.
+
+**lHKrFkPF SQL (updated)**:
+UNION of both sources, breakdown by product only (source-agnostic per owner direction).
+YouTube filter: `NOT LIKE '%Replied%'` (exclude processed); Reddit filter: `!= 'skip'` (exclude noise).
+
 ## Comment miner insight
-- **lHKrFkPF** — **Comment miner — new comments by product per day** (created 2026-07-30; SQL updated 2026-07-30 to exclude Replied).
+- **lHKrFkPF** — **Comment miner — new comments by product per day** (created 2026-07-30; SQL updated 2026-07-30 to exclude Replied; SQL UPDATED 2026-08-22 to UNION Reddit hits).
   DataVisualizationNode (HogQL), ActionsStackedBar. xAxis=`day`, yAxis=`new_comments`, `seriesBreakdownColumn="product"`.
   **CORRECT SQL (uses ARRAY JOIN; filters out Replied records):**
   ```sql
@@ -351,11 +396,11 @@ Pre-existing = PostHog templates only: Web Analytics starter dashboard **1680409
   https://us.posthog.com/project/458316/insights/lHKrFkPF
 
 ## Comment miner live count insight
-- **Mq5FXm5W** — **Comment miner — total / replied** (created 2026-07-30).
+- **Mq5FXm5W** — **Comment miner — total / replied** (created 2026-07-30; SQL UPDATED 2026-08-22 to UNION Reddit).
   DataVisualizationNode, ActionsTable (transposed), 1 row × 2 cols: `total` and `replied`.
-  SQL: `count()` and `countIf(status LIKE '%Replied%')` over ARRAY JOIN unnest of `custom.cm.comments`.
+  SQL now UNIONs `custom.cm.comments` (YouTube) + `custom.f5bot.hits` (Reddit). `replied` = YT Replied + Reddit worth_reply.
   Favorited, on dashboard 1680409 (tile 10258745). Description includes Notion DB link.
-  **Verified live: total=122, replied=16** as of 2026-07-30.
+  **Verified live: total=122, replied=16** as of 2026-07-30. After f5bot sync: expected total≈137, replied≈17.
   https://us.posthog.com/project/458316/insights/Mq5FXm5W
 - Old static text tile 10253830 **DELETED 2026-07-30** — replaced by the live insight above.
 - Notion DB id: `39255889-1bb0-818f-ae1c-cd5d93a94041`
