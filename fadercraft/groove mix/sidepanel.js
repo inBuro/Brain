@@ -1425,6 +1425,9 @@ function updateDeckConnectedVisual(deck) {
   // that had gone right back to disabled (2026-08-10, direct report — two placeholder decks, one
   // still glowing from before it disconnected).
   document.getElementById(`playBtn${deck}`).classList.toggle('isPlaying', state.decks[deck].playing === true);
+  // Shrinks the cover art to a corner and uncovers the waveform underneath it (see styles.css
+  // #deckBoxA/B.playing .deckThumb) — same playing flag as the button above, one flag two effects.
+  deckBox.classList.toggle('playing', state.decks[deck].playing === true);
   // Empty-slot hint: shown on THIS deck whenever it has no track picked, independent of the
   // sibling's state (2026-08-07, direct report — cold start, neither deck connected yet, showed
   // no guidance at all since this used to require the OTHER deck to already be live and playing).
@@ -1484,6 +1487,7 @@ function updateReadouts() {
       fxKnob.title = fxV === 0 ? 'FILTER: bypass' : `FILTER: ${fxV < 0 ? 'lowpass' : 'highpass'} ${Math.abs(fxV * 100).toFixed(0)}%`;
     }
     document.getElementById(`playBtn${deck}`).classList.toggle('isPlaying', state.decks[deck].playing === true);
+    document.getElementById(`deckBox${deck}`).classList.toggle('playing', state.decks[deck].playing === true);
   }
   const pct = Math.round(state.cross * 100);
   document.getElementById('crossThumb').style.left = `${pct}%`;
@@ -1917,9 +1921,17 @@ function pushWaveformSample(deck, peak) {
 
 // Each deck's canvas overlays BOTH decks — its own history in full accent color on top, the
 // other deck's history as a muted gray ghost underneath, so a DJ reading either deck can also
-// see how the other's transients line up. Static center line marks "now" (both histories share
-// the same timebase — newest sample always lands at the right edge, see WAVEFORM_HISTORY_LEN
-// comment above), not a scrub position.
+// see how the other's transients line up. THE core requirement (direct report, 2026-08-23:
+// "нажимаю на пробел и уже слышу звук, в то время как вейформа только добирается до плейхеда" —
+// audio is audible instantly on Play, the waveform must never visibly lag behind it) — the ONLY
+// way to guarantee zero lag is to make the newest sample's render position identical to the
+// playhead itself, not the canvas edge (an edge-entry design, however the far side is filled,
+// always takes real ticks to travel from edge to center). So history is shifted left by halfW:
+// the newest sample's bar sits with its right edge flush against the playhead, older samples
+// trail off to the left, and — because there is no future audio to draw (live MSE stream, no
+// lookahead) — the right half of the canvas stays permanently blank. That blank half is a
+// deliberate tradeoff for correctness, not an oversight: filling it would require either fake
+// data (mirrored echo, rejected earlier) or edge-entry (reintroduces the lag this fixes).
 function drawWaveformCanvas(deck) {
   const canvas = document.getElementById(`waveform${deck}`);
   if (!canvas) return;
@@ -1951,20 +1963,25 @@ function drawWaveformCanvas(deck) {
       .getPropertyValue('--color-text-tertiary').trim() || '#888888';
   }
   const midY = h / 2;
+  const halfW = w / 2;
   const colW = w / WAVEFORM_HISTORY_LEN;
+  const barW = Math.max(1, colW - Math.min(1, colW * 0.15));
   const drawBars = (histDeck, color) => {
     ctx2d.fillStyle = color;
     const hist = waveformHistory[histDeck];
     for (let i = 0; i < hist.length; i++) {
+      const x = i * colW - halfW; // newest (i = len-1) lands with its right edge at halfW
+      if (x + barW < 0) continue; // fully off-canvas — skip the wasted fillRect
       const amp = hist[i] * (midY - 1);
       if (amp <= 0) continue;
-      ctx2d.fillRect(i * colW, midY - amp, Math.max(1, colW - Math.min(1, colW * 0.15)), amp * 2);
+      ctx2d.fillRect(x, midY - amp, barW, amp * 2);
     }
   };
   drawBars(OTHER_DECK[deck], waveformGhostColor); // ghost underneath
   drawBars(deck, waveformAccentColor[deck]); // own on top
   ctx2d.fillStyle = waveformPlayheadColor;
-  ctx2d.fillRect(Math.round(w / 2) - 1, 0, Math.max(1, Math.round(dpr)), h);
+  const playheadW = Math.max(1, Math.round(dpr));
+  ctx2d.fillRect(Math.round(halfW) - Math.floor(playheadW / 2), 0, playheadW, h);
 }
 
 function drawWaveforms() {
