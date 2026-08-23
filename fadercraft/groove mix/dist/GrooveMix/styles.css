@@ -139,13 +139,19 @@ select:focus { outline: none; border-color: var(--color-success); }
    accent rather than introducing a new one. */
 .coffeeBtn { display: block; margin: var(--space-5) auto var(--space-16); width: fit-content; padding: 0; font-size: var(--text-sm); line-height: 1.4; color: var(--color-accent-deckB); text-decoration: none; opacity: 0.75; transition: opacity 0.15s ease; }
 .coffeeBtn:hover, .coffeeBtn:focus-visible { opacity: 1; }
-/* Star-rating link, right under Buy Me a Coffee. Cold state is near-invisible black (barely a
-   hint of a shape against the dark panel) — hovering reveals it in the same amber as coffeeBtn,
-   read as "hover to rate". #coffeeLink's own margin-bottom is halved here (was coffeeBtn's shared
-   space-16) since the two links now sit as a pair, not coffeeBtn alone closing out the panel. */
+/* Star-rating link, right under Buy Me a Coffee. Cold state is the same muted grey as the other
+   ghost icon buttons (.fxTypeBtn/.skipBtn/.cueBtn) — hovering reveals it in the same amber as
+   coffeeBtn, read as "hover to rate". #coffeeLink's own margin-bottom is halved here (was
+   coffeeBtn's shared space-16) since the two links now sit as a pair, not coffeeBtn alone closing
+   out the panel. */
 #coffeeLink { margin-bottom: calc(var(--space-16) / 2); }
-.rateBtn { margin-top: 0; letter-spacing: 0.1em; color: var(--color-0); opacity: 1; }
-.rateBtn:hover, .rateBtn:focus-visible { color: var(--color-accent-deckB); }
+.rateBtn { margin-top: 0; display: flex; flex-direction: row-reverse; justify-content: center; gap: 0.05em; opacity: 1; }
+/* DOM order is reversed visually (row-reverse) so hovering the Nth star from the left highlights
+   it AND every star before it via ~ (general sibling, selects DOM-later == visually-earlier
+   here) — the standard CSS-only progressive star-rating fill, no JS needed. */
+.rateStar { font: inherit; background: none; border: none; padding: 0; cursor: pointer; color: var(--color-text-muted); transition: color 0.1s ease; }
+.rateStar:hover, .rateStar:hover ~ .rateStar { color: var(--color-accent-deckB); }
+.rateStar:focus-visible { color: var(--color-accent-deckB); }
 /* position:fixed, bottom-right corner; min() clamps against the 250px panel floor. */
 /* 1:1 port of Fadercraft's FeedbackWidget: literal px, not dark-theme tokens — the white-card
    look is intentional. Only the copy differs. */

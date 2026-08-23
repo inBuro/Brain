@@ -998,6 +998,14 @@ const GUMROAD_COFFEE_URL = 'https://fadercraft.gumroad.com/coffee';
 // display name; /reviews opens straight to the reviews tab instead of the top of the listing.
 const CWS_REVIEW_URL = 'https://chromewebstore.google.com/detail/kiigcdfcmdanbpjpgilolmchobnpmjij/reviews';
 
+// Any star click — footer or the feedback popover's own rating row — is analytics-first, CWS
+// redirect second. Free-text feedback with no rating never redirects there; only this gesture does.
+function rateAndOpenCws(value, source) {
+  addBreadcrumb(`button_click: rate_extension (${value} stars, ${source})`);
+  if (window.posthog) posthog.capture('button_click', { button: 'rate_extension', rating: value, source });
+  window.open(CWS_REVIEW_URL, '_blank', 'noopener');
+}
+
 const state = {
   decks: {
     A: { tabId: null, connected: false, high: 0, mid: 0, low: 0, fx: 0, fxType: 'filter', filterValue: 0, delayValue: 0, gain: 1, playing: null, rate: 1, detectedBpm: null, beatCount: 0, recentOnsets: [], cued: false, hasPlayedOnce: false },
@@ -1021,7 +1029,7 @@ const mixerEl = document.getElementById('mixer');
 // otherwise immediately re-focus #mixer, swallowing keystrokes as mixer hotkeys.
 document.addEventListener('click', (e) => {
   if (e.target.closest('input, textarea, select')) return;
-  mixerEl.focus();
+  mixerEl.focus({ preventScroll: true });
 });
 
 // #status is the error/problem channel — every message not keyed as NON_ERROR_STATUS_KEYS means
@@ -1079,12 +1087,19 @@ coffeeLinkEl.addEventListener('click', () => {
   if (window.posthog) posthog.capture('button_click', { button: 'buy_coffee' });
 });
 
+// Guarded (unlike coffeeLinkEl above) — new element, added same day as several HTML/JS edits;
+// a stale already-open side panel that picked up new JS against old HTML (chrome.runtime.reload()
+// doesn't always re-navigate an already-open panel) would otherwise throw here and silently kill
+// every initializer after this line (same bug class noted in ARCHITECTURE.md's bug-class list).
 const rateLinkEl = document.getElementById('rateLink');
-rateLinkEl.href = CWS_REVIEW_URL;
-rateLinkEl.addEventListener('click', () => {
-  addBreadcrumb('button_click: rate_extension');
-  if (window.posthog) posthog.capture('button_click', { button: 'rate_extension' });
-});
+if (rateLinkEl) {
+  rateLinkEl.querySelectorAll('.rateStar').forEach((star) => {
+    star.addEventListener('click', () => {
+      rateAndOpenCws(Number(star.dataset.value), 'footer');
+      rateLinkEl.hidden = true; // already rated once — no need to keep nagging
+    });
+  });
+}
 
 // Banner suppressed (deferred feature) — usage/license tracking still runs, only the nag is hidden.
 // To re-enable: trialBannerEl.hidden = licensed || usageMs < TRIAL_LIMIT_MS;
@@ -1491,7 +1506,7 @@ async function sendFxType(deckKey, type, filterValue, delayValue) {
       target: { tabId },
       world: 'MAIN',
       func: counterDJSetFxType,
-      args: [type, filterValue, delayValue],
+      args: [type, filterValue ?? null, delayValue ?? null],
     });
     const result = res && res[0] && res[0].result;
     if (!result || !result.ok) {
@@ -1775,7 +1790,7 @@ connectBtn.addEventListener('click', () => {
   addBreadcrumb('button_click: send_to_other_deck');
   if (window.posthog) posthog.capture('button_click', { button: 'send_to_other_deck' });
   sendTrackToOtherDeck();
-  mixerEl.focus();
+  mixerEl.focus({ preventScroll: true });
 });
 
 // Chapter/BPM/play-state poll — 1s (was 3s). This is the ONLY place that reads detectedBpm
@@ -2936,6 +2951,7 @@ if (window.chrome && chrome.i18n) {
   const feedbackPopover = document.getElementById('feedbackPopover');
   const feedbackCloseBtn = document.getElementById('feedbackClose');
   const feedbackTextarea = document.getElementById('feedbackTextarea');
+  const feedbackStarsRow = document.getElementById('feedbackStars');
   const feedbackStars = Array.from(document.querySelectorAll('.feedbackStar'));
   const feedbackSubmitBtn = document.getElementById('feedbackSubmit');
   const feedbackStatusEl = document.getElementById('feedbackStatus');
@@ -2980,6 +2996,8 @@ if (window.chrome && chrome.i18n) {
       rating = value;
       paintStars(rating);
       updateSubmitEnabled();
+      rateAndOpenCws(value, 'feedback_form');
+      feedbackStarsRow.hidden = true; // already rated once — no need to keep nagging
     });
   });
 

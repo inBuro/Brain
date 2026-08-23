@@ -241,3 +241,58 @@ points here directly. `dist/GrooveMix/` only gets built immediately before an ac
 Store submission, not after routine edits. The `ARCHITECTURE.md` "Упаковка dist/" section has been
 rewritten to say this plainly; stop copying source into `dist/` as part of normal work from here on.
 
+## 2026-08-23 — Rating widget, focus-scroll fix, FX cycling diagnosed, v0.4.14 shipped
+
+**FX cycling "stuck" bug — not a bug:** `window.__counterDJ__` persists across reconnects (YouTube
+is an SPA), so a tab connected before the Filter/Delay dual-graph landed keeps its old engine
+forever, lacking `applyFxType`/`applyFxValueForType` — `counterDJSetFxType` correctly surfaces
+"FX bus missing" in that case. Fix is a real reload of the YouTube tab itself (not the extension,
+not just reconnect) so `counterDJSetup` rebuilds the graph fresh.
+
+**Star-rating widget (`#rateLink` in the footer, next to Buy Me a Coffee) reworked:** was a single
+`<a href>` wrapping 5 plain `<span>`s (one shared click target, no per-star value). Converted to a
+`<div role="radiogroup">` of 5 `<button data-value="5..1">` (DOM order reversed to match the
+row-reverse progressive-hover-fill trick already in place), mirroring the existing
+`.feedbackStar` pattern. Cold-state color iterated per direct feedback: `--color-0` (near-black) →
+`--color-700` (muted icon grey) → `--color-text-primary` → settled on `--color-text-muted` (the
+same grey as the knob hint captions). Removed the `title` tooltip attribute (direct request — no
+native tooltip on hover).
+
+**Click behavior, both rating surfaces (footer stars AND the feedback popover's own star row):**
+new shared `rateAndOpenCws(value, source)` — captures a `button_click` PostHog event with the
+actual rating value and `source` ('footer'/'feedback_form') FIRST, then opens the CWS review page
+as the secondary/side effect (`window.open`, new tab). Scoped deliberately to the rating gesture
+only — plain text feedback (no star clicked) still never redirects anywhere, unchanged. Each
+widget hides itself (`hidden = true`) right after its first star click — a one-time prompt, not
+nagged again once acted on.
+
+**Global click→focus scroll jump fixed:** the document-level `click` listener that focuses
+`#mixer` (so keyboard hotkeys work from anywhere in the panel) was calling plain `.focus()`,
+which scrolls the focused element into view if the browser judges it not fully visible — read
+by the user as "clicking anywhere randomly scrolls the page." Fixed with
+`mixerEl.focus({ preventScroll: true })` at both call sites (the global listener and the
+send-to-other-deck button).
+
+**Debug reload button removed:** the Cmd/Ctrl+Shift+9 hotkey started working again once its
+`chrome://extensions/shortcuts` binding was manually re-set by the user (browser silently drops
+unpacked-extension shortcut bindings after enough dev-cycle reloads — not a code issue, manifest
+and `background.js`'s `chrome.commands.onCommand` listener were correct throughout). The manual
+`#reloadExtBtn` UI button added earlier this session as a fallback was removed now that it's
+no longer needed.
+
+**Bandcamp fork deleted:** `fadercraft/groove mix (bandcamp)/` removed outright (direct
+instruction) — fully committed to git beforehand, nothing lost. This mainline folder is the only
+GrooveMix source going forward.
+
+**v0.4.14 built and shipped:** version bumped 0.4.13 → 0.4.14, `dist/GrooveMix/` synced from root
+(`sidepanel.html`/`.js`, `styles.css`, `manifest.json` — everything else was already identical),
+dev icons in `dist/GrooveMix/` verified unchanged via `shasum` against root `icons/`. Upload zip
+built separately (not committed) with `icons/prod/` swapped in for the actual CWS payload, per the
+dev/prod split above. Chrome Web Store API refresh token had expired (`invalid_grant`) — got a
+fresh one via the OAuth consent flow (manual browser step, `redirect_uri=http://localhost`,
+scope `chromewebstore`) and saved it to `~/.config/google/groovemix-cws-env`. Also added
+`Bash(curl *oauth2.googleapis.com*)` / `Bash(curl *googleapis.com/upload/chromewebstore*)` /
+`Bash(curl *googleapis.com/chromewebstore*)` to `~/Brain/.claude/settings.local.json` so future
+CWS uploads don't need a fresh permission prompt. Upload (`uploadState: SUCCESS`) and publish
+(`status: OK`) both succeeded — v0.4.14 is submitted for review.
+

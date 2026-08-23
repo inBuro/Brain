@@ -21,10 +21,15 @@ Separate PostHog project from Fadercraft (458316), same US cloud. Renamed Counte
 
 ## Owner exclusion — test_account_filters
 
-- **Status: ACTIVE** — set via MCP `project-settings-update` on 2026-08-06.
-- Filter applied: `{"key":"email","type":"person","value":"hellokbbureau@gmail.com","operator":"is_not"}`
+- **Status: ACTIVE** — 4 rules set (updated 2026-08-23).
 - `test_account_filters_default_checked: true` — new insights default to filtering test accounts.
-- Anonymous sessions (email=null) pass `is_not` automatically — no false exclusions.
+- Current filter array (full — always pass all 4 when updating):
+  1. `{"key":"email","type":"person","value":"hellokbbureau@gmail.com","operator":"is_not"}` — email (NO retroactive effect on historical events in person-on-events mode)
+  2. `{"key":"$geoip_city_name","type":"event","value":"Hua Hin","operator":"is_not"}` — original city filter (works retroactively)
+  3. `{"key":"$current_url","type":"event","value":"jomlejnpfapjfipkgdfbikkbjgabhoig","operator":"not_icontains"}` — extension URL filter (works retroactively)
+  4. `{"key":"$geoip_country_code","type":"event","value":"TH","operator":"is_not"}` — **ADDED 2026-08-23**: Thailand country exclusion (works retroactively; covers 53 sessions / 22 TH distinct_ids excl. owner distinct_id)
+- Anonymous sessions (email=null) pass `is_not` email filter automatically — no false exclusions.
+- **GOTCHA**: Only event-type filters (`type:"event"`) work retroactively. The email filter (`type:"person"`) has zero effect on historical data because email wasn't stamped on events at ingestion time.
 
 ## Extension instrumentation (added 2026-08-05)
 
@@ -69,10 +74,11 @@ Dashboard created 2026-08-05. Key insight IDs (do NOT delete these):
 - **k8bQJDP3** (id: 10771016) — "Sessions by country" WorldMap. breakdown fixed 2026-08-07: was `$geoip_country_name` (map showed 0 — WorldMap requires ISO alpha-2 codes), corrected to `$geoip_country_code`. Confirmed data: TH=9 sess, MX=1 sess (30d). math=unique_session.
 - **POj0JCaY** (id: 10826587) — "Users by country" WorldMap. Companion to k8bQJDP3 — identical config (source=extension, $geoip_country_code breakdown, -30d) but math=dau (unique users). Created 2026-08-07, on dashboard 1957704. PostHog has NO native per-tile aggregation toggle for WorldMap — two separate insights is the only option.
 - **5mmf21PF** (id: 10770955) — Sessions over time (TrendsQuery, unique_session, daily, source=extension)
-- **BoM5jXGa** (id: 11147699) — "Sessions — trailing 3 days (alert target)" — DataVisualizationNode/HogQLQuery, BoldNumber; rolling 3 complete days of unique extension sessions. Alert target for the silence alert; do NOT delete.
+- **BoM5jXGa** (id: 11147699) — "Sessions — trailing 3 days (alert target)" — DataVisualizationNode/HogQLQuery, BoldNumber; rolling 3 complete days of unique extension sessions, `$geoip_country_code != 'TH'` AND `distinct_id NOT IN ('counter-dj-owner', 'healthcheck-script')` (updated 2026-08-23). Alert target for the silence alert; do NOT delete.
 - **GkWeK0qL** (id: 10771407) — "Trial → License Funnel" (FunnelsQuery, 4 steps, favorited)
-- **Fm8Hez3W** (id: 10792069) — "Users — Progress to 100 (cumulative)" — TrendsQuery, first_time_for_user math, ActionsLineGraphCumulative display, all-time, filterTestAccounts=true; favorited. Visual progress chart toward 100-user milestone.
-- **XoX3sVkg** (id: 10792070) — "Total Extension Users (milestone alert)" — DataVisualizationNode/HogQLQuery, BoldNumber display; returns `count(DISTINCT person_id)` on track_loaded/source=extension/owner excluded. Alert target for 100-user milestone.
+- **Fm8Hez3W** (id: 10792069) — "Users — Progress to 100 (cumulative)" — TrendsQuery, first_time_for_user math, ActionsLineGraphCumulative display, all-time, filterTestAccounts=**true** (changed from false on 2026-08-23 to apply project-level TH exclusion); favorited. Visual progress chart toward 100-user milestone. `explicitDate: true` set 2026-08-23. Dashboard 1957704 `date_from` = null (set earlier 2026-08-23 so insight uses own all-time range). Expected to show ~9 users after TH filter applied (was 15–16).
+- **YmVOKhaY** (id: 10876107) — "App Launches — Installs proxy (cumulative)" — TrendsQuery, first_time_for_user math on `app_launched`/source=extension, ActionsLineGraphCumulative, all-time. Broader proxy than Fm8Hez3W (fires on panel open regardless of track_loaded). **`explicitDate: true` set 2026-08-23** (same dashboard-override fix as Fm8Hez3W). Not on dashboard (standalone insight).
+- **XoX3sVkg** (id: 10792070) — "Total Extension Users (milestone alert)" — DataVisualizationNode/HogQLQuery, BoldNumber display; returns `count(DISTINCT person_id)` on track_loaded/source=extension, `$geoip_country_code != 'TH'` AND `distinct_id NOT IN ('counter-dj-owner', 'healthcheck-script')` (updated 2026-08-23 — was missing all exclusions). Current value: **9 users**. Alert target for 100-user milestone.
 
 ### Funnel GkWeK0qL step config (updated 2026-08-06)
 
@@ -127,12 +133,19 @@ zero/non-zero alert, but don't treat the two numbers as interchangeable in repor
 - URL: https://us.posthog.com/project/542001/alerts?alert_type=insights&alert_id=019fd5bf-8af8-0000-4234-5df4a91edc7b
 - NOTE: Alert evaluates the raw SQL result (not a display-transformed cumulative). SQL manually excludes hellokbbureau@gmail.com owner email.
 
-### 100-user milestone baseline (2026-08-06)
+### 100-user milestone baseline (updated 2026-08-23 post-TH-exclusion)
 
-SQL count: 1 distinct person has fired track_loaded/source=extension (owner excluded by email filter). This is the real-user baseline at MVP launch day.
+**REVISED after Thailand exclusion applied 2026-08-23:**
+- XoX3sVkg SQL (TH excluded + distinct_id exclusion): **9 distinct users** as of 2026-08-23 (authoritative for milestone alert). Was 17 before TH exclusion — 8 users dropped (were TH/owner).
+- Fm8Hez3W cumulative trend (first_time_for_user, filterTestAccounts=**true** now): expected to show ~9 users on next render. Was 15–16 before (filterTestAccounts=false).
+- First event: 2026-08-05. Progress to 100: ~9/100 = **9%**.
+- **What was stripped**: 53 TH sessions / 22 TH distinct_ids (excl. `counter-dj-owner`) — overwhelmingly owner dev/test sessions from Bangkok.
+
+**Previous (inflated) counts for reference:**
+- XoX3sVkg before: 17 users. Fm8Hez3W before: 15–16 users. Both included TH owner sessions.
 
 - **zFYNKXKK** (id: 10797169) — "Avg session duration (min)": TrendsQuery, math=hogql `avg(session.$session_duration)/60`, source=extension filter, filterTestAccounts=true, postfix " min", 1 decimal. URL: https://us.posthog.com/project/542001/insights/zFYNKXKK
-- **Tem47ElP** (id: 10771174) — "Feature engagement — % session adoption" (UPDATED 2026-08-06, was raw session table): DataVisualizationNode/HogQLQuery, ActionsBar, x=feature y=pct_sessions (%, 1 decimal, suffix "%"), all-time, owner excluded, sorted DESC. UNION ALL + scalar subquery denominator pattern. URL: https://us.posthog.com/project/542001/insights/Tem47ElP
+- **Tem47ElP** (id: 10771174) — "Feature engagement — % session adoption": DataVisualizationNode/HogQLQuery, ActionsBar, x=feature y=pct_sessions (%, 1 decimal, suffix "%"), follows dashboard date range, TH+owner excluded (updated 2026-08-23), sorted DESC. UNION ALL + scalar subquery denominator pattern — every subquery has identical exclusion conditions. URL: https://us.posthog.com/project/542001/insights/Tem47ElP
 - **CPouyUGc** (id: 10824757) — "Users — clicks per session (simple)": DataVisualizationNode/HogQLQuery, ActionsTable, 3 cols: user_id (concat('p:', substring(any(distinct_id),1,6))), session_started (ICT), clicks (countIf(event NOT LIKE '$%')). Excludes owner + healthcheck-script by distinct_id. Owner excluded via `distinct_id NOT IN ('counter-dj-owner', 'healthcheck-script')`. All-time, newest first. Companion to KwQI1Om4 — simple reading, no color coding. URL: https://us.posthog.com/project/542001/insights/CPouyUGc
 - **uzam0hHG** (id: 10824948) — "Users — actions profile (all-time)": DataVisualizationNode/HogQLQuery, ActionsStackedBar, X=user_label (User N, dense_rank by first appearance), Y=13 stacked segments (same as KwQI1Om4). Aggregated per USER not per session — for boolean flags: sum = count of sessions where feature used; for track_skip/buttons: total count across all sessions. Two-CTE SQL: per_session→per_user. Owner excluded same as CPouyUGc. All-time. URL: https://us.posthog.com/project/542001/insights/uzam0hHG
 - **sNsTON8V** (id: 10825089) — "Users — actions profile (by week)": Companion to uzam0hHG. DataVisualizationNode/HogQLQuery, ActionsStackedBar. X=week_label (concat 'User N | MM/DD', dense_rank by first_week per user). Same 13 stacked segments. Three-CTE SQL: per_session→per_user_week (GROUP BY person_id+week_start using toMonday())→user_ranks (min week per person). JOIN user_ranks to assign stable user rank numbers. ORDER BY ur.first_week, pw.week_start → User 1's weeks run left-to-right, then User 2's, etc. Owner + healthcheck excluded. URL: https://us.posthog.com/project/542001/insights/sNsTON8V
@@ -145,7 +158,7 @@ SQL count: 1 distinct person has fired track_loaded/source=extension (owner excl
 - **ntZBRM9g** (id: 10872867) — "Feedback — Avg Rating Over Time": InsightVizNode/TrendsQuery, feedback_idea/source=extension, math=avg/math_property=rating, weekly, -90d, filterTestAccounts=true; favorited. URL: https://us.posthog.com/project/542001/insights/ntZBRM9g
 - **4rICa6HS** (id: 10872870) — "User Feedback (rating + text)": DataVisualizationNode/HogQLQuery, ActionsTable. Columns: submitted_at/distinct_id/feedback_text/rating. All feedback_idea events, newest first. **NO `{filters.dateRange.*}` → immune to dashboard date filter, shows all-time always.** Owner excluded via `distinct_id NOT IN ('counter-dj-owner', 'healthcheck-script')`. NOTE: 019fd215 junk entries ("dfdsfdsf"/"check") still appear — no person record, uncatchable; 019fda93 test rating=4.0 also visible. Accepted. Updated 2026-08-13 to remove date filter vars (was using `{filters.dateRange.from}` / `{filters.dateRange.to}` which caused dashboard to override to last 7 days). URL: https://us.posthog.com/project/542001/insights/4rICa6HS
 - **VdDdhxpd** (id: 10990801) — "Extension — Language Distribution": **DataVisualizationNode/HogQLQuery** (ActionsBar, bar chart). SQL: countDistinct($session_id) by $browser_language on track_loaded/source=extension. Excludes TH geo (`properties.$geoip_country_code != 'TH'`) + distinct_id NOT IN ('counter-dj-owner', 'healthcheck-script'). **NO `{filters.dateRange.*}` → completely immune to dashboard date filter.** All-time aggregate always. favorited. Current data: en-US=4 (real users). URL: https://us.posthog.com/project/542001/insights/VdDdhxpd
-  - **GOTCHA logged 2026-08-13**: InsightVizNode/TrendsQuery with `date_from:"all"` is NOT immune to dashboard global date filter — dashboard overrides it. Only DataVisualizationNode/HogQL without `{filters.dateRange.*}` is truly immune.
+  - **GOTCHA (2026-08-13, CORRECTED 2026-08-23)**: InsightVizNode/TrendsQuery with `date_from:"all"` is NOT immune to dashboard global date filter — dashboard overrides it. `explicitDate: true` on the insight does NOT block dashboard override — it's a UI hint only ("don't auto-suggest changing the range"), not a backend lock. Dashboard `date_from` always wins for insight tiles. Only two real remedies: (a) DataVisualizationNode/HogQL without `{filters.dateRange.*}` — truly immune always; (b) **remove the dashboard-level date filter** (`dashboard-update {filters: {date_from: null}}`) so insights use their own saved ranges. `Fm8Hez3W` fixed via option (b) on 2026-08-23: dashboard 1957704 `date_from` set to null — insight now renders all-time cumulative correctly (1→15→16 as of 08-23 partial). `explicitDate: true` on `Fm8Hez3W` and `YmVOKhaY` remains set but is effectively a no-op for dashboard-override protection.
 
 ### filter_test_accounts in person-on-events mode — key gotcha (2026-08-09)
 

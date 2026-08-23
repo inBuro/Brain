@@ -39,11 +39,6 @@
     <div class="headerBtns">
       <button id="zoomOut" class="ghostBtn" title="Smaller UI">−</button>
       <button id="zoomIn" class="ghostBtn" title="Bigger UI">+</button>
-      <!-- Debug only — remove before shipping. Manual chrome.runtime.reload() trigger, same
-           action as the Cmd/Ctrl+Shift+9 command in manifest.json — that OS-level shortcut is
-           bound per unpacked-install path and can silently go unbound after a reload/path change,
-           this button works regardless. -->
-      <button id="reloadExtBtn" class="ghostBtn" type="button" title="Reload extension (Cmd/Ctrl+Shift+9)">⟲</button>
       <!-- Force-applies _locales/en; second click reverts. Hidden when browser already resolved to English — see sidepanel.js. -->
       <button id="langToggle" class="ghostBtn" type="button" title="Show interface in English">EN</button>
       <!-- Debug only — remove before shipping. Lists every _locales/ dir and force-applies the picked locale, same override mechanism as #langToggle. -->
@@ -248,7 +243,13 @@
       </div>
       <div class="hintNote" data-i18n="hintNote">Click anywhere in the panel to give it focus — that's what turns the hotkeys on.</div>
       <a id="coffeeLink" class="coffeeBtn" href="#" target="_blank" rel="noopener">Buy me a coffee</a>
-      <a id="rateLink" class="coffeeBtn rateBtn" href="#" target="_blank" rel="noopener" title="Rate GrooveMix on the Chrome Web Store"><span class="rateStar">★</span><span class="rateStar">★</span><span class="rateStar">★</span><span class="rateStar">★</span><span class="rateStar">★</span></a>
+      <div id="rateLink" class="coffeeBtn rateBtn" role="radiogroup" aria-label="Rate">
+        <button type="button" class="rateStar" data-value="5" aria-label="5 stars">★</button>
+        <button type="button" class="rateStar" data-value="4" aria-label="4 stars">★</button>
+        <button type="button" class="rateStar" data-value="3" aria-label="3 stars">★</button>
+        <button type="button" class="rateStar" data-value="2" aria-label="2 stars">★</button>
+        <button type="button" class="rateStar" data-value="1" aria-label="1 star">★</button>
+      </div>
     </div>
     <!-- deck-showcase:end -->
   </div>
