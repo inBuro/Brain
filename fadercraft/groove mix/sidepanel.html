@@ -101,7 +101,6 @@
           <div class="deckCover ph-no-capture" id="deckCoverA">
             <div class="deckThumbWrap">
               <div class="deckThumbClip">
-                <canvas class="waveform" id="waveformA"></canvas>
                 <img class="deckThumb" id="deckThumbA" alt="" hidden>
                 <span class="deckEmptyHint" id="deckEmptyHintA" data-i18n="deckEmptyHintB" hidden>Open a YouTube tab with a track to start mixing</span>
                 <button class="tabPickBtn" id="tabPickA" title="Pick tab"><svg class="tabPickIcon" viewBox="0 0 12 6" aria-hidden="true"><path d="M6 6L0 0H12L6 6Z" fill="currentColor" /></svg></button>
@@ -109,6 +108,7 @@
               <div class="tabMenu" id="tabMenuA" hidden></div>
             </div>
             <div class="deckTitle" id="titleA">—</div>
+            <canvas class="waveform" id="waveformA"></canvas>
           </div>
           <div class="knobs">
             <div class="knobWrap">
@@ -156,7 +156,6 @@
           <div class="deckCover ph-no-capture" id="deckCoverB">
             <div class="deckThumbWrap">
               <div class="deckThumbClip">
-                <canvas class="waveform" id="waveformB"></canvas>
                 <img class="deckThumb" id="deckThumbB" alt="" hidden>
                 <!-- JS-toggled in updateDeckConnectedVisual, not CSS — visibility depends on both decks' state combined. -->
                 <span class="deckEmptyHint" id="deckEmptyHintB" data-i18n="deckEmptyHintB" hidden>Open a YouTube tab with a track to start mixing</span>
@@ -165,6 +164,7 @@
               <div class="tabMenu" id="tabMenuB" hidden></div>
             </div>
             <div class="deckTitle" id="titleB">—</div>
+            <canvas class="waveform" id="waveformB"></canvas>
           </div>
           <div class="knobs">
             <div class="knobWrap">

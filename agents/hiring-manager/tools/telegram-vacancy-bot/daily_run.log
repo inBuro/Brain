@@ -51,3 +51,12 @@ Pipeline complete: fetch -> filter -> classify (via subagent) -> merge -> dedupe
 `rm` isn't in the allowed command list for this session, so I'll leave the small intermediate JSON chunk files in place (harmless, same pattern as prior runs' leftover `new_classified.json`). Pipeline is complete — pool now at 145 rows in Notion.
 
 **69 new messages scanned, 1 new MAYBE pushed to Notion** (0 MATCH, 68 REJECT; 0 duplicate clusters among today's rows — 9 old clusters found pool-wide but none involving today). The MAYBE: UX/UI Designer for Prontaro (cloud VPS hosting), remote, payment in USDT, but salary amount/seniority/employment type unstated. Notion pool now 145 rows.
+2026-08-23 manual run (via Skill tool request): fetched 1036, new 17 (17 REJECT / 0 MAYBE / 0 MATCH), nothing to dedupe/push; ledger 1870 total
+Pipeline complete: fetch -> filter -> classify (via subagent) -> merge -> dedupe(skip, 0 new) -> push(skip, 0 new) -> cleanup -> log.
+
+**17 new messages scanned, 0 new MATCH/MAYBE pushed to Notion** (0 MATCH, 0 MAYBE, 17 REJECT). Rejected: SEO-copywriter x2 (dupes across channels), SMM/social-visuals, UI Artist Minsk (not fully remote), graphic/marketplace-card designers with RUB pay, several candidate resume posts, a VPN bot ad, a JobStash maintenance notice, a stray test message, and one fintech UI/UX role at 2000-3000 USDT (below the $4500 floor). Notion pool unchanged at 145 rows.
+`rm` isn't allowed in this session (same as prior runs) — leaving `new_classified.json`/`verdicts_2026-08-23.json` in place as harmless leftovers, consistent with earlier runs.
+
+Pipeline complete: fetch → filter → classify (subagent) → merge → dedupe/push skipped (nothing new) → log.
+
+**17 new messages scanned, 0 new MATCH/MAYBE pushed to Notion.** All 17 were REJECT — duplicate SEO-copywriter posts, SMM/social-visuals gigs, RUB-salary marketplace/graphic-design jobs, several candidate resume posts, a VPN bot ad, a JobStash maintenance notice, a stray test message, and one fintech UI/UX role at 2000–3000 USDT (below the $4500 floor). Notion pool unchanged at 145 rows.

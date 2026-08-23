@@ -78,27 +78,12 @@ h1 { font-size: var(--text-md); margin: 0; color: var(--color-text-heading); }
    (tab closing mid-load). setDeckThumb now also toggles the `hidden` attribute for the no-track
    case, which is the actual guarantee; font-size: 0 stays as a second line of defense for the
    in-flight-error case a hidden toggle can't preempt. alt="" means no caption text is lost either. */
-/* Absolute + inset:0 (not the old block/100% flow) so it stacks directly over .waveform
-   underneath inside .deckThumbClip — DOM order (canvas first, img after) is what puts it on
-   top, not z-index; see .waveform below and updateDeckConnectedVisual's .playing toggle for
-   the corner-shrink transition. */
-.deckThumb { display: block; position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%; font-size: 0; object-fit: cover; transition: transform 0.2s ease; }
+.deckThumb { display: block; width: 100%; height: 100%; font-size: 0; object-fit: cover; }
 /* .deckThumb's own `display: block` above would otherwise outrank the UA [hidden] rule (same
    specificity, author sheet wins) and the hidden attribute would silently do nothing — this is
    the actual fix for the broken-image glyph persisting after a tab closes (2026-08-13, direct
    report). */
 .deckThumb[hidden] { display: none; }
-/* transform-origin per deck's own shrink corner — OPPOSITE side from that deck's own tabPickBtn,
-   same top row (A's arrow is top-left, so its cover shrinks toward top-right; B's arrow is
-   top-right, so its cover shrinks toward top-left; direct report, 2026-08-23). */
-#deckBoxA .deckThumb { transform-origin: top right; }
-#deckBoxB .deckThumb { transform-origin: top left; }
-/* Shrinks to a corner once the deck is playing, uncovering the waveform canvas underneath it —
-   paused/idle keeps the cover full-size (nothing live worth showing yet). scale(), not fixed
-   width/height — explicit dimensions change the box's own aspect ratio away from the full-size
-   strip's, which reads as a proportion change even though object-fit: cover never distorts
-   pixels (repeated direct report, 2026-08-23) — uniform scale keeps the ratio identical. */
-#deckBoxA.playing .deckThumb, #deckBoxB.playing .deckThumb { transform: scale(0.36); }
 /* Placeholder guidance for empty second-deck slot. Visibility toggled in JS
    (updateDeckConnectedVisual), not .deck.disconnected alone — depends on the other deck's state. */
 .deckEmptyHint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 var(--space-6); text-align: center; font-size: var(--text-2xs); line-height: 1.3; color: var(--color-text-tertiary); pointer-events: none; }
@@ -419,12 +404,7 @@ select:focus { outline: none; border-color: var(--color-success); }
 #mixer .deckTitle { font-size: var(--text-2xs); color: var(--color-text-muted); margin-bottom: var(--space-6); padding: 0 0.5rem; text-align: center; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: clip; -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%); }
 /* Recent-history amplitude envelope, not a full-track scrub view (see drawWaveform) — recessed
    box matches other readouts (levelCell/tabMenu), per-deck accent fill via canvas fillStyle. */
-/* Lives inside .deckThumbClip now (moved off its own row, see sidepanel.html) — fills the same
-   box the cover art sits in; .deckThumbClip already owns the rounding/clip/background, so this
-   just stretches to it. First in DOM among deckThumbClip's children so .deckThumb paints over it
-   whenever the cover is full-size (paused/idle) and only shows through once .deckThumb shrinks
-   to its corner on .playing (see styles above). */
-.waveform { position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%; display: block; }
+.waveform { display: block; width: 100%; height: 1.75rem; border-radius: var(--radius-sm); background: var(--color-bg-recessed); margin-bottom: var(--space-6); }
 /* Post-EQ/Gain, pre-crossfader (see counterDJSetup) — both meters comparable at any crossfader
    position. -60..0dB mapped linearly. transition smooths poll-cycle jumps. */
 /* Vertical channel VU meters next to the crossfader. Fill stays flat solid, crisp horizontal

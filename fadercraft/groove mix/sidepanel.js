@@ -292,16 +292,6 @@ function counterDJSetup(initial) {
   levelSilentGain.gain.value = 0;
   eqOut.connect(levelAnalyser).connect(levelSilentGain).connect(ctx.destination);
 
-  // Waveform tap: raw off `source`, upstream of EQ/FX/Gain entirely — deliberately NOT
-  // eqOut/levelAnalyser. The waveform is meant to show "what's coming from the tab" regardless
-  // of encoder positions (e.g. Deck B's default −40dB EQ at connect would otherwise read as a
-  // flat line even while the track plays at full level — see ARCHITECTURE.md "Начальные значения").
-  const waveformAnalyser = ctx.createAnalyser();
-  waveformAnalyser.fftSize = 512;
-  const waveformSilentGain = ctx.createGain();
-  waveformSilentGain.gain.value = 0;
-  source.connect(waveformAnalyser).connect(waveformSilentGain).connect(ctx.destination);
-
   // Beat detection on ScriptProcessorNode.onaudioprocess, NOT requestAnimationFrame — rAF is
   // throttled hard on background tabs (one of the two YouTube tabs is always background).
   // onaudioprocess is driven by the audio engine's own buffering, same reason background tabs
@@ -321,7 +311,7 @@ function counterDJSetup(initial) {
   // recentOnsets is kept as a cheap rolling history for diagnostics; the phase-sync path now
   // feeds lastOnsetWallClock straight into the Kalman filter (see kalmanPhaseUpdate).
   window.__counterDJ__ = {
-    ctx, low, mid, high, fx, gain, cross, video, analyser, levelAnalyser, waveformAnalyser, cueAudioEl,
+    ctx, low, mid, high, fx, gain, cross, video, analyser, levelAnalyser, cueAudioEl,
     detectedBpm: null, beatCount: 0, lastOnsetWallClock: null, recentOnsets: [],
     fxType, fxDelayLine, applyFxType, applyFxValue, applyFxValueForType,
   };
@@ -788,22 +778,15 @@ function counterDJLevel() {
   const data = new Uint8Array(eng.levelAnalyser.fftSize);
   eng.levelAnalyser.getByteTimeDomainData(data);
   let sum = 0;
+  let peak = 0;
   for (let i = 0; i < data.length; i++) {
     const v = (data[i] - 128) / 128;
     sum += v * v;
+    const av = Math.abs(v);
+    if (av > peak) peak = av;
   }
   const rms = Math.sqrt(sum / data.length);
   const db = rms > 0 ? Math.max(-60, 20 * Math.log10(rms)) : -60;
-  // Waveform peak comes off the RAW pre-EQ tap (see waveformAnalyser above), not the level-meter
-  // data just read — the two are deliberately different signals (post-EQ dB for the meter,
-  // pre-EQ peak for the waveform).
-  const waveData = new Uint8Array(eng.waveformAnalyser.fftSize);
-  eng.waveformAnalyser.getByteTimeDomainData(waveData);
-  let peak = 0;
-  for (let i = 0; i < waveData.length; i++) {
-    const av = Math.abs((waveData[i] - 128) / 128);
-    if (av > peak) peak = av;
-  }
   return { db, peak };
 }
 
@@ -1425,9 +1408,6 @@ function updateDeckConnectedVisual(deck) {
   // that had gone right back to disabled (2026-08-10, direct report — two placeholder decks, one
   // still glowing from before it disconnected).
   document.getElementById(`playBtn${deck}`).classList.toggle('isPlaying', state.decks[deck].playing === true);
-  // Shrinks the cover art to a corner and uncovers the waveform underneath it (see styles.css
-  // #deckBoxA/B.playing .deckThumb) — same playing flag as the button above, one flag two effects.
-  deckBox.classList.toggle('playing', state.decks[deck].playing === true);
   // Empty-slot hint: shown on THIS deck whenever it has no track picked, independent of the
   // sibling's state (2026-08-07, direct report — cold start, neither deck connected yet, showed
   // no guidance at all since this used to require the OTHER deck to already be live and playing).
@@ -1487,7 +1467,6 @@ function updateReadouts() {
       fxKnob.title = fxV === 0 ? 'FILTER: bypass' : `FILTER: ${fxV < 0 ? 'lowpass' : 'highpass'} ${Math.abs(fxV * 100).toFixed(0)}%`;
     }
     document.getElementById(`playBtn${deck}`).classList.toggle('isPlaying', state.decks[deck].playing === true);
-    document.getElementById(`deckBox${deck}`).classList.toggle('playing', state.decks[deck].playing === true);
   }
   const pct = Math.round(state.cross * 100);
   document.getElementById('crossThumb').style.left = `${pct}%`;
@@ -1909,30 +1888,15 @@ const waveformHistory = {
   B: new Array(WAVEFORM_HISTORY_LEN).fill(0),
 };
 const waveformAccentColor = { A: null, B: null }; // cached from CSS on first draw, not re-read every tick
-const OTHER_DECK = { A: 'B', B: 'A' };
-let waveformGhostColor = null; // --color-text-muted, cached like the accent colors above
-let waveformPlayheadColor = null; // --color-text-tertiary
 
 function pushWaveformSample(deck, peak) {
   const hist = waveformHistory[deck];
   hist.push(clamp(peak, 0, 1));
   hist.shift();
+  drawWaveform(deck);
 }
 
-// Each deck's canvas overlays BOTH decks — its own history in full accent color on top, the
-// other deck's history as a muted gray ghost underneath, so a DJ reading either deck can also
-// see how the other's transients line up. THE core requirement (direct report, 2026-08-23:
-// "нажимаю на пробел и уже слышу звук, в то время как вейформа только добирается до плейхеда" —
-// audio is audible instantly on Play, the waveform must never visibly lag behind it) — the ONLY
-// way to guarantee zero lag is to make the newest sample's render position identical to the
-// playhead itself, not the canvas edge (an edge-entry design, however the far side is filled,
-// always takes real ticks to travel from edge to center). So history is shifted left by halfW:
-// the newest sample's bar sits with its right edge flush against the playhead, older samples
-// trail off to the left, and — because there is no future audio to draw (live MSE stream, no
-// lookahead) — the right half of the canvas stays permanently blank. That blank half is a
-// deliberate tradeoff for correctness, not an oversight: filling it would require either fake
-// data (mirrored echo, rejected earlier) or edge-entry (reintroduces the lag this fixes).
-function drawWaveformCanvas(deck) {
+function drawWaveform(deck) {
   const canvas = document.getElementById(`waveform${deck}`);
   if (!canvas) return;
   // Backing-store size follows the CSS box × DPR, not a fixed attribute — the side panel is
@@ -1954,39 +1918,15 @@ function drawWaveformCanvas(deck) {
     waveformAccentColor[deck] = getComputedStyle(document.documentElement)
       .getPropertyValue(`--color-accent-deck${deck}`).trim() || (deck === 'A' ? '#99ccff' : '#ffcc99');
   }
-  if (!waveformGhostColor) {
-    waveformGhostColor = getComputedStyle(document.documentElement)
-      .getPropertyValue('--color-text-muted').trim() || '#666666';
-  }
-  if (!waveformPlayheadColor) {
-    waveformPlayheadColor = getComputedStyle(document.documentElement)
-      .getPropertyValue('--color-text-tertiary').trim() || '#888888';
-  }
+  ctx2d.fillStyle = waveformAccentColor[deck];
+  const hist = waveformHistory[deck];
   const midY = h / 2;
-  const halfW = w / 2;
-  const colW = w / WAVEFORM_HISTORY_LEN;
-  const barW = Math.max(1, colW - Math.min(1, colW * 0.15));
-  const drawBars = (histDeck, color) => {
-    ctx2d.fillStyle = color;
-    const hist = waveformHistory[histDeck];
-    for (let i = 0; i < hist.length; i++) {
-      const x = i * colW - halfW; // newest (i = len-1) lands with its right edge at halfW
-      if (x + barW < 0) continue; // fully off-canvas — skip the wasted fillRect
-      const amp = hist[i] * (midY - 1);
-      if (amp <= 0) continue;
-      ctx2d.fillRect(x, midY - amp, barW, amp * 2);
-    }
-  };
-  drawBars(OTHER_DECK[deck], waveformGhostColor); // ghost underneath
-  drawBars(deck, waveformAccentColor[deck]); // own on top
-  ctx2d.fillStyle = waveformPlayheadColor;
-  const playheadW = Math.max(1, Math.round(dpr));
-  ctx2d.fillRect(Math.round(halfW) - Math.floor(playheadW / 2), 0, playheadW, h);
-}
-
-function drawWaveforms() {
-  drawWaveformCanvas('A');
-  drawWaveformCanvas('B');
+  const colW = w / hist.length;
+  for (let i = 0; i < hist.length; i++) {
+    const amp = hist[i] * (midY - 1);
+    if (amp <= 0) continue;
+    ctx2d.fillRect(i * colW, midY - amp, Math.max(1, colW - Math.min(1, colW * 0.15)), amp * 2);
+  }
 }
 
 // Own fast 20ms interval (separate from the 1s status poll) — uses lightweight counterDJLevel()
@@ -2016,7 +1956,6 @@ function startLevelsPoll() {
         pushWaveformSample(deck, result ? result.peak : 0);
       } catch (e) { /* transient — next tick retries */ }
     }
-    drawWaveforms(); // once per tick, after both decks' history is pushed — each canvas needs both
   }, 20);
 }
 
