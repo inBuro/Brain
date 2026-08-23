@@ -402,6 +402,9 @@ select:focus { outline: none; border-color: var(--color-success); }
    first version of this) left the left edge hard-clipped mid-glyph while the right edge's fade
    made it read as stray padding instead — a left/right asymmetry bug (direct report). */
 #mixer .deckTitle { font-size: var(--text-2xs); color: var(--color-text-muted); margin-bottom: var(--space-6); padding: 0 0.5rem; text-align: center; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: clip; -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%); mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%); }
+/* Recent-history amplitude envelope, not a full-track scrub view (see drawWaveform) — recessed
+   box matches other readouts (levelCell/tabMenu), per-deck accent fill via canvas fillStyle. */
+.waveform { display: block; width: 100%; height: 1.75rem; border-radius: var(--radius-sm); background: var(--color-bg-recessed); margin-bottom: var(--space-6); }
 /* Post-EQ/Gain, pre-crossfader (see counterDJSetup) — both meters comparable at any crossfader
    position. -60..0dB mapped linearly. transition smooths poll-cycle jumps. */
 /* Vertical channel VU meters next to the crossfader. Fill stays flat solid, crisp horizontal
