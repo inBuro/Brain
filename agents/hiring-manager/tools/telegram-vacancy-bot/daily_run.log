@@ -60,3 +60,10 @@ Pipeline complete: fetch -> filter -> classify (via subagent) -> merge -> dedupe
 Pipeline complete: fetch → filter → classify (subagent) → merge → dedupe/push skipped (nothing new) → log.
 
 **17 new messages scanned, 0 new MATCH/MAYBE pushed to Notion.** All 17 were REJECT — duplicate SEO-copywriter posts, SMM/social-visuals gigs, RUB-salary marketplace/graphic-design jobs, several candidate resume posts, a VPN bot ad, a JobStash maintenance notice, a stray test message, and one fintech UI/UX role at 2000–3000 USDT (below the $4500 floor). Notion pool unchanged at 145 rows.
+2026-08-24 manual run (via Skill tool request): fetched 1035, new 32 (28 REJECT / 4 MAYBE / 0 MATCH), dedupe 9 clusters found pool-wide (none involving today), pushed 4/4 -> Notion; notion_rows mirror 145 -> 149
+Pipeline complete: fetch -> filter -> classify (subagent) -> merge -> dedupe -> push -> cleanup -> log.
+
+**32 new messages scanned, 4 new MAYBE pushed to Notion** (0 MATCH, 4 MAYBE, 28 REJECT; 0 duplicate clusters among todays rows). The 4 MAYBE: digest with Product Designer Middle at Pyaterochka + UX/UI Middle at DigiReal (Vakansii dizaineram); digest with Product Designer at T-Bank + UX/UI Designer at Prontaro (Rost); Product Designer at Stellartech from a Relocate weekly digest; Web designer at agency ALTA (Dprofile) - Figma/design-systems work, role adjacent to product/UI. All salary/grade unstated on the relevant items. Notion pool now 149 rows.
+Pipeline complete. Summary:
+
+**32 new messages scanned, 4 new MAYBE pushed to Notion** (0 MATCH, 4 MAYBE, 28 REJECT; 0 duplicate clusters; Notion pool now 149 rows). The 4 MAYBE: Product Designer @ Пятёрочка + UX/UI @ ДиджиРеал (digest), Product Designer @ Т-Банк + UX/UI @ Prontaro (digest, Rost), Product Designer @ Stellartech (Relocate weekly digest), Web Designer @ ALTA agency (Figma/design systems, role-adjacent) — all with salary/grade unstated.
