@@ -765,29 +765,17 @@ async function counterDJTransport(action) {
   return { ok: false, error: 'unknown action ' + action };
 }
 
-// Fast-polled level+waveform read (separate from counterDJPoll) — no chapter/BPM bookkeeping,
-// just one pass over the level-meter buffer, so it can run several times a second without cost.
-// Measured round-trip cost of this exact tap (2026-08-23, both decks live, 20ms interval):
-// avg ~2.1ms/tick combined, occasional spikes to ~30ms causing <1% of ticks to skip (self-
-// recovering, no drift) — comfortably inside a 20ms budget. peak (not the full sample array)
-// is returned for the waveform: a single float is even cheaper than the RMS-only version this
-// replaced, and matches a real audio-editor waveform (amplitude envelope), not an oscilloscope trace.
+// Fast-polled level read (separate from counterDJPoll) — no chapter/BPM bookkeeping, just
+// the RMS read, so it can run several times a second without cost.
 function counterDJLevel() {
   const eng = window.__counterDJ__;
   if (!eng) return null;
   const data = new Uint8Array(eng.levelAnalyser.fftSize);
   eng.levelAnalyser.getByteTimeDomainData(data);
   let sum = 0;
-  let peak = 0;
-  for (let i = 0; i < data.length; i++) {
-    const v = (data[i] - 128) / 128;
-    sum += v * v;
-    const av = Math.abs(v);
-    if (av > peak) peak = av;
-  }
+  for (let i = 0; i < data.length; i++) { const v = (data[i] - 128) / 128; sum += v * v; }
   const rms = Math.sqrt(sum / data.length);
-  const db = rms > 0 ? Math.max(-60, 20 * Math.log10(rms)) : -60;
-  return { db, peak };
+  return rms > 0 ? Math.max(-60, 20 * Math.log10(rms)) : -60;
 }
 
 // Polled (no push channel from YouTube to side panel) — catches passive changes: user pause
@@ -1877,61 +1865,8 @@ function setLevelMeterLit(deck, litSegments) {
   });
 }
 
-// Recent-history amplitude envelope per deck, fed straight from the levels-poll tick — NOT a
-// full-track scrub view (see ARCHITECTURE.md "Bandcamp as second source" for why the audio
-// graph has no access to a decodable whole-track buffer; a YouTube <video> is MSE-streamed,
-// there is no lookahead past what has already played). WAVEFORM_HISTORY_LEN * poll interval
-// (20ms) = ~4.4s of visible history, oldest at the left.
-const WAVEFORM_HISTORY_LEN = 220;
-const waveformHistory = {
-  A: new Array(WAVEFORM_HISTORY_LEN).fill(0),
-  B: new Array(WAVEFORM_HISTORY_LEN).fill(0),
-};
-const waveformAccentColor = { A: null, B: null }; // cached from CSS on first draw, not re-read every tick
-
-function pushWaveformSample(deck, peak) {
-  const hist = waveformHistory[deck];
-  hist.push(clamp(peak, 0, 1));
-  hist.shift();
-  drawWaveform(deck);
-}
-
-function drawWaveform(deck) {
-  const canvas = document.getElementById(`waveform${deck}`);
-  if (!canvas) return;
-  // Backing-store size follows the CSS box × DPR, not a fixed attribute — the side panel is
-  // drag-resizable (see ARCHITECTURE.md "Поверхность"), so this is re-checked every draw; the
-  // cost of a no-op comparison is negligible next to the canvas repaint itself.
-  const dpr = window.devicePixelRatio || 1;
-  const cssWidth = canvas.clientWidth;
-  const cssHeight = canvas.clientHeight;
-  const wantW = Math.round(cssWidth * dpr);
-  const wantH = Math.round(cssHeight * dpr);
-  if (canvas.width !== wantW || canvas.height !== wantH) {
-    canvas.width = wantW;
-    canvas.height = wantH;
-  }
-  const ctx2d = canvas.getContext('2d');
-  const w = canvas.width, h = canvas.height;
-  ctx2d.clearRect(0, 0, w, h);
-  if (!waveformAccentColor[deck]) {
-    waveformAccentColor[deck] = getComputedStyle(document.documentElement)
-      .getPropertyValue(`--color-accent-deck${deck}`).trim() || (deck === 'A' ? '#99ccff' : '#ffcc99');
-  }
-  ctx2d.fillStyle = waveformAccentColor[deck];
-  const hist = waveformHistory[deck];
-  const midY = h / 2;
-  const colW = w / hist.length;
-  for (let i = 0; i < hist.length; i++) {
-    const amp = hist[i] * (midY - 1);
-    if (amp <= 0) continue;
-    ctx2d.fillRect(i * colW, midY - amp, Math.max(1, colW - Math.min(1, colW * 0.15)), amp * 2);
-  }
-}
-
-// Own fast 20ms interval (separate from the 1s status poll) — uses lightweight counterDJLevel()
-// not the full counterDJPoll. Measured live (2026-08-23): full sequential tick across both
-// decks averages ~2.1ms, well inside the 20ms budget — see counterDJLevel's comment for numbers.
+// Own fast 60ms interval (separate from the 1s status poll) — uses lightweight counterDJLevel()
+// not the full counterDJPoll.
 let levelsPollTimer = null;
 function startLevelsPoll() {
   clearInterval(levelsPollTimer);
@@ -1945,18 +1880,16 @@ function startLevelsPoll() {
       if (!tabId) continue;
       try {
         const res = await chrome.scripting.executeScript({ target: { tabId }, world: 'MAIN', func: counterDJLevel });
-        const result = res && res[0] && res[0].result;
-        const rawDb = result ? result.db : null;
+        const rawDb = res && res[0] && res[0].result;
         const prev = levelSmoothedDb[deck];
         const smoothed = rawDb == null ? prev : Math.max(rawDb, prev - DECAY_DB_PER_SEC * elapsedSec);
         levelSmoothedDb[deck] = smoothed;
         const pct = levelDbToPercent(smoothed);
         const litSegments = Math.floor((pct / 100) * LEVEL_METER_SEGMENTS); // floor, not round — LED meters never optimistically light early
         setLevelMeterLit(deck, litSegments);
-        pushWaveformSample(deck, result ? result.peak : 0);
       } catch (e) { /* transient — next tick retries */ }
     }
-  }, 20);
+  }, 60);
 }
 
 function disconnectDeck(deck, reason) {

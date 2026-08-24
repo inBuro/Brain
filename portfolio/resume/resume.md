@@ -22,7 +22,7 @@ English — C1, Advanced
 DAO · Yield optimiser, Crypto
 **Senior Product Designer**
 Task: Owned end-to-end UX for a live DeFi yield optimizer with 12,000 monthly active users
-Owned end-to-end redesign of critical dApp UX covering: Navigation, RPC & assets menu; Search and filtering improved through A/B testing and user research with 350 active users; Wallet connection; Core UI components and interactions. Resolved UX, UI, and frontend issues, increasing user satisfaction. Built a scalable, token-based design system, improving UI consistency and development efficiency. Established cross-functional design and delivery workflows between product, design, and engineering teams. Defined brand principles and visual direction to enable more intentional and aligned product graphics.
+Owned end-to-end redesign of critical dApp UX covering: Navigation, RPC & assets menu; Search and filtering improved through A/B testing and 98 usability-test sessions across two studies; Wallet connection; Core UI components and interactions. Resolved UX, UI, and frontend issues, increasing user satisfaction. Built a scalable, token-based design system, improving UI consistency and development efficiency. Established cross-functional design and delivery workflows between product, design, and engineering teams. Defined brand principles and visual direction to enable more intentional and aligned product graphics.
 
 ---
 
