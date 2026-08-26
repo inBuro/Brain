@@ -77,3 +77,10 @@ All state is consistent (classified.json and seen_store.json both at 1956, to_pu
 **54 new messages scanned, 2 new MAYBE pushed to Notion** (0 MATCH, 2 MAYBE, 52 REJECT; 0 duplicate clusters among today's rows — 9 old pool-wide clusters found but none involving today). Notion pool now at 151 rows.
 
 One friction note for the record: `Write`/`Edit` and multi-line/heredoc Bash calls were permission-denied all session despite `.claude/settings.local.json` explicitly allowlisting them — I worked around it entirely via single-line `./.venv/bin/python -c '...'` calls (consistent with the friction logged on 2026-08-21, still unresolved).
+2026-08-26 manual run (via Skill tool request): fetched 1034, new 51 (48 REJECT / 3 MAYBE / 0 MATCH), dedupe 0 in-batch clusters (0 involving today, 0 already in Notion), pushed 3/3 -> Notion; notion_rows mirror 151 -> 154
+Pipeline complete: fetch -> filter -> classify (subagent) -> merge -> dedupe -> push -> cleanup -> log.
+
+**51 new messages scanned, 3 new MAYBE pushed to Notion** (0 MATCH, 3 MAYBE, 48 REJECT; 0 duplicate clusters). The 3 MAYBE: digest with Senior Product Designer @ Finom fintech (Vakansii dizaineram); Senior Product Designer / UX/UI Designer @ Advancify biofeedback app (Job for Designers); AI Native Product Designer @ Prequel 85M+ downloads app (Relocate weekly digest) -- all remote, salary unstated. Notion pool now 154 rows.
+Pipeline complete: fetch → filter → classify (subagent) → merge → dedupe → push → cleanup → log, all 8 steps ran clean.
+
+**51 new messages scanned, 3 new MAYBE pushed to Notion** (0 MATCH, 3 MAYBE, 48 REJECT, 0 duplicate clusters). Pool now at 154 rows.

@@ -1,0 +1,308 @@
+[
+  {
+    "channel_id": 1151522902,
+    "message_id": 6109,
+    "verdict": "REJECT",
+    "reason": "Not a design role - P2P exchange manager at CryptoRoyal; crypto ops role"
+  },
+  {
+    "channel_id": 1090349566,
+    "message_id": 7648,
+    "verdict": "REJECT",
+    "reason": "Advertisement - Yandex Practicum course for managers, not a vacancy"
+  },
+  {
+    "channel_id": 1090349566,
+    "message_id": 7647,
+    "verdict": "REJECT",
+    "reason": "Editorial article link about AI agents for designers, not a vacancy"
+  },
+  {
+    "channel_id": 1435567661,
+    "message_id": 1342,
+    "verdict": "MAYBE",
+    "reason": "Digest: contains Senior Product Designer for fintech at Finom - remote, salary unstated; all other items fail"
+  },
+  {
+    "channel_id": 1512435004,
+    "message_id": 3152,
+    "verdict": "REJECT",
+    "reason": "Advertisement for Crypto Office wallet, not a vacancy"
+  },
+  {
+    "channel_id": 1887365954,
+    "message_id": 1087,
+    "verdict": "REJECT",
+    "reason": "Not a design role - B2B sales at Educateme language school"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5132,
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - 3D designer for POSM retail displays (SPLAT); freelance contract"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5131,
+    "verdict": "REJECT",
+    "reason": "Not a design role - remote admin/outsource gig, no experience required"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5130,
+    "verdict": "REJECT",
+    "reason": "Scam/gig ad - vague online project, no experience needed"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5129,
+    "verdict": "REJECT",
+    "reason": "Not a design role - client relations manager, RUB salary"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5128,
+    "verdict": "REJECT",
+    "reason": "Scam ad - chatbot builder gig with inflated earnings claims"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5127,
+    "verdict": "REJECT",
+    "reason": "Not a design role - marketplace reviews specialist, RUB salary"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5126,
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - communication designer for pharma marketing agency"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5125,
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - graphic designer for print fashion magazine, freelance RUB"
+  },
+  {
+    "channel_id": 1277300882,
+    "message_id": 6183,
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - communication/marketing middle designer at Pragmatica"
+  },
+  {
+    "channel_id": 1277300882,
+    "message_id": 6182,
+    "verdict": "MAYBE",
+    "reason": "Senior Product Designer / UX/UI Designer at Advancify - remote, flexible schedule, salary unstated"
+  },
+  {
+    "channel_id": 1818997587,
+    "message_id": 26623,
+    "verdict": "REJECT",
+    "reason": "No readable content - just an X/Twitter link"
+  },
+  {
+    "channel_id": 1818997587,
+    "message_id": 26622,
+    "verdict": "REJECT",
+    "reason": "No readable content - just an X/Twitter link"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11340,
+    "verdict": "REJECT",
+    "reason": "Not a vacancy - editorial advice text about crypto-native job requirements"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11339,
+    "verdict": "REJECT",
+    "reason": "Not a design role - Senior Legal Counsel Crypto/DeFi at Re7 Capital"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11338,
+    "verdict": "REJECT",
+    "reason": "Not a design role - Business Development at Bullbit; salary below floor"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11337,
+    "verdict": "REJECT",
+    "reason": "Not a design role - Futures Business Development at Bitbase; crypto BD"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11336,
+    "verdict": "REJECT",
+    "reason": "Not a design role - DevOps Engineer at BiFinance; office Vancouver"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11335,
+    "verdict": "REJECT",
+    "reason": "Not a design role - DevOps Engineer at BiFinance; duplicate of 11336"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11334,
+    "verdict": "REJECT",
+    "reason": "Not a design role - DevOps Engineer at BiFinance; duplicate of 11336"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11333,
+    "verdict": "REJECT",
+    "reason": "Not a design role - Futures Growth and User Acquisition at BiFinance; office Vancouver"
+  },
+  {
+    "channel_id": 1796231867,
+    "message_id": 3130,
+    "verdict": "REJECT",
+    "reason": "Advertisement - Yandex Practicum Mini-CEO program for T-Bank"
+  },
+  {
+    "channel_id": 1373050413,
+    "message_id": 4782,
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - interior design contractor partnership"
+  },
+  {
+    "channel_id": 1373050413,
+    "message_id": 4781,
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - 2D illustrator/animator assistant, junior/students"
+  },
+  {
+    "channel_id": 1373050413,
+    "message_id": 4780,
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - packaging designer contest for print"
+  },
+  {
+    "channel_id": 1373050413,
+    "message_id": 4779,
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - graphic/AI designer for marketplace product cards"
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4718,
+    "verdict": "REJECT",
+    "reason": "Candidate self-intro - Maxim, product designer looking for project work"
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4717,
+    "verdict": "REJECT",
+    "reason": "Candidate self-intro - beginner graphic/web designer collecting portfolio"
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4716,
+    "verdict": "REJECT",
+    "reason": "Candidate self-intro - Danya, product designer seeking remote/relocation"
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4715,
+    "verdict": "REJECT",
+    "reason": "Candidate self-intro - Diana, graphic designer seeking junior/intern UX/UI position"
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2065,
+    "verdict": "REJECT",
+    "reason": "Not a design role - User Acquisition Team Lead at Adapty"
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2064,
+    "verdict": "REJECT",
+    "reason": "Not a design role - Compliance Manager at Flipper Devices"
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2063,
+    "verdict": "MAYBE",
+    "reason": "AI Native Product Designer at Prequel - 4-5+ years, remote available, salary unstated"
+  },
+  {
+    "channel_id": 1964574584,
+    "message_id": 3847,
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - presentation designer at Astoria Capital; office Moscow, RUB"
+  },
+  {
+    "channel_id": 1964574584,
+    "message_id": 3846,
+    "verdict": "REJECT",
+    "reason": "Middle UI/UX designer at Duck My Duck - salary 2000-3000 USD/month, below floor"
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10299,
+    "verdict": "REJECT",
+    "reason": "Not a design role - Editor Localization contractor at Paysend"
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10298,
+    "verdict": "REJECT",
+    "reason": "Not a design role - Senior Technology Product Manager at Booking.com; on-site Amsterdam"
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10297,
+    "verdict": "REJECT",
+    "reason": "Not design roles - QA/Test Engineering at Yadro; hybrid Minsk"
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10296,
+    "verdict": "REJECT",
+    "reason": "Not a design role - Founding Staff Engineer at Outpost; remote Americas only"
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10295,
+    "verdict": "REJECT",
+    "reason": "Not a design role - VP of Global Business Development at TradingView; hybrid"
+  },
+  {
+    "channel_id": 1257927154,
+    "message_id": 5657,
+    "verdict": "REJECT",
+    "reason": "Likely freelance project via designer.ru; no grade/salary/employment format stated"
+  },
+  {
+    "channel_id": 1257927154,
+    "message_id": 5656,
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - graphic/SMM designer at Panda Digital"
+  },
+  {
+    "channel_id": 1696221413,
+    "message_id": 2342,
+    "verdict": "REJECT",
+    "reason": "Not a design role - Growth Engineer at The Cycle"
+  },
+  {
+    "channel_id": 1702888054,
+    "message_id": 3113,
+    "verdict": "REJECT",
+    "reason": "Not a design role - crypto cross-exchange arbitrage trader; suspicious"
+  },
+  {
+    "channel_id": 1702888054,
+    "message_id": 3112,
+    "verdict": "REJECT",
+    "reason": "Not a design role - Head of Sales at fintech; office Moscow"
+  },
+  {
+    "channel_id": 1702888054,
+    "message_id": 3111,
+    "verdict": "REJECT",
+    "reason": "Not a design role - Performance marketer/Head of Traffic at crypto/fintech"
+  }
+]

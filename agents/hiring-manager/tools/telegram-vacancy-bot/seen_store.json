@@ -9778,5 +9778,260 @@
     "verdict": "REJECT",
     "reason": "Crypto arbitrage trader role, duplicate.",
     "date": "2026-08-25T10:02:15+00:00"
+  },
+  "1151522902:6109": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - P2P exchange manager at CryptoRoyal; crypto ops role",
+    "date": "2026-08-26T09:00:02+00:00"
+  },
+  "1090349566:7648": {
+    "verdict": "REJECT",
+    "reason": "Advertisement - Yandex Practicum course for managers, not a vacancy",
+    "date": "2026-08-25T15:49:50+00:00"
+  },
+  "1090349566:7647": {
+    "verdict": "REJECT",
+    "reason": "Editorial article link about AI agents for designers, not a vacancy",
+    "date": "2026-08-25T14:00:22+00:00"
+  },
+  "1435567661:1342": {
+    "verdict": "MAYBE",
+    "reason": "Digest: contains Senior Product Designer for fintech at Finom - remote, salary unstated; all other items fail",
+    "date": "2026-08-26T07:24:02+00:00"
+  },
+  "1512435004:3152": {
+    "verdict": "REJECT",
+    "reason": "Advertisement for Crypto Office wallet, not a vacancy",
+    "date": "2026-08-25T12:49:02+00:00"
+  },
+  "1887365954:1087": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - B2B sales at Educateme language school",
+    "date": "2026-08-26T07:08:01+00:00"
+  },
+  "1938067478:5132": {
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - 3D designer for POSM retail displays (SPLAT); freelance contract",
+    "date": "2026-08-26T10:10:11+00:00"
+  },
+  "1938067478:5131": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - remote admin/outsource gig, no experience required",
+    "date": "2026-08-26T09:40:14+00:00"
+  },
+  "1938067478:5130": {
+    "verdict": "REJECT",
+    "reason": "Scam/gig ad - vague online project, no experience needed",
+    "date": "2026-08-26T09:10:14+00:00"
+  },
+  "1938067478:5129": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - client relations manager, RUB salary",
+    "date": "2026-08-26T08:40:13+00:00"
+  },
+  "1938067478:5128": {
+    "verdict": "REJECT",
+    "reason": "Scam ad - chatbot builder gig with inflated earnings claims",
+    "date": "2026-08-26T07:10:13+00:00"
+  },
+  "1938067478:5127": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - marketplace reviews specialist, RUB salary",
+    "date": "2026-08-26T06:18:42+00:00"
+  },
+  "1938067478:5126": {
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - communication designer for pharma marketing agency",
+    "date": "2026-08-25T14:26:13+00:00"
+  },
+  "1938067478:5125": {
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - graphic designer for print fashion magazine, freelance RUB",
+    "date": "2026-08-25T11:40:12+00:00"
+  },
+  "1277300882:6183": {
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - communication/marketing middle designer at Pragmatica",
+    "date": "2026-08-26T07:36:58+00:00"
+  },
+  "1277300882:6182": {
+    "verdict": "MAYBE",
+    "reason": "Senior Product Designer / UX/UI Designer at Advancify - remote, flexible schedule, salary unstated",
+    "date": "2026-08-25T14:08:57+00:00"
+  },
+  "1818997587:26623": {
+    "verdict": "REJECT",
+    "reason": "No readable content - just an X/Twitter link",
+    "date": "2026-08-25T13:25:54+00:00"
+  },
+  "1818997587:26622": {
+    "verdict": "REJECT",
+    "reason": "No readable content - just an X/Twitter link",
+    "date": "2026-08-25T13:25:45+00:00"
+  },
+  "1100655091:11340": {
+    "verdict": "REJECT",
+    "reason": "Not a vacancy - editorial advice text about crypto-native job requirements",
+    "date": "2026-08-26T09:17:06+00:00"
+  },
+  "1100655091:11339": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - Senior Legal Counsel Crypto/DeFi at Re7 Capital",
+    "date": "2026-08-26T08:30:56+00:00"
+  },
+  "1100655091:11338": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - Business Development at Bullbit; salary below floor",
+    "date": "2026-08-26T06:32:03+00:00"
+  },
+  "1100655091:11337": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - Futures Business Development at Bitbase; crypto BD",
+    "date": "2026-08-26T02:32:32+00:00"
+  },
+  "1100655091:11336": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - DevOps Engineer at BiFinance; office Vancouver",
+    "date": "2026-08-25T23:04:31+00:00"
+  },
+  "1100655091:11335": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - DevOps Engineer at BiFinance; duplicate of 11336",
+    "date": "2026-08-25T22:59:41+00:00"
+  },
+  "1100655091:11334": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - DevOps Engineer at BiFinance; duplicate of 11336",
+    "date": "2026-08-25T22:54:52+00:00"
+  },
+  "1100655091:11333": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - Futures Growth and User Acquisition at BiFinance; office Vancouver",
+    "date": "2026-08-25T22:41:29+00:00"
+  },
+  "1796231867:3130": {
+    "verdict": "REJECT",
+    "reason": "Advertisement - Yandex Practicum Mini-CEO program for T-Bank",
+    "date": "2026-08-26T07:49:52+00:00"
+  },
+  "1373050413:4782": {
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - interior design contractor partnership",
+    "date": "2026-08-26T09:38:29+00:00"
+  },
+  "1373050413:4781": {
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - 2D illustrator/animator assistant, junior/students",
+    "date": "2026-08-25T17:03:54+00:00"
+  },
+  "1373050413:4780": {
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - packaging designer contest for print",
+    "date": "2026-08-25T14:08:28+00:00"
+  },
+  "1373050413:4779": {
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - graphic/AI designer for marketplace product cards",
+    "date": "2026-08-25T11:36:08+00:00"
+  },
+  "1361592424:4718": {
+    "verdict": "REJECT",
+    "reason": "Candidate self-intro - Maxim, product designer looking for project work",
+    "date": "2026-08-26T07:18:49+00:00"
+  },
+  "1361592424:4717": {
+    "verdict": "REJECT",
+    "reason": "Candidate self-intro - beginner graphic/web designer collecting portfolio",
+    "date": "2026-08-26T06:31:23+00:00"
+  },
+  "1361592424:4716": {
+    "verdict": "REJECT",
+    "reason": "Candidate self-intro - Danya, product designer seeking remote/relocation",
+    "date": "2026-08-25T16:12:14+00:00"
+  },
+  "1361592424:4715": {
+    "verdict": "REJECT",
+    "reason": "Candidate self-intro - Diana, graphic designer seeking junior/intern UX/UI position",
+    "date": "2026-08-25T15:03:47+00:00"
+  },
+  "1788647101:2065": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - User Acquisition Team Lead at Adapty",
+    "date": "2026-08-26T09:48:27+00:00"
+  },
+  "1788647101:2064": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - Compliance Manager at Flipper Devices",
+    "date": "2026-08-26T07:01:43+00:00"
+  },
+  "1788647101:2063": {
+    "verdict": "MAYBE",
+    "reason": "AI Native Product Designer at Prequel - 4-5+ years, remote available, salary unstated",
+    "date": "2026-08-26T07:01:34+00:00"
+  },
+  "1964574584:3847": {
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - presentation designer at Astoria Capital; office Moscow, RUB",
+    "date": "2026-08-26T06:14:32+00:00"
+  },
+  "1964574584:3846": {
+    "verdict": "REJECT",
+    "reason": "Middle UI/UX designer at Duck My Duck - salary 2000-3000 USD/month, below floor",
+    "date": "2026-08-25T16:06:57+00:00"
+  },
+  "1052346215:10299": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - Editor Localization contractor at Paysend",
+    "date": "2026-08-26T09:58:28+00:00"
+  },
+  "1052346215:10298": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - Senior Technology Product Manager at Booking.com; on-site Amsterdam",
+    "date": "2026-08-26T07:58:28+00:00"
+  },
+  "1052346215:10297": {
+    "verdict": "REJECT",
+    "reason": "Not design roles - QA/Test Engineering at Yadro; hybrid Minsk",
+    "date": "2026-08-25T14:58:28+00:00"
+  },
+  "1052346215:10296": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - Founding Staff Engineer at Outpost; remote Americas only",
+    "date": "2026-08-25T13:28:28+00:00"
+  },
+  "1052346215:10295": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - VP of Global Business Development at TradingView; hybrid",
+    "date": "2026-08-25T11:58:28+00:00"
+  },
+  "1257927154:5657": {
+    "verdict": "REJECT",
+    "reason": "Likely freelance project via designer.ru; no grade/salary/employment format stated",
+    "date": "2026-08-25T17:22:20+00:00"
+  },
+  "1257927154:5656": {
+    "verdict": "REJECT",
+    "reason": "Not a product/UI designer role - graphic/SMM designer at Panda Digital",
+    "date": "2026-08-25T17:21:17+00:00"
+  },
+  "1696221413:2342": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - Growth Engineer at The Cycle",
+    "date": "2026-08-26T07:04:23+00:00"
+  },
+  "1702888054:3113": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - crypto cross-exchange arbitrage trader; suspicious",
+    "date": "2026-08-26T09:00:02+00:00"
+  },
+  "1702888054:3112": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - Head of Sales at fintech; office Moscow",
+    "date": "2026-08-25T17:00:01+00:00"
+  },
+  "1702888054:3111": {
+    "verdict": "REJECT",
+    "reason": "Not a design role - Performance marketer/Head of Traffic at crypto/fintech",
+    "date": "2026-08-25T13:00:02+00:00"
   }
 }
