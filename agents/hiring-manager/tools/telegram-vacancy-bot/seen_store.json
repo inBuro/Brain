@@ -10033,5 +10033,200 @@
     "verdict": "REJECT",
     "reason": "Not a design role - Performance marketer/Head of Traffic at crypto/fintech",
     "date": "2026-08-25T13:00:02+00:00"
+  },
+  "1151522902:6110": {
+    "verdict": "REJECT",
+    "reason": "Software engineer / LLM integration role, not a designer position.",
+    "date": "2026-08-26T13:00:02+00:00"
+  },
+  "1090349566:7651": {
+    "verdict": "REJECT",
+    "reason": "Course advertisement (free web-design course), not a job posting.",
+    "date": "2026-08-26T15:44:01+00:00"
+  },
+  "1090349566:7650": {
+    "verdict": "REJECT",
+    "reason": "Design competition / contest announcement, not a job posting.",
+    "date": "2026-08-26T14:49:55+00:00"
+  },
+  "1090349566:7649": {
+    "verdict": "REJECT",
+    "reason": "Freelance web-designer project, not full-time; budget in RUB.",
+    "date": "2026-08-26T13:05:24+00:00"
+  },
+  "1435567661:1343": {
+    "verdict": "REJECT",
+    "reason": "Digest: the only UX/UI Senior role has salary 170k RUB (below floor); other roles are junior, game, or graphic designers.",
+    "date": "2026-08-27T08:11:47+00:00"
+  },
+  "1512435004:3153": {
+    "verdict": "MAYBE",
+    "reason": "Digest contains Senior UX/UI designer at NDA, remote — correct role and grade, but salary not stated.",
+    "date": "2026-08-27T07:08:01+00:00"
+  },
+  "1230079882:1239": {
+    "verdict": "REJECT",
+    "reason": "Brand / branding designer role at ONY, not a Product or UI Designer.",
+    "date": "2026-08-27T07:08:01+00:00"
+  },
+  "1887365954:1088": {
+    "verdict": "REJECT",
+    "reason": "User Acquisition Lead - marketing role, not a designer.",
+    "date": "2026-08-27T07:08:01+00:00"
+  },
+  "1938067478:5139": {
+    "verdict": "REJECT",
+    "reason": "Geolocation / geo-marketing assistant, salary 40-50k RUB - not a designer role.",
+    "date": "2026-08-27T09:40:13+00:00"
+  },
+  "1938067478:5138": {
+    "verdict": "REJECT",
+    "reason": "Vague online job posting, likely scam; no design role.",
+    "date": "2026-08-27T09:10:10+00:00"
+  },
+  "1938067478:5137": {
+    "verdict": "REJECT",
+    "reason": "User support specialist, not a designer role.",
+    "date": "2026-08-27T08:40:18+00:00"
+  },
+  "1938067478:5136": {
+    "verdict": "REJECT",
+    "reason": "Graphic designer for educational materials - not a Product/UI Designer.",
+    "date": "2026-08-27T08:29:01+00:00"
+  },
+  "1938067478:5135": {
+    "verdict": "REJECT",
+    "reason": "AI mentor assistant role, not a designer position.",
+    "date": "2026-08-27T06:40:12+00:00"
+  },
+  "1938067478:5134": {
+    "verdict": "REJECT",
+    "reason": "Spam/scam post, not a job posting.",
+    "date": "2026-08-26T14:30:48+00:00"
+  },
+  "1938067478:5133": {
+    "verdict": "REJECT",
+    "reason": "Motion designer on project-based cooperation - wrong role type and not full-time.",
+    "date": "2026-08-26T11:31:26+00:00"
+  },
+  "1277300882:6187": {
+    "verdict": "REJECT",
+    "reason": "Creative Director (wrong role) and Senior Freelance Graphic Designer (freelance) - neither matches criteria.",
+    "date": "2026-08-26T17:20:58+00:00"
+  },
+  "1277300882:6186": {
+    "verdict": "MAYBE",
+    "reason": "Senior Product Designer at YOPE (US startup), remote implied, no salary stated.",
+    "date": "2026-08-26T15:01:58+00:00"
+  },
+  "1277300882:6185": {
+    "verdict": "REJECT",
+    "reason": "Remote work stated but location explicitly restricted to Armenia/Cyprus/Kazakhstan/Poland - candidate in Thailand does not qualify.",
+    "date": "2026-08-26T14:54:58+00:00"
+  },
+  "1277300882:6184": {
+    "verdict": "REJECT",
+    "reason": "Middle Designer, office in Bishkek - not remote.",
+    "date": "2026-08-26T13:45:58+00:00"
+  },
+  "2232544984:465": {
+    "verdict": "REJECT",
+    "reason": "Digest: roles are intern/junior/office/hybrid or game/graphic designers; the one remote UXUI role has no grade info.",
+    "date": "2026-08-27T09:40:03+00:00"
+  },
+  "1100655091:11341": {
+    "verdict": "REJECT",
+    "reason": "IT Department Lead at Nethermind - not a designer role.",
+    "date": "2026-08-27T08:36:44+00:00"
+  },
+  "1373050413:4784": {
+    "verdict": "REJECT",
+    "reason": "Graphic/event designer for Moscow event agency, hybrid format - not Product/UI, not fully remote.",
+    "date": "2026-08-26T19:58:46+00:00"
+  },
+  "1373050413:4783": {
+    "verdict": "REJECT",
+    "reason": "Illustrator for character design, project-based freelance - wrong role and employment type.",
+    "date": "2026-08-26T19:58:31+00:00"
+  },
+  "1361592424:4721": {
+    "verdict": "REJECT",
+    "reason": "Candidate own resume/portfolio post - not a job posting.",
+    "date": "2026-08-27T10:28:04+00:00"
+  },
+  "1361592424:4720": {
+    "verdict": "REJECT",
+    "reason": "Candidate own resume/portfolio post - not a job posting.",
+    "date": "2026-08-27T10:26:02+00:00"
+  },
+  "1788647101:2067": {
+    "verdict": "MAYBE",
+    "reason": "Digest contains Product Designer, Courses at Chess.com (remote); grade and salary not stated.",
+    "date": "2026-08-27T07:02:56+00:00"
+  },
+  "1788647101:2066": {
+    "verdict": "MAYBE",
+    "reason": "Digest with multiple remote Senior/Product Designer roles (Finom, BetterMe, Nebius, Prequel, Rula, Proton.ai); salaries not stated.",
+    "date": "2026-08-26T15:49:42+00:00"
+  },
+  "1052346215:10304": {
+    "verdict": "REJECT",
+    "reason": "Deep Learning Engineer at Revolut - not a designer role.",
+    "date": "2026-08-27T09:58:28+00:00"
+  },
+  "1052346215:10303": {
+    "verdict": "REJECT",
+    "reason": "Head of Growth at Freedom Travel - not a designer role.",
+    "date": "2026-08-27T07:58:28+00:00"
+  },
+  "1052346215:10302": {
+    "verdict": "REJECT",
+    "reason": "Developer Relations at Comfy, on-site San Francisco - not a designer, not remote.",
+    "date": "2026-08-26T14:58:28+00:00"
+  },
+  "1052346215:10301": {
+    "verdict": "REJECT",
+    "reason": "Frontend Engineer at Adapty - not a designer role.",
+    "date": "2026-08-26T13:28:28+00:00"
+  },
+  "1052346215:10300": {
+    "verdict": "REJECT",
+    "reason": "People Operations / HR Systems Lead at Polaroid, on-site Amsterdam - not a designer role.",
+    "date": "2026-08-26T12:03:42+00:00"
+  },
+  "1696221413:2343": {
+    "verdict": "REJECT",
+    "reason": "Project Manager (German-speaking) - not a designer role.",
+    "date": "2026-08-27T07:02:34+00:00"
+  },
+  "2215076852:784": {
+    "verdict": "REJECT",
+    "reason": "Software engineer / LLM integration role - not a designer position.",
+    "date": "2026-08-26T13:01:20+00:00"
+  },
+  "1702888054:3116": {
+    "verdict": "REJECT",
+    "reason": "Candidate resume post (CPO/Head of Product) - not a job posting.",
+    "date": "2026-08-27T09:00:04+00:00"
+  },
+  "1702888054:3115": {
+    "verdict": "REJECT",
+    "reason": "Candidate resume post (Web3 PR & Marketing Manager) - not a job posting.",
+    "date": "2026-08-26T16:00:03+00:00"
+  },
+  "1702888054:3114": {
+    "verdict": "REJECT",
+    "reason": "Software engineer / LLM integration role - not a designer position.",
+    "date": "2026-08-26T13:00:03+00:00"
+  },
+  "1885568649:622": {
+    "verdict": "REJECT",
+    "reason": "Software engineer / LLM integration role - not a designer position.",
+    "date": "2026-08-26T13:00:33+00:00"
+  },
+  "1622301621:1082": {
+    "verdict": "REJECT",
+    "reason": "Software engineer / LLM integration role - not a designer position.",
+    "date": "2026-08-26T13:05:02+00:00"
   }
 }
