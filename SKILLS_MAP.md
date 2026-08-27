@@ -20,7 +20,7 @@
 
 **`fadercraft`** (проектная, `~/Brain/.claude/skills/fadercraft/`) — 1 подскилл: fadercraft-youtube-outreach (майнинг+ответы на YouTube, `disable-model-invocation`). SEO и дизайн потребляет из глобальных групп, своих копий не держит.
 
-**`portfolio`** (проектная, `~/Brain/.claude/skills/portfolio/`) — 2 своих подскилла (telegram-vacancy-mining, portfolio-writer) + индекс 22 глобальных резюме/job-search скиллов (не перенесены, вендорский бандл без общей структуры).
+**`portfolio`** (проектная, `~/Brain/.claude/skills/portfolio/`) — 3 своих подскилла (telegram-vacancy-mining, portfolio-writer, notion — единственный скилл про Notion в этом контуре, новые находки дополняют его) + индекс 22 глобальных резюме/job-search скиллов (не перенесены, вендорский бандл без общей структуры).
 
 **`dev-toolchain`** (проектная, `~/Brain/.claude/skills/dev-toolchain/`) — 1 свой подскилл (directus-cms, CMS через официальный MCP) + индекс вендорского пака gstack (55 скиллов: браузер/iOS/планирование/деплой/документация/безопасность/сессия/GBrain/QA — не перенесён, свой корневой роутер `_gstack-command`).
 

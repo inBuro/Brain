@@ -16,6 +16,7 @@ CRITERIA = """
 - Employment: full-time only. Not: freelance/project/contract/part-time gigs.
 - Location: fully remote, no relocation required. Not: office-only, relocation-required, hybrid-with-office-requirement.
 - Compensation: from $4500/month or higher, ideally stated in USD/USDT/EUR. Reject if the post explicitly states a lower figure, or states RUB/rubles as the payment currency. If pay is not mentioned at all, still pass it through as UNCERTAIN (don't reject solely for missing salary) — but if RUB is mentioned, reject regardless of amount.
+- Industry: reject any gaming/game-dev vacancy outright (game studio, mobile games, iGaming/gambling/betting platforms), regardless of how well it fits the other criteria.
 """
 
 SYSTEM = f"""You are a job-vacancy filter for a specific candidate. Classify each Telegram message as one of:

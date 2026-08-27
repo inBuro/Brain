@@ -39,13 +39,12 @@ def create_page(row):
     payload = {
         "parent": {"data_source_id": DATA_SOURCE_ID, "type": "data_source_id"},
         "properties": {
-            "Название": {"title": [{"text": {"content": make_title(row["reason"])}}]},
+            "Название": {"title": [{"text": {"content": make_title(row["reason"]), "link": {"url": link}}}]},
             "Статус": {"select": {"name": row["verdict"]}},
             "Канал": {"rich_text": [{"text": {"content": row["channel_name"]}}]},
             "Дата": {"date": {"start": row["date"][:10]}},
             "Причина": {"rich_text": [{"text": {"content": row["reason"]}}]},
             "Текст": {"rich_text": [{"text": {"content": text}}]},
-            "Ссылка": {"url": link},
         },
     }
     resp = requests.post("https://api.notion.com/v1/pages", headers=HEADERS, json=payload)
