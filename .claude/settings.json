@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(curl -s -o /dev/null -w '%{http_code}' -H 'Authorization: Bearer phc_CjTzqqmUa65wJMnWCVA2xKCX8LkDkeotu5hEcQz7kPaq' https://us.posthog.com/api/projects/458316/insights/)",
-      "Bash(curl -s -o /dev/null -w '%{http_code}' -H 'Authorization: Bearer phc_CjTzqqmUa65wJMnWCVA2xKCX8LkDkeotu5hEcQz7kPaq' https://us.posthog.com/api/projects/458316/warehouse_sources/)"
+      "Bash(curl -s -o /dev/null -w '%{http_code}' -H 'Authorization: Bearer phc_CjTzqqmUa65wJMnWCVA2xKCX8LkDkeotu5hEcQz7kPaq' https://us.posthog.com/api/projects/458316/warehouse_sources/)",
+      "Bash(python3 -c ' *)"
     ]
   }
 }
