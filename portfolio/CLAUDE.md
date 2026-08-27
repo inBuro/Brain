@@ -11,7 +11,7 @@
 | Слой | Где |
 | --- | --- |
 | Правила | канон персоны `agents/hiring-manager/CLAUDE.md` + этот файл |
-| Директивы — SOP под задачу | группа скиллов `.claude/skills/portfolio/`: свои `telegram-vacancy-mining`, `portfolio-writer` + индекс 22 глобальных резюме-скиллов |
+| Директивы — SOP под задачу | группа скиллов `.claude/skills/hiring/`: свой `telegram-vacancy-mining` + весь резюме-бандл (22 подскилла); контент кейсов сайта — отдельная группа `.claude/skills/portfolio/` (`portfolio-writer`, `notion-review`) |
 | Исполнение — детерминированные скрипты | `agents/hiring-manager/tools/telegram-vacancy-bot/` (свой `.venv`, запускать оттуда) |
 | Артефакты | `resume/`, `portfolio/`, `applications/`, `research/` |
 | Источники | `raw/` |
@@ -37,5 +37,5 @@
 - **`raw/` не редактировать** — это источники. Выводы из них живут в `research/` и `portfolio/`.
 - **Пул вакансий майнера — в Notion** (Инбюро → Аутрич → Телеграм майнинг), не в `research/`. В `research/` — ручной майнинг и заметки по рынку.
 - **Промежуточное майнера** (`raw_messages.json`, `classified.json`, `seen_store.json`) остаётся рядом со скриптами в `agents/hiring-manager/tools/`, в `portfolio/` не копируется.
-- **Сначала искать готовый скилл** в группе `.claude/skills/portfolio/`, потом писать вручную. Скилл даёт методику и формат, результат всё равно ложится файлом сюда.
+- **Сначала искать готовый скилл** — резюме/отклики/собеседования/офферы в группе `.claude/skills/hiring/`, контент кейсов сайта in-buro.com в `.claude/skills/portfolio/` — потом писать вручную. Скилл даёт методику и формат, результат всё равно ложится файлом сюда.
 - **Self-annealing.** Сломалось или пошло не так — починить и дописать причину в этот файл или в канон персоны.

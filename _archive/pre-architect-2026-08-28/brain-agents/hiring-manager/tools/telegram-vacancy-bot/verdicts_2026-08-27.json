@@ -1,0 +1,236 @@
+[
+  {
+    "channel_id": 1151522902,
+    "message_id": 6110,
+    "verdict": "REJECT",
+    "reason": "Software engineer / LLM integration role, not a designer position."
+  },
+  {
+    "channel_id": 1090349566,
+    "message_id": 7651,
+    "verdict": "REJECT",
+    "reason": "Course advertisement (free web-design course), not a job posting."
+  },
+  {
+    "channel_id": 1090349566,
+    "message_id": 7650,
+    "verdict": "REJECT",
+    "reason": "Design competition / contest announcement, not a job posting."
+  },
+  {
+    "channel_id": 1090349566,
+    "message_id": 7649,
+    "verdict": "REJECT",
+    "reason": "Freelance web-designer project, not full-time; budget in RUB."
+  },
+  {
+    "channel_id": 1435567661,
+    "message_id": 1343,
+    "verdict": "REJECT",
+    "reason": "Digest: the only UX/UI Senior role has salary 170k RUB (below floor); other roles are junior, game, or graphic designers."
+  },
+  {
+    "channel_id": 1512435004,
+    "message_id": 3153,
+    "verdict": "MAYBE",
+    "reason": "Digest contains Senior UX/UI designer at NDA, remote — correct role and grade, but salary not stated."
+  },
+  {
+    "channel_id": 1230079882,
+    "message_id": 1239,
+    "verdict": "REJECT",
+    "reason": "Brand / branding designer role at ONY, not a Product or UI Designer."
+  },
+  {
+    "channel_id": 1887365954,
+    "message_id": 1088,
+    "verdict": "REJECT",
+    "reason": "User Acquisition Lead - marketing role, not a designer."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5139,
+    "verdict": "REJECT",
+    "reason": "Geolocation / geo-marketing assistant, salary 40-50k RUB - not a designer role."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5138,
+    "verdict": "REJECT",
+    "reason": "Vague online job posting, likely scam; no design role."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5137,
+    "verdict": "REJECT",
+    "reason": "User support specialist, not a designer role."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5136,
+    "verdict": "REJECT",
+    "reason": "Graphic designer for educational materials - not a Product/UI Designer."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5135,
+    "verdict": "REJECT",
+    "reason": "AI mentor assistant role, not a designer position."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5134,
+    "verdict": "REJECT",
+    "reason": "Spam/scam post, not a job posting."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5133,
+    "verdict": "REJECT",
+    "reason": "Motion designer on project-based cooperation - wrong role type and not full-time."
+  },
+  {
+    "channel_id": 1277300882,
+    "message_id": 6187,
+    "verdict": "REJECT",
+    "reason": "Creative Director (wrong role) and Senior Freelance Graphic Designer (freelance) - neither matches criteria."
+  },
+  {
+    "channel_id": 1277300882,
+    "message_id": 6186,
+    "verdict": "MAYBE",
+    "reason": "Senior Product Designer at YOPE (US startup), remote implied, no salary stated."
+  },
+  {
+    "channel_id": 1277300882,
+    "message_id": 6185,
+    "verdict": "REJECT",
+    "reason": "Remote work stated but location explicitly restricted to Armenia/Cyprus/Kazakhstan/Poland - candidate in Thailand does not qualify."
+  },
+  {
+    "channel_id": 1277300882,
+    "message_id": 6184,
+    "verdict": "REJECT",
+    "reason": "Middle Designer, office in Bishkek - not remote."
+  },
+  {
+    "channel_id": 2232544984,
+    "message_id": 465,
+    "verdict": "REJECT",
+    "reason": "Digest: roles are intern/junior/office/hybrid or game/graphic designers; the one remote UXUI role has no grade info."
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11341,
+    "verdict": "REJECT",
+    "reason": "IT Department Lead at Nethermind - not a designer role."
+  },
+  {
+    "channel_id": 1373050413,
+    "message_id": 4784,
+    "verdict": "REJECT",
+    "reason": "Graphic/event designer for Moscow event agency, hybrid format - not Product/UI, not fully remote."
+  },
+  {
+    "channel_id": 1373050413,
+    "message_id": 4783,
+    "verdict": "REJECT",
+    "reason": "Illustrator for character design, project-based freelance - wrong role and employment type."
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4721,
+    "verdict": "REJECT",
+    "reason": "Candidate own resume/portfolio post - not a job posting."
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4720,
+    "verdict": "REJECT",
+    "reason": "Candidate own resume/portfolio post - not a job posting."
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2067,
+    "verdict": "MAYBE",
+    "reason": "Digest contains Product Designer, Courses at Chess.com (remote); grade and salary not stated."
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2066,
+    "verdict": "MAYBE",
+    "reason": "Digest with multiple remote Senior/Product Designer roles (Finom, BetterMe, Nebius, Prequel, Rula, Proton.ai); salaries not stated."
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10304,
+    "verdict": "REJECT",
+    "reason": "Deep Learning Engineer at Revolut - not a designer role."
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10303,
+    "verdict": "REJECT",
+    "reason": "Head of Growth at Freedom Travel - not a designer role."
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10302,
+    "verdict": "REJECT",
+    "reason": "Developer Relations at Comfy, on-site San Francisco - not a designer, not remote."
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10301,
+    "verdict": "REJECT",
+    "reason": "Frontend Engineer at Adapty - not a designer role."
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10300,
+    "verdict": "REJECT",
+    "reason": "People Operations / HR Systems Lead at Polaroid, on-site Amsterdam - not a designer role."
+  },
+  {
+    "channel_id": 1696221413,
+    "message_id": 2343,
+    "verdict": "REJECT",
+    "reason": "Project Manager (German-speaking) - not a designer role."
+  },
+  {
+    "channel_id": 2215076852,
+    "message_id": 784,
+    "verdict": "REJECT",
+    "reason": "Software engineer / LLM integration role - not a designer position."
+  },
+  {
+    "channel_id": 1702888054,
+    "message_id": 3116,
+    "verdict": "REJECT",
+    "reason": "Candidate resume post (CPO/Head of Product) - not a job posting."
+  },
+  {
+    "channel_id": 1702888054,
+    "message_id": 3115,
+    "verdict": "REJECT",
+    "reason": "Candidate resume post (Web3 PR & Marketing Manager) - not a job posting."
+  },
+  {
+    "channel_id": 1702888054,
+    "message_id": 3114,
+    "verdict": "REJECT",
+    "reason": "Software engineer / LLM integration role - not a designer position."
+  },
+  {
+    "channel_id": 1885568649,
+    "message_id": 622,
+    "verdict": "REJECT",
+    "reason": "Software engineer / LLM integration role - not a designer position."
+  },
+  {
+    "channel_id": 1622301621,
+    "message_id": 1082,
+    "verdict": "REJECT",
+    "reason": "Software engineer / LLM integration role - not a designer position."
+  }
+]

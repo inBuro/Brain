@@ -1,0 +1,194 @@
+[
+  {
+    "channel_id": 1090349566,
+    "message_id": 7644,
+    "verdict": "REJECT",
+    "reason": "Course ad (Skillbox free AI content course), not a vacancy"
+  },
+  {
+    "channel_id": 1435567661,
+    "message_id": 1338,
+    "verdict": "MAYBE",
+    "reason": "Digest with Product Designer Middle (remote, Pyaterochka) and UX/UI Middle (remote, DigiReal) - salary not stated for relevant items; other entries are junior/office/wrong role"
+  },
+  {
+    "channel_id": 1512435004,
+    "message_id": 3148,
+    "verdict": "REJECT",
+    "reason": "UBT traffic specialist (marketing), not a design role"
+  },
+  {
+    "channel_id": 1512435004,
+    "message_id": 3147,
+    "verdict": "REJECT",
+    "reason": "Digest contains no product/UI designer roles - only graphic designer, AI creator, junior digital designer"
+  },
+  {
+    "channel_id": 1230079882,
+    "message_id": 1237,
+    "verdict": "REJECT",
+    "reason": "AI virtual actor creator (ComfyUI generative content), not product/UI designer; salary explicitly $1500/mo below threshold"
+  },
+  {
+    "channel_id": 1887365954,
+    "message_id": 1083,
+    "verdict": "REJECT",
+    "reason": "Frontend engineer role; Switzerland relocation required"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5111,
+    "verdict": "REJECT",
+    "reason": "Communication/graphic designer (presentations, SMM banners, merch, events); hybrid Yaroslavl/remote within RF only"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5110,
+    "verdict": "REJECT",
+    "reason": "AI advertising content specialist, not a product/UI designer; salary in RUB (80-100k)"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5109,
+    "verdict": "REJECT",
+    "reason": "Generic work-with-online-platforms post, likely scam; not a design vacancy"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5108,
+    "verdict": "REJECT",
+    "reason": "Social media banner designer, freelance per-piece pricing (400-800 RUB/banner); not full-time, RUB rates"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5107,
+    "verdict": "REJECT",
+    "reason": "Scam side-hustle promotion, not a vacancy"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5106,
+    "verdict": "REJECT",
+    "reason": "Customer support assistant, salary in RUB (from 76k); not a design vacancy"
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5105,
+    "verdict": "REJECT",
+    "reason": "Telegram channel promoter gig (find channels / invite subscribers), not a design vacancy"
+  },
+  {
+    "channel_id": 2232544984,
+    "message_id": 463,
+    "verdict": "MAYBE",
+    "reason": "Digest contains Product Designer (T-Bank, remote, no salary) and UX/UI Designer (Prontaro, remote, no grade/salary) - salary and grade unspecified for both relevant items"
+  },
+  {
+    "channel_id": 1818997587,
+    "message_id": 26621,
+    "verdict": "REJECT",
+    "reason": "Channel meta-notice (jobstash is down for upgrades), not a vacancy"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11326,
+    "verdict": "REJECT",
+    "reason": "Principal Engineer at Paradex (Singapore), not a designer"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11325,
+    "verdict": "REJECT",
+    "reason": "Quantitative Developer (Options Pricing), not a designer"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11324,
+    "verdict": "REJECT",
+    "reason": "Business Development role (NYC), not a designer"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11323,
+    "verdict": "REJECT",
+    "reason": "Senior/Principal Data Engineer, not a designer"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11322,
+    "verdict": "REJECT",
+    "reason": "Interview preparation tips editorial post, not a vacancy"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11321,
+    "verdict": "REJECT",
+    "reason": "gm greeting message, not a vacancy"
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11320,
+    "verdict": "REJECT",
+    "reason": "Engagement poll question about web3, not a vacancy"
+  },
+  {
+    "channel_id": 1796231867,
+    "message_id": 3129,
+    "verdict": "REJECT",
+    "reason": "Course ad (free web design/Figma course), not a vacancy"
+  },
+  {
+    "channel_id": 1373050413,
+    "message_id": 4775,
+    "verdict": "REJECT",
+    "reason": "Print/layout graphic designer (Adobe InDesign, polygraphy); freelance project-based; not product/UI design"
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4711,
+    "verdict": "REJECT",
+    "reason": "Salary explicitly stated as up to $3000 base (below $4500 threshold); part-time/full-time ambiguous"
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2059,
+    "verdict": "REJECT",
+    "reason": "Growth Marketing Manager (performance, SEO, lead gen), not a designer"
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2058,
+    "verdict": "MAYBE",
+    "reason": "Weekly digest contains Product Designer / Stellartech, Remote - role and location match but salary and grade not stated"
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2057,
+    "verdict": "REJECT",
+    "reason": "Senior Technical Business Analyst at Onde, not a designer"
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2056,
+    "verdict": "REJECT",
+    "reason": "Channel directory listing (10 sibling channels), not a vacancy"
+  },
+  {
+    "channel_id": 1257927154,
+    "message_id": 5655,
+    "verdict": "REJECT",
+    "reason": "Market commentary editorial post by channel admin, not a vacancy"
+  },
+  {
+    "channel_id": 1696221413,
+    "message_id": 2340,
+    "verdict": "REJECT",
+    "reason": "User Acquisition Manager (web/mobile subscription app), not a designer"
+  },
+  {
+    "channel_id": 1715826911,
+    "message_id": 929,
+    "verdict": "MAYBE",
+    "reason": "Web designer at agency ALTA (Figma, design systems, components, design tokens, AI tools) - role adjacent to product/UI design, but salary, grade, and remote/office format all unspecified"
+  }
+]
