@@ -1,0 +1,278 @@
+[
+  {
+    "channel_id": 1151522902,
+    "message_id": 6113,
+    "verdict": "REJECT",
+    "reason": "Promotional ad, not a job posting."
+  },
+  {
+    "channel_id": 1151522902,
+    "message_id": 6112,
+    "verdict": "REJECT",
+    "reason": "Senior Full-stack Developer - developer role, not design."
+  },
+  {
+    "channel_id": 1151522902,
+    "message_id": 6111,
+    "verdict": "REJECT",
+    "reason": "Web3 Video Presenter - not design."
+  },
+  {
+    "channel_id": 1090349566,
+    "message_id": 7653,
+    "verdict": "REJECT",
+    "reason": "Dubious AI gig work paid in RUB, not design."
+  },
+  {
+    "channel_id": 1090349566,
+    "message_id": 7652,
+    "verdict": "REJECT",
+    "reason": "Article, not a job posting."
+  },
+  {
+    "channel_id": 1435567661,
+    "message_id": 1344,
+    "verdict": "MAYBE",
+    "reason": "Digest has Senior Product Designer at Mayflower and Middle Product Designer at Sberzdorovie, remote, salary unstated; rest wrong fit."
+  },
+  {
+    "channel_id": 1512435004,
+    "message_id": 3154,
+    "verdict": "REJECT",
+    "reason": "Junior TikTok Creator, wrong grade/function."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5144,
+    "verdict": "REJECT",
+    "reason": "Graphic/marketing designer, salary at floor, wrong type."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5143,
+    "verdict": "REJECT",
+    "reason": "Dubious online task work, RUB/day, not design."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5142,
+    "verdict": "REJECT",
+    "reason": "Customer support, RUB, not design."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5141,
+    "verdict": "REJECT",
+    "reason": "AI mentor assistant, RUB, not design."
+  },
+  {
+    "channel_id": 1938067478,
+    "message_id": 5140,
+    "verdict": "REJECT",
+    "reason": "SMM/influencer roles, not design."
+  },
+  {
+    "channel_id": 1277300882,
+    "message_id": 6191,
+    "verdict": "REJECT",
+    "reason": "Creative Director, wrong tier, hybrid London."
+  },
+  {
+    "channel_id": 1277300882,
+    "message_id": 6190,
+    "verdict": "REJECT",
+    "reason": "UX Researcher, not Product/UI Designer."
+  },
+  {
+    "channel_id": 1277300882,
+    "message_id": 6189,
+    "verdict": "REJECT",
+    "reason": "Design-System Designer, office in Almaty."
+  },
+  {
+    "channel_id": 1277300882,
+    "message_id": 6188,
+    "verdict": "REJECT",
+    "reason": "Editorial content, not a job posting."
+  },
+  {
+    "channel_id": 2232544984,
+    "message_id": 466,
+    "verdict": "REJECT",
+    "reason": "Digest of 8 roles, all junior/graphic/office/RUB."
+  },
+  {
+    "channel_id": 1818997587,
+    "message_id": 26624,
+    "verdict": "REJECT",
+    "reason": "Event announcement, not a job posting."
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11423,
+    "verdict": "REJECT",
+    "reason": "Data Engineer, not design."
+  },
+  {
+    "channel_id": 1100655091,
+    "message_id": 11362,
+    "verdict": "REJECT",
+    "reason": "Account Executive, sales role."
+  },
+  {
+    "channel_id": 1796231867,
+    "message_id": 3131,
+    "verdict": "REJECT",
+    "reason": "Paid ad for gig work, RUB/day."
+  },
+  {
+    "channel_id": 1373050413,
+    "message_id": 4787,
+    "verdict": "REJECT",
+    "reason": "Brand designer, freelance/project-based."
+  },
+  {
+    "channel_id": 1373050413,
+    "message_id": 4786,
+    "verdict": "REJECT",
+    "reason": "Graphic/web/Tilda designer pool, freelance."
+  },
+  {
+    "channel_id": 1373050413,
+    "message_id": 4785,
+    "verdict": "REJECT",
+    "reason": "Infographic designer, freelance, RUB."
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4726,
+    "verdict": "REJECT",
+    "reason": "Candidate resume post, not a vacancy."
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4725,
+    "verdict": "REJECT",
+    "reason": "Candidate resume post, not a vacancy."
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4724,
+    "verdict": "REJECT",
+    "reason": "Candidate resume post, not a vacancy."
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4723,
+    "verdict": "REJECT",
+    "reason": "Candidate resume post, not a vacancy."
+  },
+  {
+    "channel_id": 1361592424,
+    "message_id": 4722,
+    "verdict": "REJECT",
+    "reason": "Candidate resume post, not a vacancy."
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2070,
+    "verdict": "REJECT",
+    "reason": "Manual QA, not design."
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2069,
+    "verdict": "REJECT",
+    "reason": "Growth Manager, not design."
+  },
+  {
+    "channel_id": 1788647101,
+    "message_id": 2068,
+    "verdict": "REJECT",
+    "reason": "Data Analyst, relocation to Philippines required."
+  },
+  {
+    "channel_id": 1964574584,
+    "message_id": 3848,
+    "verdict": "REJECT",
+    "reason": "Illustrator, freelance, excluded type."
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10310,
+    "verdict": "REJECT",
+    "reason": "Frontend Developer, hybrid office."
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10309,
+    "verdict": "REJECT",
+    "reason": "Content Marketing Manager, not design."
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10308,
+    "verdict": "REJECT",
+    "reason": "Flo Health digest, hybrid, none designer roles."
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10307,
+    "verdict": "REJECT",
+    "reason": "Employer brand/HR director, not design, hybrid Moscow."
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10306,
+    "verdict": "REJECT",
+    "reason": "Editorial round-up, not a job posting."
+  },
+  {
+    "channel_id": 1052346215,
+    "message_id": 10305,
+    "verdict": "REJECT",
+    "reason": "Account Director, sales role, relocation required."
+  },
+  {
+    "channel_id": 1257927154,
+    "message_id": 5658,
+    "verdict": "REJECT",
+    "reason": "Graphic designer, excluded type."
+  },
+  {
+    "channel_id": 1696221413,
+    "message_id": 2344,
+    "verdict": "REJECT",
+    "reason": "Programmatic advertising manager, not design."
+  },
+  {
+    "channel_id": 2215076852,
+    "message_id": 785,
+    "verdict": "REJECT",
+    "reason": "Full-stack Developer, not design."
+  },
+  {
+    "channel_id": 1702888054,
+    "message_id": 3118,
+    "verdict": "REJECT",
+    "reason": "Full-stack Developer, not design."
+  },
+  {
+    "channel_id": 1702888054,
+    "message_id": 3117,
+    "verdict": "REJECT",
+    "reason": "Crypto Marketing/SMM Outreach, salary far below floor."
+  },
+  {
+    "channel_id": 1885568649,
+    "message_id": 623,
+    "verdict": "REJECT",
+    "reason": "Full-stack Developer, not design."
+  },
+  {
+    "channel_id": 1622301621,
+    "message_id": 1083,
+    "verdict": "REJECT",
+    "reason": "Full-stack Developer, not design."
+  }
+]

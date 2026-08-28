@@ -90,3 +90,9 @@ Pipeline complete: fetch -> filter -> classify (subagent) -> merge -> dedupe -> 
 Pipeline complete — all 8 steps ran clean, state is consistent (`classified.json` and `seen_store.json` both at 2046, `to_push.json` cleared, local Notion mirror synced 154→158).
 
 **39 new messages scanned, 4 new MAYBE pushed to Notion** (0 MATCH, 4 MAYBE, 35 REJECT; 0 duplicate clusters among today's rows — 9 old pool-wide clusters found but none involving today). The 4 MAYBE: digest with Senior UX/UI Designer at an NDA company (СЕТИ); Senior Product Designer at YOPE, a US startup (Job for Designers); digest with Product Designer at Chess.com (Relocate); digest with multiple remote roles — Finom, BetterMe, Nebius, Prequel, Rula, Proton.ai (Relocate) — all remote-fitting, salaries unstated. Notion pool now 158 rows.
+
+2026-08-28 manual run (via Skill tool request): fetched 1037, new 46 (45 REJECT / 1 MAYBE / 0 MATCH), dedupe 9 clusters found pool-wide (none involving today), pushed 1/1 -> Notion; notion_rows mirror 158 -> 159
+Pipeline complete: fetch -> filter -> classify (subagent) -> merge -> dedupe -> push -> cleanup -> log.
+All state is consistent — pipeline complete: fetch → filter → classify → merge → dedupe → push → cleanup → log.
+
+**46 new messages scanned, 1 new MAYBE pushed to Notion** (0 MATCH, 1 MAYBE, 45 REJECT; 9 old pool-wide duplicate clusters found, none involving today's rows). The 1 MAYBE: digest with Senior Product Designer @ Mayflower and Middle Product Designer @ СберЗдоровье (both remote, salary unstated). Notion pool now at 159 rows.
