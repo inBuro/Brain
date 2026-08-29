@@ -9,6 +9,13 @@ struct SkillMetadata {
     /// name -> SKILL.md file path, for personal skills only (not plugin
     /// cache files — those are managed by the plugin system, not editable).
     var paths: [String: URL] = [:]
+    /// "plugin:name" -> bare "name", for plugin skills that can also be
+    /// invoked/recorded under their bare name. One physical skill must
+    /// have exactly one entry in `descriptions` (that's the candidate set
+    /// for the zero-count list) — this is a lookup for folding the other
+    /// spelling's invocation events into the canonical bare name, not a
+    /// second registration of the same skill.
+    var aliases: [String: String] = [:]
 }
 
 /// Reads each skill's frontmatter (`name:`, `description:`) out of every
@@ -19,34 +26,86 @@ struct SkillMetadata {
 actor SkillDescriptionIndex {
     private let skillsDir: URL
     private let pluginsCacheDir: URL
+    private let settingsFile: URL
 
     init() {
         let home = FileManager.default.homeDirectoryForCurrentUser
         skillsDir = home.appendingPathComponent(".claude/skills")
         pluginsCacheDir = home.appendingPathComponent(".claude/plugins/cache")
+        settingsFile = home.appendingPathComponent(".claude/settings.json")
     }
 
     func buildIndex() -> SkillMetadata {
         var metadata = SkillMetadata()
+        let enabledPlugins = Self.readEnabledPlugins(settingsFile)
 
         for url in Self.findSkillFiles(under: skillsDir) {
             guard let (name, description) = Self.parseFrontmatter(url) else { continue }
             metadata.descriptions[name] = description
             metadata.paths[name] = url
             if let router = Self.routerName(from: url) {
-                metadata.parents[name] = router
+                // `parents` (like every other table here) is keyed on the
+                // bare subskill name, with no room for two different
+                // routers to each have their own "overview" — that's a
+                // real gap (two genuinely distinct skills would end up
+                // merged into one row, whichever router's file the
+                // enumerator happens to visit last), but resolving it
+                // properly means qualifying subskill identity by
+                // (router, name) everywhere downstream, including the
+                // `UserDefaults` acknowledgment keys — a bigger change than
+                // this collision, in practice quite rare for a personal
+                // skill library, currently warrants. First-registered wins
+                // here, at least, so the outcome doesn't depend on
+                // filesystem enumeration order and flip between runs.
+                if metadata.parents[name] == nil {
+                    metadata.parents[name] = router
+                }
             }
         }
 
         for url in Self.findSkillFiles(under: pluginsCacheDir) {
+            // A disabled plugin (`"plugin@marketplace": false` in
+            // settings.json) can never actually fire — it's not "dead
+            // weight to clean up", it's already off. Every skill folder
+            // under a disabled plugin's cache would otherwise flood the
+            // list at zero invocations once zero-count skills are shown at
+            // all (see `SkillDensityModel`), which is how this was found.
+            if let key = Self.enabledPluginsKey(from: url), enabledPlugins[key] == false {
+                continue
+            }
             guard let (name, description) = Self.parseFrontmatter(url) else { continue }
             metadata.descriptions[name] = description
             if let plugin = Self.pluginName(from: url) {
-                metadata.descriptions["\(plugin):\(name)"] = description
+                metadata.aliases["\(plugin):\(name)"] = name
             }
         }
 
         return metadata
+    }
+
+    /// Reads `enabledPlugins` from `~/.claude/settings.json` — a flat
+    /// `{"plugin@marketplace": true/false}` map. A minimal hand-rolled
+    /// parse (not full `JSONSerialization`) since this file can contain
+    /// permission-list values this actor has no reason to model; only the
+    /// one top-level key matters here.
+    private static func readEnabledPlugins(_ url: URL) -> [String: Bool] {
+        guard let data = try? Data(contentsOf: url),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let enabled = json["enabledPlugins"] as? [String: Bool]
+        else { return [:] }
+        return enabled
+    }
+
+    /// ".../plugins/cache/<marketplace>/<plugin>/<version>/..." ->
+    /// "<plugin>@<marketplace>", matching the `enabledPlugins` key format.
+    private static func enabledPluginsKey(from skillFileURL: URL) -> String? {
+        let components = skillFileURL.pathComponents
+        guard let cacheIndex = components.firstIndex(of: "cache"),
+              cacheIndex + 2 < components.count
+        else { return nil }
+        let marketplace = components[cacheIndex + 1]
+        let plugin = components[cacheIndex + 2]
+        return "\(plugin)@\(marketplace)"
     }
 
     private static func findSkillFiles(under root: URL) -> [URL] {

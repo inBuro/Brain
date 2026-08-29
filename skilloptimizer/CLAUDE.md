@@ -24,7 +24,8 @@ Menu bar утилита для macOS: показывает плотность и
 | --- | --- |
 | Package.swift + Sources/ | `app/` |
 | Скрипт сборки/деплоя | `scripts/deploy.sh` |
-| Описание фич приложения | `docs/features.md` |
+| Описание фич приложения (что уже умеет) | `docs/features.md` |
+| Фичи-идеи, ещё не реализованные | `docs/backlog.md` |
 | Установленный `.app` (не в репозитории) | `~/Applications/SkillOptimizer.app` |
 | LaunchAgent автозапуска (не в репозитории) | `~/Library/LaunchAgents/brain.kirill.skilloptimizer.plist` |
 | Ресёрч рынка (быстрый анализ 5 конкурентов, SWOT, фичи, UX-паттерны, Deep Research промпт) | `research/` + зеркало в Notion (страница «Skill Optimizer») |
@@ -39,7 +40,8 @@ Menu bar утилита для macOS: показывает плотность и
 | `SkillDensityModel.swift` | состояние: таймфрейм, сортировка, acknowledge-таймеры (персистентны в `UserDefaults`), группировка роутер→подскиллы |
 | `SkillFileEditor.swift` | пишет прямо в `SKILL.md`: добавление/удаление триггеров и слэш-команд, архивация скилла |
 | `SkillDensityMenu.swift` / `DescriptionPopover.swift` | UI |
-| `ThinScrollbar.swift`, `AnimatedEllipsisText.swift` | мелкие вспомогательные view |
+| `ThinScrollbar.swift`, `AnimatedEllipsisText.swift`, `ResizeHandle.swift`, `VisualEffectBackground.swift`, `SortOrderSegment.swift` | мелкие вспомогательные view |
+| `AppDelegate.swift` / `PinnedPanelController.swift` | нативный `NSStatusItem` + попап-панель (не `MenuBarExtra`) |
 
 ## Правила
 

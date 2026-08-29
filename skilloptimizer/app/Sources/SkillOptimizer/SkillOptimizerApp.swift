@@ -2,32 +2,14 @@ import SwiftUI
 
 @main
 struct SkillOptimizerApp: App {
-    @StateObject private var model = SkillDensityModel()
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
-    init() {
-        NSApplication.shared.setActivationPolicy(.accessory)
-    }
-
+    // No real scene content — the menu bar icon and popup are both owned
+    // directly by `AppDelegate` (`NSStatusItem` + `AppWindowController`).
+    // SwiftUI still requires at least one Scene for `App` to be valid.
     var body: some Scene {
-        MenuBarExtra {
-            Group {
-                if model.isPinned {
-                    // Clicking the status item while pinned should bring the
-                    // real floating panel forward, not open a second, normal
-                    // transient popup alongside it.
-                    Color.clear
-                        .frame(width: 1, height: 1)
-                        .onAppear {
-                            PinnedPanelController.shared.bringToFront()
-                            NSApp.keyWindow?.close()
-                        }
-                } else {
-                    SkillDensityMenu(model: model)
-                }
-            }
-        } label: {
-            Label("\(model.totalCount)", systemImage: "chart.bar.fill")
+        Settings {
+            EmptyView()
         }
-        .menuBarExtraStyle(.window)
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 
 enum Timeframe: String, CaseIterable, Identifiable {
-    case day = "24 hours"
+    case day = "24h"
     case week = "Week"
     case month = "Month"
 
@@ -40,6 +40,22 @@ final class SkillDensityModel: ObservableObject {
     }
 
     var totalCount: Int { groups.reduce(0) { $0 + $1.entry.count + $1.children.reduce(0) { $0 + $1.count } } }
+
+    /// A reasonable initial window height from the current row count —
+    /// short lists get a short window, capped so a huge library doesn't
+    /// open full-screen by default. This only sets the *starting* size;
+    /// `AppWindowController`'s panel is freely resizable (height only)
+    /// after that, so this is a starting point, not a ceiling.
+    var idealHeight: CGFloat {
+        let rowCount = groups.reduce(0) { $0 + 1 + $1.children.count }
+        let headerFooterOverhead: CGFloat = 84 // header + 2 dividers + footer, empty-list baseline
+        guard rowCount > 0 else { return headerFooterOverhead }
+        let rowHeight: CGFloat = 22
+        let rowSpacing: CGFloat = 6
+        let scrollVerticalPadding: CGFloat = 24
+        let scrollContent = CGFloat(rowCount) * rowHeight + CGFloat(rowCount - 1) * rowSpacing + scrollVerticalPadding
+        return headerFooterOverhead + min(650, scrollContent)
+    }
 
     init() {
         refresh()
@@ -97,19 +113,30 @@ final class SkillDensityModel: ObservableObject {
             return SkillEntry(name: name, count: total[name] ?? 0, windowCount: window[name] ?? 0, description: description, path: path)
         }
 
-        // Only show names that resolve to a SKILL.md that exists today —
-        // historical invocations of a since-deleted/renamed skill (or a
-        // built-in with no file to check at all) are excluded rather than
-        // kept around as ghosts.
+        // The whole point of this app is finding dead weight — a skill
+        // that's never been called even once is exactly the thing worth
+        // surfacing, not filtering out. So the base set is every skill that
+        // exists on disk (from `metadata.descriptions`, already scoped to
+        // personal + plugin skills), not just names that happened to show
+        // up in `total`. Invoked names are unioned in too, for the same
+        // reason as before: names that resolve via the legacy
+        // "router:subskill"/plugin-prefix fallback in `currentlyExists`
+        // rather than a literal key in `descriptions`.
         //
-        // Every invoked name that has a parent router is a child; everything
-        // else (routers themselves, and skills with no subskill structure)
-        // is top-level.
+        // Historical invocations of a since-deleted/renamed skill (or a
+        // built-in with no file to check at all) are still excluded rather
+        // than kept around as ghosts — `currentlyExists` covers that half.
+        //
+        // Every name that has a parent router is a child; everything else
+        // (routers themselves, and skills with no subskill structure) is
+        // top-level.
+        let allKnownNames = Set(metadata.descriptions.keys)
         let invokedNames = Set(total.keys).filter(currentlyExists)
+        let candidateNames = allKnownNames.union(invokedNames)
         var childrenByRouter: [String: [SkillEntry]] = [:]
         var topLevelNames: Set<String> = []
 
-        for name in invokedNames {
+        for name in candidateNames {
             if let router = metadata.parents[name] {
                 childrenByRouter[router, default: []].append(entry(for: name))
             } else {
@@ -202,6 +229,14 @@ final class SkillDensityModel: ObservableObject {
     /// Plugin-prefixed names (e.g. "figma:figma-use") are untouched since
     /// they don't correspond to a subskills-folder router.
     private func normalizedName(_ name: String) -> String {
+        // A plugin skill can be invoked/recorded under either its bare name
+        // or "plugin:name" — both must accumulate onto the single canonical
+        // row (`SkillDescriptionIndex` registers only the bare name in
+        // `descriptions`), or the two spellings would show as separate rows
+        // with the count split between them instead of summed.
+        if let canonical = metadata.aliases[name] {
+            return canonical
+        }
         // "interfaces:" was the vendor pack's plugin-style prefix from when
         // it briefly lived outside ~/.claude/skills; it's a personal skill
         // group now, so that prefix is purely legacy addressing.

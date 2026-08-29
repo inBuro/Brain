@@ -101,8 +101,9 @@ enum SkillFileEditor {
 
         var endIndex = descLineIndex
         let currentText: String
+        let wasBlockScalar = afterColon.isEmpty || afterColon == ">-" || afterColon == "|" || afterColon == "|-"
 
-        if afterColon.isEmpty || afterColon == ">-" || afterColon == "|" || afterColon == "|-" {
+        if wasBlockScalar {
             // Folded/literal block scalar: gather the indented continuation lines.
             var collected: [String] = []
             var i = descLineIndex + 1
@@ -121,9 +122,44 @@ enum SkillFileEditor {
         }
 
         let newText = transform(currentText)
-        lines.replaceSubrange(descLineIndex...endIndex, with: ["description: \(newText)"])
+        // Always writing back inline used to silently flatten a block-scalar
+        // (`>-`) description into a single-line one on the very first edit —
+        // and worse, an inline plain scalar is only valid YAML for a limited
+        // character set, so a phrase containing e.g. ": " could write out
+        // genuinely broken frontmatter that Claude Code's own skill loader
+        // would then fail to parse. Round-tripping the original block-scalar
+        // style, and quoting an inline value whenever it isn't safe bare,
+        // keeps every write valid YAML regardless of what the phrases say.
+        let replacementLines: [String]
+        if wasBlockScalar {
+            replacementLines = ["description: >-", "  \(newText)"]
+        } else if isSafeAsPlainScalar(newText) {
+            replacementLines = ["description: \(newText)"]
+        } else {
+            replacementLines = ["description: \(yamlDoubleQuoted(newText))"]
+        }
+        lines.replaceSubrange(descLineIndex...endIndex, with: replacementLines)
 
         try lines.joined(separator: "\n").write(to: url, atomically: true, encoding: .utf8)
+    }
+
+    /// Not a full YAML-safety check — covers what actually shows up in skill
+    /// descriptions (a colon-space anywhere, or a leading reserved indicator
+    /// character), which is what separates "still parses" from silent
+    /// corruption when writing a plain (unquoted) scalar back to disk.
+    private static func isSafeAsPlainScalar(_ text: String) -> Bool {
+        guard let first = text.first else { return true }
+        let reservedLeading: Set<Character> = ["\"", "'", "{", "[", "&", "*", "!", "|", ">", "%", "@", "`", "#", "-", "?", ":", ","]
+        if reservedLeading.contains(first) { return false }
+        if text.contains(": ") || text.hasSuffix(":") || text.hasSuffix(" ") { return false }
+        return true
+    }
+
+    private static func yamlDoubleQuoted(_ text: String) -> String {
+        let escaped = text
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "\"", with: "\\\"")
+        return "\"\(escaped)\""
     }
 
     // MARK: - Text transforms
@@ -140,7 +176,7 @@ enum SkillFileEditor {
             return (base.isEmpty ? "" : base + " ") + "\(canonicalMarker) \(newText)."
         }
 
-        let (sectionContent, before, after) = section(of: currentText, at: target.range, variants: variants)
+        let (sectionContent, before, after) = section(of: currentText, at: target.range, matchedVariant: target.variant)
         let mergedSection = "\(canonicalMarker) \(sectionContent), \(newText)."
         return after.isEmpty ? "\(before)\(mergedSection)" : "\(before)\(mergedSection) \(after)"
     }
@@ -152,7 +188,7 @@ enum SkillFileEditor {
 
         guard let target = targetMatch else { return currentText }
 
-        let (sectionContent, before, after) = section(of: currentText, at: target.range, variants: variants)
+        let (sectionContent, before, after) = section(of: currentText, at: target.range, matchedVariant: target.variant)
         let remaining = sectionContent
             .split(separator: ",")
             .map { $0.trimmingCharacters(in: .whitespaces) }
@@ -173,8 +209,15 @@ enum SkillFileEditor {
     /// trimmed content (period stripped), plus everything before and after
     /// the section (the latter trimmed) so callers can splice a replacement
     /// back in.
-    private static func section(of text: String, at markerRange: Range<String.Index>, variants: [String]) -> (content: String, before: String, after: String) {
-        let otherMarkers = allMarkerVariants.filter { !variants.contains($0) }
+    ///
+    /// The boundary search excludes only the *matched* variant, not its whole
+    /// group — a file that (through some earlier edit or hand-tweak) mixes
+    /// two spellings of the same group, e.g. both "Триггеры:" and
+    /// "Триггерные фразы:", must still stop at the second one. Excluding the
+    /// whole group let that second marker's own label text get swallowed
+    /// into the section content and re-written into the phrase list.
+    private static func section(of text: String, at markerRange: Range<String.Index>, matchedVariant: String) -> (content: String, before: String, after: String) {
+        let otherMarkers = allMarkerVariants.filter { $0 != matchedVariant }
         let searchRange = markerRange.upperBound..<text.endIndex
         let nextBoundary = otherMarkers.compactMap { text.range(of: $0, range: searchRange) }
             .map { $0.lowerBound }

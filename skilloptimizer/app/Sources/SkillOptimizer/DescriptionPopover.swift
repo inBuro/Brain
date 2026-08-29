@@ -10,6 +10,10 @@ struct DescriptionPopover: View {
     @State private var isEditingTriggers = false
     @State private var isConfirmingDelete = false
     @State private var deleteError: String?
+    /// Which trigger phrase (if any) is mid-confirm on its remove button —
+    /// see fix #2 in docs/fixes_pending.md: a stray click used to delete a
+    /// hand-tuned phrase straight from the real SKILL.md with no way back.
+    @State private var confirmingPhrase: String?
 
     var body: some View {
         let parts = Self.parseSections(entry.description ?? "")
@@ -78,6 +82,7 @@ struct DescriptionPopover: View {
                             if entry.path != nil {
                                 Button(isEditingTriggers ? "Done" : "Edit") {
                                     isEditingTriggers.toggle()
+                                    confirmingPhrase = nil
                                 }
                                 .buttonStyle(.plain)
                                 .font(.system(size: 10))
@@ -89,15 +94,44 @@ struct DescriptionPopover: View {
                             VStack(alignment: .leading, spacing: 3) {
                                 ForEach(triggerPhrases, id: \.self) { phrase in
                                     HStack(spacing: 4) {
-                                        Button {
-                                            try? SkillFileEditor.removeTriggerPhrase(phrase, from: path)
-                                            onTriggersSaved()
-                                        } label: {
-                                            Image(systemName: "xmark.circle.fill")
-                                                .font(.system(size: 11))
-                                                .foregroundStyle(.secondary)
+                                        if confirmingPhrase == phrase {
+                                            Button {
+                                                confirmingPhrase = nil
+                                            } label: {
+                                                Image(systemName: "xmark")
+                                                    .font(.system(size: 11))
+                                            }
+                                            .buttonStyle(.plain)
+                                            .foregroundStyle(.secondary)
+                                            Button {
+                                                do {
+                                                    try SkillFileEditor.removeTriggerPhrase(phrase, from: path)
+                                                    onTriggersSaved()
+                                                } catch {
+                                                    // Was `try?` — a failed write (disk full, read-only
+                                                    // mount, permissions) was silently discarded while
+                                                    // still calling onTriggersSaved(), which re-read the
+                                                    // unchanged file and made the phrase reappear with no
+                                                    // indication anything had gone wrong.
+                                                    deleteError = error.localizedDescription
+                                                }
+                                                confirmingPhrase = nil
+                                            } label: {
+                                                Image(systemName: "checkmark.circle.fill")
+                                                    .font(.system(size: 11))
+                                            }
+                                            .buttonStyle(.plain)
+                                            .foregroundStyle(.red)
+                                        } else {
+                                            Button {
+                                                confirmingPhrase = phrase
+                                            } label: {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .font(.system(size: 11))
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            .buttonStyle(.plain)
                                         }
-                                        .buttonStyle(.plain)
                                         Text(phrase)
                                             .font(.system(size: 11))
                                             .foregroundStyle(.white)
@@ -155,6 +189,16 @@ struct DescriptionPopover: View {
                     )
                 }
             }
+        }
+        // The description (and so `triggerPhrases`) can change out from
+        // under an already-open popover — any other save, or just the
+        // 60s auto-refresh timer picking up an external file edit. Without
+        // this, a confirm-pending phrase from before the change could go on
+        // matching a different phrase after the list reorders, or linger
+        // invisibly if its own phrase is gone, silently eating the next
+        // click on some other phrase's remove button.
+        .onChange(of: entry.description) { _ in
+            confirmingPhrase = nil
         }
         .padding(10)
         .frame(width: 260)

@@ -3,21 +3,6 @@ import SwiftUI
 struct SkillDensityMenu: View {
     @ObservedObject var model: SkillDensityModel
 
-    /// MenuBarExtra's `.window` style doesn't resize the popup to fit
-    /// content on its own — flexible frame constraints (maxHeight) on the
-    /// list are silently ignored. Computing an explicit height here from the
-    /// actual row count, capped at 650pt, is what actually drives the window
-    /// size: short lists get a short window, long ones scroll within the cap.
-    private var scrollHeight: CGFloat {
-        let rowCount = model.groups.reduce(0) { $0 + 1 + $1.children.count }
-        guard rowCount > 0 else { return 0 }
-        let rowHeight: CGFloat = 22
-        let rowSpacing: CGFloat = 6
-        let verticalPadding: CGFloat = 24
-        let content = CGFloat(rowCount) * rowHeight + CGFloat(rowCount - 1) * rowSpacing + verticalPadding
-        return min(650, content)
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 8) {
@@ -30,38 +15,24 @@ struct SkillDensityMenu: View {
                 .labelsHidden()
 
                 Button {
-                    model.sortOrder = model.sortOrder == .activity ? .alphabetical : .activity
+                    model.isPinned.toggle()
+                    AppWindowController.shared.updatePinned(model.isPinned, model: model)
                 } label: {
-                    Group {
-                        if model.sortOrder == .activity {
-                            Text("321")
-                                .monospacedDigit()
-                        } else {
-                            Text("ABC")
-                        }
-                    }
-                    .font(.system(size: 11))
-                    .frame(width: 44, height: 22)
-                    .background(
-                        ZStack(alignment: .top) {
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(Color(white: 106.0 / 255.0))
-                            // The segmented timeframe picker has a hairline
-                            // highlight along its top edge (part of its native
-                            // bezel); this button mirrors it so both controls
-                            // read as the same visual family.
-                            // Rectangle() (no cornerRadius) renders a hard 2px
-                            // physical line on Retina — crisp hairline. Using
-                            // RoundedRectangle(cornerRadius:1) on a 1pt-tall shape
-                            // degrades it into a capsule/oval and blurs 3-4px.
-                            Rectangle()
-                                .fill(Color(white: 72.0 / 255.0))
-                                .frame(height: 1)
-                        }
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                    )
+                    Image(systemName: model.isPinned ? "pin.fill" : "pin")
+                        .font(.system(size: 11))
+                        .foregroundStyle(model.isPinned ? .white : .secondary)
+                        .opacity(model.isPinned ? 1 : 0.4)
+                        // Resting at an angle (unpinned) vs. pushed straight
+                        // in, filled (pinned) — the same glyph, just rotated.
+                        .rotationEffect(.degrees(model.isPinned ? 0 : 45))
                 }
                 .buttonStyle(.plain)
+                .help(model.isPinned ? "Unpin — click to close floating window" : "Pin to float above other windows")
+
+                SortOrderSegment(title: model.sortOrder == .activity ? "321" : "ABC") {
+                    model.sortOrder = model.sortOrder == .activity ? .alphabetical : .activity
+                }
+                .frame(width: 44, height: 22)
                 .help(model.sortOrder == .activity ? "Sorted by activity — click for alphabetical" : "Sorted alphabetically — click for activity")
             }
             .padding(.horizontal, 12)
@@ -88,7 +59,14 @@ struct SkillDensityMenu: View {
                     .padding(12)
                     .background(ThinScrollbar())
                 }
-                .frame(height: scrollHeight)
+                // Fills whatever height the window (now user-resizable,
+                // vertically only — see `AppWindowController`) actually is,
+                // rather than a size computed from row count. The window's
+                // *initial* height still comes from a row-count estimate
+                // (`SkillDensityModel.idealHeight`), set once when it's
+                // created — this is just what happens after that, as the
+                // window grows/shrinks.
+                .frame(maxHeight: .infinity)
             }
 
             Divider()
@@ -98,19 +76,23 @@ struct SkillDensityMenu: View {
                     model.refresh()
                 } label: {
                     HStack(spacing: 7) {
-                        Group {
-                            if model.isLoading {
-                                AnimatedEllipsisText("Indexing skills")
-                            } else {
-                                Text("Updated: \(model.lastUpdated.formatted(date: .omitted, time: .standard))")
-                            }
-                        }
-                        .font(.caption)
-                        .foregroundStyle(.white)
-                        if !model.isLoading {
-                            Image(systemName: "arrow.clockwise")
-                                .font(.system(size: 11))
-                                .offset(y: -2)
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 11))
+                            // List rows carry an extra 8pt leading padding
+                            // (added later, to clear the description
+                            // popover's arrow from the row text) that this
+                            // needs to match, net of the glyph's own small
+                            // optical bearing.
+                            .padding(.leading, 6)
+                            .offset(y: -1)
+                        if model.isLoading {
+                            AnimatedEllipsisText("Indexing skills")
+                                .font(.caption2)
+                                .foregroundStyle(.white)
+                        } else {
+                            Text(model.lastUpdated.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute(.twoDigits).second(.twoDigits)))
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -118,24 +100,6 @@ struct SkillDensityMenu: View {
                 .disabled(model.isLoading)
 
                 Spacer()
-
-                Button {
-                    model.isPinned.toggle()
-                    if model.isPinned {
-                        PinnedPanelController.shared.show(model: model)
-                        NSApp.keyWindow?.close()
-                    } else {
-                        PinnedPanelController.shared.hide()
-                    }
-                } label: {
-                    Image(systemName: model.isPinned ? "pin.fill" : "pin")
-                        .font(.system(size: 11))
-                        .foregroundStyle(model.isPinned ? .white : .secondary)
-                        .opacity(model.isPinned ? 1 : 0.4)
-                }
-                .buttonStyle(.plain)
-                .help(model.isPinned ? "Unpin — click to close floating window" : "Pin to float above other windows")
-                .padding(.trailing, 8)
 
                 Button {
                     NSApplication.shared.terminate(nil)
@@ -153,7 +117,11 @@ struct SkillDensityMenu: View {
             .padding(12)
         }
         .frame(width: 300)
-        .frame(maxHeight: 740)
+        .frame(maxHeight: .infinity, alignment: .top)
+        .overlay(alignment: .bottom) {
+            ResizeHandle(isEnabled: model.isPinned && !model.isLoading)
+                .frame(height: 10)
+        }
     }
 }
 
@@ -163,6 +131,7 @@ private struct SkillRow: View {
     var onTriggersSaved: () -> Void = {}
     var onAcknowledge: (String) -> Void = { _ in }
     @State private var showInfo = false
+    @State private var isHovering = false
 
     var body: some View {
         HStack(spacing: 6) {
@@ -171,21 +140,22 @@ private struct SkillRow: View {
                     Button {
                         showInfo.toggle()
                     } label: {
-                        HStack(spacing: 3) {
-                            Text(entry.name)
-                                .lineLimit(1)
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 8))
-                                .foregroundStyle(.tertiary)
-                        }
+                        Text(entry.name)
+                            .lineLimit(1)
                     }
                     .buttonStyle(.plain)
-                    .popover(isPresented: $showInfo, arrowEdge: .trailing) {
+                    .padding(.leading, 8)
+                    .popover(isPresented: $showInfo, arrowEdge: .leading) {
                         DescriptionPopover(entry: entry, onTriggersSaved: onTriggersSaved)
                     }
                 } else {
                     Text(entry.name)
                         .lineLimit(1)
+                        // Matches the leading padding on the button branch
+                        // above so rows with and without a popover still
+                        // line up — this padding exists to push the popover
+                        // 8pt clear of the row text, not to indent this row.
+                        .padding(.leading, 8)
                 }
             }
             .layoutPriority(0)
@@ -214,5 +184,7 @@ private struct SkillRow: View {
             }
         }
         .frame(height: 16)
+        .opacity(isHovering ? 1 : 0.8)
+        .onHover { isHovering = $0 }
     }
 }

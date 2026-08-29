@@ -64,13 +64,29 @@ actor SkillScanner {
         return formatter
     }()
 
+    /// How many transcript lines a router's subskill `Read` is allowed to
+    /// trail its `Skill` invocation by and still count as "immediately
+    /// after". `lastRouterSkill` used to never expire at all — a `Read` of
+    /// that same subskill's file hundreds of lines later, in an unrelated
+    /// context (e.g. the user just re-opening the file to look at it), would
+    /// still match and inflate that subskill's count. This isn't a precise
+    /// same-turn check (this scanner intentionally skips full per-line JSON
+    /// parsing for lines that don't even mention "Skill"/"Read", so it can't
+    /// track exact turn boundaries cheaply) — just a bound loose enough to
+    /// cover a router's own follow-up Read, tight enough to rule out "some
+    /// other point in a long session".
+    private static let maxRouterReadLineGap = 20
+
     private static func parseEvents(in url: URL) -> [SkillEvent] {
         var events: [SkillEvent] = []
         guard let text = try? String(contentsOf: url, encoding: .utf8) else { return events }
 
         var lastRouterSkill: String?
+        var lastRouterLineIndex = -1
+        var lineIndex = -1
 
         text.enumerateLines { line, _ in
+            lineIndex += 1
             guard line.contains("\"Skill\"") || line.contains("\"Read\"") else { return }
             guard let data = line.data(using: .utf8),
                   let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -89,9 +105,11 @@ actor SkillScanner {
                 if toolName == "Skill", let skill = input["skill"] as? String {
                     events.append(SkillEvent(skill: skill, date: date))
                     lastRouterSkill = skill
+                    lastRouterLineIndex = lineIndex
                 } else if toolName == "Read", let filePath = input["file_path"] as? String,
                           let (router, subskill) = routerSubskill(from: filePath),
-                          router == lastRouterSkill {
+                          router == lastRouterSkill,
+                          lineIndex - lastRouterLineIndex <= maxRouterReadLineGap {
                     events.append(SkillEvent(skill: subskill, date: date))
                 }
             }
