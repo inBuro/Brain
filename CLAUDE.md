@@ -22,7 +22,7 @@
 
 ## Проекты
 
-Fadercraft (`fadercraft/Claude.md`), Bifi (`bifi/Claude.md`), Скриншотер (`screenshotter/CLAUDE.md`), portfolio (`portfolio/CLAUDE.md`, рабочая область поиска работы: резюме, кейсы, отклики) — каждый со своим CLAUDE.md, читать по мере входа в проект.
+Fadercraft (`fadercraft/Claude.md`), Bifi (`bifi/Claude.md`), Скриншотер (`screenshotter/CLAUDE.md`), portfolio (`portfolio/CLAUDE.md`, рабочая область поиска работы: резюме, кейсы, отклики), Skill Optimizer (`skilloptimizer/CLAUDE.md`, menu bar утилита плотности использования скиллов — код и планирование вместе в одной папке, не разнесены как у остальных) — каждый со своим CLAUDE.md, читать по мере входа в проект.
 
 Три разных «портфолио» не путать: `portfolio/` — эта рабочая область поиска работы (резюме, кейсы, отклики); `~/Projects/Projects/portfolio/` — код сайта in-buro.com; `.claude/skills/portfolio/` — группа скиллов по резюме и job-search.
 
