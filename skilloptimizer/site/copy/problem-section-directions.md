@@ -5,6 +5,24 @@
 > Источники: `site/research/site_personas.md`, `site/research/site_positioning_swot.md`,
 > `site/research/site_content_matrix.md`.
 
+## Решение
+
+**Взято направление B** (владелец, 2026-08-31). Финальный текст секции:
+
+> **You built a library. You just can't see it working.**
+>
+> Thirty skills, fifty, a hundred — every one written because you needed it. What's missing isn't
+> discipline, it's an instrument. Nothing reports which ones Claude actually reaches for, and which
+> have been sitting unread since the day you wrote them.
+
+`site/ia/screens-inventory.md` и `site/ia/sitemap.md` приведены в соответствие: термин «Skill Bloat»
+убран из строк `Hero` и `Problem`.
+
+Не закрыто: вторую строку можно заменить на конкретный момент из направления A
+(«You wrote the trigger. You used the phrase. Claude solved it from scratch anyway.») — вариант
+сильнее по узнаванию, но сдвигает секцию с «нет прибора» на «сломался триггер», ближе к `Features`.
+Решать при вёрстке, на живом макете.
+
 ## Что не так с текущей формулировкой
 
 1. **«Skill Bloat» обвиняет пользователя в том, что он делал правильно.** Каждый скилл в библиотеке

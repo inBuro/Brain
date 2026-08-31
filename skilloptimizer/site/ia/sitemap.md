@@ -8,8 +8,8 @@
 
 ```
 Home (/) — лендинг с якорными секциями                                    [core]
-  Hero          — «Skill Optimizer for Claude Code» + Skill Bloat в одну строку + CTA Install   [core]
-  Problem       — Skill Bloat: разрастание библиотеки скиллов, нет видимости живое/мёртвое        [core]
+  Hero          — «Skill Optimizer for Claude Code» + боль в одну строку + CTA Install          [core]
+  Problem       — библиотека собрана осознанно, но её работу не видно (направление B)             [core]
   HowItWorks    — цепочка: наблюдение → диагностика → правка → чистка                            [core]
   Features      — 4 карточки той же цепочки, развёрнуто                                          [core]
   Privacy       — тизер «100% Local-First, ноль сети, ноль телеметрии» + ссылка на /privacy       [core]
